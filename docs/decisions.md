@@ -309,3 +309,27 @@ Where a point changes a C2 decision, it says which one.
 33. **Ads exported** as `ads/ad-a.png` and `ads/ad-b.png`, 1080 × 1350,
     from the HTML at device scale 2.5. The links get the live domain in
     C10.
+
+## C4 Setup (2026-10-15)
+
+Agreed in the C4 review of the scaffold.
+
+34. **No i18n framework; all Czech copy in `src/copy/cs.ts`.** Components
+    read their text from it and hold no Czech strings. Numbers never go
+    into copy; they come from `src/data/`. *Reason:* the page has one
+    language, so an i18n library (an extra package) or a `[lang]` route
+    segment buys nothing. One copy file still makes wording changes and
+    copy A/B tests a one-file edit, and it becomes the first dictionary
+    if a second language is ever added.
+
+35. **Route files only compose components.** `src/app/page.tsx` imports
+    and renders `<Home />`; markup and logic live in `src/components/`.
+    *Reason:* the pattern is set before C5, so each later section adds a
+    component instead of growing the page file.
+
+36. **Deploy moves to C11; localhost is the placeholder URL until then.**
+    README and the ad links in `ads/` use `http://localhost:3000`; the
+    C10 performance and accessibility check runs on a local production
+    build. C11 deploys and swaps the placeholder for the live URL.
+    Changes decision 33 ("the links get the live domain in C10").
+    *Reason:* the user's choice; no URL is set before the deploy.

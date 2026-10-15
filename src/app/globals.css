@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* Design tokens from the agreed mockup (docs/mockups/page-a.html,
+   decisions 21 and 23). The default palette and radii are cleared, so
+   only these colours exist and every corner stays square. */
+@theme {
+  --color-*: initial;
+  --color-ground: #e6e3de;
+  --color-card: #ffffff;
+  --color-ink: #000000;
+  --color-ink-soft: #2b2926;
+  --color-muted: #5c5853;
+  --color-line: #d4d0ca;
+  --color-red: #d7000f;
+  --color-red-dark: #a8000c;
+  --color-warn: #fbf4f4;
+  --color-white: #ffffff;
+  /* Text on the dark ask block. */
+  --color-on-dark-muted: #c9c6c1;
+  --color-on-dark-faint: #b5b1ab;
+  --color-on-dark-error: #ff8a8f;
+
+  --radius-*: initial;
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+
+  --spacing-gutter: 16px;
+  --container-page: 480px;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font: 400 16px / 1.5 var(--font-sans);
+  font-variation-settings: "wdth" 100;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

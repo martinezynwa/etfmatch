@@ -23,7 +23,12 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
 - Mobile first: 375 px wide is the design target.
 - Pages stay static: no searchParams, cookies or headers in page code.
   UTM and other visit parameters are read in the browser only.
-- Before "done": `pnpm check` and `pnpm test` pass (defined in C4 Setup).
+- Before "done": `pnpm check` and `pnpm test` pass.
+- Colours, fonts and spacing come from the `@theme` tokens in
+  `src/app/globals.css`; the default palette and radii are cleared.
+- Page copy lives in `src/copy/cs.ts`; components hold no Czech strings.
+- Route files in `src/app/` only import and render components from
+  `src/components/`.
 
 ## AI log
 
@@ -32,6 +37,9 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
 
 ## Map
 
+- `README.md` how to run, structure, live URL
+- `AGENTS.md` written by `next dev`: read `node_modules/next/dist/docs/` before Next.js code
+- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` sourced facts (`types.ts`, one file per topic, `data.test.ts`)
 - `docs/brief.md` the idea, decisions to make, done-when checklists
 - `docs/TODO.md` the commit plan, one section per commit
 - `docs/decisions.md` decisions with reasons

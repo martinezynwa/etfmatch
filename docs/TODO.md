@@ -20,14 +20,13 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C4 Setup
 
-- [ ] Set up project: latest Next.js App Router, TypeScript, Tailwind 4, Biome, pnpm, src/. No other packages except Vitest.
-- [ ] Run `pnpm dev` once
-- [ ] Replace the boilerplate with an empty shell (title + one sentence); delete sample assets and unused CSS.
-- [ ] Scripts: add typecheck (`next typegen && tsc --noEmit`), check = typecheck + lint, test = `vitest run`.
-- [ ] Move the verified numbers from `docs/research/` into typed files in `src/data/` (value, source URL, date, quote).
-- [ ] Set up the design tokens from the agreed mockup (colours, fonts, spacing) in the Tailwind theme.
-- [ ] Deploy the empty shell to Vercel from GitHub, so every later commit has a live URL. Note the URL in the README.
-- [ ] README: how to run, project structure rules.
+- [x] Set up project: latest Next.js App Router, TypeScript, Tailwind 4, Biome, pnpm, src/. No other packages except Vitest.
+- [x] Run `pnpm dev` once
+- [x] Replace the boilerplate with an empty shell (title + one sentence); delete sample assets and unused CSS.
+- [x] Scripts: add typecheck (`next typegen && tsc --noEmit`), check = typecheck + lint, test = `vitest run`.
+- [x] Move the verified numbers from `docs/research/` into typed files in `src/data/` (value, source URL, date, quote).
+- [x] Set up the design tokens from the agreed mockup (colours, fonts, spacing) in the Tailwind theme.
+- [x] README: how to run, project structure rules.
 
 ## C5 First screen
 
@@ -64,9 +63,14 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 - [ ] Named data controller and a privacy policy page (decision 26 leaves the name open).
 - [ ] Open Graph tags and image.
-- [ ] Mobile performance and accessibility check on the Vercel URL, with fixes.
-- [ ] Ad links in `ads/` use the live domain; re-export the PNGs if the ads change.
+- [ ] Mobile performance and accessibility check on a production build at http://localhost:3000 (`pnpm build && pnpm start`), with fixes.
+- [ ] Ad links in `ads/` keep the http://localhost:3000 placeholder (decision 36); re-export the PNGs if the ads change.
 
-## C11 README
+## C11 Deploy
+
+- [ ] Import the GitHub repo in Vercel and deploy.
+- [ ] Replace the http://localhost:3000 placeholder with the live URL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags.
+
+## C12 README
 
 - [ ] Why the sections are in this order, expected conversion, three A/B hypotheses, how the AI was used, where the task was open, demo limits and what is unfinished.

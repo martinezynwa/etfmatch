@@ -1,0 +1,1684 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C4                                                      
+
+  Read 1 file, listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(cat docs/mockups/shared.js && sed -n 1,120p docs/mockups/page-a.html)
+  ⎿  // Shared behaviour for the C3 page mockups (page-a.html, page-b.html)
+     .
+     // Throwaway design prep: the numbers are copied from docs/research/ w
+     … +462 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 120,200p docs/mockups/page-a.html && cat docs/brief.md && cat
+      .claude/skills/implementation-end/SKILL.md && ls ai-log && git remote -v)
+  ⎿    .checklist { list-style: none; margin: 0 0 22px; padding: 0; display
+     : grid; gap: 10px; }
+       .checklist li { position: relative; padding-left: 32px; font-size: 1
+     … +172 lines (ctrl+o to expand)
+
+⏺ Bash(node -v; pnpm -v; which vercel && vercel whoami 2>&1 | tail -2; npm view
+      next version; npm view create-next-app version; npm view vitest version;
+      npm view tailw…)
+  ⎿  v26.4.0
+     11.13.0
+     vercel not found
+     … +70 lines (ctrl+o to expand)
+
+⏺ Plan set: scaffold Next.js in a scratchpad and copy it into the repo, build
+  the minimal page/shell, add typecheck/check/test scripts with a Vitest data
+  check, and populate src/data/ with just the figures and quotes the page/email
+  need — Vercel deployment will need your account, so I'll leave that step for
+  you. Now I'll pull the exact quotes from the research files.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/docs/research && grep
+      -nE "15\.33|21\.16|12\.81|19\.44|0\.0838|8\.38|Nvidia|NVIDIA|503|1,249|72
+      \.94|68\.01|T…)
+  ⎿  returns.md:45:| PR calendar years 2025→2016 | 16.39, 23.31, 24.23, −19
+     .44, 26.89, 16.26, 28.88, −6.24, 19.42, 9.54 % | SP-FS | same | `16.39
+     % 23.31% 24.23% -19.44% 26.89% 16.26% 28.88% -6.24% 19.42% 9.54%` |
+     … +78 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 20,100p holdings.md; sed -n 185,215p holdings.md)
+  ⎿  | MA-FS | https://www.msci.com/documents/10199/a71b65b5-d0ea-4b5c-a709
+     -24b1213bc3c5 | "MSCI ACWI Index (USD)" factsheet, NET RETURNS, SEP 30
+     , 2026 |
+     … +144 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 40,70p returns.md; sed -n 110,130p returns.md)
+  ⎿  | PR 1y | 14.4 % | SP-FS | same | (row above) |
+     | PR 3y ann. | 21.29 % | SP-FS | same | (row above) |
+     | PR 5y ann. | 12.18 % | SP-FS | same | (row above) |
+     … +49 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 21,26p pairs.md; sed -n 32,41p pairs.md; sed -n 50,66p pairs.md;
+      sed -n 160,172p pairs.md; sed -n 250,260p pairs.md; sed -n 305,320p
+      pairs.md; sed -n 292…)
+  ⎿  ## 1. S&P 500 (US: VOO, SPY, IVV)
+
+     ### US side
+     … +136 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 1,80p taxes.md | cut -c1-600)
+  ⎿  # Czech personal income tax for a retail ETF investor
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +325 lines (ctrl+o to expand)
+
+⏺ Plan stands. Scaffolding Next.js in the scratchpad now.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/46f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad && pnpm dlx
+      create-next-app@16.4.1 -…)
+  ⎿  Progress: resolved 1, reused 0, downloaded 0, added 0
+     Packages: +1
+     +
+     … +45 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/46f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad && ls -la; pnpm dlx
+      create-next-app@…)
+  ⎿  total 0
+     drwx------@ 2 martingnebus  wheel   64 Oct 15 14:54 .
+     drwx------@ 4 martingnebus  wheel  128 Oct 15 14:54 ..
+     … +93 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 5m)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/46f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad/etf-match && for f in
+      pnpm-workspace…)
+  ⎿  === pnpm-workspace.yaml
+     allowBuilds:
+       sharp: false
+     … +241 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Scaffold is clean (Next 16.4.1, React 19.3, Tailwind 4.3, Biome 2.4). Copying
+  it into the repo and adding Vitest.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/46f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad/etf-match; cd
+      /Users/martingnebus/Mar…)
+  ⎿  + @types/react-dom 19.3.0
+     + tailwindcss 4.3.3
+     + typescript 5.9.3
+     … +15 lines (ctrl+o to expand)
+  ⎿  Created .gitignore (+41 -0)
+       1 +# See https://help.github.com/articles/ignoring-files/ for more
+         + about ignoring files.                                         
+       2 +                                                               
+       3 +# dependencies                                                 
+       4 +/node_modules                                                  
+       5 +/.pnp                                                          
+       6 +.pnp.*                                                         
+       7 +.yarn/*                                                        
+       8 +!.yarn/patches                                                 
+       9 +!.yarn/plugins                                                 
+      10 +!.yarn/releases                                                
+      11 +!.yarn/versions                                                
+      12 +                                                               
+      13 +# testing                                                      
+      14 +/coverage                                                      
+      15 +                                                               
+      16 +# next.js                                                      
+      17 +/.next/                                                        
+      18 +/out/                                                          
+      19 +                                                               
+      20 +# production                                                   
+      21 +/build                                                         
+      22 +                                                               
+      23 +# misc                                                         
+      24 +.DS_Store                                                      
+      25 +*.pem                                                          
+      26 +                                                               
+      27 +# debug                                                        
+      28 +npm-debug.log*                                                 
+      29 +yarn-debug.log*                                                
+      30 +yarn-error.log*                                                
+      31 +.pnpm-debug.log*                                               
+      32 +                                                               
+      33 +# env files (can opt-in for committing if needed)              
+      34 +.env*                                                          
+      35 +                                                               
+      36 +# vercel                                                       
+      37 +.vercel                                                        
+      38 +                                                               
+      39 +# typescript                                                   
+      40 +*.tsbuildinfo                                                  
+     … 1 more lines (ctrl+o to expand)
+  ⎿  Created biome.json (+39 -0)
+       1 +{                                                              
+       2 +  "$schema": "https://biomejs.dev/schemas/2.4.2/schema.json",  
+       3 +  "vcs": {                                                     
+       4 +    "enabled": true,                                           
+       5 +    "clientKind": "git",                                       
+       6 +    "useIgnoreFile": true                                      
+       7 +  },                                                           
+       8 +  "files": {                                                   
+       9 +    "ignoreUnknown": true,                                     
+      10 +    "includes": ["**", "!node_modules", "!.next", "!dist", "!bu
+         +ild"]                                                          
+      11 +  },                                                           
+      12 +  "formatter": {                                               
+      13 +    "enabled": true,                                           
+      14 +    "indentStyle": "space",                                    
+      15 +    "indentWidth": 2                                           
+      16 +  },                                                           
+      17 +  "css": {                                                     
+      18 +    "parser": {                                                
+      19 +      "tailwindDirectives": true                               
+      20 +    }                                                          
+      21 +  },                                                           
+      22 +  "linter": {                                                  
+      23 +    "enabled": true,                                           
+      24 +    "rules": {                                                 
+      25 +      "recommended": true                                      
+      26 +    },                                                         
+      27 +    "domains": {                                               
+      28 +      "next": "recommended",                                   
+      29 +      "react": "recommended"                                   
+      30 +    }                                                          
+      31 +  },                                                           
+      32 +  "assist": {                                                  
+      33 +    "actions": {                                               
+      34 +      "source": {                                              
+      35 +        "organizeImports": "on"                                
+      36 +      }                                                        
+      37 +    }                                                          
+      38 +  }                                                            
+      39 +}                                                              
+  ⎿  Created next.config.ts (+17 -0)
+       1 +import type { NextConfig } from "next";                        
+       2 +                                                               
+       3 +const nextConfig: NextConfig = {                               
+       4 +  /* config options here */                                    
+       5 +  cacheComponents: true,                                       
+       6 +  partialPrefetching: true,                                    
+       7 +  turbopack: {                                                 
+       8 +    rules: {                                                   
+       9 +      "*.css": {                                               
+      10 +        loaders: ["@tailwindcss/turbopack"],                   
+      11 +        as: "*.css",                                           
+      12 +      },                                                       
+      13 +    },                                                         
+      14 +  },                                                           
+      15 +};                                                             
+      16 +                                                               
+      17 +export default nextConfig;                                     
+  ⎿  Created package.json (+28 -0)
+       1 +{                                                              
+       2 +  "name": "etf-match",                                         
+       3 +  "version": "0.1.0",                                          
+       4 +  "private": true,                                             
+       5 +  "scripts": {                                                 
+       6 +    "dev": "next dev",                                         
+       7 +    "build": "next build",                                     
+       8 +    "start": "next start",                                     
+       9 +    "lint": "biome check",                                     
+      10 +    "format": "biome format --write"                           
+      11 +  },                                                           
+      12 +  "dependencies": {                                            
+      13 +    "next": "16.4.1",                                          
+      14 +    "react": "19.3.0",                                         
+      15 +    "react-dom": "19.3.0"                                      
+      16 +  },                                                           
+      17 +  "devDependencies": {                                         
+      18 +    "@biomejs/biome": "2.4.2",                                 
+      19 +    "@tailwindcss/turbopack": "^4",                            
+      20 +    "@types/node": "^20",                                      
+      21 +    "@types/react": "^19",                                     
+      22 +    "@types/react-dom": "^19",                                 
+      23 +    "tailwindcss": "^4",                                       
+      24 +    "typescript": "^5",                                        
+      25 +    "vitest": "4.1.4"                                          
+      26 +  },                                                           
+      27 +  "packageManager": "pnpm@11.13.0"                             
+      28 +}                                                              
+  ⎿  Created pnpm-workspace.yaml (+14 -0)
+       1 +allowBuilds:                                                   
+       2 +  sharp: false                                                 
+       3 +  unrs-resolver: false                                         
+       4 +minimumReleaseAgeExclude:                                      
+       5 +  - '@next/env@16.4.1'                                         
+       6 +  - '@next/swc-darwin-arm64@16.4.1'                            
+       7 +  - '@next/swc-darwin-x64@16.4.1'                              
+       8 +  - '@next/swc-linux-arm64-gnu@16.4.1'                         
+       9 +  - '@next/swc-linux-arm64-musl@16.4.1'                        
+      10 +  - '@next/swc-linux-x64-gnu@16.4.1'                           
+      11 +  - '@next/swc-linux-x64-musl@16.4.1'                          
+      12 +  - '@next/swc-win32-arm64-msvc@16.4.1'                        
+      13 +  - '@next/swc-win32-x64-msvc@16.4.1'                          
+      14 +  - next@16.4.1                                                
+  ⎿  … 11 more files changed
+  ⎿  (timeout 5m)
+
+⏺ I pinned an old Vitest by mistake; switching to the latest.
+
+⏺ Bash(pnpm add -D vitest@latest 2>&1 | tail -6; grep -A12 devDependencies
+      package.json; cat pnpm-workspace.yaml)
+  ⎿  devDependencies:
+     - vitest 4.1.4
+     + vitest 5.0.4
+     … +28 lines (ctrl+o to expand)
+  ⎿  Updated package.json (+1 -1)
+      22      "@types/react-dom": "^19",
+      23      "tailwindcss": "^4",
+      24      "typescript": "^5",
+      25 -    "vitest": "4.1.4"                                          
+      25 +    "vitest": "5.0.4"                                          
+      26    },
+      27    "packageManager": "pnpm@11.13.0"
+      28  }
+  ⎿  Updated pnpm-lock.yaml (+49 -126)
+      40          specifier: ^5
+      41          version: 5.9.3
+      42        vitest:
+      43 -        specifier: 4.1.4                                       
+      44 -        version: 4.1.4(@types/node@20.19.43)(vite@8.3.4(@types/
+         -node@20.19.43)(jiti@2.7.0))                                    
+      43 +        specifier: 5.0.4                                       
+      44 +        version: 5.0.4(@types/node@20.19.43)(vite@8.3.4(@types/
+         +node@20.19.43)(jiti@2.7.0))                                    
+      45  
+      46  packages:
+      47  
+     ...
+      444    '@rolldown/pluginutils@1.0.1':
+      445      resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yR
+           xHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
+      446  
+      447 -  '@standard-schema/spec@1.1.0':                              
+      448 -    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rU
+          -WrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+      449 -                                                              
+      447    '@swc/helpers@0.5.23':
+      448      resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9
+           Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
+      449  
+     ...
+      559    '@types/react@19.3.0':
+      560      resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmL
+           OVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
+      561  
+      565 -  '@vitest/expect@4.1.4':                                     
+      566 -    resolution: {integrity: sha512-iPBpra+VDuXmBFI3FMKHSFXp3Gx
+          -5HfmSCE8X67Dn+bwephCnQCaB7qWK2ldHa+8ncN8hJU8VTMcxjPpyMkUjww==}
+      567 -                                                              
+      568 -  '@vitest/mocker@4.1.4':                                     
+      569 -    resolution: {integrity: sha512-R9HTZBhW6yCSGbGQnDnH3QHfJxo
+          -kKN4KB+Yvk9Q1le7eQNYwiCyKxmLmurSpFy6BzJanSLuEUDrD+j97Q+ZLPg==}
+      562 +  '@vitest/mocker@5.0.4':                                     
+      563 +    resolution: {integrity: sha512-tqAlrYWce4iUxhr3ncNohejtCTO
+          +cHeE8XWrSNZY3OhPoDn01yeGv+gnaBy64ATp7o6pb03eIbBAjzmibpc9vIQ==}
+      564      peerDependencies:
+      571 -      msw: ^2.4.9                                             
+      565 +      msw: ^2.4.9 || ^3.0.0                                   
+      566        vite: ^6.0.0 || ^7.0.0 || ^8.0.0
+      567      peerDependenciesMeta:
+      568        msw:
+     ...
+      570        vite:
+      571          optional: true
+      572  
+      579 -  '@vitest/pretty-format@4.1.4':                              
+      580 -    resolution: {integrity: sha512-ddmDHU0gjEUyEVLxtZa7xamrpIe
+          -fdEETu3nZjWtHeZX4QxqJ7tRxSteHVXJOcr8jhiLoGAhkK4WJ3WqBpjx42A==}
+     … 291 more lines (ctrl+o to expand)
+
+⏺ Box 1 done. Running pnpm dev once against the boilerplate.
+
+⏺ Bash((pnpm dev --port 3123 >
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/4
+      6f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad/dev.log 2>&1 &)…)
+  ⎿  HTTP 200
+     $ next dev --port 3123
+     ▲ Next.js 16.4.1 (Turbopack)
+     … +11 lines (ctrl+o to expand)
+  ⎿  Created AGENTS.md (+9 -0)
+      1 +<!-- BEGIN:nextjs-agent-rules -->                               
+      2 +                                                                
+      3 +## This is NOT the Next.js you know                             
+      4 +                                                                
+      5 +This version has breaking changes — APIs, conventions, and file 
+        +structure may all differ from your training data. Read the relev
+        +ant guide in `node_modules/next/dist/docs/` (resolved from this 
+        +file's directory; in monorepos the `next` package may not be vis
+        +ible from the repo root) before writing any code. Heed deprecati
+        +on notices.                                                     
+      6 +                                                                
+      7 +This block is written and re-added by `next dev` — verify at `no
+        +de_modules/next/dist/server/lib/generate-agent-files.js`. Removi
+        +ng it from a diff only re-creates the uncommitted change; commit
+        +ting it with your work keeps the tree clean.                    
+      8 +                                                                
+      9 +<!-- END:nextjs-agent-rules -->                                 
+  ⎿  (timeout 1m 30s)
+
+⏺ Dev server answered 200. It also wrote an AGENTS.md on its own; checking what
+  it touched.
+⏺ Bash(git status --short; cat AGENTS.md 2>/dev/null | head -30; git diff --stat
+      CLAUDE.md)
+  ⎿  ?? .gitignore
+     ?? AGENTS.md
+     ?? biome.json
+     … +23 lines (ctrl+o to expand)
+
+⏺ I'll keep AGENTS.md since next dev regenerates it each run, linking it from
+  the Map, and I'm now checking the bundled Next docs on fonts with a width axis
+  and Tailwind setup before writing any code.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/node_modules/next/dis
+      t/docs && ls; grep -rln "axes" . | head; grep -rn -B2 -A12 "axes" $(grep
+      -rln "axes" .…)
+  ⎿  01-app
+     02-pages
+     03-architecture
+     … +44 lines (ctrl+o to expand)
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/node_modules/next/dis
+      t/docs && grep -n -A8 "### \`axes\`"
+      01-app/03-api-reference/02-components/font.md; gre…)
+  ⎿  160:### `axes`
+     161-
+     162-Some variable fonts have extra `axes` that can be included. By def
+     … +50 lines (ctrl+o to expand)
+
+⏺ Docs checked. Writing the shell, tokens and config now.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task && rm -r public
+      src/app/favicon.ico && cat src/app/page.tsx | head -5 && ls src/app)
+  ⎿  import Image from "next/image";
+
+     export default function Home() {
+     … +6 lines (ctrl+o to expand)
+  ⎿  Deleted public/file.svg (+0 -1)
+      1 -<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/20
+        -00/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 
+        -0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.
+        -5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 
+        -5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.2
+        -5h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/
+        -></svg>                                                         
+  ⎿  Deleted public/globe.svg (+0 -1)
+      1 -<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0
+        - 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-ru
+        -le="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7
+        -.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a
+        -7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0
+        - 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66
+        --.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3
+        -.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 
+        -0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-
+        -3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.6
+        -3 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7
+        - 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34
+        -q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3
+        -.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6
+        -.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><cl
+        -ipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></
+        -defs></svg>                                                     
+  ⎿  Deleted public/next.svg (+0 -1)
+      1 -<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0
+        - 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V
+        -12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68
+        -.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-
+        -23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="
+        -#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 
+        -0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.
+        -5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0
+        - 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2
+        - 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.
+        -6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0
+        - 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.
+        -5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 
+        -0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2
+        -a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 1
+        -0 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8
+        --3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.
+        -6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c
+        -0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.
+        -7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-
+        -3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1
+        - 1.4 1.5 3 1.5 5h-5.8z"/></svg>                                 
+  ⎿  Deleted public/vercel.svg (+0 -1)
+      1 -<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0
+        - 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+  ⎿  Deleted public/window.svg (+0 -1)
+      1 -<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0
+        - 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.
+        -5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0
+        - 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5
+        -.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m
+        -1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg
+        ->                                                               
+  ⎿  … 1 more file changed
+
+⏺ Write(src/app/page.tsx)
+  ⎿  Added 7 lines, removed 65 lines
+       1 -import Image from "next/image";                                
+       2 -                                                               
+       1  export default function Home() {
+       2    return (
+       5 -    <div className="flex flex-col flex-1 items-center justify-c
+         -enter bg-zinc-50 font-sans dark:bg-black">                     
+       6 -      <main className="flex flex-1 w-full max-w-3xl flex-col it
+         -ems-center justify-between py-32 px-16 bg-white dark:bg-black s
+         -m:items-start">                                                
+       7 -        <Image                                                 
+       8 -          className="dark:invert h-5 w-[100px]"                
+       9 -          src="/next.svg"                                      
+      10 -          alt="Next.js logo"                                   
+      11 -          width={100}                                          
+      12 -          height={20}                                          
+      13 -          priority                                             
+      14 -        />                                                     
+      15 -        <div className="flex flex-col items-center gap-6 text-c
+         -enter sm:items-start sm:text-left">                            
+      16 -          <h1 className="max-w-xs text-3xl font-semibold leadin
+         -g-10 tracking-tight text-black dark:text-zinc-50">             
+      17 -            To get started, edit the{" "}                      
+      18 -            <code className="rounded bg-black/[.06] px-1.5 py-0
+         -.5 font-mono text-[0.9em] dark:bg-white/[.08]">                
+      19 -              page.tsx                                         
+      20 -            </code>{" "}                                       
+      21 -            file.                                              
+      22 -          </h1>                                                
+      23 -          <p className="max-w-md text-lg leading-8 text-zinc-60
+         -0 dark:text-zinc-400">                                         
+      24 -            Looking for a starting point or more instructions? 
+         -Head over to{" "}                                              
+      25 -            <a                                                 
+      26 -              href="https://vercel.com/templates?framework=next
+         -.js&utm_source=create-next-app&utm_medium=appdir-template-tw&ut
+         -m_campaign=create-next-app"                                    
+      27 -              className="font-medium text-zinc-950 dark:text-zi
+         -nc-50"                                                         
+      28 -            >                                                  
+      29 -              Templates                                        
+      30 -            </a>{" "}                                          
+      31 -            or the{" "}                                        
+      32 -            <a                                                 
+      33 -              href="https://nextjs.org/learn?utm_source=create-
+         -next-app&utm_medium=appdir-template-tw&utm_campaign=create-next
+         --app"                                                          
+      34 -              className="font-medium text-zinc-950 dark:text-zi
+         -nc-50"                                                         
+      35 -            >                                                  
+      36 -              Learning                                         
+      37 -            </a>{" "}                                          
+      38 -            center.                                            
+      39 -          </p>                                                 
+      40 -        </div>                                                 
+      41 -        <div className="flex flex-col gap-4 text-base font-medi
+         -um sm:flex-row">                                               
+      42 -          <a                                                   
+      43 -            className="flex h-12 w-full items-center justify-ce
+         -nter gap-2 rounded-full bg-foreground px-5 text-background tran
+         -sition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158
+         -px]"                                                           
+      44 -            href="https://vercel.com/new?utm_source=create-next
+         --app&utm_medium=appdir-template-tw&utm_campaign=create-next-app
+         -"                                                              
+      45 -            target="_blank"                                    
+      46 -            rel="noopener noreferrer"                          
+      47 -          >                                                    
+      48 -            <Image                                             
+      49 -              className="dark:invert h-[14px] w-4"             
+      50 -              src="/vercel.svg"                                
+      51 -              alt="Vercel logomark"                            
+      52 -              width={16}                                       
+      53 -              height={14}                                      
+      54 -            />                                                 
+      55 -            Deploy Now                                         
+      56 -          </a>                                                 
+      57 -          <a                                                   
+      58 -            className="flex h-12 w-full items-center justify-ce
+         -nter rounded-full border border-solid border-black/[.08] px-5 t
+         -ransition-colors hover:border-transparent hover:bg-black/[.04] 
+         -dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]" 
+      59 -            href="https://nextjs.org/docs?utm_source=create-nex
+         -t-app&utm_medium=appdir-template-tw&utm_campaign=create-next-ap
+         -p"                                                             
+      60 -            target="_blank"                                    
+      61 -            rel="noopener noreferrer"                          
+      62 -          >                                                    
+      63 -            Documentation                                      
+      64 -          </a>                                                 
+      65 -        </div>                                                 
+      66 -      </main>                                                  
+      67 -    </div>                                                     
+       3 +    <main className="mx-auto max-w-page px-gutter py-8">       
+       4 +      <h1 className="text-[28px] leading-tight font-extrabold">
+         +ETF Match</h1>                                                 
+       5 +      <p className="mt-3 text-muted">                          
+       6 +        Stránku připravujeme: evropské fondy se stejným indexem
+         + jako známá ETF                                                
+       7 +        z NYSE.                                                
+       8 +      </p>                                                     
+       9 +    </main>                                                    
+      10    );
+      11  }
+
+⏺ Write(src/app/layout.tsx)
+  ⎿  Added 11 lines, removed 16 lines
+       1  import type { Metadata } from "next";
+       2 -import { Geist, Geist_Mono } from "next/font/google";          
+       2 +import { Archivo } from "next/font/google";                    
+       3  import "./globals.css";
+       4  
+       5 -const geistSans = Geist({                                      
+       6 -  variable: "--font-geist-sans",                               
+       7 -  subsets: ["latin"],                                          
+       5 +// Archivo is variable in weight and width; headings use the wi
+         +der cuts.                                                      
+       6 +const archivo = Archivo({                                      
+       7 +  variable: "--font-archivo",                                  
+       8 +  subsets: ["latin", "latin-ext"],                             
+       9 +  axes: ["wdth"],                                              
+      10  });
+      11  
+      10 -const geistMono = Geist_Mono({                                 
+      11 -  variable: "--font-geist-mono",                               
+      12 -  subsets: ["latin"],                                          
+      13 -});                                                            
+      14 -                                                               
+      12  export const metadata: Metadata = {
+      16 -  title: "Create Next App",                                    
+      17 -  description: "Generated by create next app",                 
+      13 +  title: "ETF Match",                                          
+      14 +  description:                                                 
+      15 +    "ETF z NYSE si tu většinou nekoupíte, stejný index v evrops
+         +kém fondu ano.",                                               
+      16  };
+      17  
+      18  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+      19    return (
+      22 -    <html                                                      
+      23 -      lang="en"                                                
+      24 -      className={`${geistSans.variable} ${geistMono.variable} h
+         --full antialiased`}                                            
+      25 -    >                                                          
+      26 -      <body className="min-h-full flex flex-col">{children}</bo
+         -dy>                                                            
+      20 +    <html lang="cs" className={`${archivo.variable} antialiased
+         +`}>                                                            
+      21 +      <body>{children}</body>                                  
+      22      </html>
+      23    );
+      24  }
+
+⏺ Write(src/app/globals.css)
+  ⎿  Added 45 lines, removed 17 lines
+       1  @import "tailwindcss";
+       2  
+       3 -:root {                                                        
+       4 -  --background: #ffffff;                                       
+       5 -  --foreground: #171717;                                       
+       6 -}                                                              
+       3 +/* Design tokens from the agreed mockup (docs/mockups/page-a.ht
+         +ml,                                                            
+       4 +   decisions 21 and 23). The default palette and radii are clea
+         +red, so                                                        
+       5 +   only these colours exist and every corner stays square. */  
+       6 +@theme {                                                       
+       7 +  --color-*: initial;                                          
+       8 +  --color-ground: #e6e3de;                                     
+       9 +  --color-card: #ffffff;                                       
+      10 +  --color-ink: #000000;                                        
+      11 +  --color-ink-soft: #2b2926;                                   
+      12 +  --color-muted: #5c5853;                                      
+      13 +  --color-line: #d4d0ca;                                       
+      14 +  --color-red: #d7000f;                                        
+      15 +  --color-red-dark: #a8000c;                                   
+      16 +  --color-warn: #fbf4f4;                                       
+      17 +  --color-white: #ffffff;                                      
+      18 +  /* Text on the dark ask block. */                            
+      19 +  --color-on-dark-muted: #c9c6c1;                              
+      20 +  --color-on-dark-faint: #b5b1ab;                              
+      21 +  --color-on-dark-error: #ff8a8f;                              
+      22  
+       8 -@theme inline {                                                
+       9 -  --color-background: var(--background);                       
+      10 -  --color-foreground: var(--foreground);                       
+      11 -  --font-sans: var(--font-geist-sans);                         
+      12 -  --font-mono: var(--font-geist-mono);                         
+      23 +  --radius-*: initial;                                         
+      24 +                                                               
+      25 +  --font-sans: var(--font-archivo), system-ui, sans-serif;     
+      26 +                                                               
+      27 +  --spacing-gutter: 16px;                                      
+      28 +  --container-page: 480px;                                     
+      29 +                                                               
+      30 +  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);             
+      31  }
+      32  
+      15 -@media (prefers-color-scheme: dark) {                          
+      16 -  :root {                                                      
+      17 -    --background: #0a0a0a;                                     
+      18 -    --foreground: #ededed;                                     
+      19 -  }                                                            
+      33 +html {                                                         
+      34 +  -webkit-text-size-adjust: 100%;                              
+      35 +  scroll-behavior: smooth;                                     
+      36  }
+      37  
+      38  body {
+      23 -  background: var(--background);                               
+      24 -  color: var(--foreground);                                    
+      25 -  font-family: Arial, Helvetica, sans-serif;                   
+      39 +  background: var(--color-ground);                             
+      40 +  color: var(--color-ink);                                     
+      41 +  font: 400 16px / 1.5 var(--font-sans);                       
+      42 +  font-variation-settings: "wdth" 100;                         
+      43  }
+      44 +                                                               
+      45 +:focus-visible {                                               
+      46 +  outline: 3px solid var(--color-red);                         
+      47 +  outline-offset: 2px;                                         
+      48 +}                                                              
+      49 +                                                               
+      50 +@media (prefers-reduced-motion: reduce) {                      
+      51 +  html {                                                       
+      52 +    scroll-behavior: auto;                                     
+      53 +  }                                                            
+      54 +}                                                              
+
+⏺ Now the scripts and Biome scope, so Biome skips the mockups, ads and skills.
+
+⏺ Bash(node -e '
+      const fs=require("fs");const
+      p=JSON.parse(fs.readFileSync("package.json"));…)
+  ⎿  {
+       "name": "etf-match",
+       "version": "0.1.0",
+     … +29 lines (ctrl+o to expand)
+  ⎿  Updated biome.json (+13 -1)
+       7    },
+       8    "files": {
+       9      "ignoreUnknown": true,
+      10 -    "includes": ["**", "!node_modules", "!.next", "!dist", "!bu
+         -ild"]                                                          
+      10 +    "includes": [                                              
+      11 +      "**",                                                    
+      12 +      "!node_modules",                                         
+      13 +      "!.next",                                                
+      14 +      "!dist",                                                 
+      15 +      "!build",                                                
+      16 +      "!docs",                                                 
+      17 +      "!ads",                                                  
+      18 +      "!ai-log",                                               
+      19 +      "!.claude",                                              
+      20 +      "!.agents",                                              
+      21 +      "!skills-lock.json"                                      
+      22 +    ]                                                          
+      23    },
+      24    "formatter": {
+      25      "enabled": true,
+  ⎿  Updated package.json (+4 -1)
+       6      "dev": "next dev",
+       7      "build": "next build",
+       8      "start": "next start",
+       9 +    "typecheck": "next typegen && tsc --noEmit",               
+      10      "lint": "biome check",
+      10 -    "format": "biome format --write"                           
+      11 +    "check": "pnpm typecheck && pnpm lint",                    
+      12 +    "format": "biome format --write",                          
+      13 +    "test": "vitest run"                                       
+      14    },
+      15    "dependencies": {
+      16      "next": "16.4.1",
+  ⎿  (timeout 3m)
+
+⏺ Bash(pnpm exec biome check --write 2>&1 | tail -3 && pnpm check 2>&1 | tail
+      -4)
+  ⎿  Checked 7 files in 4ms. Fixed 1 file.
+     Generating route types...
+     ✓ Types generated successfully
+     … +2 lines (ctrl+o to expand)
+  ⎿  Updated src/app/page.tsx (+2 -2)
+       3      <main className="mx-auto max-w-page px-gutter py-8">
+       4        <h1 className="text-[28px] leading-tight font-extrabold">
+          ETF Match</h1>
+       5        <p className="mt-3 text-muted">
+       6 -        Stránku připravujeme: evropské fondy se stejným indexem
+         - jako známá ETF                                                
+       7 -        z NYSE.                                                
+       6 +        Stránku připravujeme: evropské fondy se stejným indexem
+         + jako známá ETF z                                              
+       7 +        NYSE.                                                  
+       8        </p>
+       9      </main>
+      10    );
+
+⏺ pnpm check passes. Next: the typed data files, with quotes taken word for word
+  from docs/research/.
+
+⏺ Write(src/data/types.ts)
+  ⎿  Wrote 25 lines to src/data/types.ts
+       1 // Every sourced value on the page is a Fact: the value, where i
+         t came
+         e).
+       3 
+       4 export type Source = {
+       6   title: string;
+       7   url: string;
+       8   /** As-of date of the document (ISO), or null when the documen
+       9   asOf: string | null;
+      10   /** When the value was read and its quote re-checked (ISO). */
+     … +19 lines (ctrl+o to expand)
+
+⏺ Write(src/data/sources.ts)
+  ⎿  Wrote 174 lines to src/data/sources.ts
+       1 import type { Source } from "./types";
+       2 
+       3 // The documents behind src/data/. Rows, quotes and how each one
+          was
+       4 // checked are in docs/research/ (file named on each group).
+       6 const accessed = "2026-10-15";
+       7 
+       8 export const sources = {
+       9   // Index providers (docs/research/returns.md, holdings.md)
+      10   spFeed: {
+     … +188 lines (ctrl+o to expand)
+
+⏺ Write(src/data/indexes.ts)
+  ⎿  Wrote 281 lines to src/data/indexes.ts
+      1 import { sources as s } from "./sources";
+      2 import { type Fact, fact } from "./types";
+      3 
+      4 // The three indexes on the page, each with its US funds and the 
+        one EU
+        ored as
+      6 // percent (15.33 means 15.33 %). Rows: docs/research/returns.md,
+      7 // holdings.md, pairs.md.
+      8 
+      9 export type IndexId = "sp500" | "ndx" | "world";
+     … +299 lines (ctrl+o to expand)
+
+⏺ Write(src/data/brokers.ts)
+  ⎿  Wrote 87 lines to src/data/brokers.ts
+      1 import type { IndexId } from "./indexes";
+      2 import { sources as s } from "./sources";
+      3 import { type Fact, fact } from "./types";
+      4 
+      5 // Trading 212 and XTB, the two brokers named on the page (decisi
+        on 14;
+      6 // Revolut is left out until a fund is verified there). Rows:
+      7 // docs/research/brokers.md.
+      8 
+      9 export type BrokerId = "t212" | "xtb";
+     … +87 lines (ctrl+o to expand)
+
+⏺ One fix: the €100,000 quote comes from XTB's accounts page, not the fee-table
+  PDF. Adding that source.
+
+⏺ Update(src/data/sources.ts)
+  ⎿  Added 6 lines
+      139      asOf: "2026-09-30",
+      140      accessed,
+      141    },
+      142 +  xtbAccounts: {                                              
+      143 +    title: "XTB, Typy účtů a poplatky",                       
+      144 +    url: "https://www.xtb.com/cz/ucet-a-poplatky",            
+      145 +    asOf: "2026-09-30",                                       
+      146 +    accessed,                                                 
+      147 +  },                                                          
+      148    xtbSp500: {
+      149      title: "XTB, iShares Core S&P 500 UCITS ETF (Acc EUR)",
+      150      url: "https://www.xtb.com/cz/etf/ishares-core-s-p-500-ucit
+           s-acc-eur",
+
+⏺ Update(src/data/brokers.ts)
+  ⎿  Added 1 line, removed 1 line
+      82  /** XTB's free-commission limit per month, EUR. */
+      83  export const xtbFreeMonthlyEur = fact(
+      84    100_000,
+      85 -  s.xtbFees,                                                   
+      85 +  s.xtbAccounts,                                               
+      86    "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 10 E
+          UR).",
+      87  );
+
+⏺ Write(src/data/taxes.ts)
+  ⎿  Wrote 38 lines to src/data/taxes.ts
+       1 import { sources as s } from "./sources";
+       2 import { fact } from "./types";
+       3 
+         w in force
+       5 // 1 Aug – 31 Dec 2026. Rows: docs/research/taxes.md.
+       6 
+       7 export const taxes = {
+         his many years. */
+       9   timeTestYears: fact(
+      10     3,
+     … +35 lines (ctrl+o to expand)
+
+⏺ Now the test. Besides the shape checks, it confirms every quote appears word
+  for word in docs/research/, so a value can't drift away from its research row.
+
+⏺ Write(src/data/data.test.ts)
+  ⎿  Wrote 59 lines to src/data/data.test.ts
+       1 import { readdirSync, readFileSync } from "node:fs";
+       2 import { join } from "node:path";
+       3 import { describe, expect, it } from "vitest";
+       4 import * as brokers from "./brokers";
+       5 import * as indexes from "./indexes";
+       6 import { sources } from "./sources";
+       7 import * as taxes from "./taxes";
+       8 import type { Fact } from "./types";
+       9 
+      10 const isFact = (x: unknown): x is Fact<unknown> =>
+     … +53 lines (ctrl+o to expand)
+⏺ Bash(pnpm exec biome check --write 2>&1 | tail -15; pnpm test 2>&1 | grep -vE
+      "✓" | tail -40)
+  ⎿  Checked 13 files in 7ms. Fixed 3 files.
+     $ vitest run
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated src/data/brokers.ts (+1 -5)
+      23    id: "t212",
+      24    name: "Trading 212",
+      25    commission: fact(0, s.t212Terms, "Obchodní provize … Bezplatn
+          ě"),
+      26 -  fxFee: fact(                                                 
+      27 -    0.15,                                                      
+      28 -    s.t212Terms,                                               
+      29 -    "Ani o víkendu nezaplatíš více než 0,15 %.",               
+      30 -  ),                                                           
+      26 +  fxFee: fact(0.15, s.t212Terms, "Ani o víkendu nezaplatíš více
+         + než 0,15 %."),                                                
+      27    available: {
+      28      sp500: fact(
+      29        true,
+  ⎿  Updated src/data/data.test.ts (+3 -1)
+      39      expect(facts.length).toBeGreaterThan(40);
+      40    });
+      41  
+      42 -  it.each(Object.entries(sources))("source %s has a URL and dat
+         -es", (_, src) => {                                             
+      42 +  it.each(                                                     
+      43 +    Object.entries(sources),                                   
+      44 +  )("source %s has a URL and dates", (_, src) => {             
+      45      expect(src.url).toMatch(/^https:\/\//);
+      46      expect(src.accessed).toMatch(isoDate);
+      47      if (src.asOf !== null) expect(src.asOf).toMatch(isoDate);
+  ⎿  Updated src/data/indexes.ts (+6 -6)
+      153          s.qqqProspectus,
+      154          "Shares of the Trust are listed on The Nasdaq Stock Ma
+           rket LLC",
+      155        ),
+      156 -      ter: fact(                                              
+      157 -        0.18,                                                 
+      158 -        s.qqqPage,                                            
+      159 -        "Invesco QQQ’s total expense ratio is 0.18%.",        
+      160 -      ),                                                      
+      156 +      ter: fact(0.18, s.qqqPage, "Invesco QQQ’s total expense 
+          +ratio is 0.18%."),                                            
+      157      },
+      158    ],
+      159    compareWith: "QQQ",
+     ...
+      262      },
+      263      {
+      264        name: "Alphabet (A)",
+      269 -      weight: fact(2.23, s.worldFactsheet, "ALPHABET A 2,018.8
+          -9 2.23 Comm Srvcs"),                                          
+      265 +      weight: fact(                                           
+      266 +        2.23,                                                 
+      267 +        s.worldFactsheet,                                     
+      268 +        "ALPHABET A 2,018.89 2.23 Comm Srvcs",                
+      269 +      ),                                                      
+      270      },
+      271    ],
+      272  };
+
+⏺ 142 tests pass. Quick mutation check, to prove the quote test can actually
+  fail:
+
+⏺ Bash(cp src/data/taxes.ts
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/4
+      6f6b4e0-4970-44a0-8cc1-c8b77891e366/scratchpad/taxes.bak && sed -…)
+  ⎿   ❯ src/data/data.test.ts (142 tests | 1 failed) 16ms
+      FAIL  src/data/data.test.ts > src/data > data.taxes.taxes.rateHighFro
+     m2026Czk quote is in docs/research/
+     … +5 lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+⏺ The test catches a changed quote, and everything is restored. Running a
+  production build.
+
+⏺ Bash(pnpm build 2>&1 | tail -15)
+  ⎿  ✓ Compiled successfully in 1409ms
+       Running TypeScript ...
+       Finished TypeScript in 913ms ...
+     … +11 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ The build is static (○ /). Now the README and the CLAUDE.md Map.
+
+⏺ Write(README.md)
+  ⎿  Wrote 48 lines to README.md
+       1 # ETF Match
+       2 
+         n fund
+       4 tracks the same index as the US ETF they know, and where to buy 
+         it. The
+         reasons in
+       6 [docs/decisions.md](docs/decisions.md).
+       7 
+       9 
+      10 ## Run
+     … +50 lines (ctrl+o to expand)
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 3 lines, removed 1 line
+      23  - Mobile first: 375 px wide is the design target.
+      24  - Pages stay static: no searchParams, cookies or headers in pag
+          e code.
+      25    UTM and other visit parameters are read in the browser only.
+      26 -- Before "done": `pnpm check` and `pnpm test` pass (defined in 
+         -C4 Setup).                                                     
+      26 +- Before "done": `pnpm check` and `pnpm test` pass.            
+      27 +- Colours, fonts and spacing come from the `@theme` tokens in  
+      28 +  `src/app/globals.css`; the default palette and radii are clea
+         +red.                                                           
+      29  
+      30  ## AI log
+      31  
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 3 lines
+      34  
+      35  ## Map
+      36  
+      37 +- `README.md` how to run, structure, live URL                  
+      38 +- `AGENTS.md` written by `next dev`: read `node_modules/next/di
+         +st/docs/` before Next.js code                                  
+      39 +- `src/app/` the page; `src/data/` sourced facts (`types.ts`, o
+         +ne file per topic, `data.test.ts`)                             
+      40  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      41  - `docs/TODO.md` the commit plan, one section per commit
+      42  - `docs/decisions.md` decisions with reasons
+
+⏺ Ticking the finished boxes. The Vercel box stays open.
+
+⏺ Bash(perl -0pi -e 's/## C4 Setup\n\n(.*?)\n\n## C5/my $s=$1; $s=~s{- \[ \]
+      (?!Deploy)}{- [x] }g; "## C4 Setup\n\n$s\n\n## C5"/se' docs/TODO.md && sed
+      -n '/## C4/,/##…)
+  ⎿  ## C4 Setup
+
+     - [x] Set up project: latest Next.js App Router, TypeScript, Tailwind
+     … +22 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+7 -7)
+      20  
+      21  ## C4 Setup
+      22  
+      23 -- [ ] Set up project: latest Next.js App Router, TypeScript, Ta
+         -ilwind 4, Biome, pnpm, src/. No other packages except Vitest.  
+      24 -- [ ] Run `pnpm dev` once                                      
+      25 -- [ ] Replace the boilerplate with an empty shell (title + one 
+         -sentence); delete sample assets and unused CSS.                
+      26 -- [ ] Scripts: add typecheck (`next typegen && tsc --noEmit`), 
+         -check = typecheck + lint, test = `vitest run`.                 
+      27 -- [ ] Move the verified numbers from `docs/research/` into type
+         -d files in `src/data/` (value, source URL, date, quote).       
+      28 -- [ ] Set up the design tokens from the agreed mockup (colours,
+         - fonts, spacing) in the Tailwind theme.                        
+      23 +- [x] Set up project: latest Next.js App Router, TypeScript, Ta
+         +ilwind 4, Biome, pnpm, src/. No other packages except Vitest.  
+      24 +- [x] Run `pnpm dev` once                                      
+      25 +- [x] Replace the boilerplate with an empty shell (title + one 
+         +sentence); delete sample assets and unused CSS.                
+      26 +- [x] Scripts: add typecheck (`next typegen && tsc --noEmit`), 
+         +check = typecheck + lint, test = `vitest run`.                 
+      27 +- [x] Move the verified numbers from `docs/research/` into type
+         +d files in `src/data/` (value, source URL, date, quote).       
+      28 +- [x] Set up the design tokens from the agreed mockup (colours,
+         + fonts, spacing) in the Tailwind theme.                        
+      29  - [ ] Deploy the empty shell to Vercel from GitHub, so every la
+          ter commit has a live URL. Note the URL in the README.
+      30 -- [ ] README: how to run, project structure rules.             
+      30 +- [x] README: how to run, project structure rules.             
+      31  
+      32  ## C5 First screen
+      33  
+
+⏺ Seven of eight C4 boxes are complete, with new project scaffolding, app files,
+  and data modules added, plus small updates to CLAUDE.md and TODO.md. I'm now
+  closing out this section.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -2 && pnpm test 2>&1 | grep -E "Tests |Test Files"
+      && pnpm build 2>&1 | tail -6 && git diff && git log --format='%B---' -3 |
+      head -40)
+  ⎿  $ biome check
+     Checked 13 files in 5ms. No fixes applied.
+      Test Files  1 passed (1)
+     … +98 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ I've finished C4 except the Vercel deploy, and haven't committed. Check, the
+  tests and the production build all pass: Biome is clean, 142 tests pass, and
+  the build is static (○ /).
+
+  What was built
+  - Shell: "ETF Match" and one Czech sentence, using the Archivo font with Czech
+    characters. Sample files, the favicon and the dark-mode CSS are removed.
+  - Data: five typed files in src/data/ covering the numbers the page and e-mail
+    use. Each number carries its source URL, dates and quote. A test checks
+    that every quote appears word for word in docs/research/; I changed one
+    digit in a quote and it failed as it should.
+  - Design tokens: the mockup's colours, font and spacing are set as Tailwind
+    tokens. Tailwind's default colours and rounded corners are switched off, so
+    only the agreed design can be used.
+  - AGENTS.md: next dev writes this file on every run, even though I turned it
+    off when scaffolding. I kept it and linked it from the Map.
+
+  Decision for you: the Vercel box
+  Vercel can only deploy from GitHub after this commit is pushed. The Vercel CLI
+  isn't installed here, so connecting the repo needs your account. I'd commit
+  C4 now with that box open, then you import the repo at vercel.com/new and I
+  add the live URL to the README in a small follow-up commit. Or should the box
+  move to C5?
+
+  Export: please /export this session to ai-log/004-setup.txt so it goes into
+  the same commit.
+
+  Mistakes caught this session, for mistakes.md:
+  - I pinned Vitest to 4.1.4 instead of the latest version (5.0.4); I noticed
+    and switched it.
+  - I first gave XTB's €100,000 commission limit the fee-table PDF as its
+    source. The quote actually comes from XTB's accounts page
+    (xtb.com/cz/ucet-a-poplatky), and I fixed it. The new test wouldn't have
+    caught this, because it only checks that the quote exists somewhere in the
+    research, not which source it belongs to.
+  - I said turning AGENTS.md off would stop it being created; next dev writes it
+    anyway.
+
+  Proposed commit message:
+  add C4 setup: Next.js shell, sourced data, design tokens
+
+  - Next.js 16.4 App Router, TypeScript, Tailwind 4, Biome, pnpm, src/;
+    Vitest is the only extra package
+  - empty shell: ETF Match title and one Czech sentence, Archivo with
+    latin-ext and the width axis; sample assets and favicon removed
+  - scripts: typecheck (next typegen + tsc), check, test
+  - src/data/: typed facts (value, source URL, as-of and access date,
+    quote) for the three indexes, funds, brokers and taxes; a test checks
+    every quote appears verbatim in docs/research/
+  - globals.css @theme: mockup colours, font, gutter and page width;
+    default palette and radii cleared so corners stay square
+  - README: run, structure, rules; CLAUDE.md: token rule and map lines
+  - Vercel deploy still open: needs the GitHub repo imported in Vercel
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: .gitignore, AGENTS.md, README.md, CLAUDE.md, biome.json,
+  next.config.ts, package.json, pnpm-lock.yaml, pnpm-workspace.yaml,
+  tsconfig.json, docs/TODO.md, src/app/globals.css, src/app/layout.tsx,
+  src/app/page.tsx, src/data/brokers.ts, src/data/data.test.ts,
+  src/data/indexes.ts, src/data/sources.ts, src/data/taxes.ts,
+  src/data/types.ts, ai-log/004-setup.txt
+
+  Do you approve the message (or want edits), and do you want the Vercel box
+  left open or moved to C5?
+
+✻ Cooked for 6m 14s · done 3:00 PM
+
+❯ Some review                                                                   
+  - is i18n relevant for our usage? Would probably use it to better handle text 
+  changes                                                                       
+  - in page.tsx i only want to see the import of a component, so the future     
+  implementors get the idea that all code should live inside components while   
+  the page would refer to them, so that it would only import  and render        
+  something like <Home /> for now                                               
+
+⏺ Two good calls. My answers:
+
+  1. i18n: not as a framework. The page has one language and one audience. An
+     i18n library would break the "Vitest only" package rule, and Next's
+     built-in i18n pattern adds a [lang] route segment, which buys nothing with
+     only Czech. What you're after is one place to edit text, so I'll put all
+     Czech copy in one typed file, src/copy/cs.ts. Components read from it and
+     hold no Czech strings. Numbers still come only from src/data/. If a second
+     language ever comes, this file becomes the first dictionary.
+  2. page.tsx: it will only import and render <Home />, which lives in
+     src/components/.
+
+  Both are recorded as C4 decisions with their reasons, and as rules in
+  CLAUDE.md.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Write(src/copy/cs.ts)
+  ⎿  Wrote 15 lines to src/copy/cs.ts
+       1 // All Czech page copy in one place, so wording changes touch on
+         e file.
+          the text
+       3 // by the component that renders them.
+       4 
+       6   meta: {
+       7     title: "ETF Match",
+       8     description:
+         ském fondu ano.",
+      10   },
+     … +9 lines (ctrl+o to expand)
+
+⏺ Write(src/components/Home.tsx)
+  ⎿  Wrote 12 lines to src/components/Home.tsx
+       1 import { cs } from "@/copy/cs";
+       2 
+       3 export function Home() {
+       4   return (
+       5     <main className="mx-auto max-w-page px-gutter py-8">
+       6       <h1 className="text-[28px] leading-tight font-extrabold">
+       7         {cs.home.title}
+       8       </h1>
+       9       <p className="mt-3 text-muted">{cs.home.lead}</p>
+      10     </main>
+     … +2 lines (ctrl+o to expand)
+
+⏺ Write(src/app/page.tsx)
+  ⎿  Added 4 lines, removed 10 lines
+       1 -export default function Home() {                               
+       2 -  return (                                                     
+       3 -    <main className="mx-auto max-w-page px-gutter py-8">       
+       4 -      <h1 className="text-[28px] leading-tight font-extrabold">
+         -ETF Match</h1>                                                 
+       5 -      <p className="mt-3 text-muted">                          
+       6 -        Stránku připravujeme: evropské fondy se stejným indexem
+         - jako známá ETF z                                              
+       7 -        NYSE.                                                  
+       8 -      </p>                                                     
+       9 -    </main>                                                    
+      10 -  );                                                           
+       1 +import { Home } from "@/components/Home";                      
+       2 +                                                               
+       3 +export default function Page() {                               
+       4 +  return <Home />;                                             
+       5  }
+
+⏺ Update(src/app/layout.tsx)
+  ⎿  Added 1 line
+      1  import type { Metadata } from "next";
+      2  import { Archivo } from "next/font/google";
+      3 +import { cs } from "@/copy/cs";                                 
+      4  import "./globals.css";
+      5  
+      6  // Archivo is variable in weight and width; headings use the wid
+         er cuts.
+
+⏺ Update(src/app/layout.tsx)
+  ⎿  Added 1 line, removed 5 lines
+      10    axes: ["wdth"],
+      11  });
+      12  
+      13 -export const metadata: Metadata = {                            
+      14 -  title: "ETF Match",                                          
+      15 -  description:                                                 
+      16 -    "ETF z NYSE si tu většinou nekoupíte, stejný index v evrops
+         -kém fondu ano.",                                               
+      17 -};                                                             
+      13 +export const metadata: Metadata = cs.meta;                     
+      14  
+      15  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+      16    return (
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)  ⎿  ## Rules
+
+     - Data: every number shown on the page has a source URL, a date and th
+     … +20 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md (+4 -1)
+      26  - Before "done": `pnpm check` and `pnpm test` pass.
+      27  - Colours, fonts and spacing come from the `@theme` tokens in
+      28    `src/app/globals.css`; the default palette and radii are clea
+          red.
+      29 +- Page copy lives in `src/copy/cs.ts`; components hold no Czech
+         + strings.                                                      
+      30 +- Route files in `src/app/` only import and render components f
+         +rom                                                            
+      31 +  `src/components/`.                                           
+      32  
+      33  ## AI log
+      34  
+     ...
+      39  
+      40  - `README.md` how to run, structure, live URL
+      41  - `AGENTS.md` written by `next dev`: read `node_modules/next/di
+          st/docs/` before Next.js code
+      39 -- `src/app/` the page; `src/data/` sourced facts (`types.ts`, o
+         -ne file per topic, `data.test.ts`)                             
+      42 +- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         + Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         +r topic, `data.test.ts`)                                       
+      43  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      44  - `docs/TODO.md` the commit plan, one section per commit
+      45  - `docs/decisions.md` decisions with reasons
+  ⎿  Updated docs/decisions.md (+17 -0)
+      309  33. **Ads exported** as `ads/ad-a.png` and `ads/ad-b.png`, 108
+           0 × 1350,
+      310      from the HTML at device scale 2.5. The links get the live 
+           domain in
+      311      C10.
+      312 +                                                              
+      313 +## C4 Setup (2026-10-15)                                      
+      314 +                                                              
+      315 +Agreed in the C4 review of the scaffold.                      
+      316 +                                                              
+      317 +34. **No i18n framework; all Czech copy in `src/copy/cs.ts`.**
+          + Components                                                   
+      318 +    read their text from it and hold no Czech strings. Numbers
+          + never go                                                     
+      319 +    into copy; they come from `src/data/`. *Reason:* the page 
+          +has one                                                       
+      320 +    language, so an i18n library (an extra package) or a `[lan
+          +g]` route                                                     
+      321 +    segment buys nothing. One copy file still makes wording ch
+          +anges and                                                     
+      322 +    copy A/B tests a one-file edit, and it becomes the first d
+          +ictionary                                                     
+      323 +    if a second language is ever added.                       
+      324 +                                                              
+      325 +35. **Route files only compose components.** `src/app/page.tsx
+          +` imports                                                     
+      326 +    and renders `<Home />`; markup and logic live in `src/comp
+          +onents/`.                                                     
+      327 +    *Reason:* the pattern is set before C5, so each later sect
+          +ion adds a                                                    
+      328 +    component instead of growing the page file.               
+
+⏺ Now the README structure and rules, then the full check again.
+
+⏺ Bash(perl -0pi -e 's{  app/           the page; globals.css holds the design
+      tokens \(\@theme\)\n}{  app/           routes only: they import and render
+      components\n…)
+  ⎿  ## Structure
+
+     ```
+     … +38 lines (ctrl+o to expand)
+  ⎿  Updated README.md (+8 -1)
+      23  
+      24  ```
+      25  src/
+      26 -  app/           the page; globals.css holds the design tokens 
+         -(@theme)                                                       
+      26 +  app/           routes only: they import and render components
+      27 +                 (globals.css holds the design tokens, @theme) 
+      28 +  components/    the UI                                        
+      29 +  copy/cs.ts     all Czech page copy                           
+      30    data/          every sourced number: value, source URL, date,
+           quote
+      31  docs/
+      32    research/      the sourced research behind src/data/
+     ...
+      41    source (URL, as-of date, access date) and the quote it was re
+          ad from.
+      42    Components never hard-code a figure. `src/data/data.test.ts` 
+          checks that
+      43    every quote appears word for word in `docs/research/`.
+      44 +- **Copy in one file.** Every Czech string is in `src/copy/cs.t
+         +s`; no                                                         
+      45 +  i18n library, since the page has one language (decision 34). 
+      46 +- **Routes compose, components build.** `src/app/page.tsx` only
+         + renders                                                       
+      47 +  `<Home />` (decision 35).                                    
+      48  - **Tokens only.** The Tailwind palette and radii are cleared i
+          n
+      49    `globals.css`, so only the mockup's colours exist and every c
+          orner is
+      50    square.
+  ⎿  (timeout 5m)
+
+⏺ I've made both changes, and check, the 142 tests and the build all pass again;
+  the page is still static. Nothing is committed yet.
+
+  1. i18n: I didn't add a framework. The page has one language, so a library
+     would add a package (against the "Vitest only" rule) and Next's built-in
+     approach would add a [lang] route segment for nothing. Instead, every Czech
+     string now lives in one typed file, src/copy/cs.ts, so a text change is a
+     one-file edit. The page metadata reads from it too. Numbers stay out of
+     copy and come only from src/data/. If a second language is ever added, this
+     file becomes the first dictionary.
+  2. page.tsx now only imports and renders <Home />, which lives in
+     src/components/Home.tsx.
+
+  Both are recorded as decisions 34 and 35 in docs/decisions.md, as rules in
+  CLAUDE.md (now 52 lines), and in the README structure and rules.
+
+  Two things are still open from before:
+  - Vercel box: should I commit with it open (you import the repo after the
+    push, then I add the URL in a small follow-up), or move it to C5?
+  - Export: please /export this session to ai-log/004-setup.txt.
+
+  Updated commit message:
+  add C4 setup: Next.js shell, sourced data, copy file, tokens
+
+  - Next.js 16.4 App Router, TypeScript, Tailwind 4, Biome, pnpm, src/;
+    Vitest is the only extra package
+  - empty shell: page.tsx only renders <Home /> from src/components/;
+    Archivo with latin-ext and the width axis; sample assets removed
+  - src/copy/cs.ts holds all Czech copy; no i18n library for one
+    language (decisions 34, 35)
+  - scripts: typecheck (next typegen + tsc), check, test
+  - src/data/: typed facts (value, source URL, as-of and access date,
+    quote) for the three indexes, funds, brokers and taxes; a test checks
+    every quote appears verbatim in docs/research/
+  - globals.css @theme: mockup colours, font, gutter and page width;
+    default palette and radii cleared so corners stay square
+  - README: run, structure, rules; CLAUDE.md: new rules and map lines
+  - Vercel deploy still open: needs the GitHub repo imported in Vercel
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: the earlier list plus src/components/Home.tsx, src/copy/cs.ts
+  and docs/decisions.md.
+
+  Do you approve this message, or want edits?
+
+✻ Crunched for 51s · done 3:04 PM
+
+❯ noted, also please postpone the deploy to C11 as a standalone task            
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+⏺ Bash(perl -0pi -e 's/- \[ \] Deploy the empty shell to Vercel from GitHub, so
+      every later commit has a live URL\. Note the URL in the README\.\n//; s/##
+      C11 README\n…)
+  ⎿  ## C4 Setup
+
+     - [x] Set up project: latest Next.js App Router, TypeScript, Tailwind
+     … +52 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+5 -2)
+      26  - [x] Scripts: add typecheck (`next typegen && tsc --noEmit`), 
+          check = typecheck + lint, test = `vitest run`.
+      27  - [x] Move the verified numbers from `docs/research/` into type
+          d files in `src/data/` (value, source URL, date, quote).
+      28  - [x] Set up the design tokens from the agreed mockup (colours,
+           fonts, spacing) in the Tailwind theme.
+      29 -- [ ] Deploy the empty shell to Vercel from GitHub, so every la
+         -ter commit has a live URL. Note the URL in the README.         
+      29  - [x] README: how to run, project structure rules.
+      30  
+      31  ## C5 First screen
+     ...
+      66  - [ ] Mobile performance and accessibility check on the Vercel 
+          URL, with fixes.
+      67  - [ ] Ad links in `ads/` use the live domain; re-export the PNG
+          s if the ads change.
+      68  
+      70 -## C11 README                                                  
+      69 +## C11 Deploy                                                  
+      70 +                                                               
+      71 +- [ ] Import the GitHub repo in Vercel and deploy; note the liv
+         +e URL in the README.                                           
+      72 +                                                               
+      73 +## C12 README                                                  
+      74  
+      75  - [ ] Why the sections are in this order, expected conversion, 
+          three A/B hypotheses, how the AI was used, where the task was o
+          pen, demo limits and what is unfinished.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ I've moved the deploy to its own section, C11 Deploy, and renamed the README
+  section to C12. All C4 boxes are now ticked.
+
+  Decision for you: two C10 boxes need a live URL, and the deploy now comes
+  after them:
+  - "Mobile performance and accessibility check on the Vercel URL"
+  - "Ad links in ads/ use the live domain" (decision 33 also says the links get
+    the domain in C10)
+
+  I'd move both boxes into C11, after the deploy box, so C11 becomes "Deploy and
+  live checks". Should I, or leave C10 as it is?
+
+  Still missing: ai-log/004-setup.txt isn't in ai-log/ yet. Please /export this
+  session there before I commit.
+
+  Updated commit message (one bullet changed: the open Vercel task is now the
+  move to C11):
+  add C4 setup: Next.js shell, sourced data, copy file, tokens
+
+  - Next.js 16.4 App Router, TypeScript, Tailwind 4, Biome, pnpm, src/;
+    Vitest is the only extra package
+  - empty shell: page.tsx only renders <Home /> from src/components/;
+    Archivo with latin-ext and the width axis; sample assets removed
+  - src/copy/cs.ts holds all Czech copy; no i18n library for one
+    language (decisions 34, 35)
+  - scripts: typecheck (next typegen + tsc), check, test
+  - src/data/: typed facts (value, source URL, as-of and access date,
+    quote) for the three indexes, funds, brokers and taxes; a test checks
+    every quote appears verbatim in docs/research/
+  - globals.css @theme: mockup colours, font, gutter and page width;
+    default palette and radii cleared so corners stay square
+  - README: run, structure, rules; CLAUDE.md: new rules and map lines
+  - TODO: Vercel deploy moved to its own section C11, README becomes C12
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage:
+  - .gitignore, AGENTS.md, README.md, CLAUDE.md
+  - biome.json, next.config.ts, package.json, pnpm-lock.yaml,
+    pnpm-workspace.yaml, tsconfig.json
+  - docs/TODO.md, docs/decisions.md
+  - src/app/globals.css, src/app/layout.tsx, src/app/page.tsx
+  - src/components/Home.tsx, src/copy/cs.ts
+  - src/data/brokers.ts, src/data/data.test.ts, src/data/indexes.ts,
+    src/data/sources.ts, src/data/taxes.ts, src/data/types.ts
+  - ai-log/004-setup.txt
+
+  Once you've answered the C10 question, exported the session and approved the
+  message, I'll commit and push.
+
+✻ Churned for 26s · done 3:05 PM
+
+❯ for now don't set any URL, use dummy localhost                                
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ The ads still point at "doména z C4", which no longer exists. I'll switch them
+  to the localhost placeholder too. First, confirming those link lines aren't
+  part of the exported PNGs:
+
+⏺ Bash(sed -n 12,30p ads/ad-a.html)
+  ⎿      <div class="logo">ETF Match<span>.</span></div>
+         <div class="copy">
+           <p class="header">Chcete ETF z&nbsp;NYSE? V&nbsp;Česku ho většin
+     … +17 lines (ctrl+o to expand)
+
+⏺ The link sits in the spec section below the ad, outside the exported image, so
+  the PNGs don't change. Applying localhost everywhere:
+
+⏺ Bash(sed -i '' 's#https://&lt;doména z C4&gt;/#http://localhost:3000/#'
+      ads/ad-a.html ads/ad-b.html && grep -h "Odkaz" ads/ad-*.html && perl -pi
+      -e 's/^Live: _added…)
+  ⎿        <dt>Odkaz</dt><dd>http://localhost:3000/?utm_source=meta&amp;utm
+     _medium=paid_social&amp;utm_campaign=etf-match&amp;utm_content=ad-a</d
+     d>
+     … +19 lines (ctrl+o to expand)
+  ⎿  Updated README.md (+2 -1)
+       5  brief is in [docs/brief.md](docs/brief.md), decisions and their
+           reasons in
+       6  [docs/decisions.md](docs/decisions.md).
+       7  
+       8 -Live: _added after the first Vercel deploy_                    
+       8 +Live: not deployed yet (C11). Until then the placeholder URL is
+       9 +http://localhost:3000.                                         
+      10  
+      11  ## Run
+      12  
+  ⎿  Updated ads/ad-a.html (+1 -1)
+      23        <dt>Primární text</dt><dd>VOO, SPY nebo IVV znáte z videí
+           z USA. Většina brokerů v EU vám je ale neprodá. Ukážeme vám ev
+          ropský fond se stejným indexem a kde ho koupíte.</dd>
+      24        <dt>Titulek</dt><dd>Co místo toho</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26 -      <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+         -=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+         -;utm_content=ad-a</dd>                                         
+      26 +      <dt>Odkaz</dt><dd>http://localhost:3000/?utm_source=meta&
+         +amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp;utm_c
+         +ontent=ad-a</dd>                                               
+      27        <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+          ěřítku 2,5)</dd>
+      28      </dl>
+      29    </section>
+  ⎿  Updated ads/ad-b.html (+1 -1)
+      23        <dt>Primární text</dt><dd>Na VOO nebo SPY existuje evrops
+          ký fond se stejným indexem, který v Česku koupíte. Vyberte inde
+          x a ukážeme vám ISIN fondu a brokery, kde ho najdete.</dd>
+      24        <dt>Titulek</dt><dd>Najít fond</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26 -      <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+         -=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+         -;utm_content=ad-b</dd>                                         
+      26 +      <dt>Odkaz</dt><dd>http://localhost:3000/?utm_source=meta&
+         +amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp;utm_c
+         +ontent=ad-b</dd>                                               
+      27        <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+          ěřítku 2,5)</dd>
+      28      </dl>
+      29    </section>
+  ⎿  Updated docs/TODO.md (+4 -3)
+      63  
+      64  - [ ] Named data controller and a privacy policy page (decision
+           26 leaves the name open).
+      65  - [ ] Open Graph tags and image.
+      66 -- [ ] Mobile performance and accessibility check on the Vercel 
+         -URL, with fixes.                                               
+      67 -- [ ] Ad links in `ads/` use the live domain; re-export the PNG
+         -s if the ads change.                                           
+      66 +- [ ] Mobile performance and accessibility check on a productio
+         +n build at http://localhost:3000 (`pnpm build && pnpm start`), 
+         +with fixes.                                                    
+      67 +- [ ] Ad links in `ads/` keep the http://localhost:3000 placeho
+         +lder (decision 36); re-export the PNGs if the ads change.      
+      68  
+      69  ## C11 Deploy
+      70  
+      71 -- [ ] Import the GitHub repo in Vercel and deploy; note the liv
+         -e URL in the README.                                           
+      71 +- [ ] Import the GitHub repo in Vercel and deploy.             
+      72 +- [ ] Replace the http://localhost:3000 placeholder with the li
+         +ve URL: README, ad links in `ads/`.                            
+      73  
+      74  ## C12 README
+      75  
+  ⎿  Updated docs/decisions.md (+7 -0)
+      326      and renders `<Home />`; markup and logic live in `src/comp
+           onents/`.
+      327      *Reason:* the pattern is set before C5, so each later sect
+           ion adds a
+      328      component instead of growing the page file.
+      329 +                                                              
+      330 +36. **Deploy moves to C11; localhost is the placeholder URL un
+          +til then.**                                                   
+      331 +    README and the ad links in `ads/` use `http://localhost:30
+          +00`; the                                                      
+      332 +    C10 performance and accessibility check runs on a local pr
+          +oduction                                                      
+      333 +    build. C11 deploys and swaps the placeholder for the live 
+          +URL.                                                          
+      334 +    Changes decision 33 ("the links get the live domain in C10
+          +").                                                           
+      335 +    *Reason:* the user's choice; no URL is set before the depl
+          +oy.                                                           
+
+⏺ The Open Graph tags in C10 will need an absolute URL as well, so the C11 swap
+  should cover those too:
+
+⏺ Bash(sed -i '' 's#- \[ \] Replace the http://localhost:3000 placeholder with
+      the live URL: README, ad links in `ads/`.#- [ ] Replace the
+      http://localhost:3000 placeh…)
+  ⎿  72:- [ ] Replace the http://localhost:3000 placeholder with the live U
+     RL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags
+     .
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+1 -1)
+      69  ## C11 Deploy
+      70  
+      71  - [ ] Import the GitHub repo in Vercel and deploy.
+      72 -- [ ] Replace the http://localhost:3000 placeholder with the li
+         -ve URL: README, ad links in `ads/`.                            
+      72 +- [ ] Replace the http://localhost:3000 placeholder with the li
+         +ve URL: README, ad links in `ads/`, `metadataBase` for the Open
+         + Graph tags.                                                   
+      73  
+      74  ## C12 README
+      75  
+  ⎿  (timeout 5m)
+
+⏺ I've set http://localhost:3000 as the placeholder URL everywhere, until the
+  deploy in C11. Check, the 142 tests and the build still pass, and nothing is
+  committed yet.
+
+  - Ads: both link lines now use http://localhost:3000/?utm_… instead of "doména
+    z C4". Those lines sit below the ad, outside the exported image, so the
+    PNGs are unchanged.
+  - README: says the page isn't deployed yet and gives localhost as the
+    placeholder.
+  - C10: the performance and accessibility check runs on a local production
+    build (pnpm build && pnpm start), and the ad links keep the placeholder.
+  - C11: deploy, then swap localhost for the live URL in the README, the ad
+    links and the base URL for the Open Graph tags, which C10 adds.
+  - Decision 36: records this and says it changes decision 33.
+
+  Your export is in as ai-log/004-init-app.txt.
+
+  Final commit message:
+  add C4 setup: Next.js shell, sourced data, copy file, tokens
+
+  - Next.js 16.4 App Router, TypeScript, Tailwind 4, Biome, pnpm, src/;
+    Vitest is the only extra package
+  - empty shell: page.tsx only renders <Home /> from src/components/;
+    Archivo with latin-ext and the width axis; sample assets removed
+  - src/copy/cs.ts holds all Czech copy; no i18n library for one
+    language (decisions 34, 35)
+  - scripts: typecheck (next typegen + tsc), check, test
+  - src/data/: typed facts (value, source URL, as-of and access date,
+    quote) for the three indexes, funds, brokers and taxes; a test checks
+    every quote appears verbatim in docs/research/
+  - globals.css @theme: mockup colours, font, gutter and page width;
+    default palette and radii cleared so corners stay square
+  - deploy moved to its own section C11; until then README and ad links
+    use http://localhost:3000 as a placeholder (decision 36)
+  - README: run, structure, rules; CLAUDE.md: new rules and map lines
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage:
+  - .gitignore, AGENTS.md, README.md, CLAUDE.md
+  - biome.json, next.config.ts, package.json, pnpm-lock.yaml,
+    pnpm-workspace.yaml, tsconfig.json
+  - docs/TODO.md, docs/decisions.md
+  - ads/ad-a.html, ads/ad-b.html
+  - src/app/globals.css, src/app/layout.tsx, src/app/page.tsx
+  - src/components/Home.tsx, src/copy/cs.ts
+  - src/data/brokers.ts, src/data/data.test.ts, src/data/indexes.ts,
+    src/data/sources.ts, src/data/taxes.ts, src/data/types.ts
+  - ai-log/004-init-app.txt
+
+  Approve, and I'll commit and push to origin/main.
+
+✻ Churned for 37s · done 3:06 PM
