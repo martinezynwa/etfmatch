@@ -1,0 +1,974 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C6                                                      
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(for f in src/app/*.css src/app/*.tsx src/components/*.tsx src/copy/cs.ts
+      src/data/*.ts package.json; do echo "=== $f"; cat "$f"; done)
+  ⎿  === src/app/globals.css
+     @import "tailwindcss";
+     … +971 lines (ctrl+o to expand)
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ Read the C6 section, decisions 24/30, the mockup and the current code.
+  Checking the test config, then the plan.
+
+⏺ Bash(ls; cat vitest.config.* tsconfig.json biome.json 2>/dev/null | head -80;
+      cat README.md | sed -n '1,80p')
+  ⎿  ads
+     AGENTS.md
+     ai-log
+     … +71 lines (ctrl+o to expand)
+
+⏺ I'll build out C6 by adding format.ts and plan.ts helpers, a Planner.tsx
+  component holding the shared state and rendering MatchCard.tsx (sourced from
+  src/data/ with a details accordion and Czech strings), plus motion effects
+  (CountUp, Swap, bar transitions) that respect reduced motion. Note the "Chci
+  vědět víc" link to #ask won't resolve until C7, and I'm defaulting to S&P 500
+  as the index per the mockup.
+
+⏺ Bash(ls src/components; node -e 'console.log(1000*0.15, 3000*0.15, 5000*0.15,
+      10000*0.15, 3000*0.5)'; ls node_modules/next/dist/docs/ 2>/dev/null |
+      head)
+  ⎿  CtaLink.tsx
+     FirstScreen.tsx
+     Header.tsx
+     … +7 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n '1,200p' node_modules/next/dist/docs/01-app/01-getting-started/05-
+      server-and-client-components.md | grep -n -i -A3 "use
+      client\|deprecat\|serializ" | hea…)
+  ⎿  83:'use client'
+     84-
+     85-import { useState } from 'react'
+     … +36 lines (ctrl+o to expand)
+
+⏺ The client component setup works as usual. Writing the lib files and tests
+  first.
+
+⏺ Write(src/lib/format.ts)
+  ⎿  Wrote 34 lines to src/lib/format.ts
+       1 // Czech number formatting for the page. Written by hand instead
+       2 // toLocaleString, so server and browser always print the same s
+         tring:
+         ore the unit.
+       4 
+       6 
+       7 export function formatNumber(n: number, decimals = 0) {
+         ".");
+       9   const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, nbsp);
+         : "";
+     … +30 lines (ctrl+o to expand)
+
+⏺ Write(src/lib/plan.ts)
+  ⎿  Wrote 10 lines to src/lib/plan.ts
+       1 import type { IndexId } from "../data/indexes";
+       2 
+       3 // The visitor's two taps (decision 5). Choices, not sourced fig
+         ures, so
+       4 // they live here and not in src/data/.
+       6 export const amounts = [1000, 3000, 5000, 10000] as const;
+       7 export type Amount = (typeof amounts)[number];
+       8 
+       9 export const defaultAmount: Amount = 5000;
+      10 export const defaultIndex: IndexId = "sp500";
+     … +1 line (ctrl+o to expand)
+
+⏺ Write(src/lib/format.test.ts)
+  ⎿  Wrote 100 lines to src/lib/format.test.ts
+       1 import { describe, expect, it } from "vitest";
+       2 import { brokers } from "../data/brokers";
+       3 import { amounts } from "./plan";
+       4 import {
+       5   feePerPurchase,
+       6   formatDate,
+       7   formatNumber,
+       8   kc,
+       9   kcFee,
+      10   pct,
+     … +91 lines (ctrl+o to expand)
+
+⏺ Bash(pnpm vitest run src/lib 2>&1 | tail -20)
+  ⎿   RUN  v5.0.4 /Users/martingnebus/Martin/GIT-MG/clientelo-task
+     … +4 lines (ctrl+o to expand)
+
+⏺ Tests pass. Next: the Czech copy, then the motion helpers and components.
+
+⏺ Update(src/copy/cs.ts)
+  ⎿  Added 33 lines
+      23        `${ticker} je na burze ${exchange}`,
+      24      cta: "Najít evropský fond ↓",
+      25    },
+      26 +  // Decision 5.                                               
+      27    taps: {
+      28      label: "Vyberte index a částku",
+      29 +    indexQuestion: "Který index vás zajímá?",                  
+      30 +    amountQuestion: "Kolik chcete investovat měsíčně?",        
+      31    },
+      32 +  // Decisions 14, 17, 28, 30, 32.                             
+      33 +  match: {                                                     
+      34 +    label: "Váš evropský fond",                                
+      35 +    returnHead: (index: string) => `${index} za 10 let průměrně
+         +`,                                                             
+      36 +    perYear: "ročně",                                          
+      37 +    returnSub: (returnType: string) => `v USD, ${returnType}`, 
+      38 +    warning:                                                   
+      39 +      "Minulé výnosy nezaručují budoucí. Nejde o investiční dop
+         +oručení, jen o historickou statistiku indexu.",                
+      40 +    topHead: "Největší firmy uvnitř",                          
+      41 +    companiesBefore: "Celkem",                                 
+      42 +    companiesAfter: "firem v indexu.",                         
+      43 +    fundHead: (usFunds: string) => `Evropský fond místo ${usFun
+         +ds}`,                                                          
+      44 +    terLabel: "Poplatek fondu (TER) ročně",                    
+      45 +    usTerLabel: "Americký fond pro srovnání",                  
+      46 +    buyHead: "Kde koupit",                                     
+      47 +    fxFee: "směna měny",                                       
+      48 +    feesBefore: "Za nákup za",                                 
+      49 +    feesAfter: ", pokud máte účet v Kč.",                      
+      50 +    commission: (fee: string) => `Provize za nákup ETF je u obo
+         +u ${fee}.`,                                                    
+      51 +    more: "Chci vědět víc ↓",                                  
+      52 +    sourcesHead: "Zdroje dat",                                 
+      53 +    sourceGroups: {                                            
+      54 +      return: "Výnos",                                         
+      55 +      companies: "Firmy",                                      
+      56 +      fund: "Fond a poplatek",                                 
+      57 +      brokers: "Brokeři",                                      
+      58 +    },                                                         
+      59 +    /** A source without its own date: when it was read. */    
+      60 +    accessed: (date: string) => `staženo ${date}`,             
+      61 +  },                                                           
+      62  };
+
+⏺ Write(src/components/motion.tsx)
+  ⎿  Wrote 76 lines to src/components/motion.tsx
+      1 "use client";
+      2 
+      3 import { useEffect, useRef, useState } from "react";
+      4 
+      5 // The tap motion of decision 24: numbers count to their new valu
+      6 // text fades up. Nothing runs on first render or under reduced m
+        otion.
+      7 
+      8 const reducedMotion = () =>
+      9   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+     … +71 lines (ctrl+o to expand)
+
+⏺ Now the client component that holds the state, and the match card.
+
+⏺ Write(src/components/Planner.tsx)
+  ⎿  Wrote 94 lines to src/components/Planner.tsx
+       1 "use client";
+       2 
+       3 import { type ReactNode, useState } from "react";
+       4 import { cs } from "@/copy/cs";
+       5 import { type IndexId, indexes } from "@/data/indexes";
+       7 import { type Amount, amounts, defaultAmount, defaultIndex } fro
+         m "@/lib/plan";
+       8 import { MatchCard } from "./MatchCard";
+       9 
+      10 const copy = cs.taps;
+     … +91 lines (ctrl+o to expand)
+
+⏺ Write(src/components/MatchCard.tsx)
+  ⎿  Wrote 231 lines to src/components/MatchCard.tsx
+       1 import type { ReactNode } from "react";
+       2 import { cs } from "@/copy/cs";
+       3 import { brokers } from "@/data/brokers";
+       4 import type { MarketIndex } from "@/data/indexes";
+       5 import type { Fact, Source } from "@/data/types";
+       6 import {
+       7   feePerPurchase,
+       8   formatDate,
+       9   formatNumber,
+      10   kc,
+     … +250 lines (ctrl+o to expand)
+
+⏺ Now wiring it into Home and adding the accordion styles to globals.css.
+
+⏺ Write(src/components/Home.tsx)
+  ⎿  Added 4 lines, removed 7 lines
+       1 -import { cs } from "@/copy/cs";                                
+       1  import { FirstScreen } from "./FirstScreen";
+       2  import { Header } from "./Header";
+       3 +import { Planner } from "./Planner";                           
+       4  
+       5  const tapsId = "taps";
+       6 +// The ask block arrives in C7; the match card already links to
+         + it.                                                           
+       7 +const askId = "ask";                                           
+       8  
+       9  export function Home() {
+      10    return (
+     ...
+      12        <Header />
+      13        <main>
+      14          <FirstScreen tapsId={tapsId} />
+      13 -        {/* The index and amount taps arrive in C6. */}        
+      14 -        <section                                               
+      15 -          id={tapsId}                                          
+      16 -          className="scroll-mt-3"                              
+      17 -          aria-label={cs.taps.label}                           
+      18 -        />                                                     
+      15 +        <Planner tapsId={tapsId} askId={askId} />              
+      16        </main>
+      17      </div>
+      18    );
+
+⏺ Update(src/app/globals.css)
+  ⎿  Added 2 lines
+      47  html {
+      48    -webkit-text-size-adjust: 100%;
+      49    scroll-behavior: smooth;
+      50 +  /* Lets an accordion animate to height: auto (decision 24). *
+         +/                                                              
+      51 +  interpolate-size: allow-keywords;                            
+      52  }
+      53  
+      54  body {
+⏺ Update(src/app/globals.css)
+  ⎿  Added 38 lines
+       63    outline-offset: 2px;
+       64  }
+       65  
+       66 +/* Accordions (sources now, FAQ in C8): a "+" that turns to "×
+          +", and the                                                    
+       67 +   content expands where the browser supports ::details-conten
+          +t. */                                                         
+       68 +summary {                                                     
+       69 +  position: relative;                                         
+       70 +  list-style: none;                                           
+       71 +  cursor: pointer;                                            
+       72 +}                                                             
+       73 +summary::-webkit-details-marker {                             
+       74 +  display: none;                                              
+       75 +}                                                             
+       76 +summary::after {                                              
+       77 +  content: "+";                                               
+       78 +  position: absolute;                                         
+       79 +  right: 0;                                                   
+       80 +  top: 6px;                                                   
+       81 +  font-size: 20px;                                            
+       82 +  font-weight: 500;                                           
+       83 +  line-height: 1;                                             
+       84 +  transition: transform 0.25s var(--ease-out-soft);           
+       85 +}                                                             
+       86 +details[open] > summary::after {                              
+       87 +  transform: rotate(45deg);                                   
+       88 +}                                                             
+       89 +details::details-content {                                    
+       90 +  block-size: 0;                                              
+       91 +  overflow: hidden;                                           
+       92 +  transition:                                                 
+       93 +    block-size 0.28s var(--ease-out-soft),                    
+       94 +    content-visibility 0.28s allow-discrete;                  
+       95 +}                                                             
+       96 +details[open]::details-content {                              
+       97 +  block-size: auto;                                           
+       98 +}                                                             
+       99 +                                                              
+      100  @media (prefers-reduced-motion: reduce) {
+      101    html {
+      102      scroll-behavior: auto;
+      103    }
+      104 +  summary::after,                                             
+      105 +  details::details-content {                                  
+      106 +    transition: none;                                         
+      107 +  }                                                           
+      108  }
+
+⏺ Bash(pnpm check 2>&1 | tail -40)
+  ⎿        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         2 │ import { brokers } from "../data/brokers";
+         3 │ import { amounts } from "./plan";
+     … +37 lines (ctrl+o to expand)
+
+⏺ Bash(pnpm biome check --write 2>&1 | tail -5; pnpm check 2>&1 | grep -v
+      "^\s*$" | head -40)
+  ⎿  check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     … +39 lines (ctrl+o to expand)
+  ⎿  Updated src/lib/format.test.ts (+1 -1)
+      1  import { describe, expect, it } from "vitest";
+      2  import { brokers } from "../data/brokers";
+      3 -import { amounts } from "./plan";                               
+      3  import {
+      4    feePerPurchase,
+      5    formatDate,
+     ...
+       8    kcFee,
+       9    pct,
+      10  } from "./format";
+      11 +import { amounts } from "./plan";                              
+      12  
+      13  // Spaces in the output are non-breaking; the tests write them 
+          as " ".
+      14  const plain = (s: string) => s.replaceAll(" ", " ");
+
+⏺ Bash(sed -n '14p' src/lib/format.test.ts | od -c | head -3)
+  ⎿  0000000    c   o   n   s   t       p   l   a   i   n       =       (
+      s
+     0000020    :       s   t   r   i   n   g   )       =   >       s   .
+     … +2 lines (ctrl+o to expand)
+
+⏺ Biome turned the \u00a0 escape in the test into a literal non-breaking space.
+  It still works, so I left it. Next, moving the lint suppression onto the key
+  attribute.
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 2 lines, removed 2 lines
+      91          <Head>{copy.topHead}</Head>
+      92          <ul className="grid gap-[7px]">
+      93            {index.top5.map((c, i) => (
+      94 -            // Keyed by position, so a bar slides to its new wi
+         -dth.                                                           
+      95 -            // biome-ignore lint/suspicious/noArrayIndexKey: th
+         -e rows are fixed slots                                         
+      94              <li
+      95 +              // Keyed by position, so a bar slides to its new 
+         +width.                                                         
+      96 +              // biome-ignore lint/suspicious/noArrayIndexKey: 
+         +five fixed slots                                               
+      97                key={i}
+      98                className="grid grid-cols-[92px_1fr_56px] items-c
+          enter gap-2 text-sm"
+      99              >
+
+⏺ Bash(pnpm check 2>&1 | tail -8 && pnpm test 2>&1 | tail -6)
+  ⎿  $ pnpm typecheck && pnpm lint
+     $ next typegen && tsc --noEmit
+     Generating route types...
+     … +8 lines (ctrl+o to expand)
+
+⏺ Checks and tests pass. Starting the dev server to look at the page at 375 px.
+
+⏺ Bash((lsof -i :3000 -t >/dev/null && echo "port busy") ; ls
+      "/Applications/Google Chrome.app/Contents/MacOS/" 2>/dev/null)
+  ⎿  port busy
+     Google Chrome
+
+⏺ Bash(ps -o pid,command -p $(lsof -i :3000 -t | head -1); curl -s
+      localhost:3000 | grep -o 'Který index[^<]*\|Zdroje dat\|Chci vědět' | sort
+      -u)
+  ⎿    PID COMMAND
+       861 /Applications/Google Chrome.app/Contents/Frameworks/Google Chrom
+     e Framework.framework/Versions/155.0.8059.40/Helpers/Google Chrome Hel
+     … +12 lines (ctrl+o to expand)
+
+⏺ A dev server is already running on :3000 and serving the new code. Taking a
+  headless screenshot at 375 px.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad &&
+      "/Applications/Google Chrome.app/…)
+  ⎿  [70171:398483:1015/151708.694843:ERROR:base/process/process_mac.cc:45]
+      task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+     [70171:398483:1015/151708.694856:ERROR:base/process/process_mac.cc:90]
+     … +3 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The headless window came out wider than 375 px, so the right side is cut off.
+  Wrapping the page in a 375 px iframe for a true mobile-width shot.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && cat > frame.html
+      <<'EOF'
+      <!doctyp…)
+  ⎿  (750, 3600)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The 375px layout matches the mockup, and the blank pairs list is just an
+  artifact of the headless capture freezing the rise animation early. The
+  "Zdroje dat" summary still shows the ▶ marker, so I'll check the CSS the page
+  is actually loading.
+
+⏺ Bash(css=$(curl -s localhost:3000 | grep -o '/_next/static/[^"]*\.css' | head
+      -3); for c in $css; do curl -s "localhost:3000$c" | grep -o
+      'summary[^}]*}' | head -5;…)
+  ⎿  (No output)
+
+⏺ Bash(curl -s localhost:3000 | grep -o '[^"]*\.css[^"]*' | head; )
+  ⎿  /_next/static/chunks/%5Broot-of-the-server%5D__0pyu6pgxzs16s._.css
+     next_static/chunks/[root-of-the-server]__0pyu6pgxzs16s._.css
+     /_next/static/chunks/%5Broot-of-the-server%5D__0pyu6pgxzs16s._.css\
+     … +4 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s "localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0py
+      u6pgxzs16s._.css" | grep -n -A4 'summary' | head -40)
+  ⎿  255:  summary {
+     256-    display: list-item;
+     257-  }
+     … +2 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s "localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0py
+      u6pgxzs16s._.css" | grep -c
+      'interpolate-size\|details-content\|aria-pressed\|bg-warn';…)
+  ⎿  4
+     158:    --ease-out-soft: cubic-bezier(.2, .8, .2, 1);
+     159:    --animate-rise: rise .45s var(--ease-out-soft) both;
+     … +4 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s "localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0py
+      u6pgxzs16s._.css" | sed -n '1355,1420p')
+  ⎿          background-color: #ccc;
+           }
+         }
+     … +62 lines (ctrl+o to expand)
+
+⏺ The dev server's CSS has my first globals.css edit but not the second (the
+  accordion rules). Checking the file on disk.
+
+⏺ Bash(grep -n 'summary\|details' src/app/globals.css; touch
+      src/app/globals.css; sleep 2; curl -s localhost:3000 >/dev/null; f=$(curl
+      -s localhost:3000 | grep -o '/_n…)
+  ⎿  67:   content expands where the browser supports ::details-content. */
+     68:summary {
+     73:summary::-webkit-details-marker {
+     … +7 lines (ctrl+o to expand)
+⏺ Still missing, so the dev server is probably serving its last good CSS after a
+  compile error. A production build will show any error.
+
+⏺ Bash(pnpm build 2>&1 | tail -30)
+  ⎿  $ next build
+     ▲ Next.js 16.4.1 (Turbopack)
+     ✓ Running next.config.ts took 18ms
+     … +18 lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+⏺ Bash(grep -l 'interpolate-size' .next/static/chunks/*.css | head -2 | xargs
+      grep -o 'summary[^}]*}\|details[^{]*{[^}]*}' | head)
+  ⎿  (No output)
+
+⏺ Bash(ls .next/static/chunks/*.css; for f in .next/static/chunks/*.css; do tr
+      '}' '\n' < $f | grep -i 'summary\|details' | head; done)
+  ⎿  .next/static/chunks/3u7d14en47-0j.css
+     summary{display:list-item
+
+⏺ All the summary/details rules are dropped, including the ones inside the
+  reduced-motion block, even though they're in the file. Checking how CSS is
+  processed here.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(sed -n '60,200p' node_modules/@tailwindcss/turbopack/README.md; grep -o
+      'unused[A-Za-z]*\|prune[A-Za-z]*\|elements[A-Za-z]*'
+      node_modules/@tailwindcss/turbopack…)
+  ⎿        },
+         },
+       },
+     … +39 lines (ctrl+o to expand)
+
+⏺ Bash(f=.next/static/chunks/*.css; grep -o 'content:"+"[^}]*}' $f; grep -o
+      '.\{80\}focus-visible.\{300\}' $f)
+  ⎿  Error: Exit code 2
+     ugrep: warning: .next/static/chunks/*.css: No such file or directory
+     ugrep: warning: .next/static/chunks/*.css: No such file or directory
+
+⏺ Bash(f=$(ls .next/static/chunks/*.css); grep -o 'focus-visible.\{400\}' $f)
+  ⎿  focus-visible{outline:3px solid var(--color-red);outline-offset:2px}@m
+     edia (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@prope
+     rty --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{sy
+     … +3 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(NODE_PATH=node_modules/.pnpm/node_modules node
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/3
+      e31baf8-668b-4075-ac0e-70b198ffd5ff/scr…)
+  ⎿  node:internal/modules/run_main:107
+         triggerUncaughtException(
+         ^
+     … +17 lines (ctrl+o to expand)
+
+⏺ Still tracking down why the accordion CSS rules get dropped; compiling
+  globals.css with Tailwind directly to narrow it down.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && sed -i ''
+      "s#\"@tailwindcss/node\"…)
+  ⎿  :focus-visible {
+       outline: 3px solid var(--color-red);
+       outline-offset: 2px;
+     … +39 lines (ctrl+o to expand)
+
+⏺ Tailwind's own output has all the rules, so they're being dropped later, in
+  Next's CSS step (lightningcss). Running lightningcss on that output to find
+  which rule it rejects.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && node $S/tw.mjs
+      src/app/globals.css…)
+  ⎿  summary:after {
+       content: "+";
+       transition: transform .25s var(--ease-out-soft);
+     … +38 lines (ctrl+o to expand)
+
+⏺ lightningcss keeps everything as well, which points to a stale cache in
+  Turbopack. Changing the file's content and rebuilding to test that.
+
+⏺ Bash(ls .next; du -sh .next/cache 2>/dev/null; pnpm build 2>&1 | grep -i
+      'compiled\|error\|warn'; f=$(ls .next/static/chunks/*.css); grep -c
+      'details-content' $f)
+  ⎿  app-path-routes-manifest.json
+     build
+     BUILD_ID
+     … +23 lines (ctrl+o to expand)
+
+⏺ The build compiled in 103 ms, so it's a cache hit. Moving the build cache
+  aside (not deleting it) and rebuilding.
+
+⏺ Bash(mv .next/cache
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/3
+      e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad/next-cache-old && pnpm b…)
+  ⎿  ✓ Compiled successfully in 1469ms
+     1
+  ⎿  (timeout 3m)
+
+⏺ Confirmed the stale Turbopack cache was dropping the new rules, while a clean
+  build includes them—restarting the dev server on :3000 will fix it, but I'll
+  leave it running and instead verify by serving the fresh production build on
+  port 3100 and testing it at 375 px via DevTools.
+
+⏺ Bash(pnpm next start -p 3100)
+  ⎿  Running in the background (↓ to manage)
+
+  Made 1 scratchpad edit +82 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && sleep 3; node
+      cdp.mjs $PWD http:/…)
+  ⎿  mid-count: 19,44 % ročně
+     Nasdaq-100 za 10 let průměrně
+     … +45 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 1m 30s)
+
+⏺ Tapping works, and the numbers count (caught at 19,44 % on the way to 21,16
+  %). Looking at the screenshot after the taps.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The scroll got reset, so I can't see the bottom of the card yet. Capturing
+  just the match card with a clip.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && python3 - <<'EOF'
+      p='cdp.mjs'; s=…)  ⎿  -rw-r--r--@ 1 martingnebus  wheel  502811 Oct 15 15:20 s3-card.png
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 1m 30s)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The card matches the mockup. One fix: Tailwind's preflight removes link
+  underlines, so the source links look like plain text. Adding underline, then a
+  reduced-motion check.
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 6 lines, removed 1 line
+      184                {list.map((s, i) => (
+      185                  <span key={s.url}>
+      186                    {i > 0 && "; "}
+      187 -                  <a href={s.url} target="_blank" rel="noopene
+          -r">                                                           
+      187 +                  <a                                          
+      188 +                    href={s.url}                              
+      189 +                    target="_blank"                           
+      190 +                    rel="noopener"                            
+      191 +                    className="underline"                     
+      192 +                  >                                           
+      193                      {s.title}, {sourceDate(s)}
+      194                    </a>
+      195                  </span>
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/3e31baf8-668b-4075-ac0e-70b198ffd5ff/scratchpad && sed 's#await
+      send("Page.enable");…)
+  ⎿  mid-count: 21,16 % ročně
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 1m 30s)
+
+⏺ With reduced motion enabled, the number jumps straight to 21,16% with no
+  animated count-up. I'll stop the port-3100 server, check off the TODO items,
+  and update CLAUDE.md and the README to reflect the new src/lib/ structure.
+
+⏺ Bash(kill $(lsof -i :3100 -t) 2>/dev/null; python3 - <<'EOF'
+      import re…)
+  ⎿   CLAUDE.md               |  2 +-
+      README.md               |  1 +
+      docs/TODO.md            |  8 ++++----
+     … +11 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md (+1 -1)
+      39  
+      40  - `README.md` how to run, structure, live URL
+      41  - `AGENTS.md` written by `next dev`: read `node_modules/next/di
+          st/docs/` before Next.js code
+      42 -- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         - Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         -r topic, `data.test.ts`)                                       
+      42 +- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         + Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         +r topic, `data.test.ts`); `src/lib/` formatting and the taps' o
+         +ptions, with tests                                             
+      43  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      44  - `docs/TODO.md` the commit plan, one section per commit
+      45  - `docs/decisions.md` decisions with reasons
+  ⎿  Updated README.md (+1 -0)
+      29    components/    the UI
+      30    copy/cs.ts     all Czech page copy
+      31    data/          every sourced number: value, source URL, date,
+           quote
+      32 +  lib/           Czech number formatting, the taps' options (no
+         + figures)                                                      
+      33  docs/
+      34    research/      the sourced research behind src/data/
+      35    mockups/       the agreed static mockup (page-a.html) and the
+           rejected one
+  ⎿  Updated docs/TODO.md (+4 -4)
+      37  
+      38  ## C6 Taps and match card
+      39  
+      40 -- [ ] Index and amount chips (one client component, one state).
+      41 -- [ ] Match card in the order of decision 30: 10-year return wi
+         -th its warning, top 5 bars and company count, EU fund and TER v
+         -s the US fund, brokers and fees row, "Chci vědět víc" button to
+         - the form, sources in an accordion. No ISIN on the page. All va
+         -lues from `src/data/`.                                         
+      42 -- [ ] Motion on change (decision 24): numbers count, text fades
+         -, bars slide; nothing under reduced motion.                    
+      43 -- [ ] Tests: percent and Kč formatting, fee per purchase.      
+      40 +- [x] Index and amount chips (one client component, one state).
+      41 +- [x] Match card in the order of decision 30: 10-year return wi
+         +th its warning, top 5 bars and company count, EU fund and TER v
+         +s the US fund, brokers and fees row, "Chci vědět víc" button to
+         + the form, sources in an accordion. No ISIN on the page. All va
+         +lues from `src/data/`.                                         
+      42 +- [x] Motion on change (decision 24): numbers count, text fades
+         +, bars slide; nothing under reduced motion.                    
+      43 +- [x] Tests: percent and Kč formatting, fee per purchase.      
+      44  
+      45  ## C7 The ask and the e-mail
+      46  
+
+⏺ Background command "Serve the production build on port 3100" failed with exit
+code 143
+
+⏺ C6 is built: the index and amount chips, and below them the match card, which
+  updates as you tap. pnpm check and pnpm test pass (170 tests), and pnpm build
+  gives a static ○ /. I tapped through it on the production build at 375 px: S&P
+  500 → Nasdaq-100 counts the return 15,33 % → 21,16 %, and 1 000 Kč shows the
+  currency-conversion fees as 1,50 Kč (Trading 212) and 5 Kč (XTB). With reduced
+  motion on, the number jumps straight to its new value.
+
+  You need to restart your dev server on :3000. A stale Turbopack cache meant it
+  never picked up the new accordion styles in globals.css (Tailwind and
+  lightningcss both output them). I moved the build cache aside to get a clean
+  build. Until you restart, the "Zdroje dat" accordion on :3000 shows the
+  browser's ▶ marker and opens with no animation.
+
+  Files changed
+  - New: src/lib/format.ts and format.test.ts (percent, Kč, fee per purchase,
+    Czech dates), src/lib/plan.ts (the four amounts and the defaults: they're
+    choices, not sourced figures, so they're outside src/data/),
+    src/components/Planner.tsx (the client component holding the one state),
+    MatchCard.tsx, motion.tsx (counting numbers and fading text).
+  - Edited: Home.tsx, src/copy/cs.ts, src/app/globals.css (accordion styles and
+    smooth opening), docs/TODO.md (C6 ticked), CLAUDE.md map and README.md (both
+    now list src/lib/).
+
+  Worth knowing before you commit
+  - "Chci vědět víc ↓" goes to #ask, which only exists once C7 adds the ask
+    block, so the button does nothing until then.
+  - At 375 px the European fund names in the first-screen pairs list wrap onto
+    two lines. The mockup has the same narrow column, so I left it alone.
+  - When Biome formatted the test file, it turned the \u00a0 escape into a
+    literal invisible non-breaking space. The tests still pass; a comment above
+    says what it is.
+
+  Next step is /implementation-end: the checks, the reminder to export the log,
+  then the commit message for your approval.
+
+✻ Churned for 8m 43s · done 3:21 PM
+
+❯ I would like to change the alignment of the elements to this way:             
+  1 - the selected name only => [Image #1], without the fees                    
+  rest as is, while the fee being standalone element in the element column      
+  please reshuffle                                                              
+  ⎿  [Image #1]
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 4 lines, removed 1 line
+      125              {copy.fundHead(index.usFunds.map((f) => f.ticker).
+           join(", "))}
+      126            </Swap>
+      127          </Head>
+      128 -        <p className="mb-2.5 text-lg leading-[1.15] font-[850]
+          -">                                                            
+      128 +        <p className="text-lg leading-[1.15] font-[850]">     
+      129            <Swap>{index.euFund.name}</Swap>
+      130          </p>
+      131 +      </Block>                                                
+      132 +                                                              
+      133 +      <Block>                                                 
+      134          <Row label={copy.terLabel}>
+      135            <strong className="text-xl font-[850] tabular-nums w
+           dth-112">
+      136              <CountUp value={index.euFund.ter.value} format={pc
+           t} />
+
+⏺ Bash(pnpm check 2>&1 | tail -2 && pnpm build 2>&1 | grep -i
+      'compiled\|error\|○ /$'; (pnpm next start -p 3100 >/dev/null 2>&1 &);
+      sleep 3; S=/private/tmp/claude-501/…)
+  ⎿  $ biome check
+     Checked 24 files in 27ms. No fixes applied.
+     ✓ Compiled successfully in 406ms
+     … +4 lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The "Evropský fond místo …" block now holds just the heading and the full fund
+  name, as in your image. The two fee rows (the fund's TER and the US fund to
+  compare) are a separate block below it, with the same divider line as the
+  other blocks. I gave the fee block no heading of its own, because the row
+  labels already say what it is. Everything else is unchanged. pnpm check and
+  pnpm build pass, and the 375 px screenshot shows the new layout.
+
+  Decision 30 in docs/decisions.md still lists the fund name and the TER
+  comparison as one item. Should I add a line there for this split before we run
+  /implementation-end?
+
+✻ Baked for 33s · done 3:26 PM
+
+❯ yes update the decisions, but this part on the image should be the top most   
+  element [Image #2]                                                            
+  make sure it has proper heading as it should act as the main element of the   
+  MatchCard                                                                     
+  ⎿  [Image #2]
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The fund block moves to the top as the card's h2 and also becomes the card's
+  accessible name. The TER block stays where it is.
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 14 lines, removed 2 lines
+      70      <article
+      71        id="match"
+      72        className="mb-7 bg-card px-4 pt-5 pb-4"
+      73 -      aria-label={copy.label}                                  
+      73 +      aria-labelledby={titleId}                                
+      74      >
+      75 -      <div>                                                    
+      75 +      {/* The card's title: what to buy instead (decision 37). 
+         +*/}                                                            
+      76 +      <h2 id={titleId} className="tracking-[-0.01em] wdth-118">
+      77 +        <span className="mb-1.5 block text-[15px] font-extrabol
+         +d">                                                            
+      78 +          <Swap>                                               
+      79 +            {copy.fundHead(index.usFunds.map((f) => f.ticker).j
+         +oin(", "))}                                                    
+      80 +          </Swap>                                              
+      81 +        </span>                                                
+      82 +        <span className="block text-[22px] leading-[1.1] font-[
+         +850]">                                                         
+      83 +          <Swap>{index.euFund.name}</Swap>                     
+      84 +        </span>                                                
+      85 +      </h2>                                                    
+      86 +                                                               
+      87 +      <Block>                                                  
+      88          <Head className="mb-1.5">
+      89            <Swap>{copy.returnHead(index.longLabel)}</Swap>
+      90          </Head>
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 1 line, removed 1 line
+       97          <p className="mt-2.5 border-l-3 border-red bg-warn px-
+           2.5 py-2 text-[13px] leading-[1.4]">
+       98            {copy.warning}
+       99          </p>
+      100 -      </div>                                                  
+      100 +      </Block>                                                
+      101  
+      102        <Block>
+      103          <Head>{copy.topHead}</Head>
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Removed 11 lines
+      132        </Block>
+      133  
+      134        <Block>
+      135 -        <Head>                                                
+      136 -          <Swap>                                              
+      137 -            {copy.fundHead(index.usFunds.map((f) => f.ticker).
+          -join(", "))}                                                  
+      138 -          </Swap>                                             
+      139 -        </Head>                                               
+      140 -        <p className="text-lg leading-[1.15] font-[850]">     
+      141 -          <Swap>{index.euFund.name}</Swap>                    
+      142 -        </p>                                                  
+      143 -      </Block>                                                
+      144 -                                                              
+      145 -      <Block>                                                 
+      135          <Row label={copy.terLabel}>
+      136            <strong className="text-xl font-[850] tabular-nums w
+           dth-112">
+      137              <CountUp value={index.euFund.ter.value} format={pc
+           t} />
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 1 line
+      15  import { CountUp, Swap } from "./motion";
+      16  
+      17  const copy = cs.match;
+      18 +const titleId = "match-title";                                 
+      19  
+      20  // Module-level, so CountUp gets the same function every render
+          .
+      21  const whole = (n: number) => formatNumber(n);
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 1 line, removed 1 line
+      28  const sourceDate = (s: Source) =>
+      29    s.asOf ? formatDate(s.asOf) : copy.accessed(formatDate(s.acce
+          ssed));
+      30  
+      31 -// The answer to the taps, in the order of decision 30. Rendere
+         -d inside                                                       
+      31 +// The answer to the taps, in the order of decision 37. Rendere
+         +d inside                                                       
+      32  // the Planner client component; no ISIN here (it is in the e-m
+          ail).
+      33  export function MatchCard({
+      34    index,
+
+⏺ Update(src/copy/cs.ts)
+  ⎿  Added 1 line, removed 2 lines
+      29      indexQuestion: "Který index vás zajímá?",
+      30      amountQuestion: "Kolik chcete investovat měsíčně?",
+      31    },
+      32 -  // Decisions 14, 17, 28, 30, 32.                             
+      32 +  // Decisions 14, 17, 28, 32, 37.                             
+      33    match: {
+      34 -    label: "Váš evropský fond",                                
+      34      returnHead: (index: string) => `${index} za 10 let průměrně
+          `,
+      35      perYear: "ročně",
+      36      returnSub: (returnType: string) => `v USD, ${returnType}`,
+⏺ Now decision 37 and the TODO reference.
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)
+  ⎿  41:- [x] Match card in the order of decision 30 (changed by decision 3
+     7): 10-year return with its warning, top 5 bars and company count, EU
+     fund and TER vs the US fund, brokers and fees row, "Chci vědět víc" bu
+     … +5 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+1 -1)
+      38  ## C6 Taps and match card
+      39  
+      40  - [x] Index and amount chips (one client component, one state).
+      41 -- [x] Match card in the order of decision 30: 10-year return wi
+         -th its warning, top 5 bars and company count, EU fund and TER v
+         -s the US fund, brokers and fees row, "Chci vědět víc" button to
+         - the form, sources in an accordion. No ISIN on the page. All va
+         -lues from `src/data/`.                                         
+      41 +- [x] Match card in the order of decision 30 (changed by decisi
+         +on 37): 10-year return with its warning, top 5 bars and company
+         + count, EU fund and TER vs the US fund, brokers and fees row, "
+         +Chci vědět víc" button to the form, sources in an accordion. No
+         + ISIN on the page. All values from `src/data/`.                
+      42  - [x] Motion on change (decision 24): numbers count, text fades
+          , bars slide; nothing under reduced motion.
+      43  - [x] Tests: percent and Kč formatting, fee per purchase.
+      44  
+  ⎿  Updated docs/decisions.md (+21 -0)
+      333      build. C11 deploys and swaps the placeholder for the live 
+           URL.
+      334      Changes decision 33 ("the links get the live domain in C10
+           ").
+      335      *Reason:* the user's choice; no URL is set before the depl
+           oy.
+      336 +                                                              
+      337 +## C6 Taps and match card (2026-10-15)                        
+      338 +                                                              
+      339 +Agreed in the C6 review of the match card at 375 px.          
+      340 +                                                              
+      341 +37. **The fund is the card's title** (changes the order in dec
+          +ision 30).                                                    
+      342 +    The card is headed by "Evropský fond místo [US funds]" and
+          + the fund's                                                   
+      343 +    full name, as one heading that names the card for screen r
+          +eaders.                                                       
+      344 +    The fund's TER and the US fund for comparison become their
+          + own block                                                    
+      345 +    after the top 5. Order:                                   
+      346 +    1. the fund: "Evropský fond místo [US funds]" and its full
+          + name                                                         
+      347 +    2. "[index] za 10 let průměrně": the 10-year % with its wa
+          +rning                                                         
+      348 +    3. top 5 companies as bars, plus the number of companies  
+      349 +    4. TER vs the US fund                                     
+      350 +    5. where to buy and the fees row                          
+      351 +    6. the red "Chci vědět víc ↓" button                      
+      352 +    7. "Zdroje dat", the sources accordion                    
+      353 +                                                              
+      354 +    *Reason:* the user's choice in review; the fund is the ans
+          +wer the                                                       
+      355 +    first screen promises, so it leads, and a tap still change
+          +s the top                                                     
+      356 +    of the card (the name and the return both swap).          
+
+⏺ Bash(pnpm build 2>&1 | grep -i 'compiled\|error\|○ /$'; (pnpm next start -p
+      3100 >/dev/null 2>&1 &); sleep 3;
+      S=/private/tmp/claude-501/-Users-martingnebus-Martin-GI…)
+  ⎿  ✓ Compiled successfully in 338ms
+     ┌ ○ /
+     Evropský fond místo QQQ
+     … +2 lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The fund block is now the top of the match card and is its title: "Evropský
+  fond místo QQQ" above the full fund name, set larger than the other card
+  headings, at 22 px. Both sit in one h2, which also names the card for screen
+  readers, so I removed the old "Váš evropský fond" label from cs.ts. pnpm 
+  check, pnpm test (170) and pnpm build pass, and the 375 px screenshot shows
+  the new order.
+
+  Card order now
+  1. The fund (title)
+  2. 10-year return and its warning
+  3. Top 5 companies and the company count
+  4. The TER rows
+  5. Where to buy and the fees
+  6. "Chci vědět víc ↓"
+  7. "Zdroje dat"
+
+  Decisions: I added decision 37 in a new C6 section of docs/decisions.md. It
+  lists this order and records it as replacing decision 30's, with your review
+  as the reason. The C6 box in docs/TODO.md now reads "decision 30 (changed by
+  decision 37)".
+
+  Your dev server on :3000 still needs a restart to pick up the accordion
+  styles.
+
+  Ready for /implementation-end when you are.
+
+✻ Cogitated for 1m 5s · done 3:29 PM

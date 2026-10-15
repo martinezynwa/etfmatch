@@ -29,6 +29,7 @@ src/
   components/    the UI
   copy/cs.ts     all Czech page copy
   data/          every sourced number: value, source URL, date, quote
+  lib/           Czech number formatting, the taps' options (no figures)
 docs/
   research/      the sourced research behind src/data/
   mockups/       the agreed static mockup (page-a.html) and the rejected one

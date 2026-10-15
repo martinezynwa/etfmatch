@@ -23,7 +23,39 @@ export const cs = {
       `${ticker} je na burze ${exchange}`,
     cta: "Najít evropský fond ↓",
   },
+  // Decision 5.
   taps: {
     label: "Vyberte index a částku",
+    indexQuestion: "Který index vás zajímá?",
+    amountQuestion: "Kolik chcete investovat měsíčně?",
+  },
+  // Decisions 14, 17, 28, 32, 37.
+  match: {
+    returnHead: (index: string) => `${index} za 10 let průměrně`,
+    perYear: "ročně",
+    returnSub: (returnType: string) => `v USD, ${returnType}`,
+    warning:
+      "Minulé výnosy nezaručují budoucí. Nejde o investiční doporučení, jen o historickou statistiku indexu.",
+    topHead: "Největší firmy uvnitř",
+    companiesBefore: "Celkem",
+    companiesAfter: "firem v indexu.",
+    fundHead: (usFunds: string) => `Evropský fond místo ${usFunds}`,
+    terLabel: "Poplatek fondu (TER) ročně",
+    usTerLabel: "Americký fond pro srovnání",
+    buyHead: "Kde koupit",
+    fxFee: "směna měny",
+    feesBefore: "Za nákup za",
+    feesAfter: ", pokud máte účet v Kč.",
+    commission: (fee: string) => `Provize za nákup ETF je u obou ${fee}.`,
+    more: "Chci vědět víc ↓",
+    sourcesHead: "Zdroje dat",
+    sourceGroups: {
+      return: "Výnos",
+      companies: "Firmy",
+      fund: "Fond a poplatek",
+      brokers: "Brokeři",
+    },
+    /** A source without its own date: when it was read. */
+    accessed: (date: string) => `staženo ${date}`,
   },
 };

@@ -1,8 +1,10 @@
-import { cs } from "@/copy/cs";
 import { FirstScreen } from "./FirstScreen";
 import { Header } from "./Header";
+import { Planner } from "./Planner";
 
 const tapsId = "taps";
+// The ask block arrives in C7; the match card already links to it.
+const askId = "ask";
 
 export function Home() {
   return (
@@ -10,12 +12,7 @@ export function Home() {
       <Header />
       <main>
         <FirstScreen tapsId={tapsId} />
-        {/* The index and amount taps arrive in C6. */}
-        <section
-          id={tapsId}
-          className="scroll-mt-3"
-          aria-label={cs.taps.label}
-        />
+        <Planner tapsId={tapsId} askId={askId} />
       </main>
     </div>
   );

@@ -37,10 +37,10 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C6 Taps and match card
 
-- [ ] Index and amount chips (one client component, one state).
-- [ ] Match card in the order of decision 30: 10-year return with its warning, top 5 bars and company count, EU fund and TER vs the US fund, brokers and fees row, "Chci vědět víc" button to the form, sources in an accordion. No ISIN on the page. All values from `src/data/`.
-- [ ] Motion on change (decision 24): numbers count, text fades, bars slide; nothing under reduced motion.
-- [ ] Tests: percent and Kč formatting, fee per purchase.
+- [x] Index and amount chips (one client component, one state).
+- [x] Match card in the order of decision 30 (changed by decision 37): 10-year return with its warning, top 5 bars and company count, EU fund and TER vs the US fund, brokers and fees row, "Chci vědět víc" button to the form, sources in an accordion. No ISIN on the page. All values from `src/data/`.
+- [x] Motion on change (decision 24): numbers count, text fades, bars slide; nothing under reduced motion.
+- [x] Tests: percent and Kč formatting, fee per purchase.
 
 ## C7 The ask and the e-mail
 

@@ -333,3 +333,24 @@ Agreed in the C4 review of the scaffold.
     build. C11 deploys and swaps the placeholder for the live URL.
     Changes decision 33 ("the links get the live domain in C10").
     *Reason:* the user's choice; no URL is set before the deploy.
+
+## C6 Taps and match card (2026-10-15)
+
+Agreed in the C6 review of the match card at 375 px.
+
+37. **The fund is the card's title** (changes the order in decision 30).
+    The card is headed by "Evropský fond místo [US funds]" and the fund's
+    full name, as one heading that names the card for screen readers.
+    The fund's TER and the US fund for comparison become their own block
+    after the top 5. Order:
+    1. the fund: "Evropský fond místo [US funds]" and its full name
+    2. "[index] za 10 let průměrně": the 10-year % with its warning
+    3. top 5 companies as bars, plus the number of companies
+    4. TER vs the US fund
+    5. where to buy and the fees row
+    6. the red "Chci vědět víc ↓" button
+    7. "Zdroje dat", the sources accordion
+
+    *Reason:* the user's choice in review; the fund is the answer the
+    first screen promises, so it leads, and a tap still changes the top
+    of the card (the name and the return both swap).
