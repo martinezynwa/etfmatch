@@ -60,7 +60,7 @@ export const sources = {
 
   // US funds (docs/research/pairs.md)
   vooFactsheet: {
-    title: "Vanguard S&P 500 ETF (VOO), fact sheet",
+    title: "Vanguard S&P 500 ETF (VOO), factsheet",
     url: "https://fund-docs.vanguard.com/F0968.pdf",
     asOf: "2026-06-30",
     accessed,
@@ -72,7 +72,7 @@ export const sources = {
     accessed,
   },
   spyFactsheet: {
-    title: "SPDR S&P 500 ETF Trust (SPY), fact sheet",
+    title: "SPDR S&P 500 ETF Trust (SPY), factsheet",
     url: "https://www.ssga.com/us/en/intermediary/library-content/products/factsheets/etfs/us/factsheet-us-en-spy.pdf",
     asOf: "2026-09-30",
     accessed,

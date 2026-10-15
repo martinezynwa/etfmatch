@@ -30,7 +30,8 @@ export const cs = {
     headline:
       "ETF z NYSE si tu většinou nekoupíte, stejný index v evropském fondu ano.",
     why: "Americké fondy nemají dokument KID, který EU vyžaduje. Většina brokerů je proto drobným investorům neprodá.",
-    columnUs: "NYSE",
+    // "USA", not "NYSE": QQQ in the same column trades on Nasdaq.
+    columnUs: "USA",
     columnEu: "Evropa",
     /** Tags a US fund listed outside NYSE (decision 12). */
     listedOn: (ticker: string, exchange: string) =>
@@ -51,23 +52,15 @@ export const cs = {
     warning:
       "Minulé výnosy nezaručují budoucí. Nejde o investiční doporučení, jen o historickou statistiku indexu.",
     topHead: "Největší firmy uvnitř",
-    companiesBefore: "Celkem",
-    companiesAfter: "akcií v indexu.",
+    // The count sits in the heading's brackets: "(z 503 akcií)".
+    companiesBefore: "(z",
+    companiesAfter: "akcií)",
     fundHead: (usFunds: string) => `Evropský fond místo ${usFunds}`,
-    terLabel: "Poplatek fondu (TER) ročně",
-    usTerLabel: "Americký fond pro srovnání",
-    buyHead: "Kde koupit",
-    fxFee: "směna měny",
-    feesBefore: "Za nákup za",
-    feesAfter: ", pokud máte účet v Kč.",
-    commission: (fee: string) => `Provize za nákup ETF je u obou ${fee}.`,
     more: "Chci vědět víc ↓",
     sourcesHead: "Zdroje dat",
     sourceGroups: {
       return: "Výnos",
       companies: "Složení",
-      fund: "Fond a poplatek",
-      brokers: "Brokeři",
     },
     /** A source without its own date: when it was read. */
     accessed: (date: string) => `staženo ${date}`,
@@ -75,7 +68,7 @@ export const cs = {
   // Decisions 15, 26, 30. The checklist names the ISIN first, then the
   // five sections of the e-mail.
   ask: {
-    headline: "Pošleme vám celý plán k",
+    headline: "Pošleme vám celý plán pro index",
     lead: "Jeden e-mail, sestavený podle toho, co jste vybrali.",
     checklist: {
       isin: "Evropský fond a jeho ISIN, podle kterého ho najdete u brokera",
@@ -86,7 +79,7 @@ export const cs = {
       fees: (brokers: string[]) =>
         `Poplatky u ${brokers.join(" a ")} pro vaši částku`,
       taxes: (years: number, limit: string, rate: string) =>
-        `Daně v Česku stručně: ${years} roky, ${limit}, ${rate}`,
+        `Daně v Česku: kdy zisk nedaníte (držení přes ${years}\u00a0roky, prodeje do ${limit} za rok) a kdy platíte ${rate}`,
       accDist: "Akumulační, nebo distribuční fond",
     },
     emailLabel: "Váš e-mail",
@@ -98,8 +91,9 @@ export const cs = {
     consent: `Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. ${controller} Souhlas můžete kdykoli odvolat.`,
     consentMore: "Jak s e-mailem zacházíme",
     submit: "Poslat plán",
-    doneHead: "Hotovo, takhle plán vypadá.",
-    doneText: "Demo: nic jsme neuložili ani neodeslali.",
+    doneHead: "Hotovo, plán je připravený.",
+    doneText:
+      "Demo: e-mail jsme neodeslali ani neuložili, plán si prohlédnete tady na stránce.",
     reopen: "Zobrazit e-mail znovu",
   },
   // Decision 16. The keys name the questions for the faq_opened event (C9).
@@ -132,7 +126,7 @@ export const cs = {
   footer: {
     disclaimerLead: "Nejde o investiční doporučení.",
     disclaimer:
-      "Stránka ukazuje historická data indexů, ne předpověď. Minulé výnosy nezaručují budoucí a investice může ztratit hodnotu. Broker je uveden jen jako místo, kde fond najdete, ne jako doporučení.",
+      "Stránka ukazuje historická data indexů, ne předpověď. Minulé výnosy nezaručují budoucí a investice může ztratit hodnotu. Brokeři jsou uvedeni jen jako místo, kde fond najdete, ne jako doporučení.",
     sourcesHead: "Zdroje",
     sourceGroups: {
       kid: "Proč americké ETF většinou nekoupíte",
@@ -180,7 +174,7 @@ export const cs = {
     modalTitle: "Takhle vypadá váš e-mail",
     close: "Zavřít",
     subject: (index: string, amount: string) =>
-      `Předmět: Váš ETF plán: ${index}, ${amount} měsíčně`,
+      `Předmět: Váš ETF plán pro ${index}, ${amount} měsíčně`,
     title: "Váš ETF plán",
     intro: (index: string, amount: string) =>
       `Vybrali jste ${index} a ${amount} měsíčně. Evropský fond, který sleduje stejný index:`,
@@ -207,19 +201,20 @@ export const cs = {
       companies: "Počet akcií",
       companiesValue: (n: string) => `${n} akcií`,
       usShare: "Podíl USA",
-      notPublished: "neuvádí",
-      tech: (share: string) => `${share} technologie`,
-      top3: "Největší 3",
+      notPublished: "neuvedeno",
+      tech: (share: string) => `${share} v technologiích`,
+      top3: "Tři největší firmy",
       note: (world: string, usShare: string) =>
-        `Všechny tři indexy mají v čele stejné tři firmy. I fond „${world}“ má ${usShare} peněz v USA.`,
+        `Všechny tři indexy mají v čele stejné tři firmy. I v indexu ${world} připadá na USA ${usShare}.`,
     },
     fees: {
       head: (amount: string) => `3. Poplatky pro ${amount} měsíčně`,
       ter: (ter: string) => `Poplatek fondu (TER): ${ter} ročně`,
       terAfter: ", strhává se z hodnoty fondu, nic neplatíte zvlášť.",
-      noCommission: "nákup bez provize",
-      commissionUpTo: (commission: string, limit: string) =>
-        `provize ${commission} do ${limit} měsíčně`,
+      // Same wording as the match card: the commission in Kč.
+      commission: (fee: string) => `provize ${fee}`,
+      commissionUpTo: (fee: string, limit: string) =>
+        `provize ${fee} při objemu do ${limit} měsíčně`,
       fx: (fee: string) => `směna měny ${fee}`,
       perPurchase: (perPurchase: string, perYear: string) =>
         ` = ${perPurchase} za nákup, ${perYear} za rok.`,

@@ -22,20 +22,20 @@ const pairGrid = "grid grid-cols-[112px_20px_1fr] gap-x-2";
 
 export function FirstScreen({ tapsId }: { tapsId: string }) {
   return (
-    <section className="pt-1.5 pb-7" aria-labelledby="headline">
+    <section className="pb-7" aria-labelledby="headline">
       <h1
         id="headline"
-        className="text-[28px] leading-[1.08] font-[850] tracking-[-0.01em] wdth-118"
+        className="text-4xl leading-[1.08] font-heavy tracking-head text-balance wdth-118"
       >
         {copy.headline}
       </h1>
-      <p className="mt-3 mb-4 text-[15px] leading-[1.45] text-muted">
+      <p className="mt-2 mb-3 text-base leading-[1.45] text-muted">
         {copy.why}
       </p>
 
-      <div className="mb-4 bg-card px-4 pt-2.5 pb-1">
+      <div className="mb-3 bg-card px-4 pt-2.5 pb-1">
         <div
-          className={`${pairGrid} border-b-2 border-ink pb-1.5 text-[13px] font-extrabold`}
+          className={`${pairGrid} border-b-2 border-ink pb-1.5 text-sm font-extrabold`}
           aria-hidden="true"
         >
           <span>{copy.columnUs}</span>
@@ -45,17 +45,17 @@ export function FirstScreen({ tapsId }: { tapsId: string }) {
           {Object.values(indexes).map((index, i) => (
             <li
               key={index.id}
-              className={`${pairGrid} items-baseline border-line pt-[11px] pb-[9px] not-first:border-t motion-safe:animate-rise`}
+              className={`${pairGrid} items-baseline border-line pt-2 pb-1.5 not-first:border-t motion-safe:animate-rise`}
               style={{ animationDelay: `${i * 80 + 150}ms` }}
             >
-              <span className="text-base leading-[1.2] font-[750] text-muted">
+              <span className="text-body leading-[1.2] font-extrabold text-muted">
                 <span className="sr-only">{copy.columnUs}: </span>
                 {index.usFunds.map((f) => f.ticker).join(", ")}
               </span>
-              <span className="font-black text-red" aria-hidden="true">
+              <span className="font-black text-accent" aria-hidden="true">
                 →
               </span>
-              <span className="text-base leading-[1.2] font-[750]">
+              <span className="text-body leading-[1.2] font-extrabold">
                 <span className="sr-only">{copy.columnEu}: </span>
                 {keepLastTwo(index.euFund.shortName)}
               </span>

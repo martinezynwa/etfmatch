@@ -11,18 +11,44 @@
   --color-ink-soft: #2b2926;
   --color-muted: #5c5853;
   --color-line: #d4d0ca;
+  /* Red is for CTAs and disclaimers only (decision 43). */
   --color-red: #d7000f;
   --color-red-dark: #a8000c;
   --color-warn: #fbf4f4;
+  /* Selection, emphasis and focus: the chosen index, the largest
+     company, the arrow to the EU fund, the wordmark's dot. */
+  --color-accent: #1f4fd1;
+  --color-accent-soft: #edf1fb;
   --color-white: #ffffff;
   /* Text on the dark ask block. */
   --color-on-dark-muted: #c9c6c1;
   --color-on-dark-faint: #b5b1ab;
+  --color-on-dark-accent: #9db7ff;
   --color-on-dark-error: #ff8a8f;
 
   --radius-*: initial;
 
   --font-sans: var(--font-archivo), system-ui, sans-serif;
+
+  /* The type scale: every font size on the page is one of these. Line
+     heights are inherited (1.5 from body) unless a leading-* sets one. */
+  --text-*: initial;
+  --text-2xs: 10px;
+  --text-xs: 12.5px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-base: 15px;
+  --text-body: 16px;
+  --text-lg: 17px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 22px;
+  --text-4xl: 26px;
+  --text-5xl: 30px;
+
+  --font-weight-heavy: 850;
+  --tracking-head: -0.01em;
+  --tracking-mark: -0.02em;
 
   --spacing-gutter: 16px;
   --container-page: 480px;
@@ -58,6 +84,10 @@ html {
   /* Lets an accordion animate to height: auto (decision 24). */
   interpolate-size: allow-keywords;
 }
+/* The page stays put behind the open e-mail modal. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
 
 body {
   background: var(--color-ground);
@@ -67,14 +97,19 @@ body {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-red);
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* Accordions (sources and FAQ): a "+" that turns to "×", and the
-   content expands where the browser supports ::details-content. */
+/* Accordions (sources and FAQ): a "+" that turns to "×", centred on the
+   question whatever its line count, and the content expands where the
+   browser supports ::details-content. */
 summary {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
   list-style: none;
   cursor: pointer;
 }
@@ -83,19 +118,11 @@ summary::-webkit-details-marker {
 }
 summary::after {
   content: "+";
-  position: absolute;
-  right: 0;
-  top: 6px;
-  font-size: 20px;
+  flex: none;
+  font-size: var(--text-2xl);
   font-weight: 500;
   line-height: 1;
   transition: transform 0.25s var(--ease-out-soft);
-}
-/* The FAQ cards: the mark sits inside the card's padding. */
-details[data-q] > summary::after {
-  right: var(--spacing-gutter);
-  top: 20px;
-  font-size: 22px;
 }
 details[open] > summary::after {
   transform: rotate(45deg);

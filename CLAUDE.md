@@ -25,7 +25,10 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
   UTM and other visit parameters are read in the browser only.
 - Before "done": `pnpm check` and `pnpm test` pass.
 - Colours, fonts and spacing come from the `@theme` tokens in
-  `src/app/globals.css`; the default palette and radii are cleared.
+  `src/app/globals.css`; the default palette, radii and type sizes are
+  cleared.
+- Red marks only CTAs and disclaimers; selection, emphasis and focus use
+  `accent`.
 - Page copy lives in `src/copy/cs.ts`; components hold no Czech strings.
 - Route files in `src/app/` only import and render components from
   `src/components/`.

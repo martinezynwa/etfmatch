@@ -54,7 +54,8 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
           aria-label={copy.label}
         >
           <Question>{copy.indexQuestion}</Question>
-          <div className="mb-5 flex flex-wrap gap-2">
+          {/* Both rows are the same control: equal columns, same type. */}
+          <div className="mb-5 grid grid-cols-3 gap-1.5">
             {Object.values(indexes).map((index) => (
               <Chip
                 key={index.id}
@@ -72,7 +73,6 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
                 key={amount}
                 pressed={plan.amount === amount}
                 onClick={() => selectAmount(amount)}
-                className="px-1 text-sm"
               >
                 {kc(amount)}
               </Chip>
@@ -104,7 +104,7 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
 
 function Question({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mb-2.5 text-lg font-extrabold tracking-[-0.01em] wdth-118">
+    <h2 className="mb-2.5 text-xl font-extrabold tracking-head wdth-118">
       {children}
     </h2>
   );
@@ -113,12 +113,10 @@ function Question({ children }: { children: ReactNode }) {
 function Chip({
   pressed,
   onClick,
-  className = "px-4 text-[15px]",
   children,
 }: {
   pressed: boolean;
   onClick: () => void;
-  className?: string;
   children: ReactNode;
 }) {
   return (
@@ -126,7 +124,7 @@ function Chip({
       type="button"
       aria-pressed={pressed}
       onClick={onClick}
-      className={`min-h-11 cursor-pointer border-[1.5px] border-ink leading-none font-semibold transition-[background-color,color,transform] duration-180 active:scale-97 aria-pressed:bg-ink aria-pressed:text-white ${className}`}
+      className="min-h-11 cursor-pointer border-[1.5px] border-ink leading-none font-semibold transition-[background-color,color,transform] duration-180 active:scale-97 aria-pressed:bg-ink aria-pressed:text-white px-1 text-base whitespace-nowrap"
     >
       {children}
     </button>

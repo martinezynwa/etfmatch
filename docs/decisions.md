@@ -419,3 +419,47 @@ Agreed in the C6 review of the match card at 375 px.
     sentence stays hedged ("většina brokerů"); its sources are the
     Regulation and XTB's international help page, and Fio banka says its
     clients can still buy US ETFs.
+
+## UI review (2026-10-15)
+
+43. **Red only on CTAs and disclaimers; a blue accent for the rest.**
+    Changes decision 21 ("one red"). Red `#d7000f` stays on the red
+    buttons and the left rule of the two "nejde o investiční doporučení"
+    boxes. Selection, emphasis and focus use `accent` `#1f4fd1`: the
+    arrow to the EU fund, the largest company's bar, the chosen index's
+    column in the e-mail (on `accent-soft` `#edf1fb`, not the warning
+    pink), the focus ring and the wordmark's dot. The checklist ticks on
+    the dark block are plain `on-dark-accent` `#9db7ff` ticks, not filled
+    red boxes that read as checkboxes. The form error keeps
+    `on-dark-error`: an error is a warning, the one other place where a
+    red tone means something. *Reason:* the user's call after a UI
+    review; red on the focus ring, the selected column and the top bar
+    read as errors or warnings, and diluted the CTAs.
+44. **Type scale as tokens.** Every font size is one of 13 `--text-*`
+    tokens in `globals.css` (10 to 30 px), with `--font-weight-heavy`
+    (850) and `--tracking-head` / `--tracking-mark`; the 15 ad hoc sizes
+    and the 750 weight are gone. Both `<h1>`s are 28 px. *Reason:*
+    CLAUDE.md says fonts come from `@theme`; the review found 29 hard-
+    coded sizes.
+45. **After sending, a new index or amount brings the form back.** The
+    "Hotovo" state belongs to the plan that was submitted; with another
+    plan on screen the e-mail shown would not be the one "sent". Going
+    back to the sent plan shows "Hotovo" again. The address is still
+    kept nowhere (decision 30), so a new plan means typing it again.
+46. **A thinner path to the form.** Changes the match card order of
+    decisions 30 and 37. (a) The card
+    drops the TER row and "Kde koupit"; both are in the e-mail (fees
+    section). The card is 640 px tall at 375 px, was 995. (b) The stock
+    count moves into the companies heading: "Největší firmy uvnitř (z 503
+    akcií)". (c) The return line uses a short return type
+    (`returnTypeShort`, e.g. "vč. dividend, před daní") so it stays one
+    line; the e-mail keeps the full wording. (d) The amount stays as four
+    chips: a stepped slider was tried and rejected by the user. (e) The
+    first screen is tighter: header 44 px, headline 26 px
+    (both `<h1>`s; replaces decision 44's 28 px), smaller gaps and table
+    rows. On 375 × 667 the red CTA ends at 576 px, was 659. *Reason:* the
+    user's call; on an iPhone SE the first CTA was cut off and the card
+    stood between the taps and the form. A sticky CTA was considered and
+    rejected by the user. With the brokers gone, the amount changes
+    nothing on the card, only the ask's checklist line and the e-mail;
+    the user accepted that.

@@ -40,6 +40,8 @@ export type MarketIndex = {
   return10y: Fact<number>;
   /** What the return includes, in page wording (decision 4). */
   returnType: string;
+  /** The same, short enough for one line on the match card at 375 px. */
+  returnTypeShort: string;
   /** Constituents (securities) in the index, as each provider counts them;
    * a company with two share classes counts twice. */
   constituents: Fact<number>;
@@ -98,6 +100,7 @@ const sp500: MarketIndex = {
   // price return only.
   return10y: fact(15.33, s.spFeed, '"tenYearReturn":15.332528551796454'),
   returnType: "celkový výnos včetně dividend, před daní z dividend",
+  returnTypeShort: "vč. dividend, před daní",
   constituents: fact(503, s.spFactsheet, "NUMBER OF CONSTITUENTS 503"),
   usShare: fact(100, s.spFactsheet, "United States 503 68,448,592.21 100"),
   // The feed gives weights as fractions of 1; ×100 is a unit change
@@ -163,7 +166,9 @@ const ndx: MarketIndex = {
   ],
   compareWith: "QQQ",
   euFund: {
-    name: "iShares NASDAQ 100 UCITS ETF",
+    // "(Acc)" like the other two: the factsheet names it "U.S. Dollar
+    // (Accumulating)" (docs/research/pairs.md).
+    name: "iShares NASDAQ 100 UCITS ETF (Acc)",
     shortName: "iShares NASDAQ 100",
     isin: fact("IE00B53SZB19", s.ishNdx, "ISIN IE00B53SZB19"),
     ter: fact(0.3, s.ishNdx, "Total Expense Ratio 0.30%"),
@@ -174,6 +179,7 @@ const ndx: MarketIndex = {
     "10 Year 24.08% 10 Year 581.57% 10 Year 21.16%",
   ),
   returnType: "celkový výnos včetně dividend",
+  returnTypeShort: "vč. dividend",
   // 100 companies, 101 securities (Alphabet has two share classes): the
   // page counts securities, as it does for the other two indexes.
   constituents: fact(101, s.ndxFactsheet, "Securities: … 101"),
@@ -236,6 +242,7 @@ const world: MarketIndex = {
     "MSCI World -1.19 1.88 15.24 11.75 21.40 11.89 12.81 7.46",
   ),
   returnType: "celkový výnos včetně dividend, po srážkové dani z dividend",
+  returnTypeShort: "vč. dividend, po srážkové dani",
   constituents: fact(1249, s.worldFactsheet, "With 1,249 constituents"),
   usShare: fact(72.94, s.worldFactsheet, "United States 72.94%"),
   top5: [

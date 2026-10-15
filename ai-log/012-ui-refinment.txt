@@ -1,0 +1,2608 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /model                                                                        
+  ⎿  Set model to Opus 5.5 and saved as your default for new sessions
+
+❯ Please open the app in browser and scran through all the UI elements, try to  
+  find inconsistencies related to UI/UX, mismatched patterns, grammar issues,   
+  irrelevant styling, do not check facts or data validity. Share all findings   
+  that help the app perform better in those categories. Try to verify all       
+  possible screens, including the email modal.                                  
+
+⏺ Skill(claude-in-chrome)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(sed -n 1,60p README.md && cat package.json | head -30 && ls
+      src/components src/app && (lsof -iTCP -sTCP:LISTEN -P | grep -E
+      'node|next' || true))
+  ⎿  # ETF Match
+
+     A one-page lead magnet for Czech retail investors: which European fund
+     … +113 lines (ctrl+o to expand)
+
+  Read 1 file, called claude-in-chrome (ctrl+o to expand)
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Page is open at localhost:3000; scrolling through it section by section now,
+  then the modal and the privacy page.
+
+  Called claude-in-chrome 6 times (ctrl+o to expand)
+
+⏺ Checking the expanded "sources" panels and FAQ answers now.
+
+  Called claude-in-chrome 6 times (ctrl+o to expand)
+
+⏺ Measuring button sizes, fonts and tap targets via the DOM.
+
+  Called claude-in-chrome 7 times (ctrl+o to expand)
+
+⏺ Validation checked; now submitting a test address to open the e-mail modal.
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ Modal reviewed. Closing it to check the post-submit state and focus return.
+
+  Called claude-in-chrome 5 times (ctrl+o to expand)
+
+⏺ Now checking the 375 px layout (the design target).
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Window resize is blocked (maximized window), so I'll render the page in a 375
+  px same-origin iframe instead.
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ Mobile page checked; now opening the modal inside the 375 px frame.
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ Mobile modal overflow confirmed. Last step: a quick scan of the components for
+  off-token or one-off styling.
+
+⏺ Bash(sed -n '/@theme/,/^}/p' src/app/globals.css | head -60; echo ---; grep
+      -rnoE '(text|bg|border|p[xytblr]?|m[xytblr]?|gap|w|h|leading|tracking|roun
+      ded|shadow)-\[[…)
+  ⎿  @theme {
+       --color-*: initial;
+       --color-ground: #e6e3de;
+     … +47 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(grep -n 'after:\|before:\|summary' src/components/Faq.tsx
+      src/components/MatchCard.tsx src/components/Footer.tsx | head -20; grep -n
+      'text-\[1[45]px\]\|text-sm'…)
+  ⎿  src/components/Faq.tsx:52:          <summary className="py-3.5 pr-11 p
+     l-4 text-[15px] font-bold">
+     src/components/Faq.tsx:54:          </summary>
+     … +26 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 80,130p src/app/globals.css)
+  ⎿  }
+     summary::-webkit-details-marker {
+       display: none;
+     … +40 lines (ctrl+o to expand)
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+⏺ I found 4 bugs that affect what the visitor gets, plus a set of copy, naming
+  and visual inconsistencies. I went through all of /, every tap combination,
+  all accordions open, every e-mail form state (empty, invalid, valid), the
+  modal, the screen after sending, and /ochrana-udaju. The browser window
+  wouldn't resize, so I checked mobile in a 375 px frame on the same site. Its
+  scrollbar leaves about 360 px of content. I didn't check facts or figures.
+
+  Bugs (fix first)
+
+  1. The modal scrolls sideways on mobile. The first table in the e-mail ("Kolik
+     by z toho mohlo být") is 379 px wide inside a 322 px dialog. The "Svět"
+     column is cut off and the whole dialog scrolls left and right. The second
+     table wraps fine, so the two don't match. Wrap the first table in
+     overflow-x-auto or let its cells wrap.
+  2. The page behind the modal scrolls. Once the modal reaches its end, further
+     scrolling moves the page underneath (it went from the ask block to the
+     FAQ). Nothing locks the page scroll and the dialog has no
+     overscroll-behavior: contain.
+  3. Copying the ISIN copies the footnote too. A footnote number sits right
+     after the ISIN, so copying gives IE00B4L5Y983 plus a 1. Pasting the ISIN
+     into the broker app is the main thing the visitor needs to do. Move the
+     footnote off the ISIN or add a copy button.
+  4. The screen after sending goes stale. If I change the index after sending,
+     "Hotovo" stays, and "Zobrazit e-mail znovu" now shows a plan for the new
+     index. That is not the plan that was "sent". The heading "Pošleme vám celý
+     plán…" and the checklist also stay up after sending.
+  5. E-mail error state. On an empty submit the field gets no error styling; the
+     only red border is the focus ring. Focus stays on the button instead of
+     moving to the field. The old error ("Vyplňte e-mail…") stays visible while
+     typing until the next submit.
+
+  Grammar and copy (src/copy/cs.ts)
+
+  6. "Pošleme vám celý plán k Svět (MSCI World)" is the wrong case, and "k
+     Nasdaq-100" reads oddly too. Suggest "…celý plán pro index {X}".
+  7. Footer: "Broker je uveden…" The page shows two brokers, so it should be
+     "Brokeři jsou uvedeni jen jako místo, kde fond najdete…".
+  8. Modal "Podíl USA: neuvádí" has no subject. Use "neuvedeno". Also "68 %
+     technologie" should be "68 % v technologiích".
+  9. Modal note: "I fond „Svět“ má … peněz v USA". Everywhere else Svět is an
+     index, not a fund.
+  10. Subject line "Předmět: Váš ETF plán: Svět, 5 000 Kč…" has two colons, and
+      uses bare "Svět" while the body says "Svět (MSCI World)".
+  11. "Za nákup za 5 000 Kč, pokud máte účet v Kč." is a fragment with "za…za"
+      and no verb. It explains the broker cards but sits below them.
+  12. "Hotovo, takhle plán vypadá." shows after the modal is closed, so "takhle"
+      points at nothing.
+  13. Checklist "Daně v Česku stručně: 3 roky, 100 000 Kč, 15 %" gives a
+      beginner bare numbers with no context.
+  14. Commission is worded three ways: "Provize … je u obou 0 Kč" on the page,
+      then "nákup bez provize" and "provize 0 % do 100 000 € měsíčně" in the
+      modal. € also appears in a Kč-only interface.
+  15. Same footnote twice: footnote 7 appears twice on one line in the modal's
+      fees section.
+
+  Names that don't match
+
+  16. Index name: the button says "Svět", headings say "Svět (MSCI World)", the
+      e-mail subject says "Svět".
+  17. Fund names:
+      - "iShares NASDAQ 100" in capitals, while the index is "Nasdaq-100"
+        everywhere else.
+      - Only the Nasdaq fund lacks "(Acc)".
+      - The first-screen column is headed "NYSE", but the QQQ row says it trades
+        on Nasdaq.
+  18. Number of top companies: the page shows the top 5 ("Největší firmy
+      uvnitř"); the e-mail shows "Největší 3".
+  19. Number formats: the modal mixes "cca 723 000 Kč" and "cca 1,20 mil. Kč" in
+      the same row.
+
+  Visual patterns and styling
+
+  20. The two tap rows look different.
+      - Index buttons are as wide as their text, at 15 px.
+      - Amount buttons sit in an equal-width grid, at 14 px.
+  21. The +/× icons are misaligned. In globals.css they're placed at a fixed
+      top: 6px or 20px instead of being centred:
+      - FAQ "+" sits below the text on one-line questions and centred on
+        two-line ones.
+      - The sources "+" sits above the text.
+      - The sizes differ (20 vs 22 px).
+  22. No type scale.
+      - Headings are 18, 16, 26 and 20 px.
+      - The "Evropský fond místo…" label is a heading at 16 px, while the bigger
+        fund name below it is not a heading.
+      - Components use 29 hard-coded font sizes (about 11 distinct ones) and
+        weights 600, 700, 750, 800, 850 and 900.
+      - Colours come from @theme tokens; font sizes and weights don't.
+  23. Red means too many things. It is used for:
+      - buttons
+      - errors
+      - the focus ring
+      - warning boxes
+      - the Nvidia bar
+      - the selected column in the modal (with the same pink background as the
+        warnings)
+      - the checklist ticks
+
+      The modal's close button opens with a red focus ring, which looks like an
+      error.
+  24. Things that look tappable but aren't:
+      - The red filled ticks in the checklist look like checked checkboxes.
+      - The bordered broker cards look like buttons but aren't links.
+  25. Mobile wrapping:
+      - "směna měny 7,50 Kč" breaks, leaving the amount alone on a line, and the
+        two broker cards end up uneven.
+      - The headline takes 5 lines with "ano." alone at the end; text-wrap: 
+        balance would help.
+  26. Small tap targets:
+      - The "Zdroje dat" and "Zdroje" toggles are 36 px tall.
+      - The links "Jak s e-mailem zacházíme" and "Ochrana osobních údajů" are
+        12.5 px text, 14 px tall.
+      - The consent text is 12.5 px grey on black.
+  27. "Jak s e-mailem zacházíme" leaves the page mid-form, in the same tab,
+      which drops the visitor out of the funnel.
+  28. Modal reading:
+      - There is no close button or next step at the bottom; you have to scroll
+        back up to ×.
+      - The note under the first table is a 7-sentence block of 13 px grey text.
+  29. Minor:
+      - The privacy page only has its back link at the bottom.
+      - On desktop the modal (560 px) is wider than the page column (448 px).
+
+  I didn't test on a real touch device, with a screen reader, or the full
+  keyboard tab order. I've closed the browser tab.
+
+  Want me to fix these? Items 1–5 and the grammar items (6–15) are quick and
+  safe to do first.
+
+✻ Cogitated for 5m 25s · done 4:44 PM
+
+❯ good idea to perform all fixes, as far as the red color, keep it only on the  
+  disclaimers,and CTAs, elsewhere substitute it with some relevant color for    
+  its placing                                                                   
+
+⏺ I'll read the components first, then work through the fixes in order.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Bash(for f in Ask CtaLink FirstScreen Planner MatchCard; do echo "=== $f"; cat
+      -n src/components/$f.tsx; done)
+  ⎿  === Ask
+          1  "use client";
+          2
+     … +648 lines (ctrl+o to expand)
+
+⏺ Bash(for f in EmailPreview Faq Footer Header Home motion Privacy PrivacyLink
+      SourceLink; do echo "=== $f"; cat -n src/components/$f.tsx; done)
+  ⎿  === EmailPreview
+          1  "use client";
+          2
+     … +716 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(grep -rn "NASDAQ 100 UCITS ETF" docs/research | head -8; sed -n 150,180p
+      src/data/indexes.ts; grep -n 'commission\|UpTo\|name' src/data/brokers.ts
+      | head; sed -…)
+  ⎿  docs/research/brokers.md:53:| IE00B53SZB19 | Yes by name (ISIN not sho
+     wn) | SXRV.DE (Acc EUR); CNDX.UK (Acc USD) | https://www.xtb.com/cz/et
+     f/ishares-nasdaq-100-ucits-acc-eur-sxrv | "iShares NASDAQ 100 UCITS ET
+     … +70 lines (ctrl+o to expand)
+
+⏺ Plan is clear. Before editing, checking tests and data that reference the
+  strings and names I'll touch.
+
+⏺ Bash(grep -n 'cs\.\|name\|approxKc\|cca' src/data/data.test.ts
+      src/lib/format.test.ts | head -40; grep -n 'fact sheet\|factsheet'
+      src/data/sources.ts | head; ls src/…)
+  ⎿  src/lib/format.test.ts:4:  approxKc,
+     src/lib/format.test.ts:105:describe("approxKc", () => {
+     src/lib/format.test.ts:107:    [1_322_800, "cca 1,32 mil. Kč"],
+     … +20 lines (ctrl+o to expand)
+
+⏺ Starting with the design tokens and global CSS.
+
+⏺ Update(src/app/globals.css)
+  ⎿  Added 27 lines
+      11    --color-ink-soft: #2b2926;
+      12    --color-muted: #5c5853;
+      13    --color-line: #d4d0ca;
+      14 +  /* Red is for CTAs and disclaimers only (decision 43). */    
+      15    --color-red: #d7000f;
+      16    --color-red-dark: #a8000c;
+      17    --color-warn: #fbf4f4;
+      18 +  /* Selection, emphasis and focus: the chosen index, the large
+         +st                                                             
+      19 +     company, the arrow to the EU fund, the wordmark's dot. */ 
+      20 +  --color-accent: #1f4fd1;                                     
+      21 +  --color-accent-soft: #edf1fb;                                
+      22    --color-white: #ffffff;
+      23    /* Text on the dark ask block. */
+      24    --color-on-dark-muted: #c9c6c1;
+      25    --color-on-dark-faint: #b5b1ab;
+      26 +  --color-on-dark-accent: #9db7ff;                             
+      27    --color-on-dark-error: #ff8a8f;
+      28  
+      29    --radius-*: initial;
+      30  
+      31    --font-sans: var(--font-archivo), system-ui, sans-serif;
+      32  
+      33 +  /* The type scale: every font size on the page is one of thes
+         +e. Line                                                        
+      34 +     heights are inherited (1.5 from body) unless a leading-* s
+         +ets one. */                                                    
+      35 +  --text-*: initial;                                           
+      36 +  --text-2xs: 10px;                                            
+      37 +  --text-xs: 12.5px;                                           
+      38 +  --text-sm: 13px;                                             
+      39 +  --text-md: 14px;                                             
+      40 +  --text-base: 15px;                                           
+      41 +  --text-body: 16px;                                           
+      42 +  --text-lg: 17px;                                             
+      43 +  --text-xl: 18px;                                             
+      44 +  --text-2xl: 20px;                                            
+      45 +  --text-3xl: 22px;                                            
+      46 +  --text-4xl: 26px;                                            
+      47 +  --text-5xl: 28px;                                            
+      48 +  --text-6xl: 30px;                                            
+      49 +                                                               
+      50 +  --font-weight-heavy: 850;                                    
+      51 +  --tracking-head: -0.01em;                                    
+      52 +  --tracking-mark: -0.02em;                                    
+      53 +                                                               
+      54    --spacing-gutter: 16px;
+      55    --container-page: 480px;
+      56  
+
+⏺ Update(src/app/globals.css)
+  ⎿  Added 4 lines
+      85    /* Lets an accordion animate to height: auto (decision 24). *
+          /
+      86    interpolate-size: allow-keywords;
+      87  }
+      88 +/* The page stays put behind the open e-mail modal. */         
+      89 +html:has(dialog[open]) {                                       
+      90 +  overflow: hidden;                                            
+      91 +}                                                              
+      92  
+      93  body {
+      94    background: var(--color-ground);
+
+⏺ Update(src/app/globals.css)
+  ⎿  Added 11 lines, removed 14 lines
+       98  }
+       99  
+      100  :focus-visible {
+      101 -  outline: 3px solid var(--color-red);                        
+      101 +  outline: 3px solid var(--color-accent);                     
+      102    outline-offset: 2px;
+      103  }
+      104  
+      105 -/* Accordions (sources and FAQ): a "+" that turns to "×", and 
+          -the                                                           
+      106 -   content expands where the browser supports ::details-conten
+          -t. */                                                         
+      105 +/* Accordions (sources and FAQ): a "+" that turns to "×", cent
+          +red on the                                                    
+      106 +   question whatever its line count, and the content expands w
+          +here the                                                      
+      107 +   browser supports ::details-content. */                     
+      108  summary {
+      108 -  position: relative;                                         
+      109 +  display: flex;                                              
+      110 +  align-items: center;                                        
+      111 +  justify-content: space-between;                             
+      112 +  gap: 12px;                                                  
+      113 +  min-height: 44px;                                           
+      114    list-style: none;
+      115    cursor: pointer;
+      116  }
+     ...
+      119  }
+      120  summary::after {
+      121    content: "+";
+      117 -  position: absolute;                                         
+      118 -  right: 0;                                                   
+      119 -  top: 6px;                                                   
+      120 -  font-size: 20px;                                            
+      122 +  flex: none;                                                 
+      123 +  font-size: var(--text-2xl);                                 
+      124    font-weight: 500;
+      125    line-height: 1;
+      126    transition: transform 0.25s var(--ease-out-soft);
+      127  }
+      125 -/* The FAQ cards: the mark sits inside the card's padding. */ 
+      126 -details[data-q] > summary::after {                            
+      127 -  right: var(--spacing-gutter);                               
+      128 -  top: 20px;                                                  
+      129 -  font-size: 22px;                                            
+      130 -}                                                             
+      128  details[open] > summary::after {
+      129    transform: rotate(45deg);
+      130  }
+
+⏺ Now remapping every font size, weight, tracking and pixel spacing class onto
+  the tokens in one pass (one pass so old and new names don't collide).
+
+⏺ Bash(cat > /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo
+      -task/5c1ce509-db1e-4345-a48b-e39ecead7c8b/scratchpad/tokens.pl <<'EOF'
+      my %m = (…)
+  ⎿   src/app/globals.css             | 56 ++++++++++++++++++++++++++++++--
+     ---------
+      src/components/Ask.tsx          | 18 ++++++-------
+     … +10 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+9 -9)
+       84        <div className="page-wrap">
+       85          <h2
+       86            id={titleId}
+       87 -          className="text-[26px] leading-[1.1] font-[850] trac
+          -king-[-0.01em] wdth-118"                                      
+       87 +          className="text-4xl leading-[1.1] font-heavy trackin
+          +g-head wdth-118"                                              
+       88          >
+       89            {/* Non-breaking: "k" must not end a line. */}
+       90            {copy.headline}&nbsp;<Swap>{index.longLabel}</Swap>
+       91          </h2>
+       92 -        <p className="mt-2 mb-4.5 text-[15px] text-on-dark-mut
+          -ed">                                                          
+       92 +        <p className="mt-2 mb-4.5 text-base text-on-dark-muted
+          +">                                                            
+       93            {copy.lead}
+       94          </p>
+       95          <ul className="mb-5.5 grid gap-2.5">
+       96            {checklist.map((item, i) => (
+       97              // biome-ignore lint/suspicious/noArrayIndexKey: s
+           ix fixed lines
+       98 -            <li key={i} className="flex gap-3 text-[15px] lead
+          -ing-[1.35]">                                                  
+       98 +            <li key={i} className="flex gap-3 text-base leadin
+          +g-[1.35]">                                                    
+       99                <Check />
+      100                <Swap>{item}</Swap>
+      101              </li>
+     ...
+      104  
+      105          {done ? (
+      106            <div className="py-1">
+      107 -            <h3 className="mb-1.5 text-xl font-extrabold track
+          -ing-[-0.01em] wdth-118">                                      
+      107 +            <h3 className="mb-1.5 text-2xl font-extrabold trac
+          +king-head wdth-118">                                          
+      108                {copy.doneHead}
+      109              </h3>
+      110              <p className="mb-3.5 text-on-dark-muted">{copy.don
+           eText}</p>
+     ...
+      112                ref={reopenRef}
+      113                type="button"
+      114                onClick={onReopen}
+      115 -              className="min-h-12 cursor-pointer border-[1.5px
+          -] border-white px-4.5 text-[15px] leading-none font-bold"     
+      115 +              className="min-h-12 cursor-pointer border-[1.5px
+          +] border-white px-4.5 text-base leading-none font-bold"       
+      116              >
+      117                {copy.reopen}
+      118              </button>
+      119            </div>
+      120          ) : (
+      121            <form noValidate onSubmit={submit}>
+     … 24 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/CtaLink.tsx (+1 -1)
+       4  import { type CtaLocation, track } from "@/lib/track";
+       5  
+       6  const ctaClass =
+       7 -  "flex min-h-13 w-full items-center justify-center bg-red text
+         --[17px] leading-none font-extrabold text-white no-underline tra
+         -nsition-[background-color,transform] duration-150 wdth-110 hove
+         -r:bg-red-dark active:translate-y-px";                          
+       7 +  "flex min-h-13 w-full items-center justify-center bg-red text
+         +-lg leading-none font-extrabold text-white no-underline transit
+         +ion-[background-color,transform] duration-150 wdth-110 hover:bg
+         +-red-dark active:translate-y-px";                              
+       8  
+       9  // The red full-width button that scrolls to a section on the p
+          age.
+      10  // `location` names it in the cta_clicked event.
+  ⎿  Updated src/components/EmailPreview.tsx (+14 -14)
+      84        className="m-auto max-h-[calc(100%-32px)] w-[min(100%-16p
+          x,560px)] overflow-y-auto bg-card text-ink backdrop:bg-ink/55"
+      85      >
+      86        <div className="sticky top-0 z-10 flex items-center justi
+          fy-between border-b border-line bg-card py-3 pr-3 pl-4.5">
+      87 -        <p id={titleId} className="text-sm font-extrabold">    
+      87 +        <p id={titleId} className="text-md font-extrabold">    
+      88            {copy.modalTitle}
+      89          </p>
+      90          <button
+      91            type="button"
+      92            onClick={onDismiss}
+      93            aria-label={copy.close}
+      94 -          className="min-h-10 min-w-10 cursor-pointer bg-ground
+         - text-xl"                                                      
+      94 +          className="min-h-10 min-w-10 cursor-pointer bg-ground
+         + text-2xl"                                                     
+      95          >
+      96            ×
+      97          </button>
+     ...
+      109    const cite = (f: Fact<unknown>) => {
+      110      let n = sources.indexOf(f.source) + 1;
+      111      if (!n) n = sources.push(f.source);
+      112 -    return <sup className="ml-px text-[10px] text-muted">{n}</
+          -sup>;                                                         
+      112 +    return <sup className="ml-px text-2xs text-muted">{n}</sup
+          +>;                                                            
+      113    };
+      114    const amountKc = kc(amount);
+      115    const sellers = Object.values(brokers).filter(
+     ...
+      120    // Built first, so every cite() has run before the list is p
+           rinted.
+      121    const body = (
+      122      <>
+      123 -      <p className="mb-2 text-[12.5px] text-muted">           
+      123 +      <p className="mb-2 text-xs text-muted">                 
+      124          {copy.subject(index.label, amountKc)}
+      125        </p>
+      126 -      <h2 className="mt-1.5 mb-2 text-[22px] font-[850] tracki
+          -ng-[-0.01em] wdth-118">                                       
+      126 +      <h2 className="mt-1.5 mb-2 text-3xl font-heavy tracking-
+          +head wdth-118">                                               
+      127          {copy.title}
+      128        </h2>
+      129        <P>
+     ...
+      134        </P>
+      135  
+      136        <H3>{copy.income.head}</H3>
+      137 -      <p className="mb-2 border-l-3 border-red bg-warn px-2.5 
+          -py-2 text-[13px]">                                            
+     … 66 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/Faq.tsx (+3 -3)
+      43      <section className="pt-7 pb-2" aria-labelledby={titleId}>
+      44        <h2
+      45          id={titleId}
+      46 -        className="mb-2.5 text-xl font-[850] tracking-[-0.01em]
+         - wdth-118"                                                     
+      46 +        className="mb-2.5 text-2xl font-heavy tracking-head wdt
+         +h-118"                                                         
+      47        >
+      48          {copy.head}
+      49        </h2>
+      50        {items.map(([id, question, answer]) => (
+      51          <details key={id} data-q={id} className="mb-2 bg-card">
+      52 -          <summary className="py-3.5 pr-11 pl-4 text-[15px] fon
+         -t-bold">                                                       
+      52 +          <summary className="py-3.5 pr-11 pl-4 text-base font-
+         +bold">                                                         
+      53              {question}
+      54            </summary>
+      55 -          <p className="px-4 pb-3.5 text-[15px] text-ink-soft">
+         -{answer}</p>                                                   
+      55 +          <p className="px-4 pb-3.5 text-base text-ink-soft">{a
+         +nswer}</p>                                                     
+      56          </details>
+      57        ))}
+      58      </section>
+  ⎿  Updated src/components/FirstScreen.tsx (+6 -6)
+      25      <section className="pt-1.5 pb-7" aria-labelledby="headline"
+          >
+      26        <h1
+      27          id="headline"
+      28 -        className="text-[28px] leading-[1.08] font-[850] tracki
+         -ng-[-0.01em] wdth-118"                                         
+      28 +        className="text-5xl leading-[1.08] font-heavy tracking-
+         +head wdth-118"                                                 
+      29        >
+      30          {copy.headline}
+      31        </h1>
+      32 -      <p className="mt-3 mb-4 text-[15px] leading-[1.45] text-m
+         -uted">                                                         
+      32 +      <p className="mt-3 mb-4 text-base leading-[1.45] text-mut
+         +ed">                                                           
+      33          {copy.why}
+      34        </p>
+      35  
+      36        <div className="mb-4 bg-card px-4 pt-2.5 pb-1">
+      37          <div
+      38 -          className={`${pairGrid} border-b-2 border-ink pb-1.5 
+         -text-[13px] font-extrabold`}                                   
+      38 +          className={`${pairGrid} border-b-2 border-ink pb-1.5 
+         +text-sm font-extrabold`}                                       
+      39            aria-hidden="true"
+      40          >
+      41            <span>{copy.columnUs}</span>
+     ...
+      45            {Object.values(indexes).map((index, i) => (
+      46              <li
+      47                key={index.id}
+      48 -              className={`${pairGrid} items-baseline border-lin
+         -e pt-[11px] pb-[9px] not-first:border-t motion-safe:animate-ris
+         -e`}                                                            
+      48 +              className={`${pairGrid} items-baseline border-lin
+         +e pt-2.75 pb-2.25 not-first:border-t motion-safe:animate-rise`}
+      49                style={{ animationDelay: `${i * 80 + 150}ms` }}
+      50              >
+      51 -              <span className="text-base leading-[1.2] font-[75
+         -0] text-muted">                                                
+      51 +              <span className="text-body leading-[1.2] font-ext
+         +rabold text-muted">                                            
+      52                  <span className="sr-only">{copy.columnUs}: </sp
+          an>
+      53                  {index.usFunds.map((f) => f.ticker).join(", ")}
+      54                </span>
+      55                <span className="font-black text-red" aria-hidden
+          ="true">
+      56                  →
+      57                </span>
+      58 -              <span className="text-base leading-[1.2] font-[75
+         -0]">                                                           
+      58 +              <span className="text-body leading-[1.2] font-ext
+         +rabold">                                                       
+      59                  <span className="sr-only">{copy.columnEu}: </sp
+          an>
+      60                  {keepLastTwo(index.euFund.shortName)}
+      61                </span>
+  ⎿  … 5 more files changed
+
+⏺ Bash(grep -rn 'className' src/app | head; git diff src/components/Privacy.tsx
+      src/components/FirstScreen.tsx | grep '^[-+] ' )
+  ⎿  src/app/layout.tsx:43:    <html lang="cs" className={`${archivo.variab
+     le} antialiased`}>
+     -        className="text-[28px] leading-[1.08] font-[850] tracking-[-0
+     … +21 lines (ctrl+o to expand)
+
+⏺ Token mapping applied cleanly. Now the copy fixes in cs.ts.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  MISSING:     subject: (index: string, amount: string) =>
+             `Pře
+     184:    subject: (index: string, amount: string) =>
+     212:      notPublished: "neuvedeno",
+  ⎿  Updated src/copy/cs.ts (+17 -14)
+      30      headline:
+      31        "ETF z NYSE si tu většinou nekoupíte, stejný index v evro
+          pském fondu ano.",
+      32      why: "Americké fondy nemají dokument KID, který EU vyžaduje
+          . Většina brokerů je proto drobným investorům neprodá.",
+      33 -    columnUs: "NYSE",                                          
+      33 +    // "USA", not "NYSE": QQQ in the same column trades on Nasd
+         +aq.                                                            
+      34 +    columnUs: "USA",                                           
+      35      columnEu: "Evropa",
+      36      /** Tags a US fund listed outside NYSE (decision 12). */
+      37      listedOn: (ticker: string, exchange: string) =>
+     ...
+      59      usTerLabel: "Americký fond pro srovnání",
+      60      buyHead: "Kde koupit",
+      61      fxFee: "směna měny",
+      61 -    feesBefore: "Za nákup za",                                 
+      62 +    feesBefore: "Tolik zaplatíte za směnu měny při nákupu za", 
+      63      feesAfter: ", pokud máte účet v Kč.",
+      64      commission: (fee: string) => `Provize za nákup ETF je u obo
+          u ${fee}.`,
+      65      more: "Chci vědět víc ↓",
+     ...
+      76    // Decisions 15, 26, 30. The checklist names the ISIN first, 
+          then the
+      77    // five sections of the e-mail.
+      78    ask: {
+      78 -    headline: "Pošleme vám celý plán k",                       
+      79 +    headline: "Pošleme vám celý plán pro index",               
+      80      lead: "Jeden e-mail, sestavený podle toho, co jste vybrali.
+          ",
+      81      checklist: {
+      82        isin: "Evropský fond a jeho ISIN, podle kterého ho najdet
+          e u brokera",
+     ...
+      87        fees: (brokers: string[]) =>
+      88          `Poplatky u ${brokers.join(" a ")} pro vaši částku`,
+      89        taxes: (years: number, limit: string, rate: string) =>
+      89 -        `Daně v Česku stručně: ${years} roky, ${limit}, ${rate}
+         -`,                                                             
+      90 +        `Daně v Česku: kdy zisk nedaníte (držení přes ${years} 
+         +roky, prodeje do ${limit} za rok) a kdy platíte ${rate}`,      
+      91        accDist: "Akumulační, nebo distribuční fond",
+      92      },
+      93      emailLabel: "Váš e-mail",
+     ...
+       99      consent: `Odesláním souhlasíte, že váš e-mail použijeme je
+           n k zaslání plánu. ${controller} Souhlas můžete kdykoli odvola
+           t.`,
+      100      consentMore: "Jak s e-mailem zacházíme",
+      101      submit: "Poslat plán",
+      101 -    doneHead: "Hotovo, takhle plán vypadá.",                  
+      102 -    doneText: "Demo: nic jsme neuložili ani neodeslali.",     
+      102 +    doneHead: "Hotovo, plán je připravený.",                  
+      103 +    doneText:                                                 
+     … 39 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 180,240p src/copy/cs.ts)
+  ⎿    // The e-mail shown in the modal (decisions 2, 3, 4, 8, 9).
+       email: {
+         modalTitle: "Takhle vypadá váš e-mail",
+     … +58 lines (ctrl+o to expand)
+
+⏺ Update(src/copy/cs.ts)
+  ⎿  Added 1 line, removed 1 line
+      182      modalTitle: "Takhle vypadá váš e-mail",
+      183      close: "Zavřít",
+      184      subject: (index: string, amount: string) =>
+      185 -      `Předmět: Váš ETF plán: ${index}, ${amount} měsíčně`,   
+      185 +      `Předmět: Váš ETF plán pro ${index}, ${amount} měsíčně`,
+      186      title: "Váš ETF plán",
+      187      intro: (index: string, amount: string) =>
+      188        `Vybrali jste ${index} a ${amount} měsíčně. Evropský fon
+           d, který sleduje stejný index:`,
+
+⏺ Now the formatter: shared millions scale for a table row, and "cca" allowed to
+  wrap.
+
+⏺ Bash(sed -n 1,20p src/lib/format.test.ts && sed -n 100,121p
+      src/lib/format.test.ts)
+  ⎿  import { describe, expect, it } from "vitest";
+     import { brokers } from "../data/brokers";
+     import {
+     … +39 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  Updated src/lib/format.test.ts (+4 -0)
+      110      [229_600, "cca 230 000 Kč"],
+      111      [722_800, "cca 723 000 Kč"],
+      112    ])("%d → %s", (n, out) => expect(plain(approxKc(n))).toBe(ou
+           t));
+      113 +                                                              
+      114 +  it("puts a smaller amount in millions when asked", () => {  
+      115 +    expect(plain(approxKc(722_800, true))).toBe("cca 0,72 mil.
+          + Kč");                                                        
+      116 +  });                                                         
+      117  });
+      118  
+      119  describe("pctWhole and eur", () => {
+  ⎿  Updated src/lib/format.ts (+8 -7)
+      19    `${formatNumber(n, decimals)}${nbsp}Kč`;
+      20  
+      21  /** A rounded amount for the income illustration: 1 322 800 → "
+          cca 1,32
+      22 - * mil. Kč", 229 600 → "cca 230 000 Kč". */                    
+      23 -export function approxKc(n: number) {                          
+      24 -  const text =                                                 
+      25 -    Math.abs(n) >= 1_000_000                                   
+      26 -      ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`
+      27 -      : kc(Math.round(n / 1000) * 1000);                       
+      28 -  return `cca${nbsp}${text}`;                                  
+      22 + * mil. Kč", 229 600 → "cca 230 000 Kč". `inMillions` puts a sm
+         +aller                                                          
+      23 + * amount in millions too, so one table row uses one unit. The 
+         +space                                                          
+      24 + * after "cca" may break, so a narrow column can wrap it. */   
+      25 +export function approxKc(n: number, inMillions = Math.abs(n) >=
+         + 1_000_000) {                                                  
+      26 +  const text = inMillions                                      
+      27 +    ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`  
+      28 +    : kc(Math.round(n / 1000) * 1000);                         
+      29 +  return `cca ${text}`;                                        
+      30  }
+      31  
+      32  /** A fee in Kč: whole crowns stay whole, otherwise two decimal
+          s. The
+⏺ Now the e-mail modal component.
+
+⏺ Bash(sed -n 76,140p src/components/EmailPreview.tsx)
+  ⎿      <dialog
+           ref={ref}
+           aria-labelledby={titleId}
+     … +62 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿        <H3>{copy.income.head}</H3>
+           <p className="mb-2 border-l-3 border-red bg-warn px-2.5 py-2 tex
+     t-sm">
+     … +63 lines (ctrl+o to expand)
+  ⎿  Updated src/components/EmailPreview.tsx (+20 -6)
+      81          onDismiss();
+      82        }}
+      83        onClose={onDismiss}
+      84 -      className="m-auto max-h-[calc(100%-32px)] w-[min(100%-16p
+         -x,560px)] overflow-y-auto bg-card text-ink backdrop:bg-ink/55" 
+      84 +      className="m-auto max-h-[calc(100%-32px)] w-[min(100%-16p
+         +x,var(--container-page))] overflow-y-auto overscroll-contain bg
+         +-card text-ink backdrop:bg-ink/55"                             
+      85      >
+      86        <div className="sticky top-0 z-10 flex items-center justi
+          fy-between border-b border-line bg-card py-3 pr-3 pl-4.5">
+      87          <p id={titleId} className="text-md font-extrabold">
+     ...
+       97          </button>
+       98        </div>
+       99        <Email index={index} amount={amount} />
+      100 +      {/* A way out at the end too, so nobody scrolls back up 
+          +to the ×. */}                                                 
+      101 +      <div className="px-4.5 pb-4.5">                         
+      102 +        <button                                               
+      103 +          type="button"                                       
+      104 +          onClick={onDismiss}                                 
+      105 +          className="min-h-11 w-full cursor-pointer border-[1.
+          +5px] border-ink text-base font-bold"                          
+      106 +        >                                                     
+      107 +          {copy.close}                                        
+      108 +        </button>                                             
+      109 +      </div>                                                  
+      110      </dialog>
+      111    );
+      112  }
+     ...
+      119    const cite = (f: Fact<unknown>) => {
+      120      let n = sources.indexOf(f.source) + 1;
+      121      if (!n) n = sources.push(f.source);
+      112 -    return <sup className="ml-px text-2xs text-muted">{n}</sup
+          ->;                                                            
+      122 +    // select-none: copying a figure or the ISIN leaves the nu
+          +mber out.                                                     
+      123 +    return <sup className="ml-px text-2xs text-muted select-no
+          +ne">{n}</sup>;                                                
+      124    };
+      125    const amountKc = kc(amount);
+      126    const sellers = Object.values(brokers).filter(
+     ...
+      132    const body = (
+      133      <>
+      134        <p className="mb-2 text-xs text-muted">
+      124 -        {copy.subject(index.label, amountKc)}                 
+      135 +        {copy.subject(index.longLabel, amountKc)}             
+      136        </p>
+      137        <h2 className="mt-1.5 mb-2 text-3xl font-heavy tracking-
+           head wdth-118">
+     … 16 more lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  270:        {sellers.map((b) => {
+     271-          const fee = feePerPurchase(amount, b.fxFee.value);
+     272-          return (
+     … +26 lines (ctrl+o to expand)
+  ⎿  Updated src/components/EmailPreview.tsx (+35 -24)
+      127      (b) => b.available[index.id].value,
+      128    );
+      129    const world = indexes.world;
+      130 +  const outcome = (i: MarketIndex) =>                         
+      131 +    income(amount, i.return10y.value, years);                 
+      132 +  // One unit per row: if any index reaches a million, the row
+          + is in mil.                                                   
+      133 +  const inMillions = (pick: (o: ReturnType<typeof outcome>) =>
+          + number) =>                                                   
+      134 +    all.some((i) => Math.abs(pick(outcome(i))) >= 1_000_000); 
+      135 +  const totalInMillions = inMillions((o) => o.total);         
+      136 +  const gainInMillions = inMillions((o) => o.gain);           
+      137  
+      138    // Built first, so every cite() has run before the list is p
+           rinted.
+      139    const body = (
+     ...
+      162          [
+      163            copy.income.total(years),
+      164            (i) => (
+      158 -            <strong>                                          
+      159 -              {approxKc(income(amount, i.return10y.value, year
+          -s).total)}                                                    
+      160 -            </strong>                                         
+      165 +            <strong>{approxKc(outcome(i).total, totalInMillion
+          +s)}</strong>                                                  
+      166            ),
+      167          ],
+      168          [
+      169            copy.income.paidIn,
+      165 -          (i) => kc(income(amount, i.return10y.value, years).p
+          -aidIn),                                                       
+      170 +          (i) => kc(outcome(i).paidIn),                       
+      171          ],
+      172          [
+      173            copy.income.gain,
+      169 -          (i) => approxKc(income(amount, i.return10y.value, ye
+          -ars).gain),                                                   
+      174 +          (i) => approxKc(outcome(i).gain, gainInMillions),   
+      175          ],
+      176          [
+      177            copy.income.average,
+     ...
+      183            ),
+      184          ],
+      185        ])}
+      181 -      <Note>                                                  
+      182 -        {copy.income.noteAssumption(                          
+      183 -          years,                                              
+     … 50 more lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  23:  pctWhole,
+     34:const share = (n: number) => (Number.isInteger(n) ? pctWhole(n) : p
+     ct(n));
+     … +5 lines (ctrl+o to expand)
+  ⎿  Updated src/components/EmailPreview.tsx (+18 -19)
+      269          </Li>
+      270          {sellers.map((b) => {
+      271            const fee = feePerPurchase(amount, b.fxFee.value);
+      272 +          const commission = kc(feePerPurchase(amount, b.commi
+          +ssion.value));                                                
+      273 +          const commissionFact = b.commissionUpToEur ?? b.comm
+          +ission;                                                       
+      274            return (
+      275              <Li key={b.id}>
+      276                {b.name}:{" "}
+      275 -              {b.commissionUpToEur ? (                        
+      276 -                <>                                            
+      277 -                  {copy.fees.commissionUpTo(                  
+      278 -                    pctWhole(b.commission.value),             
+      277 +              {b.commissionUpToEur                            
+      278 +                ? copy.fees.commissionUpTo(                   
+      279 +                    commission,                               
+      280                      eur(b.commissionUpToEur.value),
+      280 -                  )}                                          
+      281 -                  {cite(b.commissionUpToEur)}                 
+      282 -                </>                                           
+      283 -              ) : (                                           
+      284 -                <>                                            
+      285 -                  {copy.fees.noCommission}                    
+      286 -                  {cite(b.commission)}                        
+      287 -                </>                                           
+      288 -              )}                                              
+      289 -              , {copy.fees.fx(pct(b.fxFee.value))}            
+      290 -              {cite(b.fxFee)}                                 
+      281 +                  )                                           
+      282 +                : copy.fees.commission(commission)}           
+      283 +              {cite(commissionFact)}, {copy.fees.fx(pct(b.fxFe
+          +e.value))}                                                    
+      284 +              {/* One number per source on a line. */}        
+      285 +              {b.fxFee.source !== commissionFact.source && cit
+          +e(b.fxFee)}                                                   
+      286                {copy.fees.perPurchase(
+      287                  kcFee(fee),
+      288                  kcFee(Math.round(fee * 12 * 100) / 100),
+     ...
+      341  // A plain function, not a component: the cells must run insid
+           e Email's
+      342  // render, so their cite() calls number the sources in order.
+      343  function comparison(chosen: IndexId, rows: Row[]) {
+      349 -  const tint = (id: IndexId) => (id === chosen ? "bg-warn" : "
+          -");                                                           
+      344 +  const tint = (id: IndexId) => (id === chosen ? "bg-accent-so
+          +ft" : "");                                                    
+     … 32 more lines (ctrl+o to expand)
+
+⏺ Now the ask block: submitted-plan tracking, error handling, the tick icon and
+  the consent link.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  Traceback (most recent call last):
+       File "<stdin>", line 68, in <module>
+     AssertionError: // A tick, not a checkbox: the list says what the e-ma
+     … +2 lines (ctrl+o to expand)
+
+⏺ Leftover placeholder in my script aborted it before writing; rerunning without
+  it.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  148:              onInput={() => error && setError(null)}
+     154:              aria-invalid={error ? true : undefined}
+     156:              className="min-h-13 w-full border-2 border-white bg-
+     … +4 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+33 -14)
+      35    onReopen: () => void;
+      36  }) {
+      37    const [error, setError] = useState<EmailError | null>(null);
+      38 -  const [done, setDone] = useState(false);                     
+      38 +  // The plan the visitor submitted. A new index or amount brin
+         +gs the form                                                    
+      39 +  // back, so the e-mail shown is always the one for the plan o
+         +n screen.                                                      
+      40 +  const [sentPlan, setSentPlan] = useState<string | null>(null)
+         +;                                                              
+      41 +  const plan = `${index.id}-${amount}`;                        
+      42 +  const done = sentPlan === plan;                              
+      43    const reopenRef = useRef<HTMLButtonElement>(null);
+      44 +  const inputRef = useRef<HTMLInputElement>(null);             
+      45    const sectionRef = useRef<HTMLElement>(null);
+      46    const started = useRef(false);
+      47 +  const justSent = useRef(false);                              
+      48    useSeenOnce(sectionRef, () =>
+      49      track("form_viewed", { index: index.id, amount }),
+      50    );
+      51  
+      52    // The form is gone once sent, so the reopen button takes the
+           focus.
+      53    // Its effect runs before the dialog's (the Ask comes first i
+          n the
+      48 -  // tree), so the dialog hands the focus back to it when it cl
+         -oses.                                                          
+      54 +  // tree), so the dialog hands the focus back to it when it cl
+         +oses. Only                                                     
+      55 +  // right after a submit: a tap back to a sent plan leaves foc
+         +us alone.                                                      
+      56    useEffect(() => {
+      50 -    if (done) reopenRef.current?.focus({ preventScroll: true })
+         -;                                                              
+      57 +    if (!done || !justSent.current) return;                    
+      58 +    justSent.current = false;                                  
+      59 +    reopenRef.current?.focus({ preventScroll: true });         
+      60    }, [done]);
+      61  
+      62    function submit(event: FormEvent<HTMLFormElement>) {
+     ...
+      64      const email = new FormData(event.currentTarget).get("email"
+          );
+      65      const problem = emailError(typeof email === "string" ? emai
+          l : "");
+      66      setError(problem);
+      58 -    if (problem) return track("form_error", { error_type: probl
+         -em });                                                         
+      67 +    if (problem) {                                             
+      68 +      inputRef.current?.focus();                               
+      69 +      return track("form_error", { error_type: problem });     
+      70 +    }                                                          
+      71      track("form_submitted", { index: index.id, amount });
+     … 75 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -i '' 's/ aria-invalid:border-on-dark-error aria-invalid:outline-2
+      aria-invalid:outline-on-dark-error"/ aria-invalid:border-on-dark-error"/'
+      src/components/…)
+  ⎿            className="text-4xl leading-[1.1] font-heavy tracking-head t
+     ext-balance wdth-118"
+             >
+     … +38 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+1 -1)
+      153                }}
+      154                aria-invalid={error ? true : undefined}
+      155                aria-describedby={error ? errorId : undefined}
+      156 -              className="min-h-13 w-full border-2 border-white
+          - bg-white px-4 text-lg leading-none font-medium text-ink aria-
+          -invalid:border-on-dark-error aria-invalid:outline-2 aria-inval
+          -id:outline-on-dark-error"                                     
+      156 +              className="min-h-13 w-full border-2 border-white
+          + bg-white px-4 text-lg leading-none font-medium text-ink aria-
+          +invalid:border-on-dark-error"                                 
+      157              />
+      158              <p
+      159                id={errorId}
+
+⏺ Write(src/components/PrivacyLink.tsx)
+  ⎿  Added 14 lines, removed 2 lines
+       5  export const privacyHref = "/ochrana-udaju";
+       6  
+       7  // The link to the privacy page, from the consent text and the 
+          footer.
+       8 -export function PrivacyLink({ children }: { children: ReactNode
+         - }) {                                                          
+       8 +// `newTab` keeps the form in place for a visitor who checks it
+         + mid-way.                                                      
+       9 +// The vertical padding widens the tap area without moving the 
+         +text.                                                          
+      10 +export function PrivacyLink({                                  
+      11 +  newTab = false,                                              
+      12 +  children,                                                    
+      13 +}: {                                                           
+      14 +  newTab?: boolean;                                            
+      15 +  children: ReactNode;                                         
+      16 +}) {                                                           
+      17    return (
+      10 -    <Link href={privacyHref} className="underline underline-off
+         -set-2">                                                        
+      18 +    <Link                                                      
+      19 +      href={privacyHref}                                       
+      20 +      className="py-2.5 underline underline-offset-2"          
+      21 +      {...(newTab && { target: "_blank", rel: "noopener" })}   
+      22 +    >                                                          
+      23        {children}
+      24      </Link>
+      25    );
+
+⏺ Now the taps, match card, first screen, FAQ, footer, header and privacy page.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  117-}: {
+     118-  pressed: boolean;
+     119-  onClick: () => void;
+     … +16 lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+7 -5)
+      113                </span>
+      114                <span className="h-3 overflow-hidden bg-ground">
+      115                  <span
+      116 -                  className={`block h-full ease-out-soft motio
+          -n-safe:transition-[width] motion-safe:duration-500 ${i === 0 ?
+          - "bg-red" : "bg-ink"}`}                                       
+      116 +                  className={`block h-full ease-out-soft motio
+          +n-safe:transition-[width] motion-safe:duration-500 ${i === 0 ?
+          + "bg-accent" : "bg-ink"}`}                                    
+      117                    style={{ width: `${(c.weight.value / maxWeig
+           ht) * 100}%` }}
+      118                  />
+      119                </span>
+     ...
+      149            {sellers.map((b) => (
+      150              <li
+      151                key={b.id}
+      152 -              className="flex-1 border-[1.5px] border-line px-
+          -3 py-2.5 text-body font-extrabold"                            
+      152 +              // A filled tile, not a bordered box: it is info
+          +rmation, not                                                  
+      153 +              // a button.                                    
+      154 +              className="flex-1 bg-ground px-3 py-2.5 text-bod
+          +y font-extrabold"                                             
+      155              >
+      156                {b.name}
+      157                <small className="mt-0.5 block text-sm font-norm
+           al text-muted">
+      156 -                {copy.fxFee}{" "}                             
+      157 -                <span className="tabular-nums">               
+      158 +                {copy.fxFee}                                  
+      159 +                <span className="block font-bold whitespace-no
+          +wrap text-ink tabular-nums">                                  
+      160                    <CountUp
+      161                      value={feePerPurchase(amount, b.fxFee.valu
+           e)}
+      162                      format={kcFee}
+     ...
+      181        </div>
+      182  
+      183        <details className="mt-4 border-t border-line">
+      182 -        <summary className="py-3 pr-8 pb-1 text-sm font-bold t
+          -ext-muted">                                                   
+      184 +        <summary className="text-sm font-bold text-muted">    
+      185            {copy.sourcesHead}
+      186          </summary>
+      187          <SourceGroups groups={sourceGroups} />
+  ⎿  Updated src/components/Planner.tsx (+3 -5)
+      54            aria-label={copy.label}
+      55          >
+      56            <Question>{copy.indexQuestion}</Question>
+      57 -          <div className="mb-5 flex flex-wrap gap-2">          
+      57 +          {/* Both rows are the same control: equal columns, sa
+         +me type. */}                                                   
+      58 +          <div className="mb-5 grid grid-cols-3 gap-1.5">      
+      59              {Object.values(indexes).map((index) => (
+      60                <Chip
+      61                  key={index.id}
+     ...
+      73                  key={amount}
+      74                  pressed={plan.amount === amount}
+      75                  onClick={() => selectAmount(amount)}
+      75 -                className="px-1 text-md"                       
+      76                >
+      77                  {kc(amount)}
+      78                </Chip>
+     ...
+      113  function Chip({
+      114    pressed,
+      115    onClick,
+      116 -  className = "px-4 text-base",                               
+      116    children,
+      117  }: {
+      118    pressed: boolean;
+      119    onClick: () => void;
+      121 -  className?: string;                                         
+      120    children: ReactNode;
+      121  }) {
+      122    return (
+     ...
+      124        type="button"
+      125        aria-pressed={pressed}
+      126        onClick={onClick}
+      129 -      className={`min-h-11 cursor-pointer border-[1.5px] borde
+          -r-ink leading-none font-semibold transition-[background-color,
+          -color,transform] duration-180 active:scale-97 aria-pressed:bg-
+          -ink aria-pressed:text-white ${className}`}                    
+      127 +      className="min-h-11 cursor-pointer border-[1.5px] border
+          +-ink leading-none font-semibold transition-[background-color,c
+          +olor,transform] duration-180 active:scale-97 aria-pressed:bg-i
+          +nk aria-pressed:text-white px-1 text-base whitespace-nowrap"  
+      128      >
+      129        {children}
+      130      </button>
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  src/components/CtaLink.tsx:7:  "flex min-h-13 w-full items-center just
+     ify-center bg-red text-lg leading-none font-extrabold text-white no-un
+     derline transition-[background-color,transform] duration-150 wdth-110
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Faq.tsx (+1 -1)
+      49        </h2>
+      50        {items.map(([id, question, answer]) => (
+      51          <details key={id} data-q={id} className="mb-2 bg-card">
+      52 -          <summary className="py-3.5 pr-11 pl-4 text-base font-
+         -bold">                                                         
+      52 +          <summary className="px-4 py-3.5 text-base font-bold">
+      53              {question}
+      54            </summary>
+      55            <p className="px-4 pb-3.5 text-base text-ink-soft">{a
+          nswer}</p>
+  ⎿  Updated src/components/FirstScreen.tsx (+2 -2)
+      25      <section className="pt-1.5 pb-7" aria-labelledby="headline"
+          >
+      26        <h1
+      27          id="headline"
+      28 -        className="text-5xl leading-[1.08] font-heavy tracking-
+         -head wdth-118"                                                 
+      28 +        className="text-5xl leading-[1.08] font-heavy tracking-
+         +head text-balance wdth-118"                                    
+      29        >
+      30          {copy.headline}
+      31        </h1>
+     ...
+      52                  <span className="sr-only">{copy.columnUs}: </sp
+          an>
+      53                  {index.usFunds.map((f) => f.ticker).join(", ")}
+      54                </span>
+      55 -              <span className="font-black text-red" aria-hidden
+         -="true">                                                       
+      55 +              <span className="font-black text-accent" aria-hid
+         +den="true">                                                    
+      56                  →
+      57                </span>
+      58                <span className="text-body leading-[1.2] font-ext
+          rabold">
+  ⎿  Updated src/components/Footer.tsx (+1 -1)
+      41          {copy.disclaimer}
+      42        </p>
+      43        <details className="mb-2.5 border-t border-line">
+      44 -        <summary className="py-3 pr-8 pb-1 text-sm font-bold"> 
+      44 +        <summary className="text-sm font-bold">                
+      45            {copy.sourcesHead}
+      46          </summary>
+      47          <SourceGroups groups={sourceGroups} />
+  ⎿  Updated src/components/Header.tsx (+1 -1)
+       9          className="text-2xl font-black tracking-mark no-underli
+          ne wdth-125"
+      10        >
+      11          {cs.header.wordmark}
+      12 -        <span className="text-red" aria-hidden="true">         
+      12 +        <span className="text-accent" aria-hidden="true">      
+      13            .
+      14          </span>
+      15        </Link>
+  ⎿  Updated src/components/Privacy.tsx (+16 -8)
+      11      <div className="page-wrap">
+      12        <Header />
+      13        <main className="pt-4 pb-10">
+      14 -        <h1 className="mb-5 text-6xl leading-[1.05] font-heavy 
+         -tracking-head wdth-118">                                       
+      14 +        <BackLink className="mb-2" />                          
+      15 +        <h1 className="mb-5 text-5xl leading-[1.08] font-heavy 
+         +tracking-head text-balance wdth-118">                          
+      16            {copy.title}
+      17          </h1>
+      18          {copy.sections.map((section) => (
+     ...
+      23              <p className="text-base leading-normal">{section.te
+          xt}</p>
+      24            </section>
+      25          ))}
+      25 -        <Link                                                  
+      26 -          href="/"                                             
+      27 -          className="mt-2 inline-flex min-h-12 items-center fon
+         -t-bold underline underline-offset-2"                           
+      28 -        >                                                      
+      29 -          <span aria-hidden="true">←&nbsp;</span>              
+      30 -          {copy.back}                                          
+      31 -        </Link>                                                
+      26 +        <BackLink className="mt-2" />                          
+      27        </main>
+      28      </div>
+      29    );
+      30  }
+      31 +                                                               
+      32 +// The way back, at the top and at the end of the page.        
+      33 +function BackLink({ className }: { className: string }) {      
+      34 +  return (                                                     
+      35 +    <Link                                                      
+      36 +      href="/"                                                 
+      37 +      className={`inline-flex min-h-11 items-center font-bold u
+         +nderline underline-offset-2 ${className}`}                     
+      38 +    >                                                          
+      39 +      <span aria-hidden="true">←&nbsp;</span>                  
+      40 +      {copy.back}                                              
+      41 +    </Link>                                                    
+      42 +  );                                                           
+      43 +}                                                              
+
+⏺ Red now remains only on the two CTAs and the two disclaimer boxes. Next, the
+  data-side naming fixes.
+
+⏺ Bash(sed -i '' 's/    name: "iShares NASDAQ 100 UCITS ETF",/    \/\/ "(Acc)"
+      like the other two: the factsheet names it "U.S. Dollar\n    \/\/
+      (Accumulating)" (docs\…)
+  ⎿    compareWith: "QQQ",
+       euFund: {
+         // "(Acc)" like the other two: the factsheet names it "U.S. Dollar
+     … +10 lines (ctrl+o to expand)
+  ⎿  Updated src/data/indexes.ts (+3 -1)
+      163    ],
+      164    compareWith: "QQQ",
+      165    euFund: {
+      166 -    name: "iShares NASDAQ 100 UCITS ETF",                     
+      166 +    // "(Acc)" like the other two: the factsheet names it "U.S
+          +. Dollar                                                      
+      167 +    // (Accumulating)" (docs/research/pairs.md).              
+      168 +    name: "iShares NASDAQ 100 UCITS ETF (Acc)",               
+      169      shortName: "iShares NASDAQ 100",
+      170      isin: fact("IE00B53SZB19", s.ishNdx, "ISIN IE00B53SZB19"),
+      171      ter: fact(0.3, s.ishNdx, "Total Expense Ratio 0.30%"),
+  ⎿  Updated src/data/sources.ts (+2 -2)
+      60  
+      61    // US funds (docs/research/pairs.md)
+      62    vooFactsheet: {
+      63 -    title: "Vanguard S&P 500 ETF (VOO), fact sheet",           
+      63 +    title: "Vanguard S&P 500 ETF (VOO), factsheet",            
+      64      url: "https://fund-docs.vanguard.com/F0968.pdf",
+      65      asOf: "2026-06-30",
+      66      accessed,
+     ...
+      72      accessed,
+      73    },
+      74    spyFactsheet: {
+      75 -    title: "SPDR S&P 500 ETF Trust (SPY), fact sheet",         
+      75 +    title: "SPDR S&P 500 ETF Trust (SPY), factsheet",          
+      76      url: "https://www.ssga.com/us/en/intermediary/library-conte
+          nt/products/factsheets/etfs/us/factsheet-us-en-spy.pdf",
+      77      asOf: "2026-09-30",
+      78      accessed,
+
+⏺ Now running format, typecheck, lint and tests.
+
+⏺ Bash(pnpm exec biome check --write src >/dev/null 2>&1; pnpm check 2>&1 | tail
+      -30 && pnpm test 2>&1 | tail -15)
+  ⎿  $ pnpm typecheck && pnpm lint
+     $ next typegen && tsc --noEmit
+     Generating route types...
+     … +12 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+1 -3)
+      102            {/* Non-breaking: "index" stays with the index's nam
+           e. */}
+      103            {copy.headline}&nbsp;<Swap>{index.longLabel}</Swap>
+      104          </h2>
+      105 -        <p className="mt-2 mb-4.5 text-base text-on-dark-muted
+          -">                                                            
+      106 -          {copy.lead}                                         
+      107 -        </p>                                                  
+      105 +        <p className="mt-2 mb-4.5 text-base text-on-dark-muted
+          +">{copy.lead}</p>                                             
+      106          <ul className="mb-5.5 grid gap-2.5">
+      107            {checklist.map((item, i) => (
+      108              // biome-ignore lint/suspicious/noArrayIndexKey: s
+           ix fixed lines
+  ⎿  Updated src/components/EmailPreview.tsx (+35 -44)
+      127      (b) => b.available[index.id].value,
+      128    );
+      129    const world = indexes.world;
+      130 -  const outcome = (i: MarketIndex) =>                         
+      131 -    income(amount, i.return10y.value, years);                 
+      130 +  const outcome = (i: MarketIndex) => income(amount, i.return1
+          +0y.value, years);                                             
+      131    // One unit per row: if any index reaches a million, the row
+            is in mil.
+      132    const inMillions = (pick: (o: ReturnType<typeof outcome>) =>
+            number) =>
+      133      all.some((i) => Math.abs(pick(outcome(i))) >= 1_000_000);
+     ...
+      160        {comparison(index.id, [
+      161          [
+      162            copy.income.total(years),
+      164 -          (i) => (                                            
+      165 -            <strong>{approxKc(outcome(i).total, totalInMillion
+          -s)}</strong>                                                  
+      166 -          ),                                                  
+      167 -        ],                                                    
+      168 -        [                                                     
+      169 -          copy.income.paidIn,                                 
+      170 -          (i) => kc(outcome(i).paidIn),                       
+      171 -        ],                                                    
+      172 -        [                                                     
+      173 -          copy.income.gain,                                   
+      174 -          (i) => approxKc(outcome(i).gain, gainInMillions),   
+      163 +          (i) => <strong>{approxKc(outcome(i).total, totalInMi
+          +llions)}</strong>,                                            
+      164          ],
+      165 +        [copy.income.paidIn, (i) => kc(outcome(i).paidIn)],   
+      166 +        [copy.income.gain, (i) => approxKc(outcome(i).gain, ga
+          +inInMillions)],                                               
+      167          [
+      168            copy.income.average,
+      169            (i) => (
+     ...
+      337    // fit the table, so the dialog itself never scrolls sideway
+           s.
+      338    return (
+      339      <div className="mb-1.5 overflow-x-auto">
+      349 -    <table className="w-full border-collapse text-sm">        
+      350 -      <thead>                                                 
+      351 -        <tr>                                                  
+      352 -          <td className="border-b border-line" />             
+      353 -          {all.map((i) => (                                   
+      354 -            <th                                               
+      355 -              key={i.id}                                      
+     … 63 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/Footer.tsx (+1 -3)
+      41          {copy.disclaimer}
+      42        </p>
+      43        <details className="mb-2.5 border-t border-line">
+      44 -        <summary className="text-sm font-bold">                
+      45 -          {copy.sourcesHead}                                   
+      46 -        </summary>                                             
+      44 +        <summary className="text-sm font-bold">{copy.sourcesHea
+         +d}</summary>                                                   
+      45          <SourceGroups groups={sourceGroups} />
+      46        </details>
+      47        <p>
+  ⎿  (timeout 5m)
+
+⏺ Checks and tests pass. Now checking the result in the browser at 375 px and
+  desktop.
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ Chips fit at 375 px. Continuing down the mobile page.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The "+" still sits low. Inspecting the computed layout.
+
+  Searched for 1 pattern, called claude-in-chrome 4 times (ctrl+o to expand)
+
+⏺ The dev server is serving a stale build of globals.css (my first edits but not
+  the last). Touching the file to trigger a rebuild.
+
+⏺ Bash(touch src/app/globals.css && sleep 3 && curl -s localhost:3000/ | grep -o
+      '/_next/static/[^"]*\.css' | head -1 | xargs -I{} curl -s
+      localhost:3000{} | grep -c '…)
+  ⎿  1
+     summary {
+       cursor: pointer;
+     … +7 lines (ctrl+o to expand)
+
+⏺ Still stale, so I'm checking which directory the :3000 server is actually
+  running from.
+⏺ Bash(lsof -a -p 15115 -d cwd -Fn 2>/dev/null | tail -1; ps -o pid,command -p
+      15115 | tail -1)
+  ⎿  n/Users/martingnebus/Martin/GIT-MG/clientelo-task
+     15115 next-server (v16.4.1)
+
+⏺ Bash(cd /tmp && for u in $(curl -s localhost:3000/ | grep -o
+      '/_next/static/[^"]*\.css' | sort -u); do echo "== $u"; curl -s
+      "localhost:3000$u" | grep -n 'align-item…)
+  ⎿  == /_next/static/chunks/src_app_1b8t1ygeecdey._.css
+     127:    --text-md: 14px;
+     802:    align-items: center;
+     … +3 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(u=$(curl -s localhost:3000/ | grep -o '/_next/static/[^"]*\.css' | head
+      -1); curl -s "localhost:3000$u" | grep -n 'has(dialog\|outline: 3px' -A2 |
+      head; curl -s…)
+  ⎿  1730:html:has(dialog[open]) {
+     1731-  overflow: hidden;
+     1732-}
+     … +40 lines (ctrl+o to expand)
+
+⏺ Bash(printf '\n' >> src/app/globals.css && sleep 4 && u=$(curl -s
+      localhost:3000/ | grep -o '/_next/static/[^"]*\.css' | head -1); curl -s
+      "localhost:3000$u" | grep…)
+  ⎿  3
+     1742:  outline: 3px solid var(--color-accent);
+  ⎿  Updated src/app/globals.css (+1 -0)
+      148      transition: none;
+      149    }
+      150  }
+      151 +                                                              
+
+⏺ Rebuilt. Removing the extra newline and reloading the frames.
+
+⏺ Bash(python3 -c "
+      import pathlib;p=pathlib.Path('src/app/globals.css');s=p.read_text().rstri
+      p('\n')+'\n';p.write_text(s)" && pnpm exec biome check
+      src/app/globals.cs…)
+  ⎿  Checked 1 file in 2ms. No fixes applied.
+  ⎿  Updated src/app/globals.css (+0 -1)
+      148      transition: none;
+      149    }
+      150  }
+      151 -                                                              
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Accordion icons are centred now. Testing the form states and the modal at 375
+  px.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The dialog no longer scrolls sideways, but the first table is still 3 px too
+  wide for its wrapper. Looking at it.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Bash(sed -i '' 's/py-3 pr-3 pl-4\.5"/py-3 pr-3 pl-4"/; s/<div
+      className="p-4\.5 text-base">/<div className="p-4 text-base">/; s/<div
+      className="px-4\.5 pb-4\.5">/<di…)
+  ⎿  86:      <div className="sticky top-0 z-10 flex items-center justify-b
+     etween border-b border-line bg-card py-3 pr-3 pl-4">
+     101:      <div className="px-4 pb-4">
+     … +5 lines (ctrl+o to expand)
+  ⎿  Updated src/components/EmailPreview.tsx (+4 -4)
+      83        onClose={onDismiss}
+      84        className="m-auto max-h-[calc(100%-32px)] w-[min(100%-16p
+          x,var(--container-page))] overflow-y-auto overscroll-contain bg
+          -card text-ink backdrop:bg-ink/55"
+      85      >
+      86 -      <div className="sticky top-0 z-10 flex items-center justi
+         -fy-between border-b border-line bg-card py-3 pr-3 pl-4.5">     
+      86 +      <div className="sticky top-0 z-10 flex items-center justi
+         +fy-between border-b border-line bg-card py-3 pr-3 pl-4">       
+      87          <p id={titleId} className="text-md font-extrabold">
+      88            {copy.modalTitle}
+      89          </p>
+     ...
+       98        </div>
+       99        <Email index={index} amount={amount} />
+      100        {/* A way out at the end too, so nobody scrolls back up 
+           to the ×. */}
+      101 -      <div className="px-4.5 pb-4.5">                         
+      101 +      <div className="px-4 pb-4">                             
+      102          <button
+      103            type="button"
+      104            onClick={onDismiss}
+     ...
+      312    );
+      313  
+      314    return (
+      315 -    <div className="p-4.5 text-base">                         
+      315 +    <div className="p-4 text-base">                           
+      316        {body}
+      317        <H3>{copy.sourcesHead}</H3>
+      318        <ol className="list-decimal pl-4.5 text-xs text-muted">
+     ...
+      357              <tr key={label}>
+      358                <th
+      359                  scope="row"
+      360 -                className="w-[22%] border-b border-line px-1 p
+          -y-1.75 text-left align-top font-medium text-muted"            
+      360 +                className="w-[20%] border-b border-line px-1 p
+          +y-1.75 text-left align-top font-medium text-muted"            
+      361                >
+      362                  {label}
+      363                </th>
+  ⎿  Updated src/copy/cs.ts (+1 -1)
+      87        fees: (brokers: string[]) =>
+      88          `Poplatky u ${brokers.join(" a ")} pro vaši částku`,
+      89        taxes: (years: number, limit: string, rate: string) =>
+      90 -        `Daně v Česku: kdy zisk nedaníte (držení přes ${years} 
+         -roky, prodeje do ${limit} za rok) a kdy platíte ${rate}`,      
+      90 +        `Daně v Česku: kdy zisk nedaníte (držení přes ${years}\
+         +u00a0roky, prodeje do ${limit} za rok) a kdy platíte ${rate}`, 
+      91        accDist: "Akumulační, nebo distribuční fond",
+      92      },
+      93      emailLabel: "Váš e-mail",
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Tables fit exactly now. Checking the fees, taxes and end of the modal.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The page behind stays locked while the modal scrolls, and the bottom "Zavřít"
+  works. Now checking the flow after sending and what an ISIN copy picks up.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The bottom close didn't seem to close the dialog in that scripted run.
+  Checking with a real click.
+
+  Called claude-in-chrome 5 times (ctrl+o to expand)
+
+⏺ Even × no longer closes it, so React state and the dialog are out of sync.
+  Inspecting the component props.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ A React removeChild error fired when the form was submitted, and it broke the
+  modal state. Looking for the first error in the console.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ My iframe harness overwrote a live Next page's body, so those errors may come
+  from that page, not the app. Retesting the flow in a clean tab with real
+  clicks and typing.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Nothing responded at all, not even typing. Checking the console for a
+  page-level error.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Error state works (pink border, message clears on typing). Now a valid submit.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Modal looks right at desktop width. Scrolling to the end and clicking the
+  bottom "Zavřít".
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Background stayed put. Clicking "Zavřít".
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Closes correctly in a clean tab, and focus returns to "Zobrazit e-mail znovu",
+  so the earlier failure came from my iframe harness. Now checking that
+  changing the plan brings the form back.
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ Behaviour verified. Now recording the colour decision and the rule, as
+  CLAUDE.md requires.
+
+⏺ Bash(sed -n 395,421p docs/decisions.md; grep -n 'red\|Red\|#d7000f'
+      docs/decisions.md | head)
+  ⎿      2.9 s → 2.3 s, performance 96 → 98–99, page weight 342 → 223 KiB.
+         An SVG icon removes the `/favicon.ico` 404 (best practices 96 →
+         100). Accessibility and SEO were 100 before and after. *Reason:* t
+     … +34 lines (ctrl+o to expand)
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)
+  ⎿        55 CLAUDE.md
+  ⎿  Updated CLAUDE.md (+4 -1)
+      25    UTM and other visit parameters are read in the browser only.
+      26  - Before "done": `pnpm check` and `pnpm test` pass.
+      27  - Colours, fonts and spacing come from the `@theme` tokens in
+      28 -  `src/app/globals.css`; the default palette and radii are clea
+         -red.                                                           
+      28 +  `src/app/globals.css`; the default palette, radii and type si
+         +zes are                                                        
+      29 +  cleared.                                                     
+      30 +- Red marks only CTAs and disclaimers; selection, emphasis and 
+         +focus use                                                      
+      31 +  `accent`.                                                    
+      32  - Page copy lives in `src/copy/cs.ts`; components hold no Czech
+           strings.
+      33  - Route files in `src/app/` only import and render components f
+          rom
+      34    `src/components/`.
+  ⎿  Updated docs/decisions.md (+27 -0)
+      419      sentence stays hedged ("většina brokerů"); its sources are
+            the
+      420      Regulation and XTB's international help page, and Fio bank
+           a says its
+      421      clients can still buy US ETFs.
+      422 +                                                              
+      423 +## UI review (2026-10-15)                                     
+      424 +                                                              
+      425 +43. **Red only on CTAs and disclaimers; a blue accent for the 
+          +rest.**                                                       
+      426 +    Changes decision 21 ("one red"). Red `#d7000f` stays on th
+          +e red                                                         
+      427 +    buttons and the left rule of the two "nejde o investiční d
+          +oporučení"                                                    
+      428 +    boxes. Selection, emphasis and focus use `accent` `#1f4fd1
+          +`: the                                                        
+      429 +    arrow to the EU fund, the largest company's bar, the chose
+          +n index's                                                     
+      430 +    column in the e-mail (on `accent-soft` `#edf1fb`, not the 
+          +warning                                                       
+      431 +    pink), the focus ring and the wordmark's dot. The checklis
+          +t ticks on                                                    
+      432 +    the dark block are plain `on-dark-accent` `#9db7ff` ticks,
+          + not filled                                                   
+      433 +    red boxes that read as checkboxes. The form error keeps   
+      434 +    `on-dark-error`: an error is a warning, the one other plac
+          +e where a                                                     
+      435 +    red tone means something. *Reason:* the user's call after 
+          +a UI                                                          
+      436 +    review; red on the focus ring, the selected column and the
+          + top bar                                                      
+      437 +    read as errors or warnings, and diluted the CTAs.         
+      438 +44. **Type scale as tokens.** Every font size is one of 13 `--
+          +text-*`                                                       
+      439 +    tokens in `globals.css` (10 to 30 px), with `--font-weight
+          +-heavy`                                                       
+      440 +    (850) and `--tracking-head` / `--tracking-mark`; the 15 ad
+          + hoc sizes                                                    
+      441 +    and the 750 weight are gone. Both `<h1>`s are 28 px. *Reas
+          +on:*                                                          
+      442 +    CLAUDE.md says fonts come from `@theme`; the review found 
+          +29 hard-                                                      
+      443 +    coded sizes.                                              
+      444 +45. **After sending, a new index or amount brings the form bac
+          +k.** The                                                      
+      445 +    "Hotovo" state belongs to the plan that was submitted; wit
+          +h another                                                     
+      446 +    plan on screen the e-mail shown would not be the one "sent
+          +". Going                                                      
+      447 +    back to the sent plan shows "Hotovo" again. The address is
+          + still                                                        
+      448 +    kept nowhere (decision 30), so a new plan means typing it 
+          +again.                                                        
+
+⏺ Final run: checks, tests and the production build (the page must stay static).
+
+⏺ Bash(pnpm check 2>&1 | tail -4 && pnpm test 2>&1 | grep -E 'Tests|Test Files'
+      && pnpm build 2>&1 | tail -14)
+  ⎿  Generating route types...
+     ✓ Types generated successfully
+     $ biome check
+     … +16 lines (ctrl+o to expand)
+  ⎿  (timeout 6m 40s)
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ I've made all the fixes. pnpm check, pnpm test and pnpm build pass, and every
+  page is still static. I tested the result in the browser at 375 px and at
+  desktop width. Nothing is committed yet.
+
+  Red
+  - Red is now only on the three red buttons and the two "Nejde o investiční
+    doporučení" boxes.
+  - I added one blue accent (#1f4fd1) for everything else: the → arrows, the
+    largest company's bar, the chosen index's column in the e-mail (light blue
+    instead of the warning pink), the focus ring and the dot in the wordmark.
+  - The checklist ticks on the black block are now plain light-blue ticks, not
+    filled red boxes that looked like checkboxes.
+  - One exception: the form error message and the invalid field's border are
+    still pink-red. That's the usual convention for errors, so I left it. Say if
+    you want it changed too.
+
+  Bugs
+  - Modal on mobile: it no longer scrolls sideways at 375 px. The tables now
+    fit; to get there the first column is narrower and "cca" can wrap onto its
+    own line.
+  - Page behind the modal: it no longer scrolls while the modal is open.
+  - Copying the ISIN: the footnote number moved to the fund name, and footnote
+    numbers are never copied. Tapping the ISIN selects it.
+  - After sending: changing the index or amount brings the form back. The
+    visitor has to type the e-mail again, because the address isn't stored
+    anywhere. Going back to the plan they sent shows "Hotovo" again.
+  - Error state:
+    - Focus moves to the field.
+    - The field gets a pink border.
+    - The message disappears as soon as they start typing.
+
+  Copy (all in src/copy/cs.ts)
+  - Headline: "plán pro index …".
+  - Footer: "Brokeři jsou uvedeni".
+  - E-mail table: "neuvedeno", "68 % v technologiích", "I v indexu Svět (MSCI
+    World) připadá na USA…".
+  - Subject line: one colon only.
+  - Sentence under the broker tiles: "Tolik zaplatíte za směnu měny…".
+  - After sending: "Hotovo, plán je připravený."
+  - The tax line in the checklist now explains the numbers.
+  - Commission reads "provize 0 Kč" for both brokers, the same as on the page.
+  - No footnote number appears twice on one line.
+
+  Names
+  - The first-screen column is headed "USA", because QQQ trades on Nasdaq.
+  - The Nasdaq fund now ends in "(Acc)" like the other two, as its factsheet
+    does.
+  - "factsheet" is spelled one way throughout.
+  - The e-mail row is "Tři největší firmy".
+  - A table row now uses one unit: "cca 0,72 mil. Kč" next to "1,20 mil. Kč".
+    This is the one formatter change, with a new test.
+
+  Visual
+  - The two tap rows match: equal widths and the same text size.
+  - The +/× icons are centred and the same size everywhere.
+  - Every font size now comes from a set of 13 named sizes in globals.css,
+    replacing 15 one-off sizes. Both page titles are 28 px.
+  - Broker tiles are filled grey instead of looking like buttons, and the amount
+    never breaks across lines.
+  - Headlines wrap more evenly.
+  - All accordion toggles are at least 44 px tall.
+  - "Jak s e-mailem zacházíme" opens in a new tab, so the visitor doesn't lose
+    the form.
+  - The modal is as wide as the page column, has a "Zavřít" button at the
+    bottom, and its small print is now four bullet points.
+  - The privacy page has a back link at the top too.
+
+  I added decisions 43–45 to docs/decisions.md (colours, font sizes, behaviour
+  after sending). I also added a red-only-on-CTAs-and-disclaimers rule to
+  CLAUDE.md.
+
+  Two corrections to my earlier review:
+  - The match-card heading is built correctly; I misread it.
+  - "NASDAQ" in capitals is the fund's official name, so I kept it.
+
+  Two things to know:
+  - Your running dev server once kept serving an old globals.css until the
+    file's content changed. If something looks stale, restart pnpm dev.
+  - On 320 px screens, the "10 000 Kč" button will be tight.
+
+✻ Sautéed for 11m 49s · done 4:59 PM
+
+❯ - On smaller screens(iphone SE), the button is partly visible, maybe try to   
+  make some gaps between texts slightly tighter                                 
+  - The general steps should be clear throughout the whole way, that is, the    
+  CTA button, we see it on mobile at first, when clicked, we lose its track     
+  though, until we scroll slightly down, would you recommend cutting certain    
+  elements in order for it to be visible always? theoretically we shoud achieve 
+  the double click to reach the email input and final CTA => suggest before     
+  implementing                                                                  
+
+⏺ I'll measure the first screen and the scroll distances at iPhone SE sizes
+  before changing anything.
+
+  Called claude-in-chrome 5 times (ctrl+o to expand)
+
+⏺ I measured the page at iPhone SE sizes (375 px wide) and tried the spacing
+  changes live in the browser. Nothing in the code has changed yet.
+
+  1. First-screen button on iPhone SE
+
+  The "Najít evropský fond ↓" button ends 659 px from the top. An iPhone SE
+  shows about 548 px when Safari's bars are expanded and about 627 px when they
+  shrink on scroll, so the button is either cut off or hidden.
+
+  Tightening the spacing moves the bottom of the button from 659 to 576 px:
+
+  - Headline: 28 → 26 px. It wraps to 4 lines instead of 5, saving about 39 px.
+  - Header bar: 52 → 44 px, and no gap above the headline.
+  - Table rows: the padding goes from 20 to 14 px per row.
+  - Gaps: the space around the grey paragraph under the headline and before the
+    button shrinks by about 4 px each.
+
+  That makes the button fully visible once Safari's bars shrink. With the bars
+  expanded it is still about 28 px short. Spacing alone can't close that gap
+  without cutting content, which point 2 handles differently.
+
+  2. Keeping the next step in view
+
+  What a visitor does now on a 548 px screen:
+
+  1. Tap the first button. The page scrolls to the index and amount taps.
+  2. Scroll about 1,100 px through the fund card to "Chci vědět víc ↓", with no
+     button in view on the way.
+  3. Tap it. The e-mail field lands about 490 px down, at the bottom edge, and
+     "Poslat plán" is below the screen.
+
+  So it takes two taps plus a long scroll, and the final button still isn't
+  visible.
+
+  My recommendation: one red button fixed to the bottom of the screen on mobile,
+  plus a reordered e-mail block.
+
+  - A fixed bottom button with two stages:
+    - On the first screen it reads "Najít evropský fond ↓" and replaces the
+      button in the page. That also settles point 1, because a fixed button is
+      always fully visible.
+    - Once the taps are on screen it changes to "Poslat plán e-mailem ↓".
+      Tapping it scrolls to the e-mail field and puts the cursor in it.
+    - It hides when the e-mail form is in view, and while the modal or keyboard
+      is open.
+    - It sits above iPhone's home bar.
+  - Reorder the e-mail block:
+    - Order: headline → e-mail field → "Poslat plán" → consent text → the
+      checklist, retitled "Co v e-mailu najdete".
+    - The field and the button then sit within about 250 px of each other, so
+      they fit together even on a small screen.
+    - The phone keyboard's return key reads "Odeslat".
+  - Remove the "Chci vědět víc" button inside the fund card, since the fixed
+    button does its job. That saves 72 px.
+
+  The result is two taps to the e-mail field with the final button in view, from
+  anywhere on the page.
+
+  Optional cuts, which shorten the scroll but aren't needed:
+
+  - Show the top 3 companies instead of 5 (saves about 44 px).
+  - Move the card's "Zdroje dat" into the footer sources (saves about 48 px).
+
+  Even with both, the fund card is still taller than an SE screen, so cuts alone
+  can't keep the button visible. The fixed button is what does that.
+
+  Trade-offs:
+
+  - The fixed button covers about 60 px at the bottom of the screen while
+    scrolling.
+  - The consent text moves under the button. It still says "Odesláním
+    souhlasíte…" right next to it, but if your GDPR reading requires it above
+    the button, I'll keep it there.
+  - The analytics labels for the button change (first_screen and match_card
+    become the two stages of the fixed button).
+  - This replaces earlier recorded layout decisions (30 and 37), so I'd record a
+    new one.
+
+  Do I go ahead with the spacing changes, the fixed button and the reorder? Also
+  tell me whether you want either optional cut.
+
+✻ Cogitated for 1m 40s · done 5:06 PM
+
+❯ no I don't want fixed button, maybe we fan focus on thinning certain elements 
+  on this page:                                                                 
+  - change the buttons for price to a horizontal slider                         
+  - label under percentage average should have one row                          
+  - remove the TER(it is in email anyway)                                       
+  - in the biggest companies, put the counter to a brackets in the header       
+  - also remove the where to buy - in email anyway                              
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ I'll proceed with building it as requested, but noting one thing to flag at
+  the end: "Kde koupit" is the only fund card element tied to the amount, so
+  without it, the slider's effect will only show up in the checklist line of the
+  e-mail block.
+
+⏺ Bash(sed -n 1,70p src/components/MatchCard.tsx && sed -n 84,200p
+      src/components/MatchCard.tsx && grep -n 'returnType' -r src | grep -v
+      test)
+  ⎿  "use client";
+
+     import { type ReactNode, useRef } from "react";
+     … +191 lines (ctrl+o to expand)
+
+⏺ Rewriting the fund card without the TER and "Kde koupit" blocks, with the
+  stock count in the heading.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib,re…)
+  ⎿          </p>
+             {/* One line at 375 px: the short return type (decision 46). *
+     /}
+     … +63 lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+14 -75)
+       2  
+       3  import { type ReactNode, useRef } from "react";
+       4  import { cs } from "@/copy/cs";
+       5 -import { brokers } from "@/data/brokers";                      
+       6 -import { comparedFund, type MarketIndex } from "@/data/indexes"
+         -;                                                              
+       5 +import type { MarketIndex } from "@/data/indexes";             
+       6  import type { Fact, Source } from "@/data/types";
+       8 -import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@
+         -/lib/format";                                                  
+       7 +import { formatNumber, pct } from "@/lib/format";              
+       8  import type { Amount } from "@/lib/plan";
+       9  import { track } from "@/lib/track";
+      10  import { CtaLink } from "./CtaLink";
+     ...
+      17  
+      18  // Module-level, so CountUp gets the same function every render
+          .
+      19  const whole = (n: number) => formatNumber(n);
+      21 -const crowns = (n: number) => kc(n);                           
+      20  
+      21  const uniqueSources = (...facts: Fact<unknown>[]) => [
+      22    ...new Set(facts.map((f) => f.source)),
+      23  ];
+      24  
+      27 -// The answer to the taps, in the order of decision 37. Rendere
+         -d inside                                                       
+      28 -// the Planner; no ISIN here (it is in the e-mail). Sends match
+         -_viewed                                                        
+      29 -// once, with the plan shown at that moment.                   
+      25 +// The answer to the taps, in the order of decision 37, thinned
+         + by                                                            
+      26 +// decision 46: the fees and the brokers are in the e-mail only
+         +. Rendered                                                     
+      27 +// inside the Planner; no ISIN here (it is in the e-mail). Send
+         +s                                                              
+      28 +// match_viewed once, with the plan shown at that moment.      
+      29  export function MatchCard({
+      30    index,
+      31    amount,
+     ...
+      37  }) {
+      38    const ref = useRef<HTMLElement>(null);
+      39    useSeenOnce(ref, () => track("match_viewed", { index: index.i
+          d, amount }));
+      41 -  const usFund = comparedFund(index);                          
+      42 -  const sellers = Object.values(brokers).filter(               
+      43 -    (b) => b.available[index.id].value,                        
+      44 -  );                                                           
+      45 -  const commissions = new Set(sellers.map((b) => b.commission.v
+         -alue));                                                        
+      40    const maxWeight = Math.max(...index.top5.map((c) => c.weight.
+          value));
+     … 97 more lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib,re…)
+  ⎿        `${ticker} je na burze ${exchange}`,
+         cta: "Najít evropský fond ↓",
+       },
+     … +35 lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+0 -13)
+      148      </h3>
+      149    );
+      150  }
+      151 -                                                              
+      152 -function Row({ label, children }: { label: string; children: R
+          -eactNode }) {                                                 
+      153 -  return (                                                    
+      154 -    <div className="flex items-baseline justify-between gap-3 
+          -text-base">                                                   
+      155 -      <span className="text-md text-muted">{label}</span>     
+      156 -      {children}                                              
+      157 -    </div>                                                    
+      158 -  );                                                          
+      159 -}                                                             
+      160 -                                                              
+      161 -function Note({ children }: { children: ReactNode }) {        
+      162 -  return <p className="mt-2 text-md text-muted">{children}</p>
+          -;                                                             
+      163 -}                                                             
+  ⎿  Updated src/copy/cs.ts (+3 -11)
+      52      warning:
+      53        "Minulé výnosy nezaručují budoucí. Nejde o investiční dop
+          oručení, jen o historickou statistiku indexu.",
+      54      topHead: "Největší firmy uvnitř",
+      55 -    companiesBefore: "Celkem",                                 
+      56 -    companiesAfter: "akcií v indexu.",                         
+      55 +    // The count sits in the heading's brackets: "(z 503 akcií)
+         +".                                                             
+      56 +    companiesBefore: "(z",                                     
+      57 +    companiesAfter: "akcií)",                                  
+      58      fundHead: (usFunds: string) => `Evropský fond místo ${usFun
+          ds}`,
+      58 -    terLabel: "Poplatek fondu (TER) ročně",                    
+      59 -    usTerLabel: "Americký fond pro srovnání",                  
+      60 -    buyHead: "Kde koupit",                                     
+      61 -    fxFee: "směna měny",                                       
+      62 -    feesBefore: "Tolik zaplatíte za směnu měny při nákupu za", 
+      63 -    feesAfter: ", pokud máte účet v Kč.",                      
+      64 -    commission: (fee: string) => `Provize za nákup ETF je u obo
+         -u ${fee}.`,                                                    
+      59      more: "Chci vědět víc ↓",
+      60      sourcesHead: "Zdroje dat",
+      61      sourceGroups: {
+      62        return: "Výnos",
+      63        companies: "Složení",
+      70 -      fund: "Fond a poplatek",                                 
+      71 -      brokers: "Brokeři",                                      
+      64      },
+      65      /** A source without its own date: when it was read. */
+      66      accessed: (date: string) => `staženo ${date}`,
+  ⎿  Updated src/data/indexes.ts (+5 -0)
+      40    return10y: Fact<number>;
+      41    /** What the return includes, in page wording (decision 4). *
+          /
+      42    returnType: string;
+      43 +  /** The same, short enough for one line on the match card at 
+         +375 px. */                                                     
+      44 +  returnTypeShort: string;                                     
+      45    /** Constituents (securities) in the index, as each provider 
+          counts them;
+      46     * a company with two share classes counts twice. */
+      47    constituents: Fact<number>;
+     ...
+      100    // price return only.
+      101    return10y: fact(15.33, s.spFeed, '"tenYearReturn":15.3325285
+           51796454'),
+      102    returnType: "celkový výnos včetně dividend, před daní z divi
+           dend",
+      103 +  returnTypeShort: "vč. dividend, před daní",                 
+      104    constituents: fact(503, s.spFactsheet, "NUMBER OF CONSTITUEN
+           TS 503"),
+      105    usShare: fact(100, s.spFactsheet, "United States 503 68,448,
+           592.21 100"),
+      106    // The feed gives weights as fractions of 1; ×100 is a unit 
+           change
+     ...
+      179      "10 Year 24.08% 10 Year 581.57% 10 Year 21.16%",
+      180    ),
+      181    returnType: "celkový výnos včetně dividend",
+      182 +  returnTypeShort: "vč. dividend",                            
+      183    // 100 companies, 101 securities (Alphabet has two share cla
+           sses): the
+      184    // page counts securities, as it does for the other two inde
+           xes.
+      185    constituents: fact(101, s.ndxFactsheet, "Securities: … 101")
+           ,
+     ...
+      242      "MSCI World -1.19 1.88 15.24 11.75 21.40 11.89 12.81 7.46"
+           ,
+      243    ),
+      244    returnType: "celkový výnos včetně dividend, po srážkové dani
+            z dividend",
+      245 +  returnTypeShort: "vč. dividend, po srážkové dani",          
+      246    constituents: fact(1249, s.worldFactsheet, "With 1,249 const
+           ituents"),
+      247    usShare: fact(72.94, s.worldFactsheet, "United States 72.94%
+           "),
+      248    top5: [
+
+⏺ Now the amount slider in the Planner.
+
+⏺ Bash(sed -n 1,60p src/components/Planner.tsx && sed -n 60,115p
+      src/components/Planner.tsx)
+  ⎿  "use client";
+
+     import { type ReactNode, useRef, useState } from "react";
+     … +113 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  7:import { type Amount, amounts, defaultAmount, defaultIndex } from "@
+     /lib/plan";
+  ⎿  Updated src/app/globals.css (+34 -0)
+      102    outline-offset: 2px;
+      103  }
+      104  
+      105 +/* The amount slider (decision 46): a thin black track and a s
+          +quare                                                         
+      106 +   black thumb, like a pressed chip, with a 44 px tall touch a
+          +rea. */                                                       
+      107 +.amount-slider {                                              
+      108 +  appearance: none;                                           
+      109 +  height: 44px;                                               
+      110 +  background: transparent;                                    
+      111 +  cursor: pointer;                                            
+      112 +}                                                             
+      113 +.amount-slider::-webkit-slider-runnable-track {               
+      114 +  height: 4px;                                                
+      115 +  background: var(--color-ink);                               
+      116 +}                                                             
+      117 +.amount-slider::-moz-range-track {                            
+      118 +  height: 4px;                                                
+      119 +  background: var(--color-ink);                               
+      120 +}                                                             
+      121 +.amount-slider::-webkit-slider-thumb {                        
+      122 +  appearance: none;                                           
+      123 +  width: 28px;                                                
+      124 +  height: 28px;                                               
+      125 +  margin-top: -12px;                                          
+      126 +  background: var(--color-ink);                               
+      127 +  border: 3px solid var(--color-ground);                      
+      128 +  box-shadow: 0 0 0 1.5px var(--color-ink);                   
+      129 +}                                                             
+      130 +.amount-slider::-moz-range-thumb {                            
+      131 +  width: 22px;                                                
+      132 +  height: 22px;                                               
+      133 +  border-radius: 0;                                           
+      134 +  background: var(--color-ink);                               
+      135 +  border: 3px solid var(--color-ground);                      
+      136 +  box-shadow: 0 0 0 1.5px var(--color-ink);                   
+      137 +}                                                             
+      138 +                                                              
+      139  /* Accordions (sources and FAQ): a "+" that turns to "×", cent
+           red on the
+      140     question whatever its line count, and the content expands w
+           here the
+      141     browser supports ::details-content. */
+  ⎿  Updated src/components/Planner.tsx (+44 -20)
+      1  "use client";
+      2  
+      3 -import { type ReactNode, useRef, useState } from "react";       
+      3 +import { type ReactNode, useEffect, useRef, useState } from "rea
+        +ct";                                                            
+      4  import { cs } from "@/copy/cs";
+      5  import { type IndexId, indexes } from "@/data/indexes";
+      6  import { kc } from "@/lib/format";
+     ...
+      11  import { MatchCard } from "./MatchCard";
+      12  
+      13  const copy = cs.taps;
+      14 +const amountId = "amount";                                     
+      15 +const amountLabelId = "amount-label";                          
+      16  
+      17  type Plan = { index: IndexId; amount: Amount };
+      18  
+     ...
+      35      track("index_selected", { index: id });
+      36    }
+      37  
+      36 -  function selectAmount(amount: Amount) {                      
+      37 -    if (amount === plan.amount) return;                        
+      38 -    setPlan({ ...plan, amount });                              
+      39 -    track("amount_selected", { amount });                      
+      40 -  }                                                            
+      38 +  // The slider moves the plan at once; its event waits until i
+         +t has                                                          
+      39 +  // rested for 400 ms, so a drag across stops sends one event,
+         + and only                                                      
+      40 +  // when it ends on a new amount.                             
+      41 +  const trackedAmount = useRef(plan.amount);                   
+      42 +  useEffect(() => {                                            
+      43 +    if (plan.amount === trackedAmount.current) return;         
+      44 +    const timer = setTimeout(() => {                           
+      45 +      trackedAmount.current = plan.amount;                     
+      46 +      track("amount_selected", { amount: plan.amount });       
+      47 +    }, 400);                                                   
+      48 +    return () => clearTimeout(timer);                          
+      49 +  }, [plan.amount]);                                           
+      50  
+      51    function openMail() {
+      52      opens.current += 1;
+     ...
+      63            aria-label={copy.label}
+      64          >
+     … 60 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -i '' 's/className="w-21 text-right/className="w-24 text-right/'
+      src/components/Planner.tsx && sed -i '' 's/<header className="flex h-13
+      items-center">/<hea…)
+  ⎿  src/components/CtaLink.tsx:7:  "flex min-h-13 w-full items-center just
+     ify-center bg-red text-lg leading-none font-extrabold text-white no-un
+     derline transition-[background-color,transform] duration-150 wdth-110
+     … +4 lines (ctrl+o to expand)
+  ⎿  Updated src/components/FirstScreen.tsx (+5 -5)
+      22  
+      23  export function FirstScreen({ tapsId }: { tapsId: string }) {
+      24    return (
+      25 -    <section className="pt-1.5 pb-7" aria-labelledby="headline"
+         ->                                                              
+      25 +    <section className="pb-7" aria-labelledby="headline">      
+      26        <h1
+      27          id="headline"
+      28 -        className="text-5xl leading-[1.08] font-heavy tracking-
+         -head text-balance wdth-118"                                    
+      28 +        className="text-4xl leading-[1.08] font-heavy tracking-
+         +head text-balance wdth-118"                                    
+      29        >
+      30          {copy.headline}
+      31        </h1>
+      32 -      <p className="mt-3 mb-4 text-base leading-[1.45] text-mut
+         -ed">                                                           
+      32 +      <p className="mt-2 mb-3 text-base leading-[1.45] text-mut
+         +ed">                                                           
+      33          {copy.why}
+      34        </p>
+      35  
+      36 -      <div className="mb-4 bg-card px-4 pt-2.5 pb-1">          
+      36 +      <div className="mb-3 bg-card px-4 pt-2.5 pb-1">          
+      37          <div
+      38            className={`${pairGrid} border-b-2 border-ink pb-1.5 
+          text-sm font-extrabold`}
+      39            aria-hidden="true"
+     ...
+      45            {Object.values(indexes).map((index, i) => (
+      46              <li
+      47                key={index.id}
+      48 -              className={`${pairGrid} items-baseline border-lin
+         -e pt-2.75 pb-2.25 not-first:border-t motion-safe:animate-rise`}
+      48 +              className={`${pairGrid} items-baseline border-lin
+         +e pt-2 pb-1.5 not-first:border-t motion-safe:animate-rise`}    
+      49                style={{ animationDelay: `${i * 80 + 150}ms` }}
+      50              >
+      51                <span className="text-body leading-[1.2] font-ext
+          rabold text-muted">
+  ⎿  Updated src/components/Header.tsx (+1 -1)
+      3  
+      4  export function Header() {
+      5    return (
+      6 -    <header className="flex h-13 items-center">                 
+      6 +    <header className="flex h-11 items-center">                 
+      7        <Link
+      8          href="/"
+      9          className="text-2xl font-black tracking-mark no-underlin
+         e wdth-125"
+  ⎿  Updated src/components/Planner.tsx (+1 -1)
+       94              />
+       95              <output
+       96                htmlFor={amountId}
+       97 -              className="w-21 text-right text-xl font-extrabol
+          -d whitespace-nowrap tabular-nums"                             
+       97 +              className="w-24 text-right text-xl font-extrabol
+          +d whitespace-nowrap tabular-nums"                             
+       98              >
+       99                {kc(plan.amount)}
+      100              </output>
+  ⎿  Updated src/components/Privacy.tsx (+1 -1)
+      12        <Header />
+      13        <main className="pt-4 pb-10">
+      14          <BackLink className="mb-2" />
+      15 -        <h1 className="mb-5 text-5xl leading-[1.08] font-heavy 
+         -tracking-head text-balance wdth-118">                          
+      15 +        <h1 className="mb-5 text-4xl leading-[1.08] font-heavy 
+         +tracking-head text-balance wdth-118">                          
+      16            {copy.title}
+      17          </h1>
+      18          {copy.sections.map((section) => (
+
+⏺ Bash(sed -i '' '/--text-5xl: 28px;/d; s/--text-6xl: 30px;/--text-5xl: 30px;/'
+      src/app/globals.css && grep -rl 'text-6xl' src/components | xargs sed -i
+      '' 's/text-6xl…)
+  ⎿  35:  --text-*: initial;
+     36:  --text-2xs: 10px;
+     37:  --text-xs: 12.5px;
+     … +16 lines (ctrl+o to expand)
+  ⎿  Updated src/app/globals.css (+1 -2)
+      44    --text-2xl: 20px;
+      45    --text-3xl: 22px;
+      46    --text-4xl: 26px;
+      47 -  --text-5xl: 28px;                                            
+      48 -  --text-6xl: 30px;                                            
+      47 +  --text-5xl: 30px;                                            
+      48  
+      49    --font-weight-heavy: 850;
+      50    --tracking-head: -0.01em;
+  ⎿  Updated src/components/MatchCard.tsx (+1 -1)
+      70          <Head className="mb-1.5">
+      71            <Swap>{copy.returnHead(index.longLabel)}</Swap>
+      72          </Head>
+      73 -        <p className="text-6xl leading-none font-black tabular-
+         -nums wdth-120">                                                
+      73 +        <p className="text-5xl leading-none font-black tabular-
+         +nums wdth-120">                                                
+      74            <CountUp value={index.return10y.value} format={pct} /
+          > {copy.perYear}
+      75          </p>
+      76          {/* One line at 375 px: the short return type (decision
+           46). */}
+  ⎿  (timeout 5m)
+
+⏺ Checks and tests pass. Verifying in the browser.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+⏺ The browser window itself is now 375×667, the size of an iPhone SE screen, so
+  I'll check the real page directly.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The button is fully on screen at 375×667. Scrolling to the slider and card.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The heading reads "(z503 akcií)" because JSX dropped the space at a line
+  break. Fixing it.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  {copy.topHead} {copy.companiesBefore}
+               <CountUp value={index.constituents.value} format={whole} />{
+     " "}
+     … +9 lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+1 -1)
+      84  
+      85        <Block>
+      86          <Head>
+      87 -          {copy.topHead} {copy.companiesBefore}                
+      87 +          {copy.topHead} {copy.companiesBefore}{" "}           
+      88            <CountUp value={index.constituents.value} format={who
+          le} />{" "}
+      89            {copy.companiesAfter}
+      90          </Head>
+
+⏺ Now testing the slider with keyboard steps and the longest heading (Svět).
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Dragging the slider to the right end, then tapping "Svět".
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Slider sends one event per drag, the return label stays on one line, and "(z 1
+  249 akcií)" fits. Recording the decision and running the final checks.
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'
+      46. **A thinner path to the form.** Changes the match card order of…)
+  ⎿  $ biome check
+     Checked 40 files in 11ms. No fixes applied.
+           Tests  213 passed (213)
+     … +4 lines (ctrl+o to expand)
+  ⎿  Updated docs/decisions.md (+18 -0)
+      446      plan on screen the e-mail shown would not be the one "sent
+           ". Going
+      447      back to the sent plan shows "Hotovo" again. The address is
+            still
+      448      kept nowhere (decision 30), so a new plan means typing it 
+           again.
+      449 +46. **A thinner path to the form.** Changes the match card ord
+          +er of                                                         
+      450 +    decisions 30 and 37 and the amount chips of decision 5. (a
+          +) The card                                                    
+      451 +    drops the TER row and "Kde koupit"; both are in the e-mail
+          + (fees                                                        
+      452 +    section). The card is 640 px tall at 375 px, was 995. (b) 
+          +The stock                                                     
+      453 +    count moves into the companies heading: "Největší firmy uv
+          +nitř (z 503                                                   
+      454 +    akcií)". (c) The return line uses a short return type     
+      455 +    (`returnTypeShort`, e.g. "vč. dividend, před daní") so it 
+          +stays one                                                     
+      456 +    line; the e-mail keeps the full wording. (d) The amount is
+          + a stepped                                                    
+      457 +    slider over the same four amounts, the chosen one printed 
+          +beside it;                                                    
+      458 +    `amount_selected` fires once the slider rests for 400 ms o
+          +n a new                                                       
+      459 +    amount. (e) The first screen is tighter: header 44 px, hea
+          +dline 26 px                                                   
+      460 +    (both `<h1>`s; replaces decision 44's 28 px), smaller gaps
+          + and table                                                    
+      461 +    rows. On 375 × 667 the red CTA ends at 576 px, was 659. *R
+          +eason:* the                                                   
+      462 +    user's call; on an iPhone SE the first CTA was cut off and
+          + the card                                                     
+      463 +    stood between the taps and the form. A sticky CTA was cons
+          +idered and                                                    
+      464 +    rejected by the user. *Open:* with the brokers gone, the a
+          +mount no                                                      
+      465 +    longer changes anything on the card, only the ask's checkl
+          +ist line                                                      
+      466 +    and the e-mail.                                           
+  ⎿  (timeout 6m 40s)
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The five changes are done, and I checked them in the browser at 375×667, the
+  size of an iPhone SE screen. pnpm check, pnpm test and pnpm build pass, and
+  the page is still static. Nothing is committed.
+
+  - Amount slider: the four price buttons are now a slider that snaps to the
+    same four amounts, with the chosen amount printed beside it. Dragging across
+    several stops sends a single analytics event once the slider stops.
+  - Line under the percentage: it now fits on one row on the card, e.g. "v USD,
+    vč. dividend, před daní". The e-mail keeps the full wording.
+  - TER and "Kde koupit": both are removed from the card; they stay in the
+    e-mail. The card is now 640 px tall instead of 995.
+  - Stock count: it's in the heading now: "Největší firmy uvnitř (z 503 akcií)".
+    "(z 1 249 akcií)" for Svět still fits on one line.
+
+  I also tightened the first screen, as you asked in your previous message. The
+  header bar is shorter and the headline is 26 px (the privacy page's headline
+  too). The gaps and table rows are smaller as well. The red "Najít evropský
+  fond ↓" button now ends at 576 px instead of 659, so it's fully visible on an
+  iPhone SE.
+
+  Overall the page is about 440 px shorter, and the e-mail block starts at 1,507
+  px instead of 1,945.
+
+  I recorded this as decision 46 in docs/decisions.md.
+
+  Decision for you: with "Kde koupit" gone, nothing on the card changes when you
+  move the slider. The amount now shows up only in the e-mail block's checklist
+  ("Kolik by z 10 000 Kč měsíčně…") and in the e-mail itself, so the slider can
+  feel like it does nothing. I see two options:
+
+  - Leave it. The slider then only shapes the e-mail.
+  - Add one line under the slider, e.g. "Za 10 let cca 1,32 mil. Kč (historicky,
+    ne předpověď)". It would show the amount's effect right away, but it puts
+    on the page the 10-year figure we decided earlier (decision 4) to keep as
+    the e-mail's main draw.
+
+  Which do you prefer?
+
+  My resize from earlier took effect late, so your Chrome window is now 375×667.
+  You may want to resize it back.
+
+✻ Brewed for 3m 29s · done 5:13 PM
+
+❯ ok acceptable, but revert the monthly per month back to those buttons, don't  
+  like the slider                                                               
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ I'll put back the four amount buttons exactly as they were before the slider,
+  and remove the slider code and CSS.
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿   src/components/Planner.tsx | 10 ++++------
+      1 file changed, 4 insertions(+), 6 deletions(-)
+     src/fonts/subset.sh:4:# ranges the page uses. One file instead of Goog
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated docs/decisions.md (+7 -8)
+      447      back to the sent plan shows "Hotovo" again. The address is
+            still
+      448      kept nowhere (decision 30), so a new plan means typing it 
+           again.
+      449  46. **A thinner path to the form.** Changes the match card ord
+           er of
+      450 -    decisions 30 and 37 and the amount chips of decision 5. (a
+          -) The card                                                    
+      450 +    decisions 30 and 37. (a) The card                         
+      451      drops the TER row and "Kde koupit"; both are in the e-mail
+            (fees
+      452      section). The card is 640 px tall at 375 px, was 995. (b) 
+           The stock
+      453      count moves into the companies heading: "Největší firmy uv
+           nitř (z 503
+      454      akcií)". (c) The return line uses a short return type
+      455      (`returnTypeShort`, e.g. "vč. dividend, před daní") so it 
+           stays one
+      456 -    line; the e-mail keeps the full wording. (d) The amount is
+          - a stepped                                                    
+      457 -    slider over the same four amounts, the chosen one printed 
+          -beside it;                                                    
+      458 -    `amount_selected` fires once the slider rests for 400 ms o
+          -n a new                                                       
+      459 -    amount. (e) The first screen is tighter: header 44 px, hea
+          -dline 26 px                                                   
+      456 +    line; the e-mail keeps the full wording. (d) The amount st
+          +ays as four                                                   
+      457 +    chips: a stepped slider was tried and rejected by the user
+          +. (e) The                                                     
+      458 +    first screen is tighter: header 44 px, headline 26 px     
+      459      (both `<h1>`s; replaces decision 44's 28 px), smaller gaps
+            and table
+      460      rows. On 375 × 667 the red CTA ends at 576 px, was 659. *R
+           eason:* the
+      461      user's call; on an iPhone SE the first CTA was cut off and
+            the card
+      462      stood between the taps and the form. A sticky CTA was cons
+           idered and
+      464 -    rejected by the user. *Open:* with the brokers gone, the a
+          -mount no                                                      
+      465 -    longer changes anything on the card, only the ask's checkl
+          -ist line                                                      
+      466 -    and the e-mail.                                           
+      463 +    rejected by the user. With the brokers gone, the amount ch
+          +anges                                                         
+      464 +    nothing on the card, only the ask's checklist line and the
+          + e-mail;                                                      
+      465 +    the user accepted that.                                   
+  ⎿  Updated src/app/globals.css (+0 -34)
+      101    outline-offset: 2px;
+      102  }
+      103  
+      104 -/* The amount slider (decision 46): a thin black track and a s
+          -quare                                                         
+      105 -   black thumb, like a pressed chip, with a 44 px tall touch a
+          -rea. */                                                       
+      106 -.amount-slider {                                              
+      107 -  appearance: none;                                           
+      108 -  height: 44px;                                               
+      109 -  background: transparent;                                    
+      110 -  cursor: pointer;                                            
+      111 -}                                                             
+      112 -.amount-slider::-webkit-slider-runnable-track {               
+      113 -  height: 4px;                                                
+      114 -  background: var(--color-ink);                               
+      115 -}                                                             
+      116 -.amount-slider::-moz-range-track {                            
+      117 -  height: 4px;                                                
+      118 -  background: var(--color-ink);                               
+      119 -}                                                             
+      120 -.amount-slider::-webkit-slider-thumb {                        
+      121 -  appearance: none;                                           
+      122 -  width: 28px;                                                
+      123 -  height: 28px;                                               
+      124 -  margin-top: -12px;                                          
+      125 -  background: var(--color-ink);                               
+      126 -  border: 3px solid var(--color-ground);                      
+      127 -  box-shadow: 0 0 0 1.5px var(--color-ink);                   
+      128 -}                                                             
+      129 -.amount-slider::-moz-range-thumb {                            
+      130 -  width: 22px;                                                
+      131 -  height: 22px;                                               
+      132 -  border-radius: 0;                                           
+      133 -  background: var(--color-ink);                               
+      134 -  border: 3px solid var(--color-ground);                      
+      135 -  box-shadow: 0 0 0 1.5px var(--color-ink);                   
+      136 -}                                                             
+      137 -                                                              
+      104  /* Accordions (sources and FAQ): a "+" that turns to "×", cent
+           red on the
+      105     question whatever its line count, and the content expands w
+           here the
+      106     browser supports ::details-content. */
+  ⎿  Updated src/components/Planner.tsx (+20 -44)
+      1  "use client";
+      2  
+      3 -import { type ReactNode, useEffect, useRef, useState } from "rea
+        -ct";                                                            
+      3 +import { type ReactNode, useRef, useState } from "react";       
+      4  import { cs } from "@/copy/cs";
+      5  import { type IndexId, indexes } from "@/data/indexes";
+      6  import { kc } from "@/lib/format";
+     ...
+      11  import { MatchCard } from "./MatchCard";
+      12  
+      13  const copy = cs.taps;
+      14 -const amountId = "amount";                                     
+      15 -const amountLabelId = "amount-label";                          
+      14  
+      15  type Plan = { index: IndexId; amount: Amount };
+      16  
+     ...
+      33      track("index_selected", { index: id });
+      34    }
+      35  
+      38 -  // The slider moves the plan at once; its event waits until i
+         -t has                                                          
+      39 -  // rested for 400 ms, so a drag across stops sends one event,
+         - and only                                                      
+      40 -  // when it ends on a new amount.                             
+      41 -  const trackedAmount = useRef(plan.amount);                   
+      42 -  useEffect(() => {                                            
+      43 -    if (plan.amount === trackedAmount.current) return;         
+      44 -    const timer = setTimeout(() => {                           
+      45 -      trackedAmount.current = plan.amount;                     
+      46 -      track("amount_selected", { amount: plan.amount });       
+      47 -    }, 400);                                                   
+      48 -    return () => clearTimeout(timer);                          
+      49 -  }, [plan.amount]);                                           
+      36 +  function selectAmount(amount: Amount) {                      
+      37 +    if (amount === plan.amount) return;                        
+      38 +    setPlan({ ...plan, amount });                              
+      39 +    track("amount_selected", { amount });                      
+      40 +  }                                                            
+      41  
+      42    function openMail() {
+      43      opens.current += 1;
+     ...
+      54            aria-label={copy.label}
+      55          >
+     … 60 more lines (ctrl+o to expand)
+  ⎿  (timeout 6m 40s)
+
+⏺ The amount buttons are back, exactly as they were before the slider: four
+  equal-width buttons matching the index buttons. Tapping one sends the
+  analytics event straight away again. The slider code and its CSS are gone.
+
+  The other changes stay as they were: the tighter first screen, the shorter
+  return line, the stock count in the heading, and the card without TER and "Kde
+  koupit". In docs/decisions.md, decision 46 now notes that the slider was
+  tried and rejected, and that you accepted that the amount no longer changes
+  anything on the card.
+
+  pnpm check, pnpm test and pnpm build pass, and the page is still static. I
+  didn't re-check this in the browser, since the buttons are back to the version
+  I'd already checked at 375 px. Nothing is committed yet.
+
+✻ Crunched for 26s · done 5:15 PM

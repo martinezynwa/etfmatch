@@ -35,15 +35,13 @@ const sourceGroups: [string, Source[]][] = [
 // (decision 40).
 export function Footer() {
   return (
-    <footer className="pt-4.5 pb-10 text-[12.5px] leading-normal text-muted">
+    <footer className="pt-4.5 pb-10 text-xs leading-normal text-muted">
       <p className="mb-2.5">
         <strong className="text-ink">{copy.disclaimerLead}</strong>{" "}
         {copy.disclaimer}
       </p>
       <details className="mb-2.5 border-t border-line">
-        <summary className="py-3 pr-8 pb-1 text-[13px] font-bold">
-          {copy.sourcesHead}
-        </summary>
+        <summary className="text-sm font-bold">{copy.sourcesHead}</summary>
         <SourceGroups groups={sourceGroups} />
       </details>
       <p>

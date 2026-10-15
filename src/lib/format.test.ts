@@ -110,6 +110,10 @@ describe("approxKc", () => {
     [229_600, "cca 230 000 Kč"],
     [722_800, "cca 723 000 Kč"],
   ])("%d → %s", (n, out) => expect(plain(approxKc(n))).toBe(out));
+
+  it("puts a smaller amount in millions when asked", () => {
+    expect(plain(approxKc(722_800, true))).toBe("cca 0,72 mil. Kč");
+  });
 });
 
 describe("pctWhole and eur", () => {

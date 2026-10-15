@@ -35,19 +35,28 @@ export function Ask({
   onReopen: () => void;
 }) {
   const [error, setError] = useState<EmailError | null>(null);
-  const [done, setDone] = useState(false);
+  // The plan the visitor submitted. A new index or amount brings the form
+  // back, so the e-mail shown is always the one for the plan on screen.
+  const [sentPlan, setSentPlan] = useState<string | null>(null);
+  const plan = `${index.id}-${amount}`;
+  const done = sentPlan === plan;
   const reopenRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const started = useRef(false);
+  const justSent = useRef(false);
   useSeenOnce(sectionRef, () =>
     track("form_viewed", { index: index.id, amount }),
   );
 
   // The form is gone once sent, so the reopen button takes the focus.
   // Its effect runs before the dialog's (the Ask comes first in the
-  // tree), so the dialog hands the focus back to it when it closes.
+  // tree), so the dialog hands the focus back to it when it closes. Only
+  // right after a submit: a tap back to a sent plan leaves focus alone.
   useEffect(() => {
-    if (done) reopenRef.current?.focus({ preventScroll: true });
+    if (!done || !justSent.current) return;
+    justSent.current = false;
+    reopenRef.current?.focus({ preventScroll: true });
   }, [done]);
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -55,16 +64,20 @@ export function Ask({
     const email = new FormData(event.currentTarget).get("email");
     const problem = emailError(typeof email === "string" ? email : "");
     setError(problem);
-    if (problem) return track("form_error", { error_type: problem });
+    if (problem) {
+      inputRef.current?.focus();
+      return track("form_error", { error_type: problem });
+    }
     track("form_submitted", { index: index.id, amount });
-    setDone(true);
+    justSent.current = true;
+    setSentPlan(plan);
     onSubmitted();
   }
 
   const checklist = [
     copy.checklist.isin,
     copy.checklist.income(kc(amount), years),
-    copy.checklist.inside(Object.values(indexes).map((i) => i.label)),
+    copy.checklist.inside(Object.values(indexes).map((i) => i.longLabel)),
     copy.checklist.fees(Object.values(brokers).map((b) => b.name)),
     copy.checklist.taxes(
       taxes.timeTestYears.value,
@@ -84,18 +97,16 @@ export function Ask({
       <div className="page-wrap">
         <h2
           id={titleId}
-          className="text-[26px] leading-[1.1] font-[850] tracking-[-0.01em] wdth-118"
+          className="text-4xl leading-[1.1] font-heavy tracking-head text-balance wdth-118"
         >
-          {/* Non-breaking: "k" must not end a line. */}
+          {/* Non-breaking: "index" stays with the index's name. */}
           {copy.headline}&nbsp;<Swap>{index.longLabel}</Swap>
         </h2>
-        <p className="mt-2 mb-4.5 text-[15px] text-on-dark-muted">
-          {copy.lead}
-        </p>
+        <p className="mt-2 mb-4.5 text-base text-on-dark-muted">{copy.lead}</p>
         <ul className="mb-5.5 grid gap-2.5">
           {checklist.map((item, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: six fixed lines
-            <li key={i} className="flex gap-3 text-[15px] leading-[1.35]">
+            <li key={i} className="flex gap-3 text-base leading-[1.35]">
               <Check />
               <Swap>{item}</Swap>
             </li>
@@ -104,7 +115,7 @@ export function Ask({
 
         {done ? (
           <div className="py-1">
-            <h3 className="mb-1.5 text-xl font-extrabold tracking-[-0.01em] wdth-118">
+            <h3 className="mb-1.5 text-2xl font-extrabold tracking-head wdth-118">
               {copy.doneHead}
             </h3>
             <p className="mb-3.5 text-on-dark-muted">{copy.doneText}</p>
@@ -112,14 +123,14 @@ export function Ask({
               ref={reopenRef}
               type="button"
               onClick={onReopen}
-              className="min-h-12 cursor-pointer border-[1.5px] border-white px-4.5 text-[15px] leading-none font-bold"
+              className="min-h-12 cursor-pointer border-[1.5px] border-white px-4.5 text-base leading-none font-bold"
             >
               {copy.reopen}
             </button>
           </div>
         ) : (
           <form noValidate onSubmit={submit}>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-bold">
+            <label htmlFor="email" className="mb-1.5 block text-md font-bold">
               {copy.emailLabel}
             </label>
             <input
@@ -130,6 +141,9 @@ export function Ask({
               inputMode="email"
               placeholder={copy.emailPlaceholder}
               required
+              ref={inputRef}
+              // The old message goes as soon as the visitor fixes the field.
+              onInput={() => error && setError(null)}
               onFocus={() => {
                 if (started.current) return;
                 started.current = true;
@@ -137,17 +151,18 @@ export function Ask({
               }}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? errorId : undefined}
-              className="min-h-13 w-full border-2 border-white bg-white px-4 text-[17px] leading-none font-medium text-ink"
+              className="min-h-13 w-full border-2 border-white bg-white px-4 text-lg leading-none font-medium text-ink aria-invalid:border-on-dark-error"
             />
             <p
               id={errorId}
               role="alert"
-              className="mt-2 text-sm text-on-dark-error empty:hidden"
+              className="mt-2 text-md text-on-dark-error empty:hidden"
             >
               {error && copy.errors[error]}
             </p>
-            <p className="mt-3 mb-4 text-[12.5px] leading-[1.45] text-on-dark-faint">
-              {copy.consent} <PrivacyLink>{copy.consentMore}</PrivacyLink>
+            <p className="mt-3 mb-4 text-sm leading-[1.45] text-on-dark-faint">
+              {copy.consent}{" "}
+              <PrivacyLink newTab>{copy.consentMore}</PrivacyLink>
             </p>
             <CtaSubmit>{copy.submit}</CtaSubmit>
           </form>
@@ -157,17 +172,19 @@ export function Ask({
   );
 }
 
+// A plain tick, not a filled box: the list says what the e-mail holds,
+// it is not something to tick off.
 function Check() {
   return (
     <svg
       viewBox="0 0 20 20"
       aria-hidden="true"
-      className="size-5 shrink-0 bg-red"
+      className="size-5 shrink-0 text-on-dark-accent"
     >
       <path
-        d="M5.5 10.5l3 3 6-7"
+        d="M4.5 10.5l3.5 3.5 7.5-8"
         fill="none"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"

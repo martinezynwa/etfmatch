@@ -43,16 +43,16 @@ export function Faq() {
     <section className="pt-7 pb-2" aria-labelledby={titleId}>
       <h2
         id={titleId}
-        className="mb-2.5 text-xl font-[850] tracking-[-0.01em] wdth-118"
+        className="mb-2.5 text-2xl font-heavy tracking-head wdth-118"
       >
         {copy.head}
       </h2>
       {items.map(([id, question, answer]) => (
         <details key={id} data-q={id} className="mb-2 bg-card">
-          <summary className="py-3.5 pr-11 pl-4 text-[15px] font-bold">
+          <summary className="px-4 py-3.5 text-base font-bold">
             {question}
           </summary>
-          <p className="px-4 pb-3.5 text-[15px] text-ink-soft">{answer}</p>
+          <p className="px-4 pb-3.5 text-base text-ink-soft">{answer}</p>
         </details>
       ))}
     </section>

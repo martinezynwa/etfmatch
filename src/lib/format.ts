@@ -19,13 +19,14 @@ export const kc = (n: number, decimals = 0) =>
   `${formatNumber(n, decimals)}${nbsp}Kč`;
 
 /** A rounded amount for the income illustration: 1 322 800 → "cca 1,32
- * mil. Kč", 229 600 → "cca 230 000 Kč". */
-export function approxKc(n: number) {
-  const text =
-    Math.abs(n) >= 1_000_000
-      ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`
-      : kc(Math.round(n / 1000) * 1000);
-  return `cca${nbsp}${text}`;
+ * mil. Kč", 229 600 → "cca 230 000 Kč". `inMillions` puts a smaller
+ * amount in millions too, so one table row uses one unit. The space
+ * after "cca" may break, so a narrow column can wrap it. */
+export function approxKc(n: number, inMillions = Math.abs(n) >= 1_000_000) {
+  const text = inMillions
+    ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`
+    : kc(Math.round(n / 1000) * 1000);
+  return `cca ${text}`;
 }
 
 /** A fee in Kč: whole crowns stay whole, otherwise two decimals. The

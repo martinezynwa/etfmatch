@@ -3,13 +3,13 @@ import { cs } from "@/copy/cs";
 
 export function Header() {
   return (
-    <header className="flex h-13 items-center">
+    <header className="flex h-11 items-center">
       <Link
         href="/"
-        className="text-[19px] font-black tracking-[-0.02em] no-underline wdth-125"
+        className="text-2xl font-black tracking-mark no-underline wdth-125"
       >
         {cs.header.wordmark}
-        <span className="text-red" aria-hidden="true">
+        <span className="text-accent" aria-hidden="true">
           .
         </span>
       </Link>
