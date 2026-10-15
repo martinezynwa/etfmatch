@@ -1,10 +1,11 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import { cs } from "@/copy/cs";
 import { type IndexId, indexes } from "@/data/indexes";
 import { kc } from "@/lib/format";
 import { type Amount, amounts, defaultAmount, defaultIndex } from "@/lib/plan";
+import { track } from "@/lib/track";
 import { Ask } from "./Ask";
 import { EmailPreview } from "./EmailPreview";
 import { MatchCard } from "./MatchCard";
@@ -22,7 +23,27 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
   });
   // The e-mail modal: null until the first valid submit.
   const [mailOpen, setMailOpen] = useState<boolean | null>(null);
+  const opens = useRef(0);
   const index = indexes[plan.index];
+
+  // A chip sends its event only when it changes the plan.
+  function selectIndex(id: IndexId) {
+    if (id === plan.index) return;
+    setPlan({ ...plan, index: id });
+    track("index_selected", { index: id });
+  }
+
+  function selectAmount(amount: Amount) {
+    if (amount === plan.amount) return;
+    setPlan({ ...plan, amount });
+    track("amount_selected", { amount });
+  }
+
+  function openMail() {
+    opens.current += 1;
+    setMailOpen(true);
+    track("email_preview_opened", { count: opens.current });
+  }
 
   return (
     <>
@@ -38,7 +59,7 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
               <Chip
                 key={index.id}
                 pressed={plan.index === index.id}
-                onClick={() => setPlan({ ...plan, index: index.id })}
+                onClick={() => selectIndex(index.id)}
               >
                 {index.label}
               </Chip>
@@ -50,7 +71,7 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
               <Chip
                 key={amount}
                 pressed={plan.amount === amount}
-                onClick={() => setPlan({ ...plan, amount })}
+                onClick={() => selectAmount(amount)}
                 className="px-1 text-sm"
               >
                 {kc(amount)}
@@ -66,8 +87,8 @@ export function Planner({ tapsId, askId }: { tapsId: string; askId: string }) {
         id={askId}
         index={index}
         amount={plan.amount}
-        onSubmitted={() => setMailOpen(true)}
-        onReopen={() => setMailOpen(true)}
+        onSubmitted={openMail}
+        onReopen={openMail}
       />
       {mailOpen !== null && (
         <EmailPreview

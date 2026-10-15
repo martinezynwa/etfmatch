@@ -1,12 +1,17 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { type ReactNode, useRef } from "react";
 import { cs } from "@/copy/cs";
 import { brokers } from "@/data/brokers";
 import { comparedFund, type MarketIndex } from "@/data/indexes";
 import type { Fact, Source } from "@/data/types";
 import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@/lib/format";
+import type { Amount } from "@/lib/plan";
+import { track } from "@/lib/track";
 import { CtaLink } from "./CtaLink";
 import { CountUp, Swap } from "./motion";
 import { SourceGroups } from "./SourceLink";
+import { useSeenOnce } from "./useSeenOnce";
 
 const copy = cs.match;
 const titleId = "match-title";
@@ -20,16 +25,19 @@ const uniqueSources = (...facts: Fact<unknown>[]) => [
 ];
 
 // The answer to the taps, in the order of decision 37. Rendered inside
-// the Planner client component; no ISIN here (it is in the e-mail).
+// the Planner; no ISIN here (it is in the e-mail). Sends match_viewed
+// once, with the plan shown at that moment.
 export function MatchCard({
   index,
   amount,
   askId,
 }: {
   index: MarketIndex;
-  amount: number;
+  amount: Amount;
   askId: string;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  useSeenOnce(ref, () => track("match_viewed", { index: index.id, amount }));
   const usFund = comparedFund(index);
   const sellers = Object.values(brokers).filter(
     (b) => b.available[index.id].value,
@@ -58,6 +66,7 @@ export function MatchCard({
 
   return (
     <article
+      ref={ref}
       id="match"
       className="mb-7 bg-card px-4 pt-5 pb-4"
       aria-labelledby={titleId}
@@ -164,7 +173,9 @@ export function MatchCard({
       </Block>
 
       <div className="mt-5">
-        <CtaLink href={`#${askId}`}>{copy.more}</CtaLink>
+        <CtaLink href={`#${askId}`} location="match_card">
+          {copy.more}
+        </CtaLink>
       </div>
 
       <details className="mt-4 border-t border-line">

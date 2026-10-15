@@ -354,3 +354,18 @@ Agreed in the C6 review of the match card at 375 px.
     *Reason:* the user's choice in review; the fund is the answer the
     first screen promises, so it leads, and a tap still changes the top
     of the card (the name and the return both swap).
+
+## C9 Measurement (2026-10-15)
+
+38. **"≥ 50 % in view" means half the block or half the screen.** At
+    375 px the match card is more than twice the screen's height, so half
+    of it is never visible at once. `match_viewed` and `form_viewed` fire
+    when the visible part is at least half the block or half the
+    viewport, whichever is smaller. *Reason:* the literal rule would never
+    fire for the match card on mobile, the page's target.
+
+39. **A chip sends its event only when it changes the plan.** Tapping the
+    chip already pressed sends nothing. Device is mobile below 768 px, as
+    in the mockups; a missing UTM is logged as `null`. *Reason:* the
+    events count choices, and a repeat tap is not one.
+

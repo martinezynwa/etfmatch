@@ -67,7 +67,9 @@ export function FirstScreen({ tapsId }: { tapsId: string }) {
         </ul>
       </div>
 
-      <CtaLink href={`#${tapsId}`}>{copy.cta}</CtaLink>
+      <CtaLink href={`#${tapsId}`} location="first_screen">
+        {copy.cta}
+      </CtaLink>
     </section>
   );
 }

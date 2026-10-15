@@ -1,0 +1,620 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C9                                                      
+
+  Searched for 1 pattern, read 1 file, listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(sed -n 186,220p docs/decisions.md; sed -n 283,302p docs/decisions.md; sed
+      -n 337,400p docs/decisions.md; grep -n -i -E
+      "measure|track|utm|variant|event" docs/br…)
+  ⎿  ### Measurement
+
+     19. **One `track(event, props)` call; console.log only.** Every event
+     … +77 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 55,75p docs/brief.md; for f in src/components/*.tsx
+      src/lib/plan.ts src/lib/email.ts src/app/page.tsx; do echo "=== $f"; cat
+      $f; done; cat vitest.config.…)
+  ⎿        the visitor gets; the value is clear before the form.
+     - [ ] Every interactive element leads to the form.
+     - [ ] The form has as few fields as possible, with GDPR consent text a
+     … +965 lines (ctrl+o to expand)
+
+⏺ Reading the components that will need tracking calls.
+
+  Searched for 1 pattern, read 1 file, listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(sed -n 55,140p docs/mockups/shared.js; grep -n -i
+      "mobile\|768\|breakpoint" src/app/globals.css | head)
+  ⎿      companies: "1 249 firem", usShare: "72,94 %", extra: "",
+         top: [["Nvidia", 5.81], ["Apple", 5.41], ["Microsoft", 4.0], ["Ama
+     zon", 2.67], ["Alphabet (A)", 2.23]],
+     … +83 lines (ctrl+o to expand)
+
+⏺ I'll build src/lib/track.ts with a typed, console.log-only track(event, props)
+  and tested pure helpers, then wire it into PageEvents, CtaLink, chips,
+  Planner, and Ask to fire the required analytics events—using a custom "half
+  card or half viewport" rule for in-view detection and sensible defaults for
+  device/UTMs, no input needed from you first.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Now writing the tracking module.
+
+⏺ Write(src/lib/track.ts)
+  ⎿  Wrote 82 lines to src/lib/track.ts
+      1 import type { IndexId } from "../data/indexes";
+      2 import type { EmailError } from "./email";
+      3 import type { Amount } from "./plan";
+      5 // Measurement (decisions 19, 31): one `track()` that only consol
+        e-logs.
+      6 // A real tool later replaces its inside. Every event carries the
+         visit:
+        nly.
+      8 
+      9 export type Variant = "ad-a" | "ad-b" | "none";
+     … +79 lines (ctrl+o to expand)
+
+⏺ Write(src/lib/track.test.ts)
+  ⎿  Wrote 91 lines to src/lib/track.test.ts
+       1 import { afterEach, describe, expect, it, vi } from "vitest";
+       2 import {
+       3   halfInView,
+       4   payload,
+       5   track,
+       6   variantFrom,
+       7   visitProps,
+       8 } from "./track";
+       9 
+      10 const adA =
+     … +87 lines (ctrl+o to expand)
+
+⏺ Bash(pnpm vitest run src/lib/track.test.ts 2>&1 | tail -15)
+  ⎿   RUN  v5.0.4 /Users/martingnebus/Martin/GIT-MG/clientelo-task
+     … +4 lines (ctrl+o to expand)
+
+⏺ Tests pass. Now wiring the events into the components.
+
+⏺ Write(src/components/useSeenOnce.ts)
+  ⎿  Wrote 42 lines to src/components/useSeenOnce.ts
+       1 "use client";
+       2 
+       3 import { type RefObject, useEffect, useRef } from "react";
+       4 import { halfInView } from "@/lib/track";
+       5 
+       6 const steps = Array.from({ length: 21 }, (_, i) => i / 20);
+       7 
+       8 /** Calls `onSeen` the first time the block is half in view (see
+       9  * `halfInView`), with the props it holds at that moment. */
+      10 export function useSeenOnce(
+     … +34 lines (ctrl+o to expand)
+
+⏺ Write(src/components/PageEvents.tsx)
+  ⎿  Wrote 28 lines to src/components/PageEvents.tsx
+       1 "use client";
+       2 
+       3 import { useEffect, useRef } from "react";
+       5 
+       6 // The page-wide events: page_viewed on load, and faq_opened for
+          the FAQ's
+       7 // <details data-q> (the source accordions have no data-q, decis
+       8 // Renders nothing, so the FAQ stays a server component.
+       9 export function PageEvents() {
+      10   const viewed = useRef(false);
+     … +22 lines (ctrl+o to expand)
+
+⏺ Update(src/components/CtaLink.tsx)
+  ⎿  Added 11 lines, removed 1 line
+       1 +"use client";                                                  
+       2 +                                                               
+       3  import type { ReactNode } from "react";
+       4 +import { type CtaLocation, track } from "@/lib/track";         
+       5  
+       6  const ctaClass =
+       7    "flex min-h-13 w-full items-center justify-center bg-red text
+          -[17px] leading-none font-extrabold text-white no-underline tra
+          nsition-[background-color,transform] duration-150 wdth-110 hove
+          r:bg-red-dark active:translate-y-px";
+       8  
+       9  // The red full-width button that scrolls to a section on the p
+          age.
+      10 +// `location` names it in the cta_clicked event.               
+      11  export function CtaLink({
+      12    href,
+      13 +  location,                                                    
+      14    children,
+      15  }: {
+      16    href: string;
+      17 +  location: CtaLocation;                                       
+      18    children: ReactNode;
+      19  }) {
+      20    return (
+      15 -    <a href={href} className={ctaClass}>                       
+      21 +    <a                                                         
+      22 +      href={href}                                              
+      23 +      onClick={() => track("cta_clicked", { location })}       
+      24 +      className={ctaClass}                                     
+      25 +    >                                                          
+      26        {children}
+      27      </a>
+      28    );
+
+⏺ Update(src/components/FirstScreen.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      67          </ul>
+      68        </div>
+      69  
+      70 -      <CtaLink href={`#${tapsId}`}>{copy.cta}</CtaLink>        
+      70 +      <CtaLink href={`#${tapsId}`} location="first_screen">    
+      71 +        {copy.cta}                                             
+      72 +      </CtaLink>                                               
+      73      </section>
+      74    );
+      75  }
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      164        </Block>
+      165  
+      166        <div className="mt-5">
+      167 -        <CtaLink href={`#${askId}`}>{copy.more}</CtaLink>     
+      167 +        <CtaLink href={`#${askId}`} location="match_card">    
+      168 +          {copy.more}                                         
+      169 +        </CtaLink>                                            
+      170        </div>
+      171  
+      172        <details className="mt-4 border-t border-line">
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 4 lines, removed 1 line
+       1 -import type { ReactNode } from "react";                        
+       1 +import { type ReactNode, useRef } from "react";                
+       2  import { cs } from "@/copy/cs";
+       3  import { brokers } from "@/data/brokers";
+       4  import { comparedFund, type MarketIndex } from "@/data/indexes"
+          ;
+       5  import type { Fact, Source } from "@/data/types";
+       6  import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@
+          /lib/format";
+       7 +import type { Amount } from "@/lib/plan";                      
+       8 +import { track } from "@/lib/track";                           
+       9  import { CtaLink } from "./CtaLink";
+      10  import { CountUp, Swap } from "./motion";
+      11  import { SourceGroups } from "./SourceLink";
+      12 +import { useSeenOnce } from "./useSeenOnce";                   
+      13  
+      14  const copy = cs.match;
+      15  const titleId = "match-title";
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      30    askId,
+      31  }: {
+      32    index: MarketIndex;
+      33 -  amount: number;                                              
+      33 +  amount: Amount;                                              
+      34    askId: string;
+      35  }) {
+      36 +  const ref = useRef<HTMLElement>(null);                       
+      37 +  useSeenOnce(ref, () => track("match_viewed", { index: index.i
+         +d, amount }));                                                 
+      38    const usFund = comparedFund(index);
+      39    const sellers = Object.values(brokers).filter(
+      40      (b) => b.available[index.id].value,
+
+⏺ Update(src/components/MatchCard.tsx)
+  ⎿  Added 1 line
+      63  
+      64    return (
+      65      <article
+      66 +      ref={ref}                                                
+      67        id="match"
+      68        className="mb-7 bg-card px-4 pt-5 pb-4"
+      69        aria-labelledby={titleId}
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/MatchCard.tsx'…)
+  ⎿  24:// accordion motion is in globals.css. `data-q` names each one for
+     the
+     25:// faq_opened event (PageEvents).
+     … +6 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Faq.tsx (+1 -1)
+      22  
+      23  // The four doubts that block the form (decision 16). Plain <de
+          tails>: the
+      24  // accordion motion is in globals.css. `data-q` names each one 
+          for the
+      25 -// faq_opened event (C9).                                      
+      25 +// faq_opened event (PageEvents).                              
+      26  const items = [
+      27    ["banned", copy.items.banned.question, copy.items.banned.answ
+          er],
+      28    ["stocks", copy.items.stocks.question, copy.items.stocks.answ
+          er],
+  ⎿  Updated src/components/MatchCard.tsx (+4 -1)
+      1 +"use client";                                                   
+      2 +                                                                
+      3  import { type ReactNode, useRef } from "react";
+      4  import { cs } from "@/copy/cs";
+      5  import { brokers } from "@/data/brokers";
+     ...
+      25  ];
+      26  
+      27  // The answer to the taps, in the order of decision 37. Rendere
+          d inside
+      26 -// the Planner client component; no ISIN here (it is in the e-m
+         -ail).                                                          
+      28 +// the Planner; no ISIN here (it is in the e-mail). Sends match
+         +_viewed                                                        
+      29 +// once, with the plan shown at that moment.                   
+      30  export function MatchCard({
+      31    index,
+      32    amount,
+⏺ Now the Ask form events and the Planner.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/Ask.tsx'…)
+  ⎿    × Formatter would have printed the following content:
+
+          1  1 │   import { afterEach, describe, expect, it, vi } from "vit
+     … +28 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+18 -4)
+       7  import { taxes } from "@/data/taxes";
+       8  import { type EmailError, emailError } from "@/lib/email";
+       9  import { kc, pctWhole } from "@/lib/format";
+      10 -import { years } from "@/lib/plan";                            
+      10 +import { type Amount, years } from "@/lib/plan";               
+      11 +import { track } from "@/lib/track";                           
+      12  import { CtaSubmit } from "./CtaLink";
+      13  import { Swap } from "./motion";
+      14 +import { useSeenOnce } from "./useSeenOnce";                   
+      15  
+      16  const copy = cs.ask;
+      17  const titleId = "ask-title";
+     ...
+      19  
+      20  // The ask (decisions 15, 26, 30): what the e-mail holds, one f
+          ield, the
+      21  // consent text. A valid submit only opens the preview; the add
+          ress is
+      20 -// read once for the check and kept nowhere.                   
+      22 +// read once for the check and kept nowhere, and no event carri
+         +es it.                                                         
+      23  export function Ask({
+      24    id,
+      25    index,
+     ...
+      29  }: {
+      30    id: string;
+      31    index: MarketIndex;
+      30 -  amount: number;                                              
+      32 +  amount: Amount;                                              
+      33    onSubmitted: () => void;
+      34    onReopen: () => void;
+      35  }) {
+      36    const [error, setError] = useState<EmailError | null>(null);
+      37    const [done, setDone] = useState(false);
+      38    const reopenRef = useRef<HTMLButtonElement>(null);
+      39 +  const sectionRef = useRef<HTMLElement>(null);                
+      40 +  const started = useRef(false);                               
+      41 +  useSeenOnce(sectionRef, () =>                                
+      42 +    track("form_viewed", { index: index.id, amount }),         
+      43 +  );                                                           
+      44  
+      45    // The form is gone once sent, so the reopen button takes the
+           focus.
+      46    // Its effect runs before the dialog's (the Ask comes first i
+          n the
+     ...
+      54      const email = new FormData(event.currentTarget).get("email"
+          );
+     … 26 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/Home.tsx (+2 -0)
+      2  import { FirstScreen } from "./FirstScreen";
+      3  import { Footer } from "./Footer";
+      4  import { Header } from "./Header";
+      5 +import { PageEvents } from "./PageEvents";                      
+      6  import { Planner } from "./Planner";
+      7  
+      8  const tapsId = "taps";
+     ...
+      28        <div className="page-wrap">
+      29          <Footer />
+      30        </div>
+      31 +      <PageEvents />                                           
+      32      </>
+      33    );
+      34  }
+  ⎿  Updated src/components/Planner.tsx (+26 -5)
+       1  "use client";
+       2  
+       3 -import { type ReactNode, useState } from "react";              
+       3 +import { type ReactNode, useRef, useState } from "react";      
+       4  import { cs } from "@/copy/cs";
+       5  import { type IndexId, indexes } from "@/data/indexes";
+       6  import { kc } from "@/lib/format";
+       7  import { type Amount, amounts, defaultAmount, defaultIndex } fr
+          om "@/lib/plan";
+       8 +import { track } from "@/lib/track";                           
+       9  import { Ask } from "./Ask";
+      10  import { EmailPreview } from "./EmailPreview";
+      11  import { MatchCard } from "./MatchCard";
+     ...
+      23    });
+      24    // The e-mail modal: null until the first valid submit.
+      25    const [mailOpen, setMailOpen] = useState<boolean | null>(null
+          );
+      26 +  const opens = useRef(0);                                     
+      27    const index = indexes[plan.index];
+      28  
+      29 +  // A chip sends its event only when it changes the plan.     
+      30 +  function selectIndex(id: IndexId) {                          
+      31 +    if (id === plan.index) return;                             
+      32 +    setPlan({ ...plan, index: id });                           
+      33 +    track("index_selected", { index: id });                    
+      34 +  }                                                            
+      35 +                                                               
+      36 +  function selectAmount(amount: Amount) {                      
+      37 +    if (amount === plan.amount) return;                        
+      38 +    setPlan({ ...plan, amount });                              
+      39 +    track("amount_selected", { amount });                      
+      40 +  }                                                            
+      41 +                                                               
+      42 +  function openMail() {                                        
+      43 +    opens.current += 1;                                        
+      44 +    setMailOpen(true);                                         
+      45 +    track("email_preview_opened", { count: opens.current });   
+      46 +  }                                                            
+      47 +                                                               
+      48    return (
+      49      <>
+      50        <div className="page-wrap">
+     … 26 more lines (ctrl+o to expand)
+
+⏺ Bash(pnpm format >/dev/null && pnpm check 2>&1 | tail -5 && git status
+      --short)
+  ⎿  $ biome format --write
+     $ next typegen && tsc --noEmit
+     Generating route types...
+     … +14 lines (ctrl+o to expand)
+  ⎿  Updated src/lib/track.test.ts (+1 -7)
+       1  import { afterEach, describe, expect, it, vi } from "vitest";
+       2 -import {                                                       
+       3 -  halfInView,                                                  
+       4 -  payload,                                                     
+       5 -  track,                                                       
+       6 -  variantFrom,                                                 
+       7 -  visitProps,                                                  
+       8 -} from "./track";                                              
+       2 +import { halfInView, payload, track, variantFrom, visitProps } 
+         +from "./track";                                                
+       3  
+       4  const adA =
+       5    "?utm_source=meta&utm_medium=paid_social&utm_campaign=etf-mat
+          ch&utm_content=ad-a";
+
+⏺ Checks pass. Next, a production build to confirm the page is still static.
+
+⏺ Bash(pnpm build 2>&1 | tail -15)
+  ⎿  ✓ Compiled successfully in 406ms
+       Running TypeScript ...
+       Finished TypeScript in 1070ms ...
+     … +11 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ The page is still static. Now checking in the browser that the events actually
+  fire.
+
+⏺ Bash(pnpm start -p 3123)
+  ⎿  Running in the background (↓ to manage)
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Background command "Start the production server on port 3123" failed with exit
+code 1
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Port 3123 is taken by something else; I'll use another.
+
+⏺ Bash(pnpm start -p 3471)
+  ⎿  Running in the background (↓ to manage)
+
+  Called claude-in-chrome 4 times (ctrl+o to expand)
+
+⏺ Most events log correctly without exposing the e-mail address, but
+  match_viewed, form_viewed, and form_started are missing. Before changing any
+  code, I'll check whether the tab being in the background is causing this.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Found it: the tab is hidden so the browser suppresses IntersectionObserver,
+  animation frames, and focus events, explaining the three missing events. Next
+  I'll reload with console capture to check page_viewed and trigger a synthetic
+  focus to verify form_started.
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ page_viewed fires once on load and form_started once for two focuses. Now
+  cleaning up, ticking the boxes and recording the two assumptions as decisions.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Stop Task
+  ⎿  pnpm start -p 3471 · stopped
+
+⏺ Bash(tail -5 docs/decisions.md && python3 - <<'EOF'
+      p='docs/TODO.md'…)
+  ⎿      7. "Zdroje dat", the sources accordion
+
+         *Reason:* the user's choice in review; the fund is the answer the
+     … +15 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md (+1 -1)
+      39  
+      40  - `README.md` how to run, structure, live URL
+      41  - `AGENTS.md` written by `next dev`: read `node_modules/next/di
+          st/docs/` before Next.js code
+      42 -- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         - Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         -r topic, `data.test.ts`); `src/lib/` formatting, the taps' opti
+         -ons, the income illustration and the e-mail check, with tests  
+      42 +- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         + Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         +r topic, `data.test.ts`); `src/lib/` formatting, the taps' opti
+         +ons, the income illustration, the e-mail check and `track()`, w
+         +ith tests                                                      
+      43  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      44  - `docs/TODO.md` the commit plan, one section per commit
+      45  - `docs/decisions.md` decisions with reasons
+  ⎿  Updated docs/TODO.md (+3 -3)
+      55  
+      56  ## C9 Measurement
+      57  
+      58 -- [ ] `track(event, props)` that only console-logs; variant, UT
+         -M and device read in the browser.                              
+      59 -- [ ] The events of decision 19 as changed by decision 31 wired
+         -; the e-mail address is never logged.                          
+      60 -- [ ] Tests: variant from `utm_content`, event props.          
+      58 +- [x] `track(event, props)` that only console-logs; variant, UT
+         +M and device read in the browser.                              
+      59 +- [x] The events of decision 19 as changed by decision 31 wired
+         +; the e-mail address is never logged.                          
+      60 +- [x] Tests: variant from `utm_content`, event props.          
+      61  
+      62  ## C10 Launch readiness
+      63  
+  ⎿  Updated docs/decisions.md (+15 -0)
+      354      *Reason:* the user's choice in review; the fund is the ans
+           wer the
+      355      first screen promises, so it leads, and a tap still change
+           s the top
+      356      of the card (the name and the return both swap).
+      357 +                                                              
+      358 +## C9 Measurement (2026-10-15)                                
+      359 +                                                              
+      360 +38. **"≥ 50 % in view" means half the block or half the screen
+          +.** At                                                        
+      361 +    375 px the match card is more than twice the screen's heig
+          +ht, so half                                                   
+      362 +    of it is never visible at once. `match_viewed` and `form_v
+          +iewed` fire                                                   
+      363 +    when the visible part is at least half the block or half t
+          +he                                                            
+      364 +    viewport, whichever is smaller. *Reason:* the literal rule
+          + would never                                                  
+      365 +    fire for the match card on mobile, the page's target.     
+      366 +                                                              
+      367 +39. **A chip sends its event only when it changes the plan.** 
+          +Tapping the                                                   
+      368 +    chip already pressed sends nothing. Device is mobile below
+          + 768 px, as                                                   
+      369 +    in the mockups; a missing UTM is logged as `null`. *Reason
+          +:* the                                                        
+      370 +    events count choices, and a repeat tap is not one.        
+      371 +                                                              
+
+⏺ C9 is complete — I added new tracking files (track.ts, PageEvents.tsx,
+  useSeenOnce.ts) and updated several components plus the docs to reflect the
+  changes.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -3 && pnpm test 2>&1 | tail -5 && pnpm build 2>&1
+      | tail -6 && git status --short && awk '/^## C9/,/^## C10/' docs/TODO.md
+      && ls ai-log &…)
+  ⎿  ✓ Types generated successfully
+     $ biome check
+     Checked 37 files in 10ms. No fixes applied.
+     … +101 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 25,40p README.md)
+  ⎿  ```
+     src/
+       app/           routes only: they import and render components
+     … +14 lines (ctrl+o to expand)
+
+⏺ The README's structure listing also names the src/lib/ files, so I'm adding
+  track() there too.
+
+⏺ Update(README.md)  ⎿  Added 1 line, removed 1 line
+      30    copy/cs.ts     all Czech page copy
+      31    data/          every sourced number: value, source URL, date,
+           quote
+      32    lib/           Czech number formatting, the taps' options, th
+          e income
+      33 -                 illustration, the e-mail check (no figures)   
+      33 +                 illustration, the e-mail check, track() (no fi
+         +gures)                                                         
+      34  docs/
+      35    research/      the sourced research behind src/data/
+      36    mockups/       the agreed static mockup (page-a.html) and the
+           rejected one
+
+⏺ C9 is implemented. pnpm check, pnpm test (211 tests) and pnpm build all pass,
+  the page is still static, and all three C9 boxes are ticked.
+
+  Browser check: on the production build, nine of the eleven events logged
+  correctly with variant: "ad-a" and the UTMs. faq_opened fired for the FAQ but
+  not for the source accordions. The e-mail address never appeared in any event.
+
+  Not verified in the browser: match_viewed and form_viewed. The browser tab was
+  hidden, so the browser never ran the in-view check. Their 50 % rule is
+  unit-tested only. Please scroll the page once in your own browser with the
+  console open to confirm them.
+
+  Two decisions I made myself (written as 38 and 39 in docs/decisions.md):
+  - "≥ 50 % in view" means half the block or half the screen. At 375 px the
+    match card is more than twice the screen's height, so the literal rule would
+    never fire on mobile.
+  - A chip sends an event only when it changes the selection. Device is mobile
+    below 768 px, and a missing UTM is logged as null.
+
+  Export: please run /export to ai-log/009-measurement.txt so it goes into this
+  commit.
+
+  Mistakes from this session for ai-log/mistakes.md:
+  - I put the test file's imports on several lines; biome check caught it.
+  - I tried to start the server on a port that was already in use.
+  - My first browser check was incomplete because the tab was hidden; I found
+    that only after three events were missing.
+
+  Files to stage: CLAUDE.md, README.md, docs/TODO.md, docs/decisions.md,
+  src/components/Ask.tsx, src/components/CtaLink.tsx, src/components/Faq.tsx,
+  src/components/FirstScreen.tsx, src/components/Home.tsx,
+  src/components/MatchCard.tsx, src/components/Planner.tsx,
+  src/components/PageEvents.tsx, src/components/useSeenOnce.ts,
+  src/lib/track.ts, src/lib/track.test.ts, ai-log/009-measurement.txt
+
+  add C9 measurement: track() console log, funnel events
+
+  - track(event, props) in src/lib/: console.log only; every event carries
+    the variant (ad-a / ad-b / none from utm_content), the UTMs and the
+    device, read once in the browser (decision 19)
+  - typed event map: no prop can hold the e-mail address
+  - events wired as decision 31 changed them: page_viewed, cta_clicked
+    (first_screen / match_card), index_selected, amount_selected,
+    match_viewed, form_viewed, form_started, form_error, form_submitted,
+    email_preview_opened with count, faq_opened (FAQ only, not sources)
+  - PageEvents: page_viewed and faq_opened without making the FAQ a
+    client component; useSeenOnce sends the in-view events once
+  - decision 38: in view means half the block or half the screen, since
+    the match card is taller than two screens at 375 px
+  - decision 39: chips send events only when they change the plan
+  - tests: variant from utm_content, visit props, event payload, track's
+    log line, the in-view rule
+  - CLAUDE.md map and README list track()
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Shall I commit with this message and push once the export is in place?
+
+✻ Crunched for 4m 43s · done 3:58 PM

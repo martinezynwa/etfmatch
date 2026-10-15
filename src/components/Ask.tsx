@@ -7,9 +7,11 @@ import { indexes, type MarketIndex } from "@/data/indexes";
 import { taxes } from "@/data/taxes";
 import { type EmailError, emailError } from "@/lib/email";
 import { kc, pctWhole } from "@/lib/format";
-import { years } from "@/lib/plan";
+import { type Amount, years } from "@/lib/plan";
+import { track } from "@/lib/track";
 import { CtaSubmit } from "./CtaLink";
 import { Swap } from "./motion";
+import { useSeenOnce } from "./useSeenOnce";
 
 const copy = cs.ask;
 const titleId = "ask-title";
@@ -17,7 +19,7 @@ const errorId = "ask-error";
 
 // The ask (decisions 15, 26, 30): what the e-mail holds, one field, the
 // consent text. A valid submit only opens the preview; the address is
-// read once for the check and kept nowhere.
+// read once for the check and kept nowhere, and no event carries it.
 export function Ask({
   id,
   index,
@@ -27,13 +29,18 @@ export function Ask({
 }: {
   id: string;
   index: MarketIndex;
-  amount: number;
+  amount: Amount;
   onSubmitted: () => void;
   onReopen: () => void;
 }) {
   const [error, setError] = useState<EmailError | null>(null);
   const [done, setDone] = useState(false);
   const reopenRef = useRef<HTMLButtonElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const started = useRef(false);
+  useSeenOnce(sectionRef, () =>
+    track("form_viewed", { index: index.id, amount }),
+  );
 
   // The form is gone once sent, so the reopen button takes the focus.
   // Its effect runs before the dialog's (the Ask comes first in the
@@ -47,7 +54,8 @@ export function Ask({
     const email = new FormData(event.currentTarget).get("email");
     const problem = emailError(typeof email === "string" ? email : "");
     setError(problem);
-    if (problem) return;
+    if (problem) return track("form_error", { error_type: problem });
+    track("form_submitted", { index: index.id, amount });
     setDone(true);
     onSubmitted();
   }
@@ -67,6 +75,7 @@ export function Ask({
 
   return (
     <section
+      ref={sectionRef}
       id={id}
       className="bg-ink pt-8 pb-9 text-white"
       aria-labelledby={titleId}
@@ -120,6 +129,11 @@ export function Ask({
               inputMode="email"
               placeholder={copy.emailPlaceholder}
               required
+              onFocus={() => {
+                if (started.current) return;
+                started.current = true;
+                track("form_started", {});
+              }}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? errorId : undefined}
               className="min-h-13 w-full border-2 border-white bg-white px-4 text-[17px] leading-none font-medium text-ink"

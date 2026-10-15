@@ -55,9 +55,9 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C9 Measurement
 
-- [ ] `track(event, props)` that only console-logs; variant, UTM and device read in the browser.
-- [ ] The events of decision 19 as changed by decision 31 wired; the e-mail address is never logged.
-- [ ] Tests: variant from `utm_content`, event props.
+- [x] `track(event, props)` that only console-logs; variant, UTM and device read in the browser.
+- [x] The events of decision 19 as changed by decision 31 wired; the e-mail address is never logged.
+- [x] Tests: variant from `utm_content`, event props.
 
 ## C10 Launch readiness
 

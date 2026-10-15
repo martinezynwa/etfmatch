@@ -22,7 +22,7 @@ function terPair(index: MarketIndex) {
 
 // The four doubts that block the form (decision 16). Plain <details>: the
 // accordion motion is in globals.css. `data-q` names each one for the
-// faq_opened event (C9).
+// faq_opened event (PageEvents).
 const items = [
   ["banned", copy.items.banned.question, copy.items.banned.answer],
   ["stocks", copy.items.stocks.question, copy.items.stocks.answer],

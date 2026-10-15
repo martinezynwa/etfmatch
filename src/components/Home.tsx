@@ -2,6 +2,7 @@ import { Faq } from "./Faq";
 import { FirstScreen } from "./FirstScreen";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { PageEvents } from "./PageEvents";
 import { Planner } from "./Planner";
 
 const tapsId = "taps";
@@ -27,6 +28,7 @@ export function Home() {
       <div className="page-wrap">
         <Footer />
       </div>
+      <PageEvents />
     </>
   );
 }
