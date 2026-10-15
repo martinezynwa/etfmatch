@@ -61,10 +61,10 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C10 Launch readiness
 
-- [ ] Named data controller and a privacy policy page (decision 26 leaves the name open).
-- [ ] Open Graph tags and image.
-- [ ] Mobile performance and accessibility check on a production build at [http://localhost:3000](http://localhost:3000) (`pnpm build && pnpm start`), with fixes.
-- [ ] Ad links in `ads/` keep the [http://localhost:3000](http://localhost:3000) placeholder (decision 36); re-export the PNGs if the ads change.
+- [x] Named data controller and a privacy policy page (decision 26 leaves the name open). The name stays a placeholder by the user's choice; `/ochrana-udaju` added (decision 40).
+- [x] Open Graph tags and image.
+- [x] Mobile performance and accessibility check on a production build at [http://localhost:3000](http://localhost:3000) (`pnpm build && pnpm start`), with fixes. Run on port 3001, since a dev server held 3000 (decision 41).
+- [x] Ad links in `ads/` keep the [http://localhost:3000](http://localhost:3000) placeholder (decision 36); re-export the PNGs if the ads change. Ads unchanged, no re-export.
 
 ## C11 Deploy
 

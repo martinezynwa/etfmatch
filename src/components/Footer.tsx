@@ -3,6 +3,7 @@ import { comparedFund, indexes } from "@/data/indexes";
 import { sources } from "@/data/sources";
 import type { Source } from "@/data/types";
 import { feeExamples } from "./Faq";
+import { PrivacyLink } from "./PrivacyLink";
 import { SourceGroups } from "./SourceLink";
 
 const copy = cs.footer;
@@ -30,7 +31,8 @@ const sourceGroups: [string, Source[]][] = [
 ];
 
 // The page's last block: the disclaimer (decision 17), the sources behind
-// an accordion and the data controller (decision 26).
+// an accordion, the data controller (decision 26) and the privacy page
+// (decision 40).
 export function Footer() {
   return (
     <footer className="pt-4.5 pb-10 text-[12.5px] leading-normal text-muted">
@@ -44,7 +46,9 @@ export function Footer() {
         </summary>
         <SourceGroups groups={sourceGroups} />
       </details>
-      <p>{copy.controller}</p>
+      <p>
+        {copy.controller} <PrivacyLink>{copy.privacy}</PrivacyLink>
+      </p>
     </footer>
   );
 }

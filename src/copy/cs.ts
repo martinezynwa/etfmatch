@@ -5,15 +5,22 @@
 /** One index's TERs, formatted: the EU fund and the US fund it replaces. */
 type TerPair = { index: string; eu: string; ticker: string; us: string };
 
-// Decision 26: said in the consent text and in the footer.
-const controller =
-  "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním).";
+// Decision 26: said in the consent text, the footer and the privacy page.
+const controllerWho =
+  "provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním)";
+const controller = `Správce údajů: ${controllerWho}.`;
+
+const description =
+  "ETF z NYSE si tu většinou nekoupíte, stejný index v evropském fondu ano.";
 
 export const cs = {
   meta: {
     title: "ETF Match",
-    description:
-      "ETF z NYSE si tu většinou nekoupíte, stejný index v evropském fondu ano.",
+    description,
+    // Open Graph and the share card (decision 40).
+    // QQQ is left out: it is listed on Nasdaq, not NYSE (decision 27).
+    ogTitle: "ETF Match: evropský fond místo VOO, SPY nebo IVV",
+    ogAlt: `ETF Match. ${description}`,
   },
   header: {
     wordmark: "ETF Match",
@@ -89,6 +96,7 @@ export const cs = {
       invalid: "E-mail má chybný tvar, zkontrolujte ho.",
     },
     consent: `Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. ${controller} Souhlas můžete kdykoli odvolat.`,
+    consentMore: "Jak s e-mailem zacházíme",
     submit: "Poslat plán",
     doneHead: "Hotovo, takhle plán vypadá.",
     doneText: "Demo: nic jsme neuložili ani neodeslali.",
@@ -132,6 +140,40 @@ export const cs = {
       fees: "Poplatky fondů v otázkách",
     },
     controller,
+    privacy: "Ochrana osobních údajů",
+  },
+  // The privacy page, /ochrana-udaju (decision 40). Says what the demo
+  // does today; what a live mailing would add is left to fill in.
+  privacy: {
+    title: "Ochrana osobních údajů",
+    back: "Zpět na ETF Match",
+    sections: [
+      { head: "Správce údajů", text: `Je to ${controllerWho}.` },
+      {
+        head: "Jaké údaje a proč",
+        text: "Jen e-mail, který zadáte do formuláře. Použijeme ho k jedinému účelu: poslat vám plán sestavený podle indexu a částky, které jste vybrali. Žádný newsletter.",
+      },
+      {
+        head: "Právní základ",
+        text: "Váš souhlas podle čl. 6 odst. 1 písm. a) GDPR, který dáváte odesláním formuláře. Souhlas můžete kdykoli odvolat.",
+      },
+      {
+        head: "Co se s e-mailem děje teď",
+        text: "Stránka je demo. E-mail se zkontroluje jen ve vašem prohlížeči a nikam se neodesílá ani neukládá. Plán, který by vám přišel, se zobrazí přímo na stránce.",
+      },
+      {
+        head: "Měření návštěvy",
+        text: "Stránka zaznamenává kroky návštěvy (třeba výběr indexu nebo odeslání formuláře), parametry reklamy z odkazu (UTM) a zda jde o mobil. Zatím jen do konzole vašeho prohlížeče, nikam je neposílá. E-mail se nezaznamenává. Stránka nepoužívá cookies.",
+      },
+      {
+        head: "Před spuštěním doplníme",
+        text: "Než začneme plán skutečně posílat, doplníme sem jméno a kontakt správce, kdo e-maily rozesílá a jak dlouho e-mail uchováváme. Před zapnutím analytického nástroje se stránka zeptá na souhlas s cookies.",
+      },
+      {
+        head: "Vaše práva",
+        text: "Máte právo na přístup ke svým údajům, jejich opravu a výmaz, omezení zpracování, přenositelnost a odvolání souhlasu. Stížnost můžete podat u Úřadu pro ochranu osobních údajů.",
+      },
+    ],
   },
   // The e-mail shown in the modal (decisions 2, 3, 4, 8, 9).
   email: {

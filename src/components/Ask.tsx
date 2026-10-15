@@ -11,6 +11,7 @@ import { type Amount, years } from "@/lib/plan";
 import { track } from "@/lib/track";
 import { CtaSubmit } from "./CtaLink";
 import { Swap } from "./motion";
+import { PrivacyLink } from "./PrivacyLink";
 import { useSeenOnce } from "./useSeenOnce";
 
 const copy = cs.ask;
@@ -146,7 +147,7 @@ export function Ask({
               {error && copy.errors[error]}
             </p>
             <p className="mt-3 mb-4 text-[12.5px] leading-[1.45] text-on-dark-faint">
-              {copy.consent}
+              {copy.consent} <PrivacyLink>{copy.consentMore}</PrivacyLink>
             </p>
             <CtaSubmit>{copy.submit}</CtaSubmit>
           </form>

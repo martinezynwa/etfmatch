@@ -28,12 +28,14 @@ src/
                  (globals.css holds the design tokens, @theme)
   components/    the UI
   copy/cs.ts     all Czech page copy
+  fonts/         Archivo cut to Czech (subset.sh), with its OFL licence
   data/          every sourced number: value, source URL, date, quote
   lib/           Czech number formatting, the taps' options, the income
                  illustration, the e-mail check, track() (no figures)
 docs/
   research/      the sourced research behind src/data/
   mockups/       the agreed static mockup (page-a.html) and the rejected one
+public/          og.png, the share card (from ads/og.html)
 ads/             the two Meta ads, HTML and exported PNGs
 ai-log/          one exported AI session per step, plus mistakes.md
 ```

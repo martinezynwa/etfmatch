@@ -369,3 +369,32 @@ Agreed in the C6 review of the match card at 375 px.
     in the mockups; a missing UTM is logged as `null`. *Reason:* the
     events count choices, and a repeat tap is not one.
 
+
+## C10 Launch readiness (2026-10-15)
+
+40. **The controller stays a placeholder; a privacy page explains the
+    demo.** The user kept decision 26's wording ("provozovatel ETF Match,
+    jméno a kontakt doplníme před spuštěním"), so the brief's "named data
+    controller" is still open. `/ochrana-udaju` says what the form takes
+    (the e-mail only), why (the plan), the legal basis (consent), that the
+    demo stores and sends nothing, that `track()` only logs to the
+    browser console with no cookies, what is filled in before a real
+    mailing, and the visitor's rights. The consent text and the footer
+    link to it. The share card (`public/og.png`, 1200 × 630, from
+    `ads/og.html` on the ads' template) and the OG title name VOO, SPY,
+    IVV, not QQQ, which is listed on Nasdaq (decision 27). *Reason:* the
+    user's choice; the page says honestly what the demo does instead of
+    inventing a policy for a mailing that does not exist.
+
+41. **Archivo is self-hosted as one Czech subset.** `next/font/google`
+    preloaded Google's latin and latin-ext files, 172 KiB with the width
+    axis, and Czech needs both. `src/fonts/subset.sh` cuts the OFL source
+    to the Czech characters and the ranges the code uses (weight
+    400–900, width 100–125): one 54 KiB file, loaded with
+    `next/font/local`. Mobile Lighthouse on the production build: LCP
+    2.9 s → 2.3 s, performance 96 → 98–99, page weight 342 → 223 KiB.
+    An SVG icon removes the `/favicon.ico` 404 (best practices 96 →
+    100). Accessibility and SEO were 100 before and after. *Reason:* the
+    headline is the LCP element and waited on the font; the brief asks
+    for "fast on a mobile connection". The remaining hints (unused and
+    legacy JS, 7 KiB render-blocking CSS) are Next.js's own chunks.

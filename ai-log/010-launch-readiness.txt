@@ -1,0 +1,1140 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C10                                                     
+
+  Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+⏺ Bash(cat docs/brief.md; echo ---; git ls-files | grep -v '^\.claude/skills/' ;
+      echo ---; cat src/copy/cs.ts)
+  ⎿  # Brief
+
+     A one-page lead magnet comparing NYSE ETFs for a Czech retail investor
+     … +350 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ I've reviewed C10, decisions 26/36, and the copy/layout/footer. My plan: add
+  the controller info and a /ochrana-udaju privacy page (closing decision 26),
+  extend layout.tsx with OG/Twitter metadata and a static opengraph-image, run a
+  build/Lighthouse check at 375px, and verify the ad HTML links—though I need
+  your input on the controller's name and contact details first.
+
+⏺ User answered Claude's questions:
+  ⎿  · Who is the named data controller on the page (consent text, footer, 
+     privacy page)? Decision 26 kept your personal name off the page until 
+     launch. → Keep placeholder
+
+⏺ Keeping the placeholder. The privacy page will use the same wording. Next I'm
+  reading the Next.js docs on metadata and OG images.
+
+  Listed 2 directories (ctrl+o to expand)
+
+⏺ Bash(cat node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventio
+      ns/01-metadata/opengraph-image.md | sed -n '1,200p'; grep -n -A25 "###
+      \`metadataBase\`…)
+  ⎿  ---
+     title: opengraph-image and twitter-image
+     description: API Reference for the Open Graph Image and Twitter Image
+     … +266 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 418,465p node_modules/next/dist/docs/01-app/03-api-reference/04-fu
+      nctions/generate-metadata.md; grep -n "font\|Font\|woff\|ttf"
+      node_modules/next/dist/do…)
+  ⎿  <meta property="og:image" content="https://acme.com/og-image.png" />
+     ```
+     … +59 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(sed -n 1680,1760p ai-log/003-finalize-design.txt; grep -n "localhost"
+      ads/*.html)
+  ⎿    full fund names that include "UCITS ETF".
+
+       Before committing: please /export this session to ai-log/003-design-
+     … +80 lines (ctrl+o to expand)
+
+⏺ Bash(grep -n "export-ads.mjs" -A30 ai-log/003-finalize-design.txt | head -45;
+      npm ls -g --depth=0 2>/dev/null | head -20)
+  ⎿  1742:      $S/pp/export-ads.mjs <<'EOF'
+     1743-      i…)
+     1744-  ⎿  /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads/ad-a.pn
+     … +31 lines (ctrl+o to expand)
+
+⏺ Status: OG image will be a static 1200×630 PNG captured with headless Chrome,
+  the same way the ads were. Now looking at the page components so the privacy
+  page matches them.
+
+⏺ Bash(cat src/components/Home.tsx src/components/Header.tsx
+      src/app/globals.css; sed -n 1,40p src/components/Faq.tsx)
+  ⎿  import { Faq } from "./Faq";
+     import { FirstScreen } from "./FirstScreen";
+     import { Footer } from "./Footer";
+     … +210 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Writing the privacy copy and the page now.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/copy/cs.ts'; s=open(p).read()…)
+  ⎿  21:    ogAlt: `ETF Match. ${description}`,
+     97:    consentMore: "Jak s e-mailem zacházíme",
+     141:    privacy: "Ochrana osobních údajů",
+     145:  privacy: {
+  ⎿  Updated src/copy/cs.ts (+43 -3)
+       5  /** One index's TERs, formatted: the EU fund and the US fund it
+           replaces. */
+       6  type TerPair = { index: string; eu: string; ticker: string; us:
+           string };
+       7  
+       8 -// Decision 26: said in the consent text and in the footer.    
+       8 +// Decision 26: said in the consent text, the footer and the pr
+         +ivacy page.                                                    
+       9  const controller =
+      10    "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt
+           doplníme před spuštěním).";
+      11  
+      12 +const description =                                            
+      13 +  "ETF z NYSE si tu většinou nekoupíte, stejný index v evropské
+         +m fondu ano.";                                                 
+      14 +                                                               
+      15  export const cs = {
+      16    meta: {
+      17      title: "ETF Match",
+      15 -    description:                                               
+      16 -      "ETF z NYSE si tu většinou nekoupíte, stejný index v evro
+         -pském fondu ano.",                                             
+      18 +    description,                                               
+      19 +    // Open Graph and the share card (decision 40).            
+      20 +    ogTitle: "ETF Match: evropský fond místo VOO, SPY nebo QQQ"
+         +,                                                              
+      21 +    ogAlt: `ETF Match. ${description}`,                        
+      22    },
+      23    header: {
+      24      wordmark: "ETF Match",
+     ...
+       94        invalid: "E-mail má chybný tvar, zkontrolujte ho.",
+       95      },
+       96      consent: `Odesláním souhlasíte, že váš e-mail použijeme je
+           n k zaslání plánu. ${controller} Souhlas můžete kdykoli odvola
+           t.`,
+       97 +    consentMore: "Jak s e-mailem zacházíme",                  
+       98      submit: "Poslat plán",
+       99      doneHead: "Hotovo, takhle plán vypadá.",
+      100      doneText: "Demo: nic jsme neuložili ani neodeslali.",
+     ...
+      138        fees: "Poplatky fondů v otázkách",
+      139      },
+      140      controller,
+      141 +    privacy: "Ochrana osobních údajů",                        
+      142 +  },                                                          
+      143 +  // The privacy page, /ochrana-udaju (decision 40). Says what
+          + the demo                                                     
+      144 +  // does today; what a live mailing would add is left to fill
+          + in.                                                          
+      145 +  privacy: {                                                  
+      146 +    title: "Ochrana osobních údajů",                          
+      147 +    back: "Zpět na ETF Match",                                
+     … 30 more lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/app/layout.tsx'; s=open(p).read()…)
+  ⎿  Updated src/app/layout.tsx (+26 -1)
+      10    axes: ["wdth"],
+      11  });
+      12  
+      13 -export const metadata: Metadata = cs.meta;                     
+      13 +const { title, description, ogTitle, ogAlt } = cs.meta;        
+      14 +                                                               
+      15 +// Decision 40. localhost is the placeholder base until the dep
+         +loy                                                            
+      16 +// (decision 36); C11 sets the live URL here.                  
+      17 +const ogImage = { url: "/og.png", width: 1200, height: 630, alt
+         +: ogAlt };                                                     
+      18 +                                                               
+      19 +export const metadata: Metadata = {                            
+      20 +  metadataBase: new URL("http://localhost:3000"),              
+      21 +  title,                                                       
+      22 +  description,                                                 
+      23 +  openGraph: {                                                 
+      24 +    type: "website",                                           
+      25 +    locale: "cs_CZ",                                           
+      26 +    siteName: title,                                           
+      27 +    title: ogTitle,                                            
+      28 +    description,                                               
+      29 +    url: "/",                                                  
+      30 +    images: [ogImage],                                         
+      31 +  },                                                           
+      32 +  twitter: {                                                   
+      33 +    card: "summary_large_image",                               
+      34 +    title: ogTitle,                                            
+      35 +    description,                                               
+      36 +    images: [ogImage],                                         
+      37 +  },                                                           
+      38 +};                                                             
+      39  
+      40  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+      41    return (
+
+⏺ Now the privacy component, its route, and links from the consent text and
+  footer.
+
+⏺ Bash(mkdir -p src/app/ochrana-udaju && cat > src/components/PrivacyLink.tsx
+      <<'EOF'
+      import Link from "next/link";…)
+  ⎿   src/app/layout.tsx        | 27 ++++++++++++++++++++++++++-
+      src/components/Ask.tsx    |  4 +++-
+      src/components/Footer.tsx |  8 ++++++--
+     … +3 lines (ctrl+o to expand)
+  ⎿  Created src/app/ochrana-udaju/page.tsx (+9 -0)
+      1 +import type { Metadata } from "next";                           
+      2 +import { Privacy } from "@/components/Privacy";                 
+      3 +import { cs } from "@/copy/cs";                                 
+      4 +                                                                
+      5 +export const metadata: Metadata = { title: cs.privacy.title };  
+      6 +                                                                
+      7 +export default function Page() {                                
+      8 +  return <Privacy />;                                           
+      9 +}                                                               
+  ⎿  Updated src/components/Ask.tsx (+3 -1)
+      11  import { track } from "@/lib/track";
+      12  import { CtaSubmit } from "./CtaLink";
+      13  import { Swap } from "./motion";
+      14 +import { PrivacyLink } from "./PrivacyLink";                   
+      15  import { useSeenOnce } from "./useSeenOnce";
+      16  
+      17  const copy = cs.ask;
+     ...
+      147                {error && copy.errors[error]}
+      148              </p>
+      149              <p className="mt-3 mb-4 text-[12.5px] leading-[1.4
+           5] text-on-dark-faint">
+      149 -              {copy.consent}                                  
+      150 +              {copy.consent}{" "}                             
+      151 +              <PrivacyLink>{copy.consentMore}</PrivacyLink>   
+      152              </p>
+      153              <CtaSubmit>{copy.submit}</CtaSubmit>
+      154            </form>
+  ⎿  Updated src/components/Footer.tsx (+6 -2)
+      3  import { sources } from "@/data/sources";
+      4  import type { Source } from "@/data/types";
+      5  import { feeExamples } from "./Faq";
+      6 +import { PrivacyLink } from "./PrivacyLink";                    
+      7  import { SourceGroups } from "./SourceLink";
+      8  
+      9  const copy = cs.footer;
+     ...
+      31  ];
+      32  
+      33  // The page's last block: the disclaimer (decision 17), the sou
+          rces behind
+      33 -// an accordion and the data controller (decision 26).         
+      34 +// an accordion, the data controller (decision 26) and the priv
+         +acy page                                                       
+      35 +// (decision 40).                                              
+      36  export function Footer() {
+      37    return (
+      38      <footer className="pt-4.5 pb-10 text-[12.5px] leading-norma
+          l text-muted">
+     ...
+      46          </summary>
+      47          <SourceGroups groups={sourceGroups} />
+      48        </details>
+      47 -      <p>{copy.controller}</p>                                 
+      49 +      <p>                                                      
+      50 +        {copy.controller} <PrivacyLink>{copy.privacy}</PrivacyL
+         +ink>                                                           
+      51 +      </p>                                                     
+      52      </footer>
+      53    );
+      54  }
+  ⎿  Created src/components/Privacy.tsx (+35 -0)
+       1 +import Link from "next/link";                                  
+       2 +import { cs } from "@/copy/cs";                                
+       3 +import { Header } from "./Header";                             
+       4 +                                                               
+       5 +const copy = cs.privacy;                                       
+       6 +                                                               
+       7 +// The privacy page (decision 40): who the controller is, what 
+         +the form                                                       
+       8 +// takes and what the demo does with it. One column, like the h
+         +ome page.                                                      
+       9 +export function Privacy() {                                    
+      10 +  return (                                                     
+      11 +    <div className="page-wrap">                                
+      12 +      <Header />                                               
+      13 +      <main className="pt-4 pb-10">                            
+      14 +        <h1 className="mb-5 text-[30px] leading-[1.05] font-[85
+         +0] tracking-[-0.01em] wdth-118">                               
+      15 +          {copy.title}                                         
+      16 +        </h1>                                                  
+      17 +        {copy.sections.map((section) => (                      
+      18 +          <section key={section.head} className="mb-4.5">      
+      19 +            <h2 className="mb-1 text-[17px] font-extrabold wdth
+         +-110">                                                         
+      20 +              {section.head}                                   
+      21 +            </h2>                                              
+      22 +            <p className="text-[15px] leading-normal">{section.
+         +text}</p>                                                      
+      23 +          </section>                                           
+      24 +        ))}                                                    
+      25 +        <Link                                                  
+      26 +          href="/"                                             
+      27 +          className="mt-2 inline-flex min-h-12 items-center fon
+         +t-bold underline underline-offset-2"                           
+      28 +        >                                                      
+      29 +          <span aria-hidden="true">←&nbsp;</span>              
+      30 +          {copy.back}                                          
+      31 +        </Link>                                                
+      32 +      </main>                                                  
+      33 +    </div>                                                     
+      34 +  );                                                           
+      35 +}                                                              
+  ⎿  Created src/components/PrivacyLink.tsx (+14 -0)
+       1 +import Link from "next/link";                                  
+       2 +import type { ReactNode } from "react";                        
+       3 +                                                               
+       4 +/** The privacy page's route (decision 40). */                 
+       5 +export const privacyHref = "/ochrana-udaju";                   
+       6 +                                                               
+       7 +// The link to the privacy page, from the consent text and the 
+         +footer.                                                        
+       8 +export function PrivacyLink({ children }: { children: ReactNode
+         + }) {                                                          
+       9 +  return (                                                     
+      10 +    <Link href={privacyHref} className="underline underline-off
+         +set-2">                                                        
+      11 +      {children}                                               
+      12 +    </Link>                                                    
+      13 +  );                                                           
+      14 +}                                                              
+
+⏺ Adding a title template so the privacy page reads "Ochrana osobních údajů ·
+  ETF Match", then building the OG image source.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/app/layout.tsx'; s=open(p).read()…)
+  ⎿  [20056:521138:1015/160355.314657:ERROR:base/process/process_mac.cc:45]
+      task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+     [20056:521138:1015/160355.314672:ERROR:base/process/process_mac.cc:90]
+     … +6 lines (ctrl+o to expand)
+  ⎿  Created ads/og.html (+33 -0)
+       1 +<!doctype html>                                                
+       2 +<html lang="cs">                                               
+       3 +<head>                                                         
+       4 +<meta charset="utf-8">                                         
+       5 +<meta name="viewport" content="width=1200">                    
+       6 +<title>ETF Match: Open Graph image</title>                     
+       7 +<link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+         +th,wght@62..125,400..900&display=swap" rel="stylesheet">       
+       8 +<link rel="stylesheet" href="ad.css">                          
+       9 +<style>                                                        
+      10 +  /* The share card, 1200 x 630 at scale 1, exported to public/
+         +og.png                                                         
+      11 +     (decision 40). Same tokens and type as the ads; no button,
+         + since a                                                       
+      12 +     share card is not clickable in parts. */                  
+      13 +  body { padding: 0; display: block; background: var(--bg); }  
+      14 +  .og {                                                        
+      15 +    width: 1200px; height: 630px; padding: 56px 64px; overflow:
+         + hidden;                                                       
+      16 +    display: flex; flex-direction: column; background: var(--bg
+         +);                                                             
+      17 +  }                                                            
+      18 +  .og .logo { font-size: 30px; }                               
+      19 +  .og .copy { justify-content: center; }                       
+      20 +  .og .header { font-size: 68px; line-height: 1.02; max-width: 
+         +1020px; }                                                      
+      21 +  .og .sub { font-size: 28px; margin-top: 28px; padding-top: 20
+         +px; border-top-width: 4px; max-width: 900px; }                 
+      22 +</style>                                                       
+      23 +</head>                                                        
+      24 +<body>                                                         
+      25 +  <div class="og" role="img" aria-label="ETF Match. ETF z NYSE 
+         +si tu většinou nekoupíte, stejný index v evropském fondu ano.">
+      26 +    <div class="logo">ETF Match<span>.</span></div>            
+      27 +    <div class="copy">                                         
+      28 +      <p class="header">ETF z&nbsp;NYSE si tu většinou nekoupít
+         +e, stejný index v&nbsp;evropském fondu ano.</p>                
+      29 +      <p class="sub">Evropský fond místo VOO, SPY nebo QQQ a&nb
+         +sp;kde ho koupit.</p>                                          
+      30 +    </div>                                                     
+      31 +  </div>                                                       
+      32 +</body>                                                        
+      33 +</html>                                                        
+  ⎿  Updated src/app/layout.tsx (+1 -1)
+      18  
+      19  export const metadata: Metadata = {
+      20    metadataBase: new URL("http://localhost:3000"),
+      21 -  title,                                                       
+      21 +  title: { default: title, template: `%s · ${title}` },        
+      22    description,
+      23    openGraph: {
+      24      type: "website",
+  ⎿  … 1 more file changed
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The image renders with Archivo. One issue: QQQ is listed on Nasdaq, not NYSE
+  (decisions 12 and 27 keep it out of an "ETF z NYSE" line). Switching the sub
+  and the OG title to VOO, SPY, IVV.
+
+⏺ Bash(sed -i '' 's/místo VOO, SPY nebo QQQ a&nbsp;kde ho koupit/místo VOO, SPY
+      nebo IVV a\&nbsp;kde ho koupit/; s/font-size: 28px; margin-top:
+      28px/font-size: 30px; m…)
+  ⎿  ads/og.html:29:      <p class="sub">Evropský fond místo VOO, SPY nebo
+     IVV a&nbsp;kde ho koupit.</p>
+     src/copy/cs.ts:21:    ogTitle: "ETF Match: evropský fond místo VOO, SP
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated ads/og.html (+2 -2)
+      18    .og .logo { font-size: 30px; }
+      19    .og .copy { justify-content: center; }
+      20    .og .header { font-size: 68px; line-height: 1.02; max-width: 
+          1020px; }
+      21 -  .og .sub { font-size: 28px; margin-top: 28px; padding-top: 20
+         -px; border-top-width: 4px; max-width: 900px; }                 
+      21 +  .og .sub { font-size: 30px; margin-top: 28px; padding-top: 20
+         +px; border-top-width: 4px; max-width: 900px; }                 
+      22  </style>
+      23  </head>
+      24  <body>
+     ...
+      26      <div class="logo">ETF Match<span>.</span></div>
+      27      <div class="copy">
+      28        <p class="header">ETF z&nbsp;NYSE si tu většinou nekoupít
+          e, stejný index v&nbsp;evropském fondu ano.</p>
+      29 -      <p class="sub">Evropský fond místo VOO, SPY nebo QQQ a&nb
+         -sp;kde ho koupit.</p>                                          
+      29 +      <p class="sub">Evropský fond místo VOO, SPY nebo IVV a&nb
+         +sp;kde ho koupit.</p>                                          
+      30      </div>
+      31    </div>
+      32  </body>
+  ⎿  Updated src/copy/cs.ts (+2 -1)
+      17      title: "ETF Match",
+      18      description,
+      19      // Open Graph and the share card (decision 40).
+      20 -    ogTitle: "ETF Match: evropský fond místo VOO, SPY nebo QQQ"
+         -,                                                              
+      20 +    // QQQ is left out: it is listed on Nasdaq, not NYSE (decis
+         +ion 27).                                                       
+      21 +    ogTitle: "ETF Match: evropský fond místo VOO, SPY nebo IVV"
+         +,                                                              
+      22      ogAlt: `ETF Match. ${description}`,
+      23    },
+      24    header: {
+  ⎿  … 1 more file changed
+⏺ Bash(sed -n 14,24p src/copy/cs.ts)
+  ⎿  export const cs = {
+       meta: {
+         title: "ETF Match",
+     … +8 lines (ctrl+o to expand)
+
+⏺ Ticking the first two boxes, then the production build and checks.
+
+⏺ Bash(pnpm check 2>&1 | tail -15 && pnpm test 2>&1 | tail -6 && pnpm build 2>&1
+      | tail -20)
+  ⎿      151     │ - ··············<PrivacyLink>{copy.consentMore}</Privacy
+     Link>
+             150 │ + ··············{copy.consent}·<PrivacyLink>{copy.consen
+     … +37 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Bash(pnpm format >/dev/null && pnpm check 2>&1 | tail -3; (pnpm start
+      >/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/
+      2c057e97-2a18-460a-ac…)
+  ⎿  $ biome format --write
+     ✓ Types generated successfully
+     $ biome check
+     … +27 lines (ctrl+o to expand)
+  ⎿  Updated src/components/Ask.tsx (+1 -2)
+      147                {error && copy.errors[error]}
+      148              </p>
+      149              <p className="mt-3 mb-4 text-[12.5px] leading-[1.4
+           5] text-on-dark-faint">
+      150 -              {copy.consent}{" "}                             
+      151 -              <PrivacyLink>{copy.consentMore}</PrivacyLink>   
+      150 +              {copy.consent} <PrivacyLink>{copy.consentMore}</
+          +PrivacyLink>                                                  
+      151              </p>
+      152              <CtaSubmit>{copy.submit}</CtaSubmit>
+      153            </form>
+
+⏺ The HTML references an HMR client, which suggests port 3000 is held by a dev
+  server rather than my pnpm start. Checking.
+
+⏺ Bash(cat /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-t
+      ask/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad/server.log; lsof -nP
+      -iTCP:3000 -iT…)
+  ⎿  $ next start
+     ⨯ Failed to start server
+     Error: listen EADDRINUSE: address already in use :::3000
+     … +14 lines (ctrl+o to expand)
+
+⏺ Your dev server is on port 3000, so I'll leave it running and serve the
+  production build on 3001 for the checks.
+
+⏺ Bash(pnpm build >/dev/null 2>&1; (pnpm start -p 3001
+      >/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/
+      2c057e97-2a18-460a-accc-922ff5826bec/s…)
+  ⎿  Error: Exit code 1
+     <link rel="preload" as="script" fetchPriority="low" 
+     href="/_next/static/chunks/2pj6a6fgmelnd.js"/>
+     <title>ETF Match
+     <title>Ochrana osobních údajů · ETF Match
+     lighthouse not found
+
+⏺ Production build works on 3001. Running Lighthouse (mobile, default
+  throttling) through npx; it doesn't get added to the project.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad && export
+      CHROME_PATH="/Applications…)
+  ⎿  home performance:96 accessibility:100 best-practices:96 seo:100
+       first-contentful-paint 0.8 s
+       largest-contentful-paint 2.9 s
+     … +40 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 6m 40s)
+
+⏺ Scores are 96 / 100 / 96 / 100. Two things to look at: LCP at 2.9 s when FCP
+  is 0.8 s (usually a late font or an animated element), and a console error.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad && node -e '
+      const r=require("./lh-h…)
+  ⎿  largest-contentful-paint-element {
+      "type": "list",
+      "items": [
+     … +151 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The LCP element is the headline, with 2.4 s render delay and no load time,
+  which points at the web font. A 404 on /favicon.ico is the console error.
+  Checking the font files.
+
+⏺ Bash(curl -s http://localhost:3001 | grep -oE '<link[^>]*(font|woff2)[^>]*>';
+      ls -la .next/static/media/ | head; cd
+      /private/tmp/claude-501/-Users-martingnebus-Marti…)
+  ⎿  total 416
+     drwxr-xr-x@ 5 martingnebus  staff    160 Oct 15 16:04 .
+     drwxr-xr-x@ 5 martingnebus  staff    160 Oct 15 16:04 ..
+     … +31 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The two preloaded Archivo subsets (latin + latin-ext, needed for Czech) total
+  172 KiB and delay the headline on throttled 4G, despite a fast 0.49s
+  unthrottled LCP. I'll check if a Czech-only subset would be significantly
+  smaller.
+
+⏺ Bash(python3 -c "import fontTools; print(fontTools.version)" 2>&1; python3 -c
+      "import brotli; print('brotli ok')" 2>&1 | tail -1)
+  ⎿  Traceback (most recent call last):
+       File "<string>", line 1, in <module>
+         import fontTools; print(fontTools.version)
+     … +3 lines (ctrl+o to expand)
+
+⏺ Not installed. Prototyping in a scratchpad venv: fetch the OFL Archivo
+  variable TTF and subset it to the characters the page uses, keeping both axes.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad; cd $S && python3 -m
+      venv venv >/dev/…)
+  ⎿  total 1288
+     drwxr-xr-x@ 3 martingnebus  wheel      96 Oct 15 16:06 .
+     drwx------@ 7 martingnebus  wheel     224 Oct 15 16:06 ..
+     … +2 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 3m)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad; cd
+      /Users/martingnebus/Martin/GIT-MG…)
+  ⎿   §×ÚáéíóöúýČčďěňřšťůŽž–’“„…€→↓
+     ['0xa0', '0xa7', '0xd7', '0xda', '0xe1', '0xe9', '0xed', '0xf3', '0xf6
+     ', '0xfa', '0xfd', '0x10c', '0x10d', '0x10f', '0x11b', '0x148', '0x159
+     … +4 lines (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad;
+      U="U+0020-007E,U+00A0-00FF,U+010C-01…)
+  ⎿  -rw-r--r--@ 1 martingnebus  wheel  82836 Oct 15 16:06 full-axes.woff2
+     -rw-r--r--@ 1 martingnebus  wheel  55100 Oct 15 16:06 limited.woff2
+        1 "wdth" 100
+     … +14 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 3m)
+
+⏺ I'll subset Archivo to Czech-only glyphs at the needed weights/widths,
+  shrinking it to one 54 KiB file (from 172 KiB across two preloads) — allowed
+  since Archivo's OFL license permits self-hosted subsets. I'll implement this
+  with next/font/local and also add an SVG icon to fix the favicon 404.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad; cd
+      /Users/martingnebus/Martin/GIT-MG…)
+  ⎿  Copyright 2020 The Archivo Project Authors (https://github.com/Omnibus
+     -Type/Archivo)
+     … +29 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 100,235p
+      node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md
+      | grep -v "^$" | head -90)
+  ⎿  The path of the font file as a string or an array of objects (with typ
+     e `Array<{path: string, weight?: string, style?: string}>`) relative t
+     o the directory where the font loader function is called.
+     … +99 lines (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad; cd
+      /Users/martingnebus/Martin/GIT-MG…)
+  ⎿  src/fonts/archivo-cs.woff2
+     total 136
+     drwxr-xr-x@ 5 martingnebus  staff    160 Oct 15 16:07 .
+     … +5 lines (ctrl+o to expand)
+  ⎿  Created src/fonts/OFL.txt (+93 -0)
+       1 +Copyright 2020 The Archivo Project Authors (https://github.com/
+         +Omnibus-Type/Archivo)                                          
+       2 +                                                               
+       3 +This Font Software is licensed under the SIL Open Font License,
+         + Version 1.1.                                                  
+       4 +This license is copied below, and is also available with a FAQ 
+         +at:                                                            
+       5 +http://scripts.sil.org/OFL                                     
+       6 +                                                               
+       7 +                                                               
+       8 +-----------------------------------------------------------    
+       9 +SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007           
+      10 +-----------------------------------------------------------    
+      11 +                                                               
+      12 +PREAMBLE                                                       
+      13 +The goals of the Open Font License (OFL) are to stimulate world
+         +wide                                                           
+      14 +development of collaborative font projects, to support the font
+         + creation                                                      
+      15 +efforts of academic and linguistic communities, and to provide 
+         +a free and                                                     
+      16 +open framework in which fonts may be shared and improved in par
+         +tnership                                                       
+      17 +with others.                                                   
+      18 +                                                               
+      19 +The OFL allows the licensed fonts to be used, studied, modified
+         + and                                                           
+      20 +redistributed freely as long as they are not sold by themselves
+         +. The                                                          
+      21 +fonts, including any derivative works, can be bundled, embedded
+         +,                                                              
+      22 +redistributed and/or sold with any software provided that any r
+         +eserved                                                        
+      23 +names are not used by derivative works. The fonts and derivativ
+         +es,                                                            
+      24 +however, cannot be released under any other type of license. Th
+         +e                                                              
+      25 +requirement for fonts to remain under this license does not app
+         +ly                                                             
+      26 +to any document created using the fonts or their derivatives.  
+      27 +                                                               
+      28 +DEFINITIONS                                                    
+      29 +"Font Software" refers to the set of files released by the Copy
+         +right                                                          
+      30 +Holder(s) under this license and clearly marked as such. This m
+         +ay                                                             
+      31 +include source files, build scripts and documentation.         
+      32 +                                                               
+      33 +"Reserved Font Name" refers to any names specified as such afte
+         +r the                                                          
+      34 +copyright statement(s).                                        
+      35 +                                                               
+      36 +"Original Version" refers to the collection of Font Software co
+         +mponents as                                                    
+      37 +distributed by the Copyright Holder(s).                        
+      38 +                                                               
+      39 +"Modified Version" refers to any derivative made by adding to, 
+         +deleting,                                                      
+      40 +or substituting -- in part or in whole -- any of the components
+         + of the                                                        
+     … 53 more lines (ctrl+o to expand)
+  ⎿  Created src/fonts/subset.sh (+28 -0)
+       1 +#!/usr/bin/env bash                                            
+       2 +# Builds archivo-cs.woff2 from Google's Archivo variable font (
+         +OFL, see                                                       
+       3 +# OFL.txt): Czech characters only, weights 400-900, widths 100-
+         +125, the                                                       
+       4 +# ranges the page uses. One file instead of Google's latin and 
+         +latin-ext                                                      
+       5 +# pair (decision 41). Needs fonttools and brotli:              
+       6 +#   pip install fonttools==4.55.3 brotli==1.1.0                
+       7 +# Usage: src/fonts/subset.sh "path/to/Archivo[wdth,wght].ttf"  
+       8 +# The TTF: https://github.com/google/fonts/tree/main/ofl/archiv
+         +o                                                              
+       9 +set -euo pipefail                                              
+      10 +                                                               
+      11 +src="$1"                                                       
+      12 +out="$(dirname "$0")/archivo-cs.woff2"                         
+      13 +tmp="$(mktemp -d)"                                             
+      14 +trap 'rm -rf "$tmp"' EXIT                                      
+      15 +                                                               
+      16 +# Basic Latin, Latin-1, the Czech and Slovak letters, typograph
+         +ic                                                             
+      17 +# punctuation, the euro sign and the arrows the copy uses.     
+      18 +unicodes="U+0020-007E,U+00A0-00FF,U+010C-010F,U+011A-011B,U+013
+         +9-013E,\                                                       
+      19 +U+0147-0148,U+0154-0155,U+0158-0159,U+0160-0161,U+0164-0165,U+0
+         +16E-016F,\                                                     
+      20 +U+017D-017E,U+2009,U+2013-2014,U+2018-201E,U+2022,U+2026,U+202F
+         +,\                                                             
+      21 +U+2039-203A,U+20AC,U+2190-2193,U+2212,U+2264-2265"             
+      22 +                                                               
+      23 +fonttools varLib.instancer "$src" wght=400:900 wdth=100:125 \  
+      24 +  -o "$tmp/archivo.ttf" -q                                     
+      25 +pyftsubset "$tmp/archivo.ttf" --unicodes="$unicodes" \         
+      26 +  --layout-features='kern,liga,calt,ccmp,locl,mark,mkmk,tnum,ln
+         +um,case' \                                                     
+      27 +  --flavor=woff2 --output-file="$out"                          
+      28 +echo "$out"                                                    
+  ⎿  … 1 more file changed
+
+⏺ Subset font built (54 KiB). Switching the layout to it and adding the icon.
+⏺ Bash(grep -rn "tabular-nums\|font-feature" src | head -5; python3 - <<'EOF'
+      p='src/app/layout.tsx'; s=open(p).read()…)
+  ⎿  src/components/MatchCard.tsx:90:        <p className="text-[30px] lead
+     ing-none font-black tabular-nums wdth-120">
+     src/components/MatchCard.tsx:120:              <span className="text-r
+     … +21 lines (ctrl+o to expand)
+  ⎿  Created src/app/icon.svg (+1 -0)
+      1 +<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rec
+        +t width="32" height="32" fill="#000"/><path d="M8 7h14v4h-9v3h8v
+        +4h-8v3h9v4H8z" fill="#fff"/><rect x="24" y="21" width="4" height
+        +="4" fill="#d7000f"/></svg>                                     
+  ⎿  Updated src/app/layout.tsx (+5 -4)
+       1  import type { Metadata } from "next";
+       2 -import { Archivo } from "next/font/google";                    
+       2 +import localFont from "next/font/local";                       
+       3  import { cs } from "@/copy/cs";
+       4  import "./globals.css";
+       5  
+       6  // Archivo is variable in weight and width; headings use the wi
+          der cuts.
+       7 -const archivo = Archivo({                                      
+       7 +// One self-hosted Czech subset (src/fonts/subset.sh, decision 
+         +41).                                                           
+       8 +const archivo = localFont({                                    
+       9 +  src: "../fonts/archivo-cs.woff2",                            
+      10    variable: "--font-archivo",
+       9 -  subsets: ["latin", "latin-ext"],                             
+      10 -  axes: ["wdth"],                                              
+      11 +  weight: "400 900",                                           
+      12  });
+      13  
+      14  const { title, description, ogTitle, ogAlt } = cs.meta;
+
+⏺ Bash(kill $(lsof -t -iTCP:3001 -sTCP:LISTEN) 2>/dev/null; pnpm build 2>&1 |
+      tail -8 && (pnpm start -p 3001
+      >/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG…)
+  ⎿  ┌ ○ /
+     ├ ○ /_not-found
+     ├ ○ /icon.svg
+     … +9 lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+⏺ Bash(curl -s http://localhost:3001 | grep -oE '<link[^>]*woff2[^>]*>'; cd
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/2
+      c057e97-2a18-460a…)
+  ⎿  home performance:99 accessibility:100 best-practices:100 seo:100 0.8 s
+      · 2.3 s · 10 ms · 0 · Total size was 223 KiB
+       FAIL performance legacy-javascript-insight Est savings of 14 KiB
+     … +25 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 8m 20s)
+
+⏺ LCP improved from 2.9s to 2.3s, Performance is now 98–99 with the rest at 100,
+  and page weight dropped from 342 to 223 KiB (remaining is Next's framework JS
+  plus 7 KiB CSS). Next I'll confirm the font preload is intact and do a manual
+  check at 375px.
+
+⏺ Bash(curl -sI http://localhost:3001 | grep -i "^link"; curl -s
+      http://localhost:3001 | grep -o 'archivo_cs[^"]*woff2' | head -2; curl -s
+      http://localhost:3001 | grep…)
+  ⎿  link: </_next/static/media/archivo_cs-s.p.29xv5sk5lzbbr.woff2>; rel=pr
+     eload; as="font"; crossorigin=""; type="font/woff2"
+     archivo_cs-s.p.29xv5sk5lzbbr.woff2
+
+⏺ Font preloading via the Link header checks out. Next I'll capture 375px
+  screenshots of the privacy page and the home page's consent/footer sections
+  using an iframe, since headless Chrome won't render below roughly 500px.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad;
+      CH="/Applications/Google Chrome.app/…)
+  ⎿  Error: Exit code 127
+     (eval):1: command not found: ls
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad;
+      CH="/Applications/Google Chrome.app/…)
+  ⎿  /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+     sk/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad/shot-.png
+     /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+     … +4 lines (ctrl+o to expand)
+
+⏺ Screenshots are taken. Reviewing them.
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ Found a duplicated "Správce údajů:" label on the privacy page, and the pairs
+  list on the home page appears empty, possibly due to a mid-animation state.
+  I'll fix the duplication and investigate the home page issue next.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad; cd
+      /Users/martingnebus/Martin/GIT-MG…)
+  ⎿  9:const controllerWho =
+     11:const controller = `Správce údajů: ${controllerWho}.`;
+     98:    consent: `Odesláním souhlasíte, že váš e-mail použijeme jen k z
+     … +4 lines (ctrl+o to expand)
+  ⎿  Updated src/copy/cs.ts (+4 -3)
+       6  type TerPair = { index: string; eu: string; ticker: string; us:
+           string };
+       7  
+       8  // Decision 26: said in the consent text, the footer and the pr
+          ivacy page.
+       9 -const controller =                                             
+      10 -  "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt
+         - doplníme před spuštěním).";                                   
+       9 +const controllerWho =                                          
+      10 +  "provozovatel ETF Match (demo, jméno a kontakt doplníme před 
+         +spuštěním)";                                                   
+      11 +const controller = `Správce údajů: ${controllerWho}.`;         
+      12  
+      13  const description =
+      14    "ETF z NYSE si tu většinou nekoupíte, stejný index v evropské
+          m fondu ano.";
+     ...
+      148      title: "Ochrana osobních údajů",
+      149      back: "Zpět na ETF Match",
+      150      sections: [
+      150 -      { head: "Správce údajů", text: controller },            
+      151 +      { head: "Správce údajů", text: `Je to ${controllerWho}.`
+          + },                                                           
+      152        {
+      153          head: "Jaké údaje a proč",
+      154          text: "Jen e-mail, který zadáte do formuláře. Použijem
+           e ho k jedinému účelu: poslat vám plán sestavený podle indexu 
+           a částky, které jste vybrali. Žádný newsletter.",
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The rows are still empty after 10 s of virtual time. It could be headless not
+  running animations inside an iframe, or a real regression. Checking how the
+  rows animate.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ It's a pure CSS rise-in. The Lighthouse final screenshot is from a real
+  mobile-emulated load, so that's the better test.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/2c057e97-2a18-460a-accc-922ff5826bec/scratchpad && node -e '
+      const r=require("./lh2-…)
+  ⎿  screenshot
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The empty list in my earlier test was just an artifact of the headless iframe
+  freezing the CSS animation—on real mobile the pairs render fine and the Czech
+  glyphs look correct. I'll run checks now that the copy fix is in.
+
+⏺ Bash(pnpm format >/dev/null; pnpm check 2>&1 | tail -2 && pnpm test 2>&1 |
+      grep -E "Tests|Test Files" && pnpm build 2>&1 | grep -E "○|error|Error";
+      grep -rn "localho…)
+  ⎿  $ biome format --write
+     $ biome check
+     Checked 40 files in 13ms. No fixes applied.
+     … +20 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ All checks pass and the ad links still use the localhost placeholder (decision
+  36). The ads didn't change, so no PNG re-export. Now the docs: decisions,
+  TODO, the map and the README.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)
+  ⎿        52 CLAUDE.md
+      CLAUDE.md                 |  4 ++--
+      README.md                 |  2 ++
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md (+2 -2)
+      39  
+      40  - `README.md` how to run, structure, live URL
+      41  - `AGENTS.md` written by `next dev`: read `node_modules/next/di
+          st/docs/` before Next.js code
+      42 -- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         - Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         -r topic, `data.test.ts`); `src/lib/` formatting, the taps' opti
+         -ons, the income illustration, the e-mail check and `track()`, w
+         -ith tests                                                      
+      42 +- `src/app/` routes (`/`, `/ochrana-udaju`, `icon.svg`); `src/c
+         +omponents/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` so
+         +urced facts (`types.ts`, one file per topic, `data.test.ts`); `
+         +src/lib/` formatting, the taps' options, the income illustratio
+         +n, the e-mail check and `track()`, with tests; `src/fonts/` the
+         + Archivo subset, its OFL licence and `subset.sh`               
+      43  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      44  - `docs/TODO.md` the commit plan, one section per commit
+      45  - `docs/decisions.md` decisions with reasons
+      46  - `docs/glossary.md` term · plain explanation · Czech page word
+          ing
+      47  - `docs/research/` sourced data from C1, one file per topic; st
+          art at its README
+      48  - `docs/mockups/` static page mockups from C3; `shared.js` hold
+          s their data and behaviour
+      49 -- `ads/` the two Meta ads (A problem hook, B answer hook): HTML
+         - on one template `ad.css`, exported PNGs                       
+      49 +- `ads/` the two Meta ads (A problem hook, B answer hook): HTML
+         + on one template `ad.css`, exported PNGs; `og.html` is the sour
+         +ce of `public/og.png`                                          
+      50  - `.claude/skills/implementation-start` and `implementation-end
+          ` open and close a TODO section
+      51  - `.claude/skills/implementation-plan` grilling for planning st
+          eps, one question at a time
+      52  - `.claude/skills/` third-party skills, pinned in `skills-lock.
+          json`: lead-magnets, copywriting, cro, ad-creative, analytics, 
+          ab-testing, frontend-design, performance, core-web-vitals, acce
+          ssibility
+  ⎿  Updated README.md (+2 -0)
+      28                   (globals.css holds the design tokens, @theme)
+      29    components/    the UI
+      30    copy/cs.ts     all Czech page copy
+      31 +  fonts/         Archivo cut to Czech (subset.sh), with its OFL
+         + licence                                                       
+      32    data/          every sourced number: value, source URL, date,
+           quote
+      33    lib/           Czech number formatting, the taps' options, th
+          e income
+      34                   illustration, the e-mail check, track() (no fi
+          gures)
+      35  docs/
+      36    research/      the sourced research behind src/data/
+      37    mockups/       the agreed static mockup (page-a.html) and the
+           rejected one
+      38 +public/          og.png, the share card (from ads/og.html)     
+      39  ads/             the two Meta ads, HTML and exported PNGs
+      40  ai-log/          one exported AI session per step, plus mistake
+          s.md
+      41  ```
+  ⎿  Updated docs/TODO.md (+4 -4)
+      61  
+      62  ## C10 Launch readiness
+      63  
+      64 -- [ ] Named data controller and a privacy policy page (decision
+         - 26 leaves the name open).                                     
+      65 -- [ ] Open Graph tags and image.                               
+      66 -- [ ] Mobile performance and accessibility check on a productio
+         -n build at [http://localhost:3000](http://localhost:3000) (`pnp
+         -m build && pnpm start`), with fixes.                           
+      67 -- [ ] Ad links in `ads/` keep the [http://localhost:3000](http:
+         -//localhost:3000) placeholder (decision 36); re-export the PNGs
+         - if the ads change.                                            
+      64 +- [x] Named data controller and a privacy policy page (decision
+         + 26 leaves the name open). The name stays a placeholder by the 
+         +user's choice; `/ochrana-udaju` added (decision 40).           
+      65 +- [x] Open Graph tags and image.                               
+      66 +- [x] Mobile performance and accessibility check on a productio
+         +n build at [http://localhost:3000](http://localhost:3000) (`pnp
+         +m build && pnpm start`), with fixes. Run on port 3001, since a 
+         +dev server held 3000 (decision 41).                            
+      67 +- [x] Ad links in `ads/` keep the [http://localhost:3000](http:
+         +//localhost:3000) placeholder (decision 36); re-export the PNGs
+         + if the ads change. Ads unchanged, no re-export.               
+      68  
+      69  ## C11 Deploy
+      70  
+  ⎿  Updated docs/decisions.md (+29 -0)
+      369      in the mockups; a missing UTM is logged as `null`. *Reason
+           :* the
+      370      events count choices, and a repeat tap is not one.
+      371  
+      372 +                                                              
+      373 +## C10 Launch readiness (2026-10-15)                          
+      374 +                                                              
+      375 +40. **The controller stays a placeholder; a privacy page expla
+          +ins the                                                       
+      376 +    demo.** The user kept decision 26's wording ("provozovatel
+          + ETF Match,                                                   
+      377 +    jméno a kontakt doplníme před spuštěním"), so the brief's 
+          +"named data                                                   
+      378 +    controller" is still open. `/ochrana-udaju` says what the 
+          +form takes                                                    
+      379 +    (the e-mail only), why (the plan), the legal basis (consen
+          +t), that the                                                  
+      380 +    demo stores and sends nothing, that `track()` only logs to
+          + the                                                          
+      381 +    browser console with no cookies, what is filled in before 
+          +a real                                                        
+      382 +    mailing, and the visitor's rights. The consent text and th
+          +e footer                                                      
+      383 +    link to it. The share card (`public/og.png`, 1200 × 630, f
+          +rom                                                           
+      384 +    `ads/og.html` on the ads' template) and the OG title name 
+          +VOO, SPY,                                                     
+      385 +    IVV, not QQQ, which is listed on Nasdaq (decision 27). *Re
+          +ason:* the                                                    
+      386 +    user's choice; the page says honestly what the demo does i
+          +nstead of                                                     
+      387 +    inventing a policy for a mailing that does not exist.     
+      388 +                                                              
+      389 +41. **Archivo is self-hosted as one Czech subset.** `next/font
+          +/google`                                                      
+      390 +    preloaded Google's latin and latin-ext files, 172 KiB with
+          + the width                                                    
+      391 +    axis, and Czech needs both. `src/fonts/subset.sh` cuts the
+          + OFL source                                                   
+      392 +    to the Czech characters and the ranges the code uses (weig
+          +ht                                                            
+      393 +    400–900, width 100–125): one 54 KiB file, loaded with     
+      394 +    `next/font/local`. Mobile Lighthouse on the production bui
+          +ld: LCP                                                       
+      395 +    2.9 s → 2.3 s, performance 96 → 98–99, page weight 342 → 2
+          +23 KiB.                                                       
+      396 +    An SVG icon removes the `/favicon.ico` 404 (best practices
+          + 96 →                                                         
+      397 +    100). Accessibility and SEO were 100 before and after. *Re
+          +ason:* the                                                    
+      398 +    headline is the LCP element and waited on the font; the br
+          +ief asks                                                      
+      399 +    for "fast on a mobile connection". The remaining hints (un
+          +used and                                                      
+      400 +    legacy JS, 7 KiB render-blocking CSS) are Next.js's own ch
+          +unks.                                                         
+
+⏺ Stopping my production server on 3001. Your dev server on 3000 stays up.
+
+⏺ Bash(kill $(lsof -t -iTCP:3001 -sTCP:LISTEN) 2>/dev/null; lsof -nP -iTCP:3000
+      -iTCP:3001 -sTCP:LISTEN | tail -n +2)
+  ⎿  node    15115 martingnebus   13u  IPv6 0x51720e794ded6e06      0t0  TC
+     P *:3000 (LISTEN)
+
+⏺ C10 is implemented and all four boxes are ticked. pnpm check, pnpm test (211
+  tests) and pnpm build pass, and every route is still static.
+
+  - Data controller and privacy page: as you chose, the controller stays a
+    placeholder, so the brief's "named data controller" is still open
+    (decision 40). There's a new /ochrana-udaju page that says what the demo
+    actually does: it takes only the e-mail, stores and sends nothing, track()
+    only logs to the browser console, and there are no cookies. The consent text
+    and the footer link to it.
+  - Open Graph: OG and Twitter tags are in place, with the base URL on the
+    localhost placeholder (C11 swaps it, as planned). The share image is
+    public/og.png at 1200 × 630, made from ads/og.html the same way as the ads.
+    Its title names VOO, SPY and IVV but not QQQ, which trades on Nasdaq, not
+    NYSE (decision 27).
+  - Speed and accessibility: I ran the production build on port 3001 because
+    your dev server holds 3000.
+
+  | Mobile Lighthouse        | Before  | After   |
+  |--------------------------|---------|---------|
+  | Performance              | 96      | 98–99   |
+  | Accessibility            | 100     | 100     |
+  | Best practices           | 96      | 100     |
+  | SEO                      | 100     | 100     |
+  | Headline load time (LCP) | 2.9 s   | 2.3 s   |
+  | Page weight              | 342 KiB | 223 KiB |
+    Two fixes did this (decision 41):
+    - Font: the headline was waiting on 172 KiB of Archivo. It's now one 54 KiB
+      file with only the Czech characters, weights and widths the page uses,
+      plus its OFL licence and the script that rebuilds it in src/fonts/.
+    - Icon: a missing /favicon.ico was causing an error, so I added an SVG icon.
+
+    What's left is Next.js's own JavaScript and 7 KiB of CSS. The first screen
+    and the Czech glyphs look right on a real mobile load.
+  - Ads: the links still point to http://localhost:3000. The ads didn't change,
+    so I didn't re-export the PNGs.
+
+  Also fixed: the privacy page repeated "Správce údajů" under a heading with the
+  same words.
+
+  Files changed: src/app/layout.tsx, src/components/Ask.tsx,
+  src/components/Footer.tsx, src/copy/cs.ts, docs/decisions.md, docs/TODO.md,
+  CLAUDE.md, README.md.
+  New files: src/app/ochrana-udaju/page.tsx, src/app/icon.svg,
+  src/components/Privacy.tsx, src/components/PrivacyLink.tsx, src/fonts/
+  (archivo-cs.woff2, OFL.txt, subset.sh), ads/og.html, public/og.png.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -2 && pnpm test 2>&1 | grep -E "Tests " && pnpm
+      build 2>&1 | grep -E "○ |rror"; git status --short; awk '/^## C10/,/^##
+      C11/' docs/TODO.m…)  ⎿  $ biome check
+     Checked 40 files in 11ms. No fixes applied.
+           Tests  211 passed (211)
+     … +96 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Checks pass (check, 211 tests, build, all routes static), and every C10 box is
+  ticked.
+
+  Export: please /export this session to ai-log/010-launch-readiness.txt so it
+  goes into the same commit.
+
+  Mistakes from this session, for ai-log/mistakes.md:
+  1. The first OG image and title said "místo VOO, SPY nebo QQQ" under an "ETF z
+     NYSE" headline. QQQ is on Nasdaq (decision 27). I caught it and changed it
+     to IVV.
+  2. The privacy page put "Správce údajů:" in the text right under the "Správce
+     údajů" heading. I caught it in the 375 px screenshot.
+  3. My first pnpm start failed because your dev server had port 3000, and I
+     briefly read the dev server's HTML as if it were the production build.
+     Fixed by using port 3001.
+  4. In a shell loop I named a variable path, which in zsh replaces PATH, and
+     broke the command.
+
+  Commit message:
+  add C10 launch readiness: privacy page, OG tags, font subset
+
+  - /ochrana-udaju: what the form takes, why, the legal basis, that the
+    demo stores and sends nothing, track() console-only with no cookies,
+    what is filled in before a real mailing, the visitor's rights
+  - controller kept as a placeholder by the user's choice (decision 40);
+    consent text and footer link to the privacy page
+  - Open Graph and Twitter tags with metadataBase on the localhost
+    placeholder; share card public/og.png (1200 x 630) from ads/og.html,
+    naming VOO, SPY, IVV, not QQQ (Nasdaq)
+  - Archivo self-hosted as one Czech subset, weights 400-900, widths
+    100-125: 54 KiB instead of 172 KiB (src/fonts/subset.sh, OFL licence)
+  - SVG icon removes the /favicon.ico 404
+  - mobile Lighthouse on the production build: LCP 2.9 s -> 2.3 s,
+    performance 96 -> 98-99, best practices 96 -> 100, accessibility and
+    SEO 100 (decision 41)
+  - ad links keep the localhost placeholder; ads unchanged, no re-export
+  - TODO, decisions 40-41, CLAUDE.md map and README updated
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: CLAUDE.md, README.md, docs/TODO.md, docs/decisions.md,
+  src/app/layout.tsx, src/app/icon.svg, src/app/ochrana-udaju/page.tsx,
+  src/components/Ask.tsx, src/components/Footer.tsx, src/components/Privacy.tsx,
+  src/components/PrivacyLink.tsx, src/copy/cs.ts, src/fonts/archivo-cs.woff2,
+  src/fonts/OFL.txt, src/fonts/subset.sh, ads/og.html, public/og.png,
+  ai-log/010-launch-readiness.txt
+
+  Do you approve the message? Once the export file exists, I'll commit and push.
+
+✻ Crunched for 8m 15s · done 4:10 PM
+
+※ recap: C10 (launch readiness) is built and every check passes: the privacy page, Open Graph tags, and the font fix that brought mobile LCP to 2.3 s. Next, export this session to ai-log/010-launch-readiness.txt and approve the commit message so I can commit and push. (disable recaps in /config)

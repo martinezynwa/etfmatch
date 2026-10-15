@@ -39,14 +39,14 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
 
 - `README.md` how to run, structure, live URL
 - `AGENTS.md` written by `next dev`: read `node_modules/next/dist/docs/` before Next.js code
-- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` sourced facts (`types.ts`, one file per topic, `data.test.ts`); `src/lib/` formatting, the taps' options, the income illustration, the e-mail check and `track()`, with tests
+- `src/app/` routes (`/`, `/ochrana-udaju`, `icon.svg`); `src/components/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` sourced facts (`types.ts`, one file per topic, `data.test.ts`); `src/lib/` formatting, the taps' options, the income illustration, the e-mail check and `track()`, with tests; `src/fonts/` the Archivo subset, its OFL licence and `subset.sh`
 - `docs/brief.md` the idea, decisions to make, done-when checklists
 - `docs/TODO.md` the commit plan, one section per commit
 - `docs/decisions.md` decisions with reasons
 - `docs/glossary.md` term · plain explanation · Czech page wording
 - `docs/research/` sourced data from C1, one file per topic; start at its README
 - `docs/mockups/` static page mockups from C3; `shared.js` holds their data and behaviour
-- `ads/` the two Meta ads (A problem hook, B answer hook): HTML on one template `ad.css`, exported PNGs
+- `ads/` the two Meta ads (A problem hook, B answer hook): HTML on one template `ad.css`, exported PNGs; `og.html` is the source of `public/og.png`
 - `.claude/skills/implementation-start` and `implementation-end` open and close a TODO section
 - `.claude/skills/implementation-plan` grilling for planning steps, one question at a time
 - `.claude/skills/` third-party skills, pinned in `skills-lock.json`: lead-magnets, copywriting, cro, ad-creative, analytics, ab-testing, frontend-design, performance, core-web-vitals, accessibility
