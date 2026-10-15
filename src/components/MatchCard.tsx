@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import { cs } from "@/copy/cs";
 import { brokers } from "@/data/brokers";
-import type { MarketIndex } from "@/data/indexes";
+import { comparedFund, type MarketIndex } from "@/data/indexes";
 import type { Fact, Source } from "@/data/types";
 import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@/lib/format";
 import { CtaLink } from "./CtaLink";
 import { CountUp, Swap } from "./motion";
-import { SourceLink } from "./SourceLink";
+import { SourceGroups } from "./SourceLink";
 
 const copy = cs.match;
 const titleId = "match-title";
@@ -30,9 +30,7 @@ export function MatchCard({
   amount: number;
   askId: string;
 }) {
-  const usFund =
-    index.usFunds.find((f) => f.ticker === index.compareWith) ??
-    index.usFunds[0];
+  const usFund = comparedFund(index);
   const sellers = Object.values(brokers).filter(
     (b) => b.available[index.id].value,
   );
@@ -173,19 +171,7 @@ export function MatchCard({
         <summary className="py-3 pr-8 pb-1 text-[13px] font-bold text-muted">
           {copy.sourcesHead}
         </summary>
-        <ul className="grid gap-1.5 pt-1 text-xs leading-[1.4] text-muted">
-          {sourceGroups.map(([label, list]) => (
-            <li key={label}>
-              <b className="font-semibold text-ink">{label}:</b>{" "}
-              {list.map((s, i) => (
-                <span key={s.url}>
-                  {i > 0 && "; "}
-                  <SourceLink source={s} />
-                </span>
-              ))}
-            </li>
-          ))}
-        </ul>
+        <SourceGroups groups={sourceGroups} />
       </details>
     </article>
   );

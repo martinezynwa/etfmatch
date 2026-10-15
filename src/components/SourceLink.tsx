@@ -14,3 +14,23 @@ export function SourceLink({ source }: { source: Source }) {
     </a>
   );
 }
+
+/** Sources grouped under a label, one line per group, as the "Zdroje"
+ * accordions list them. */
+export function SourceGroups({ groups }: { groups: [string, Source[]][] }) {
+  return (
+    <ul className="grid gap-1.5 pt-1 text-xs leading-[1.4] text-muted">
+      {groups.map(([label, list]) => (
+        <li key={label}>
+          <b className="font-semibold text-ink">{label}:</b>{" "}
+          {list.map((s, i) => (
+            <span key={s.url}>
+              {i > 0 && "; "}
+              <SourceLink source={s} />
+            </span>
+          ))}
+        </li>
+      ))}
+    </ul>
+  );
+}

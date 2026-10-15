@@ -2,6 +2,13 @@
 // No numbers here: figures come from src/data/ and are put into the text
 // by the component that renders them.
 
+/** One index's TERs, formatted: the EU fund and the US fund it replaces. */
+type TerPair = { index: string; eu: string; ticker: string; us: string };
+
+// Decision 26: said in the consent text and in the footer.
+const controller =
+  "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním).";
+
 export const cs = {
   meta: {
     title: "ETF Match",
@@ -81,12 +88,50 @@ export const cs = {
       empty: "Vyplňte e-mail, na který plán pošleme.",
       invalid: "E-mail má chybný tvar, zkontrolujte ho.",
     },
-    consent:
-      "Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním). Souhlas můžete kdykoli odvolat.",
+    consent: `Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. ${controller} Souhlas můžete kdykoli odvolat.`,
     submit: "Poslat plán",
     doneHead: "Hotovo, takhle plán vypadá.",
     doneText: "Demo: nic jsme neuložili ani neodeslali.",
     reopen: "Zobrazit e-mail znovu",
+  },
+  // Decision 16. The keys name the questions for the faq_opened event (C9).
+  faq: {
+    head: "Časté otázky",
+    items: {
+      banned: {
+        question: "Je nákup ETF z NYSE v Česku zakázaný?",
+        answer:
+          "Není. Pravidla EU chtějí, aby fond pro drobné investory měl dokument KID (klíčové informace). Americké fondy ho nevydávají, a proto je většina brokerů v EU nenabízí.",
+      },
+      stocks: {
+        question: "Můžu koupit akcie amerických firem?",
+        answer:
+          "Ano. Pravidlo o dokumentu KID se týká fondů, ne akcií jednotlivých firem.",
+      },
+      ter: {
+        question: "Proč je evropský fond někdy dražší?",
+        answer: (dearer: TerPair, cheaper: TerPair) =>
+          `Poplatek si určuje každý fond sám. U indexu ${dearer.index} stojí evropský fond ${dearer.eu} ročně, ${dearer.ticker} ${dearer.us}. U indexu ${cheaper.index} je to naopak: evropský fond ${cheaper.eu}, ${cheaper.ticker} ${cheaper.us}.`,
+      },
+      isin: {
+        question: "Co je ISIN a jak fond najdu u brokera?",
+        answer: (length: number) =>
+          `ISIN je ${length}místný kód jednoho konkrétního fondu. Pošleme vám ho v plánu; vložte ho do vyhledávání v aplikaci brokera. Ticker se liší podle burzy, ISIN je všude stejný.`,
+      },
+    },
+  },
+  // Decisions 17, 26, 32.
+  footer: {
+    disclaimerLead: "Nejde o investiční doporučení.",
+    disclaimer:
+      "Stránka ukazuje historická data indexů, ne předpověď. Minulé výnosy nezaručují budoucí a investice může ztratit hodnotu. Broker je uveden jen jako místo, kde fond najdete, ne jako doporučení.",
+    sourcesHead: "Zdroje",
+    sourceGroups: {
+      kid: "Proč americké ETF většinou nekoupíte",
+      exchanges: "Burzy amerických fondů",
+      fees: "Poplatky fondů v otázkách",
+    },
+    controller,
   },
   // The e-mail shown in the modal (decisions 2, 3, 4, 8, 9).
   email: {

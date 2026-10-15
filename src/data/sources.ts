@@ -164,6 +164,20 @@ export const sources = {
     accessed,
   },
 
+  // Why US ETFs are mostly not on offer (docs/research/us-etf-rule.md)
+  priips: {
+    title: "Nařízení EU 1286/2014 (PRIIPs), dokument KID",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R1286",
+    asOf: "2014-11-26",
+    accessed,
+  },
+  xtbHelp: {
+    title: "XTB, nápověda: Přidání nového instrumentu do nabídky",
+    url: "https://www.xtb.com/int/help-center/stocks-and-etfs/adding-a-new-instrument-to-the-offer",
+    asOf: "2026-02-03",
+    accessed,
+  },
+
   // Czech taxes (docs/research/taxes.md)
   zdp: {
     title: "Zákon o daních z příjmů (586/1992 Sb.)",

@@ -1,4 +1,6 @@
+import { Faq } from "./Faq";
 import { FirstScreen } from "./FirstScreen";
+import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { Planner } from "./Planner";
 
@@ -18,7 +20,13 @@ export function Home() {
           <FirstScreen tapsId={tapsId} />
         </div>
         <Planner tapsId={tapsId} askId={askId} />
+        <div className="page-wrap">
+          <Faq />
+        </div>
       </main>
+      <div className="page-wrap">
+        <Footer />
+      </div>
     </>
   );
 }

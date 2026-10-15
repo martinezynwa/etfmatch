@@ -278,6 +278,10 @@ const world: MarketIndex = {
 
 export const indexes: Record<IndexId, MarketIndex> = { sp500, ndx, world };
 
+/** The US fund named next to the EU fund's TER (match card, FAQ). */
+export const comparedFund = (index: MarketIndex) =>
+  index.usFunds.find((f) => f.ticker === index.compareWith) ?? index.usFunds[0];
+
 /** The bad year the e-mail names (decision 4): the S&P 500 price return
  * in the fourth column of the factsheet's calendar-year row. */
 export const sp500BadYear = {

@@ -1,0 +1,767 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C8                                                      
+
+  Listed 2 directories (ctrl+o to expand)
+
+⏺ Bash(sed -n 240,320p docs/decisions.md; echo ----; cat src/copy/cs.ts; echo
+      ----; cat src/components/Home.tsx src/components/Ask.tsx
+      src/components/SourceLink.tsx sr…)
+  ⎿  23. **Square corners on everything** (`--radius: 0`): cards, chips,
+         buttons, inputs, modal, check marks. *Reason:* agreed in review.
+     … +513 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 130,150p docs/mockups/page-a.html; sed -n 290,315p
+      docs/mockups/page-a.html; echo ----; cat src/app/globals.css; echo ----;
+      grep -n "details\|summary\|So…)
+  ⎿    .done { padding: 4px 0; }
+       .done p { margin: 0 0 14px; color: #c9c6c1; }
+       .ghost { min-height: 48px; padding: 0 18px; border-radius: var(--rad
+     … +184 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Reading the C8 scope and mockup; now checking formatters and how TERs are
+  sourced before planning.
+
+⏺ Bash(cat src/lib/format.ts; grep -n "ter:\|ter = \|exchange" -A4
+      src/data/indexes.ts | grep -n "fact\|s\.\|ticker\|ter" | head -40; diff
+      <(sed -n '/class="faq"/,/<\/…)
+  ⎿  // Czech number formatting for the page. Written by hand instead of
+     // toLocaleString, so server and browser always print the same string:
+     // decimal comma, a non-breaking space between thousands and before th
+     … +87 lines (ctrl+o to expand)
+
+⏺ I'll implement C8 by adding two new sources, building the FAQ and footer
+  copy/components sourced from indexes/isin data rather than hardcoded numbers,
+  and tagging FAQ items with data-q attributes for C9's tracking later.
+
+⏺ Bash(sed -n 1,60p src/components/MatchCard.tsx; sed -n 150,192p
+      src/components/MatchCard.tsx; cat src/data/data.test.ts | head -60; cat
+      package.json | grep -A8 '"scr…)
+  ⎿  import type { ReactNode } from "react";
+     import { cs } from "@/copy/cs";
+     import { brokers } from "@/data/brokers";
+     … +169 lines (ctrl+o to expand)
+
+⏺ Starting the implementation with the sources and the copy.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/data/sources.ts'…)
+  ⎿  24:  label: string;
+     26:  longLabel: string;
+     53:  label: "S&P 500",
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated src/copy/cs.ts (+47 -2)
+       2  // No numbers here: figures come from src/data/ and are put int
+          o the text
+       3  // by the component that renders them.
+       4  
+       5 +// Decision 26: said in the consent text and in the footer.    
+       6 +const controller =                                             
+       7 +  "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt
+         + doplníme před spuštěním).";                                   
+       8 +                                                               
+       9  export const cs = {
+      10    meta: {
+      11      title: "ETF Match",
+     ...
+       85        empty: "Vyplňte e-mail, na který plán pošleme.",
+       86        invalid: "E-mail má chybný tvar, zkontrolujte ho.",
+       87      },
+       84 -    consent:                                                  
+       85 -      "Odesláním souhlasíte, že váš e-mail použijeme jen k zas
+          -lání plánu. Správce údajů: provozovatel ETF Match (demo, jméno
+          - a kontakt doplníme před spuštěním). Souhlas můžete kdykoli od
+          -volat.",                                                      
+       88 +    consent: `Odesláním souhlasíte, že váš e-mail použijeme je
+          +n k zaslání plánu. ${controller} Souhlas můžete kdykoli odvola
+          +t.`,                                                          
+       89      submit: "Poslat plán",
+       90      doneHead: "Hotovo, takhle plán vypadá.",
+       91      doneText: "Demo: nic jsme neuložili ani neodeslali.",
+       92      reopen: "Zobrazit e-mail znovu",
+       93    },
+       94 +  // Decision 16. `id` names the question for the faq_opened e
+          +vent.                                                         
+       95 +  faq: {                                                      
+       96 +    head: "Časté otázky",                                     
+       97 +    items: {                                                  
+       98 +      banned: {                                               
+       99 +        question: "Je nákup ETF z NYSE v Česku zakázaný?",    
+      100 +        answer:                                               
+      101 +          "Není. Pravidla EU chtějí, aby fond pro drobné inves
+          +tory měl dokument KID (klíčové informace). Americké fondy ho n
+          +evydávají, a proto je většina brokerů v EU nenabízí.",        
+      102 +      },                                                      
+      103 +      stocks: {                                               
+      104 +        question: "Můžu koupit akcie amerických firem?",      
+      105 +        answer:                                               
+      106 +          "Ano. Pravidlo o dokumentu KID se týká fondů, ne akc
+          +ií jednotlivých firem.",                                      
+      107 +      },                                                      
+      108 +      ter: {                                                  
+      109 +        question: "Proč je evropský fond někdy dražší?",      
+      110 +        answer: (                                             
+      111 +          dearer: { index: string; eu: string; us: string; tic
+          +ker: string },                                                
+      112 +          cheaper: { index: string; eu: string; us: string; ti
+          +cker: string },                                               
+     … 26 more lines (ctrl+o to expand)
+  ⎿  Updated src/data/sources.ts (+14 -0)
+      164      accessed,
+      165    },
+      166  
+      167 +  // Why US ETFs are mostly not on offer (docs/research/us-etf
+          +-rule.md)                                                     
+      168 +  priips: {                                                   
+      169 +    title: "Nařízení EU 1286/2014 (PRIIPs), dokument KID",    
+      170 +    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/
+          +?uri=CELEX:32014R1286",                                       
+      171 +    asOf: "2014-11-26",                                       
+      172 +    accessed,                                                 
+      173 +  },                                                          
+      174 +  xtbHelp: {                                                  
+      175 +    title: "XTB, nápověda: Přidání nového instrumentu do nabíd
+          +ky",                                                          
+      176 +    url: "https://www.xtb.com/int/help-center/stocks-and-etfs/
+          +adding-a-new-instrument-to-the-offer",                        
+      177 +    asOf: "2026-02-03",                                       
+      178 +    accessed,                                                 
+      179 +  },                                                          
+      180 +                                                              
+      181    // Czech taxes (docs/research/taxes.md)
+      182    zdp: {
+      183      title: "Zákon o daních z příjmů (586/1992 Sb.)",
+
+⏺ longLabel for World is "Svět (MSCI World)", so I'm adjusting the FAQ 3 wording
+  to "U indexu …" so it reads correctly with that label.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/copy/cs.ts'…)
+  ⎿  29:  compareWith: string;
+     88:  compareWith: "VOO",
+     162:  compareWith: "QQQ",
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated src/copy/cs.ts (+6 -6)
+       2  // No numbers here: figures come from src/data/ and are put int
+          o the text
+       3  // by the component that renders them.
+       4  
+       5 +/** One index's TERs, formatted: the EU fund and the US fund it
+         + replaces. */                                                  
+       6 +type TerPair = { index: string; eu: string; ticker: string; us:
+         + string };                                                     
+       7 +                                                               
+       8  // Decision 26: said in the consent text and in the footer.
+       9  const controller =
+      10    "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt
+           doplníme před spuštěním).";
+     ...
+       94      doneText: "Demo: nic jsme neuložili ani neodeslali.",
+       95      reopen: "Zobrazit e-mail znovu",
+       96    },
+       94 -  // Decision 16. `id` names the question for the faq_opened e
+          -vent.                                                         
+       97 +  // Decision 16. The keys name the questions for the faq_open
+          +ed event (C9).                                                
+       98    faq: {
+       99      head: "Časté otázky",
+      100      items: {
+     ...
+      110        },
+      111        ter: {
+      112          question: "Proč je evropský fond někdy dražší?",
+      110 -        answer: (                                             
+      111 -          dearer: { index: string; eu: string; us: string; tic
+          -ker: string },                                                
+      112 -          cheaper: { index: string; eu: string; us: string; ti
+          -cker: string },                                               
+      113 -        ) =>                                                  
+      114 -          `Poplatek si určuje každý fond sám. U ${dearer.index
+          -} stojí evropský fond ${dearer.eu} ročně, ${dearer.ticker} ${d
+          -earer.us}. U ${cheaper.index} je to naopak: evropský fond ${ch
+          -eaper.eu}, ${cheaper.ticker} ${cheaper.us}.`,                 
+      113 +        answer: (dearer: TerPair, cheaper: TerPair) =>        
+      114 +          `Poplatek si určuje každý fond sám. U indexu ${deare
+          +r.index} stojí evropský fond ${dearer.eu} ročně, ${dearer.tick
+          +er} ${dearer.us}. U indexu ${cheaper.index} je to naopak: evro
+          +pský fond ${cheaper.eu}, ${cheaper.ticker} ${cheaper.us}.`,   
+      115        },
+      116        isin: {
+      117          question: "Co je ISIN a jak fond najdu u brokera?",
+
+⏺ Next, the components: I'm moving the source-list markup into SourceLink.tsx so
+  the match card and footer can both use it.
+
+⏺ Bash(cat >> src/components/SourceLink.tsx <<'EOF'…)
+  ⎿   src/components/MatchCard.tsx  | 16 ++------------
+      src/components/SourceLink.tsx | 20 ++++++++++++++++++
+      src/copy/cs.ts                | 49 ++++++++++++++++++++++++++++++++++
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+2 -14)
+       6  import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@
+          /lib/format";
+       7  import { CtaLink } from "./CtaLink";
+       8  import { CountUp, Swap } from "./motion";
+       9 -import { SourceLink } from "./SourceLink";                     
+       9 +import { SourceGroups } from "./SourceLink";                   
+      10  
+      11  const copy = cs.match;
+      12  const titleId = "match-title";
+     ...
+      173          <summary className="py-3 pr-8 pb-1 text-[13px] font-bo
+           ld text-muted">
+      174            {copy.sourcesHead}
+      175          </summary>
+      176 -        <ul className="grid gap-1.5 pt-1 text-xs leading-[1.4]
+          - text-muted">                                                 
+      177 -          {sourceGroups.map(([label, list]) => (              
+      178 -            <li key={label}>                                  
+      179 -              <b className="font-semibold text-ink">{label}:</
+          -b>{" "}                                                       
+      180 -              {list.map((s, i) => (                           
+      181 -                <span key={s.url}>                            
+      182 -                  {i > 0 && "; "}                             
+      183 -                  <SourceLink source={s} />                   
+      184 -                </span>                                       
+      185 -              ))}                                             
+      186 -            </li>                                             
+      187 -          ))}                                                 
+      188 -        </ul>                                                 
+      176 +        <SourceGroups groups={sourceGroups} />                
+      177        </details>
+      178      </article>
+      179    );
+  ⎿  Updated src/components/SourceLink.tsx (+20 -0)
+      14      </a>
+      15    );
+      16  }
+      17 +                                                               
+      18 +/** Sources grouped under a label, one line per group, as the "
+         +Zdroje"                                                        
+      19 + * accordions list them. */                                    
+      20 +export function SourceGroups({ groups }: { groups: [string, Sou
+         +rce[]][] }) {                                                  
+      21 +  return (                                                     
+      22 +    <ul className="grid gap-1.5 pt-1 text-xs leading-[1.4] text
+         +-muted">                                                       
+      23 +      {groups.map(([label, list]) => (                         
+      24 +        <li key={label}>                                       
+      25 +          <b className="font-semibold text-ink">{label}:</b>{" 
+         +"}                                                             
+      26 +          {list.map((s, i) => (                                
+      27 +            <span key={s.url}>                                 
+      28 +              {i > 0 && "; "}                                  
+      29 +              <SourceLink source={s} />                        
+      30 +            </span>                                            
+      31 +          ))}                                                  
+      32 +        </li>                                                  
+      33 +      ))}                                                      
+      34 +    </ul>                                                      
+      35 +  );                                                           
+      36 +}                                                              
+
+  Searched for 3 patterns, read 2 files (ctrl+o to expand)
+
+⏺ Adding a small comparedFund helper so the match card and the FAQ pick the same
+  US fund, then writing Faq and Footer.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/data/indexes.ts'…)
+  ⎿  Created src/components/Faq.tsx (+56 -0)
+       1 +import { cs } from "@/copy/cs";                                
+       2 +import { comparedFund, indexes, type MarketIndex } from "@/data
+         +/indexes";                                                     
+       3 +import { pct } from "@/lib/format";                            
+       4 +                                                               
+       5 +const copy = cs.faq;                                           
+       6 +const titleId = "faq-title";                                   
+       7 +                                                               
+       8 +// One index's TERs for the fee answer, read from src/data/.   
+       9 +function terPair(index: MarketIndex) {                         
+      10 +  const us = comparedFund(index);                              
+      11 +  return {                                                     
+      12 +    index: index.longLabel,                                    
+      13 +    eu: pct(index.euFund.ter.value),                           
+      14 +    ticker: us.ticker,                                         
+      15 +    us: pct(us.ter.value),                                     
+      16 +  };                                                           
+      17 +}                                                              
+      18 +                                                               
+      19 +// The four doubts that block the form (decision 16). Plain <de
+         +tails>: the                                                    
+      20 +// accordion motion is in globals.css. `data-q` names each one 
+         +for the                                                        
+      21 +// faq_opened event (C9).                                      
+      22 +const items = [                                                
+      23 +  ["banned", copy.items.banned.question, copy.items.banned.answ
+         +er],                                                           
+      24 +  ["stocks", copy.items.stocks.question, copy.items.stocks.answ
+         +er],                                                           
+      25 +  [                                                            
+      26 +    "ter",                                                     
+      27 +    copy.items.ter.question,                                   
+      28 +    copy.items.ter.answer(terPair(indexes.ndx), terPair(indexes
+         +.world)),                                                      
+      29 +  ],                                                           
+      30 +  [                                                            
+      31 +    "isin",                                                    
+      32 +    copy.items.isin.question,                                  
+      33 +    copy.items.isin.answer(indexes.sp500.euFund.isin.value.leng
+         +th),                                                           
+      34 +  ],                                                           
+      35 +] as const;                                                    
+      36 +                                                               
+      37 +export function Faq() {                                        
+      38 +  return (                                                     
+      39 +    <section className="pt-7 pb-2" aria-labelledby={titleId}>  
+      40 +      <h2                                                      
+     … 16 more lines (ctrl+o to expand)
+  ⎿  Created src/components/Footer.tsx (+50 -0)
+       1 +import { cs } from "@/copy/cs";                                
+       2 +import { indexes } from "@/data/indexes";                      
+       3 +import { sources } from "@/data/sources";                      
+       4 +import type { Source } from "@/data/types";                    
+       5 +import { comparedFund } from "@/data/indexes";                 
+       6 +import { SourceGroups } from "./SourceLink";                   
+       7 +                                                               
+       8 +const copy = cs.footer;                                        
+       9 +                                                               
+      10 +const all = Object.values(indexes);                            
+      11 +const unique = (list: Source[]) => [...new Set(list)];         
+      12 +                                                               
+      13 +// Sources for what the first screen and the FAQ say; the match
+         + card lists                                                    
+      14 +// its own (decision 32).                                      
+      15 +const sourceGroups: [string, Source[]][] = [                   
+      16 +  [copy.sourceGroups.kid, [sources.priips, sources.xtbHelp]],  
+      17 +  [                                                            
+      18 +    copy.sourceGroups.exchanges,                               
+      19 +    unique(all.flatMap((i) => i.usFunds.map((f) => f.exchange.s
+         +ource))),                                                      
+      20 +  ],                                                           
+      21 +  [                                                            
+      22 +    copy.sourceGroups.fees,                                    
+      23 +    unique(                                                    
+      24 +      [indexes.ndx, indexes.world].flatMap((i) => [            
+      25 +        i.euFund.ter.source,                                   
+      26 +        comparedFund(i).ter.source,                            
+      27 +      ]),                                                      
+      28 +    ),                                                         
+      29 +  ],                                                           
+      30 +];                                                             
+      31 +                                                               
+      32 +// The page's last block: the disclaimer (decision 17), the sou
+         +rces behind                                                    
+      33 +// an accordion and the data controller (decision 26).         
+      34 +export function Footer() {                                     
+      35 +  return (                                                     
+      36 +    <footer className="pt-4.5 pb-10 text-[12.5px] leading-norma
+         +l text-muted">                                                 
+      37 +      <p className="mb-2.5">                                   
+      38 +        <strong className="text-ink">{copy.disclaimerLead}</str
+         +ong>{" "}                                                      
+      39 +        {copy.disclaimer}                                      
+      40 +      </p>                                                     
+     … 10 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/MatchCard.tsx (+2 -4)
+      1  import type { ReactNode } from "react";
+      2  import { cs } from "@/copy/cs";
+      3  import { brokers } from "@/data/brokers";
+      4 -import type { MarketIndex } from "@/data/indexes";              
+      4 +import { comparedFund, type MarketIndex } from "@/data/indexes";
+      5  import type { Fact, Source } from "@/data/types";
+      6  import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@/
+         lib/format";
+      7  import { CtaLink } from "./CtaLink";
+     ...
+      30    amount: number;
+      31    askId: string;
+      32  }) {
+      33 -  const usFund =                                               
+      34 -    index.usFunds.find((f) => f.ticker === index.compareWith) ?
+         -?                                                              
+      35 -    index.usFunds[0];                                          
+      33 +  const usFund = comparedFund(index);                          
+      34    const sellers = Object.values(brokers).filter(
+      35      (b) => b.available[index.id].value,
+      36    );
+  ⎿  Updated src/data/indexes.ts (+5 -0)
+      278  
+      279  export const indexes: Record<IndexId, MarketIndex> = { sp500, 
+           ndx, world };
+      280  
+      281 +/** The US fund named next to the EU fund's TER (match card, F
+          +AQ). */                                                       
+      282 +export const comparedFund = (index: MarketIndex) =>           
+      283 +  index.usFunds.find((f) => f.ticker === index.compareWith) ??
+      284 +  index.usFunds[0];                                           
+      285 +                                                              
+      286  /** The bad year the e-mail names (decision 4): the S&P 500 pr
+           ice return
+      287   * in the fourth column of the factsheet's calendar-year row. 
+           */
+      288  export const sp500BadYear = {
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/Footer.tsx'…)
+  ⎿  13:function terPair(index: MarketIndex) {
+     32:    copy.items.ter.answer(...(feeExamples.map(terPair) as [Pair, Pa
+     ir])),
+  ⎿  Updated src/components/Faq.tsx (+5 -1)
+       5  const copy = cs.faq;
+       6  const titleId = "faq-title";
+       7  
+       8 +/** The fee answer's two indexes: the EU fund dearer, then chea
+         +per, than                                                      
+       9 + * its US fund (checked in data.test.ts). */                   
+      10 +export const feeExamples = [indexes.ndx, indexes.world] as cons
+         +t;                                                             
+      11 +                                                               
+      12  // One index's TERs for the fee answer, read from src/data/.
+      13  function terPair(index: MarketIndex) {
+      14    const us = comparedFund(index);
+     ...
+      29    [
+      30      "ter",
+      31      copy.items.ter.question,
+      28 -    copy.items.ter.answer(terPair(indexes.ndx), terPair(indexes
+         -.world)),                                                      
+      32 +    copy.items.ter.answer(...(feeExamples.map(terPair) as [Pair
+         +, Pair])),                                                     
+      33    ],
+      34    [
+      35      "isin",
+  ⎿  Updated src/components/Footer.tsx (+3 -3)
+      1  import { cs } from "@/copy/cs";
+      2 -import { indexes } from "@/data/indexes";                       
+      2 +import { comparedFund, indexes } from "@/data/indexes";         
+      3  import { sources } from "@/data/sources";
+      4  import type { Source } from "@/data/types";
+      5 -import { comparedFund } from "@/data/indexes";                  
+      5 +import { feeExamples } from "./Faq";                            
+      6  import { SourceGroups } from "./SourceLink";
+      7  
+      8  const copy = cs.footer;
+     ...
+      21    [
+      22      copy.sourceGroups.fees,
+      23      unique(
+      24 -      [indexes.ndx, indexes.world].flatMap((i) => [            
+      24 +      feeExamples.flatMap((i) => [                             
+      25          i.euFund.ter.source,
+      26          comparedFund(i).ter.source,
+      27        ]),
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/Faq.tsx'…)
+  ⎿    });
+
+       // " … " joins two parts of a quote that sit apart in the source.
+     … +44 lines (ctrl+o to expand)
+  ⎿  Updated src/app/globals.css (+7 -1)
+      71    outline-offset: 2px;
+      72  }
+      73  
+      74 -/* Accordions (sources now, FAQ in C8): a "+" that turns to "×"
+         -, and the                                                      
+      74 +/* Accordions (sources and FAQ): a "+" that turns to "×", and t
+         +he                                                             
+      75     content expands where the browser supports ::details-content
+          . */
+      76  summary {
+      77    position: relative;
+     ...
+       91    line-height: 1;
+       92    transition: transform 0.25s var(--ease-out-soft);
+       93  }
+       94 +/* The FAQ cards: the mark sits inside the card's padding. */ 
+       95 +details[data-q] > summary::after {                            
+       96 +  right: var(--spacing-gutter);                               
+       97 +  top: 14px;                                                  
+       98 +  font-size: 22px;                                            
+       99 +}                                                             
+      100  details[open] > summary::after {
+      101    transform: rotate(45deg);
+      102  }
+  ⎿  Updated src/components/Faq.tsx (+1 -1)
+      29    [
+      30      "ter",
+      31      copy.items.ter.question,
+      32 -    copy.items.ter.answer(...(feeExamples.map(terPair) as [Pair
+         -, Pair])),                                                     
+      32 +    copy.items.ter.answer(terPair(feeExamples[0]), terPair(feeE
+         +xamples[1])),                                                  
+      33    ],
+      34    [
+      35      "isin",
+  ⎿  Updated src/components/Home.tsx (+8 -0)
+      1 +import { Faq } from "./Faq";                                    
+      2  import { FirstScreen } from "./FirstScreen";
+      3 +import { Footer } from "./Footer";                              
+      4  import { Header } from "./Header";
+      5  import { Planner } from "./Planner";
+      6  
+     ...
+      20            <FirstScreen tapsId={tapsId} />
+      21          </div>
+      22          <Planner tapsId={tapsId} askId={askId} />
+      23 +        <div className="page-wrap">                            
+      24 +          <Faq />                                              
+      25 +        </div>                                                 
+      26        </main>
+      27 +      <div className="page-wrap">                              
+      28 +        <Footer />                                             
+      29 +      </div>                                                   
+      30      </>
+      31    );
+      32  }
+  ⎿  Updated src/data/data.test.ts (+13 -0)
+      58    it.each(facts)("%s quote is in docs/research/", (_, f) => {
+      59      for (const part of f.quote.split(" … ")) expect(research).t
+          oContain(part);
+      60    });
+      61 +                                                               
+      62 +  // The FAQ's fee answer (decision 16) says the EU Nasdaq-100 
+         +fund costs                                                     
+      63 +  // more than its US fund and the EU World fund less.         
+      64 +  it("keeps the FAQ fee answer true", () => {                  
+      65 +    const ter = (i: indexes.MarketIndex) => [                  
+      66 +      i.euFund.ter.value,                                      
+      67 +      indexes.comparedFund(i).ter.value,                       
+      68 +    ];                                                         
+      69 +    const [ndxEu, ndxUs] = ter(indexes.indexes.ndx);           
+      70 +    const [worldEu, worldUs] = ter(indexes.indexes.world);     
+      71 +    expect(ndxEu).toBeGreaterThan(ndxUs);                      
+      72 +    expect(worldEu).toBeLessThan(worldUs);                     
+      73 +  });                                                          
+      74  });
+
+⏺ Bash(pnpm format >/dev/null && pnpm check 2>&1 | tail -3 && pnpm test 2>&1 |
+      tail -6)
+  ⎿  $ biome format --write
+     ✓ Types generated successfully
+     $ biome check
+     … +6 lines (ctrl+o to expand)
+  ⎿  Updated src/data/indexes.ts (+1 -2)
+      280  
+      281  /** The US fund named next to the EU fund's TER (match card, F
+           AQ). */
+      282  export const comparedFund = (index: MarketIndex) =>
+      283 -  index.usFunds.find((f) => f.ticker === index.compareWith) ??
+      284 -  index.usFunds[0];                                           
+      283 +  index.usFunds.find((f) => f.ticker === index.compareWith) ??
+          + index.usFunds[0];                                            
+      284  
+      285  /** The bad year the e-mail names (decision 4): the S&P 500 pr
+           ice return
+      286   * in the fourth column of the factsheet's calendar-year row. 
+           */
+
+⏺ Checks and tests pass. Now looking at it in the browser at 375 px to check the
+  accordions and the footer.
+
+⏺ Bash((lsof -i :3000 -t >/dev/null && echo running) || (nohup pnpm dev >
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/a
+      6f18bcd-f69d-4684-9…)
+  ⎿  running
+     200
+     chromium not found
+     … +3 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s localhost:3000 | grep -o "Časté otázky\|U
+      indexu[^<]*\|12místný\|Správce údajů[^<]*" | sort | uniq -c;
+      S=/private/tmp/claude-501/-Users-martingnebus-Mar…)
+  ⎿     1 12místný
+        2 Časté otázky
+        1 Správce údajů: provozovatel ETF Match (demo, jméno a kontakt dopl
+     … +67 lines (ctrl+o to expand)
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/a6f18bcd-f69d-4684-95de-94246c8a20af/scratchpad; "/Applications/Google
+      Chrome.app/Con…)
+  ⎿  (375, 3600)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/a6f18bcd-f69d-4684-95de-94246c8a20af/scratchpad; "/Applications/Google
+      Chrome.app/Con…)
+  ⎿  (500, 3400)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The FAQ "+" sits about 7 px above the question text; Archivo draws the glyph
+  above its em-box centre. Nudging it down and checking the open state as well.
+
+⏺ Bash(sed -i '' '/details\[data-q\] > summary::after {/,/}/s/top: 14px;/top:
+      20px;/' src/app/globals.css && grep -n -A4 "data-q\] > summary"
+      src/app/globals.css; S=/p…)
+  ⎿  95:details[data-q] > summary::after {
+     96-  right: var(--spacing-gutter);
+     97-  top: 20px;
+     … +2 lines (ctrl+o to expand)
+  ⎿  Updated src/app/globals.css (+1 -1)
+       94  /* The FAQ cards: the mark sits inside the card's padding. */
+       95  details[data-q] > summary::after {
+       96    right: var(--spacing-gutter);
+       97 -  top: 14px;                                                  
+       97 +  top: 20px;                                                  
+       98    font-size: 22px;
+       99  }
+      100  details[open] > summary::after {
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Aligned. Now checking the open state by setting open on the accordions for one
+  screenshot, then reverting it.
+
+⏺ Bash(cp src/components/Faq.tsx /tmp/faq.bak 2>/dev/null;
+      S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task
+      /a6f18bcd-f69d-4684-95de-94246c8a2…)
+  ⎿  (No output)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The open state looks right. Ticking the boxes and running the final checks.
+
+⏺ Bash(sed -i '' -e 's/^- \[ \] Four FAQ accordions (decision 16)/- [x] Four FAQ
+      accordions (decision 16)/' -e 's/^- \[ \] Footer: disclaimer, sources in
+      an accordion/…)
+  ⎿  ## C8 FAQ, disclaimer, sources
+
+     - [x] Four FAQ accordions (decision 16) that open smoothly.
+     … +19 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+2 -2)
+      50  
+      51  ## C8 FAQ, disclaimer, sources
+      52  
+      53 -- [ ] Four FAQ accordions (decision 16) that open smoothly.    
+      54 -- [ ] Footer: disclaimer, sources in an accordion, data control
+         -ler line.                                                      
+      53 +- [x] Four FAQ accordions (decision 16) that open smoothly.    
+      54 +- [x] Footer: disclaimer, sources in an accordion, data control
+         +ler line.                                                      
+      55  
+      56  ## C9 Measurement
+      57  
+
+⏺ Both C8 boxes are ticked, and pnpm check and pnpm test (197 tests) pass. I
+  checked the page in headless Chrome with the accordions closed and open; the
+  shots are 500 px wide because headless Chrome wouldn't render a true 375 px
+  window.
+
+  What's on the page now
+  - FAQ: four cards under the e-mail form, with the wording from the mockup.
+    They use the same smooth opening as the existing "Zdroje dat" accordion. All
+    numbers come from src/data/: the fees in question 3 (0,30 % vs QQQ 0,18 %;
+    0,20 % vs URTH 0,24 %) and the "12místný" in question 4, which is the length
+    of the stored ISIN.
+  - Footer: the disclaimer, a closed "Zdroje" accordion and the data controller
+    line from decision 26. The accordion has three groups: why US ETFs mostly
+    can't be bought (PRIIPs regulation, XTB help page), the US funds' exchanges
+    (five SEC prospectuses) and the fees quoted in the FAQ.
+
+  Changes beyond the plan
+  - Question 3 wording: it now reads "U indexu Nasdaq-100 … U indexu Svět (MSCI
+    World) je to naopak". The mockup's plain "U MSCI World" didn't work with the
+    World label the data uses.
+  - New test: it checks that the European Nasdaq-100 fund still costs more than
+    QQQ and the World fund less than URTH. If a fee changes so the answer is no
+    longer true, the test fails.
+  - Controller text: it is written once, and both the consent text and the
+    footer use it.
+  - Shared source list: the match card and the footer now render their source
+    lists with the same component.
+  - "+" position: on the FAQ cards it was about 7 px above the question text, so
+    I moved it down.
+  - data-q on each question is ready for the faq_opened event in C9. Nothing is
+    tracked yet.
+
+  Files changed
+  - New: src/components/Faq.tsx, src/components/Footer.tsx
+  - Changed: src/components/Home.tsx, MatchCard.tsx, SourceLink.tsx,
+    src/copy/cs.ts, src/data/sources.ts, indexes.ts, data.test.ts,
+    src/app/globals.css, docs/TODO.md
+  - The CLAUDE.md map needs no update, since no new folders or file types were
+    added.
+
+  Next I'll run /implementation-end.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -2 && pnpm test 2>&1 | grep -E "Tests |Test Files"
+      && pnpm build 2>&1 | tail -15; ls ai-log; git log -3 --format='%B---')
+  ⎿  $ biome check
+     Checked 33 files in 9ms. No fixes applied.
+      Test Files  4 passed (4)
+     … +85 lines (ctrl+o to expand)
+
+⏺ Wrap-up for C8: pnpm check, pnpm test (197 tests) and pnpm build all pass, and
+  the page still builds as static. Both C8 boxes in docs/TODO.md are ticked.
+
+  Export: please run /export ai-log/008-faq-footer.txt so the session log goes
+  into this commit.
+
+  Mistakes from this session (for you to note in ai-log/mistakes.md if you
+  want):
+  - I guessed the position of the FAQ "+" (top: 14px) without checking it. It
+    rendered about 7 px above the question text. The screenshot caught it and I
+    fixed it to 20px.
+  - My first FAQ 3 wording ("U {label} …") would have printed "U Svět (MSCI
+    World)". I caught it before rendering and changed it to "U indexu …".
+  - My first screenshot at 375 px was cut off on the right, because headless
+    Chrome wouldn't render a window that narrow. I used 500 px instead, so the
+    page hasn't been checked at exactly 375 px in a real browser.
+
+  Proposed commit message:
+
+  add C8 FAQ, disclaimer, sources: FAQ cards, footer
+
+  - Faq: four <details> cards under the form (decision 16), smooth open
+    from the shared accordion CSS; data-q names each for faq_opened (C9)
+  - FAQ numbers from src/data/: Nasdaq-100 and World TERs vs QQQ and
+    URTH, the ISIN length; wording "U indexu …" fits the "Svět (MSCI
+    World)" label
+  - Footer: disclaimer (decision 17), "Zdroje" accordion with the KID
+    rule, the US funds' exchanges and the FAQ fees, the data controller
+    line (decision 26)
+  - sources: PRIIPs 1286/2014 and XTB's help page (us-etf-rule.md 1.1,
+    4.1, 5.1)
+  - copy: faq and footer in cs.ts; the controller line written once,
+    shared by the consent text and the footer
+  - comparedFund() and SourceGroups shared by the match card, FAQ and
+    footer
+  - test: the FAQ fee answer stays true (EU Nasdaq-100 fund dearer than
+    QQQ, EU World fund cheaper than URTH)
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage:
+  - docs/TODO.md
+  - src/app/globals.css
+  - src/components/Faq.tsx
+  - src/components/Footer.tsx
+  - src/components/Home.tsx
+  - src/components/MatchCard.tsx
+  - src/components/SourceLink.tsx
+  - src/copy/cs.ts
+  - src/data/data.test.ts
+  - src/data/indexes.ts
+  - src/data/sources.ts
+  - ai-log/008-faq-footer.txt (after you export it)
+
+  Approve the message, or edit it, and I'll commit and push.
+
+✻ Brewed for 3m 51s · done 3:48 PM
+
+※ recap: C8 (FAQ, disclaimer, sources) is built and all checks, tests and the build pass. Next, export the session to ai-log/008-faq-footer.txt and approve the commit message so I can commit and push. (disable recaps in /config)

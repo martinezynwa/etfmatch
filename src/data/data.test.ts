@@ -58,4 +58,17 @@ describe("src/data", () => {
   it.each(facts)("%s quote is in docs/research/", (_, f) => {
     for (const part of f.quote.split(" … ")) expect(research).toContain(part);
   });
+
+  // The FAQ's fee answer (decision 16) says the EU Nasdaq-100 fund costs
+  // more than its US fund and the EU World fund less.
+  it("keeps the FAQ fee answer true", () => {
+    const ter = (i: indexes.MarketIndex) => [
+      i.euFund.ter.value,
+      indexes.comparedFund(i).ter.value,
+    ];
+    const [ndxEu, ndxUs] = ter(indexes.indexes.ndx);
+    const [worldEu, worldUs] = ter(indexes.indexes.world);
+    expect(ndxEu).toBeGreaterThan(ndxUs);
+    expect(worldEu).toBeLessThan(worldUs);
+  });
 });

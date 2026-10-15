@@ -50,8 +50,8 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C8 FAQ, disclaimer, sources
 
-- [ ] Four FAQ accordions (decision 16) that open smoothly.
-- [ ] Footer: disclaimer, sources in an accordion, data controller line.
+- [x] Four FAQ accordions (decision 16) that open smoothly.
+- [x] Footer: disclaimer, sources in an accordion, data controller line.
 
 ## C9 Measurement
 
@@ -63,14 +63,18 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 - [ ] Named data controller and a privacy policy page (decision 26 leaves the name open).
 - [ ] Open Graph tags and image.
-- [ ] Mobile performance and accessibility check on a production build at http://localhost:3000 (`pnpm build && pnpm start`), with fixes.
-- [ ] Ad links in `ads/` keep the http://localhost:3000 placeholder (decision 36); re-export the PNGs if the ads change.
+- [ ] Mobile performance and accessibility check on a production build at [http://localhost:3000](http://localhost:3000) (`pnpm build && pnpm start`), with fixes.
+- [ ] Ad links in `ads/` keep the [http://localhost:3000](http://localhost:3000) placeholder (decision 36); re-export the PNGs if the ads change.
 
 ## C11 Deploy
 
 - [ ] Import the GitHub repo in Vercel and deploy.
-- [ ] Replace the http://localhost:3000 placeholder with the live URL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags.
+- [ ] Replace the [http://localhost:3000](http://localhost:3000) placeholder with the live URL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags.
 
 ## C12 README
 
 - [ ] Why the sections are in this order, expected conversion, three A/B hypotheses, how the AI was used, where the task was open, demo limits and what is unfinished.
+
+
+
+&nbsp;
