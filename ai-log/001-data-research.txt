@@ -1,0 +1,2882 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C1                                                      
+
+  Read 1 file, listed 1 directory (ctrl+o to expand)
+
+⏺ Here's my plan: I'll find relevant skills (landing pages, lead magnets, copy,
+  analytics) and propose a shortlist for your approval, then scope the data to
+  collect via a quick implementation-plan, have sub-agents gather sourced data
+  from primary sources, and compile it into docs/research.md with a "not
+  verified" list. Starting now by searching for skills.
+
+⏺ Skill(find-skills)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && for q in "landing
+      page" "lead mag…)
+  ⎿  === landing page
+
+     Install with npx skills add <owner/repo@skill>
+     … +165 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 5m)
+
+⏺ Before shortlisting, I'll check repo reputation, because some install counts
+  look inflated.
+
+⏺ Bash(for r in anthropics/skills coreyhaines31/marketingskills
+      pbakaus/impeccable leonxlnx/taste-skill autonnel/autonnel-skills
+      addyosmani/web-quality-skills; do echo…)
+  ⎿  anthropics/skills: 181237 stars, pushed 2026-10-09T18:45:52Z, owner ty
+     pe Organization
+     coreyhaines31/marketingskills: 54799 stars, pushed 2026-10-14T21:21:00
+     … +9 lines (ctrl+o to expand)
+
+⏺ I'm excluding autonnel/autonnel-skills since its ~90K installs with only 5
+  GitHub stars seems implausible. Next, I'll dig into the full contents of the
+  marketingskills and web-quality repos.
+
+⏺ Bash(gh api repos/coreyhaines31/marketingskills/contents/skills --jq
+      '.[].name' | tr '\n' ' '; echo; gh api
+      repos/addyosmani/web-quality-skills/contents/skills --jq…)
+  ⎿  ab-testing ad-creative ads ai-seo analytics aso attribution churn-prev
+     ention co-marketing cold-email community-marketing competitor-profilin
+     g competitors content-strategy copy-editing copywriting cro customer-r
+     … +15 lines (ctrl+o to expand)
+
+⏺ User answered Claude's questions:
+  ⎿  · Which skill groups should I install into the project's .claude/skills/? 
+     (All are from reputable repos: anthropics/skills 181K stars, 
+     coreyhaines31/marketingskills 55K, addyosmani/web-quality-skills 2.9K.) → 
+     Funnel & copy (Recommended), Measurement (Recommended), Design 
+     (Recommended), Web quality
+
+⏺ Bash(npx -y skills add --help 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | head -40)
+  ⎿  Usage: skills <command> [options]
+
+     Manage Skills:
+     … +36 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(git ls-files .agents .claude | head;
+      npx -y skills add coreyhaines31/marketingskills -s lead-magnets
+      copywriting cro ad-creative analytics ab-testing -a claude…)
+  ⎿  .agents/skills/grilling/SKILL.md
+     .claude/skills/grilling
+     .claude/skills/implementation-end/SKILL.md
+     … +34 lines (ctrl+o to expand)
+  ⎿  Created .claude/skills/ab-testing/SKILL.md (+356 -0)
+        1 +---                                                           
+        2 +name: ab-testing                                              
+        3 +description: When the user wants to plan, design, or implement
+          + an A/B test or experiment, or build a growth experimentation 
+          +program. Also use when the user mentions "A/B test," "split te
+          +st," "experiment," "test this change," "variant copy," "multiv
+          +ariate test," "hypothesis," "should I test this," "which versi
+          +on is better," "test two versions," "statistical significance,
+          +" "how long should I run this test," "growth experiments," "ex
+          +periment velocity," "experiment backlog," "ICE score," "experi
+          +mentation program," or "experiment playbook." Use this wheneve
+          +r someone is comparing two approaches and wants to measure whi
+          +ch performs better, or when they want to build a systematic ex
+          +perimentation practice. For tracking implementation, see analy
+          +tics. For page-level conversion optimization, see cro.        
+        4 +metadata:                                                     
+        5 +  version: 2.0.2                                              
+        6 +---                                                           
+        7 +                                                              
+        8 +# A/B Test Setup                                              
+        9 +                                                              
+       10 +You are an expert in experimentation and A/B testing. Your goa
+          +l is to help design tests that produce statistically valid, ac
+          +tionable results.                                             
+       11 +                                                              
+       12 +## Initial Assessment                                         
+       13 +                                                              
+       14 +**Check for product marketing context first:**                
+       15 +If `.agents/product-marketing.md` exists (or `.claude/product-
+          +marketing.md`, or the legacy `product-marketing-context.md` fi
+          +lename, in older setups), read it before asking questions. Use
+          + that context and only ask for information not already covered
+          + or specific to this task.                                    
+       16 +                                                              
+       17 +Before designing a test, understand:                          
+       18 +                                                              
+       19 +1. **Test Context** - What are you trying to improve? What cha
+          +nge are you considering?                                      
+       20 +2. **Current State** - Baseline conversion rate? Current traff
+          +ic volume?                                                    
+       21 +3. **Constraints** - Technical complexity? Timeline? Tools ava
+          +ilable?                                                       
+       22 +                                                              
+       23 +---                                                           
+       24 +                                                              
+       25 +## Core Principles                                            
+       26 +                                                              
+       27 +### 1. Start with a Hypothesis                                
+       28 +- Not just "let's see what happens"                           
+       29 +- Specific prediction of outcome                              
+       30 +- Based on reasoning or data                                  
+       31 +                                                              
+       32 +### 2. Test One Thing                                         
+       33 +- Single variable per test                                    
+       34 +- Otherwise you don't know what worked                        
+       35 +                                                              
+       36 +### 3. Statistical Rigor                                      
+       37 +- Pre-determine sample size                                   
+       38 +- Don't peek and stop early                                   
+       39 +- Commit to the methodology                                   
+       40 +                                                              
+     … 316 more lines (ctrl+o to expand)
+  ⎿  Created .claude/skills/ab-testing/evals/evals.json (+116 -0)
+        1 +{                                                             
+        2 +  "skill_name": "ab-testing",                                 
+        3 +  "evals": [                                                  
+        4 +    {                                                         
+        5 +      "id": 1,                                                
+        6 +      "prompt": "I want to A/B test our homepage headline. We 
+          +currently say 'The All-in-One Project Management Tool' and wan
+          +t to test something benefit-focused. We get about 15,000 visit
+          +ors/month and our current signup rate is 3.2%.",              
+        7 +      "expected_output": "Should check for product-marketing.m
+          +d first. Should build a proper hypothesis using the framework:
+          + 'Because [observation], we believe [change] will cause [outco
+          +me], which we'll measure by [metric].' Should identify this as
+          + an A/B test (two variants). Should calculate or reference sam
+          +ple size needs based on 15,000 monthly visitors and 3.2% basel
+          +ine. Should define primary metric (signup rate), secondary met
+          +rics, and guardrail metrics. Should warn about the peeking pro
+          +blem and recommend a fixed test duration. Should provide the t
+          +est plan in the structured output format.",                   
+        8 +      "assertions": [                                         
+        9 +        "Checks for product-marketing.md",                    
+       10 +        "Uses the hypothesis framework with observation, belie
+          +f, outcome, and metric",                                      
+       11 +        "Identifies as A/B test type",                        
+       12 +        "Addresses sample size calculation based on traffic an
+          +d baseline rate",                                             
+       13 +        "Defines primary metric (signup rate)",               
+       14 +        "Defines secondary and guardrail metrics",            
+       15 +        "Warns about the peeking problem",                    
+       16 +        "Provides structured test plan output"                
+       17 +      ],                                                      
+       18 +      "files": []                                             
+       19 +    },                                                        
+       20 +    {                                                         
+       21 +      "id": 2,                                                
+       22 +      "prompt": "we want to test like 4 different CTA button c
+          +olors on our pricing page. is that a good idea?",             
+       23 +      "expected_output": "Should trigger on casual phrasing. S
+          +hould identify this as an A/B/n test (multiple variants). Shou
+          +ld caution that testing 4 variants requires significantly more
+          + traffic than a simple A/B test. Should reference the sample s
+          +ize quick reference showing traffic multipliers for multiple v
+          +ariants. Should question whether button color alone is likely 
+          +to produce meaningful lift vs testing CTA copy, placement, or 
+          +surrounding context. Should recommend either reducing to 2 var
+          +iants or ensuring sufficient traffic. Should still provide hyp
+          +othesis framework and test setup if proceeding.",             
+       24 +      "assertions": [                                         
+       25 +        "Triggers on casual phrasing",                        
+       26 +        "Identifies as A/B/n test (multiple variants)",       
+       27 +        "Cautions about increased traffic needs for 4 variants
+          +",                                                            
+       28 +        "References sample size requirements",                
+       29 +        "Questions whether button color alone is high-impact",
+       30 +        "Suggests alternative higher-impact elements to test",
+       31 +        "Provides hypothesis framework"                       
+       32 +      ],                                                      
+       33 +      "files": []                                             
+       34 +    },                                                        
+       35 +    {                                                         
+       36 +      "id": 3,                                                
+       37 +      "prompt": "Our test has been running for 3 days and Vari
+          +ant B is winning with 95% confidence. Should we call it?",    
+       38 +      "expected_output": "Should immediately address the peeki
+          +ng problem. Should explain that checking results early inflate
+          +s false positive rates. Should recommend running for the full 
+          +pre-calculated duration regardless of early results. Should ex
+          +plain why early significance can be misleading (regression to 
+          +the mean, day-of-week effects, audience mix shifts). Should pr
+          +ovide guidance on when it IS appropriate to stop early (sequen
+          +tial testing methods). Should recommend the pre-test commitmen
+          +t to duration.",                                              
+       39 +      "assertions": [                                         
+       40 +        "Addresses the peeking problem directly",             
+     … 76 more lines (ctrl+o to expand)
+  ⎿  Created .claude/skills/ab-testing/references/sample-size-guide.md
+     (+276 -0)
+        1 +# Sample Size Guide                                           
+        2 +                                                              
+        3 +Reference for calculating sample sizes and test duration.     
+        4 +                                                              
+        5 +## Contents                                                   
+        6 +- Sample Size Fundamentals (required inputs, what these mean) 
+        7 +- Sample Size Quick Reference Tables                          
+        8 +- Duration Calculator (formula, examples, minimum duration rul
+          +es, maximum duration guidelines)                              
+        9 +- Online Calculators                                          
+       10 +- Adjusting for Multiple Variants                             
+       11 +- Common Sample Size Mistakes                                 
+       12 +- When Sample Size Requirements Are Too High                  
+       13 +- Sequential Testing                                          
+       14 +- Quick Decision Framework                                    
+       15 +                                                              
+       16 +## Sample Size Fundamentals                                   
+       17 +                                                              
+       18 +### Required Inputs                                           
+       19 +                                                              
+       20 +1. **Baseline conversion rate**: Your current rate            
+       21 +2. **Minimum detectable effect (MDE)**: Smallest change worth 
+          +detecting                                                     
+       22 +3. **Statistical significance level**: Usually α = 0.05 (5%)  
+       23 +4. **Statistical power**: Usually 80% (β = 0.20)              
+       24 +                                                              
+       25 +### What These Mean                                           
+       26 +                                                              
+       27 +**Baseline conversion rate**: If your page converts at 5%, tha
+          +t's your baseline.                                            
+       28 +                                                              
+       29 +**MDE (Minimum Detectable Effect)**: The smallest improvement 
+          +you care about detecting. Set this based on:                  
+       30 +- Business impact (is a 5% lift meaningful?)                  
+       31 +- Implementation cost (worth the effort?)                     
+       32 +- Realistic expectations (what have past tests shown?)        
+       33 +                                                              
+       34 +**Significance level (α = 0.05)**: For the planned test and it
+          +s assumptions, limits the long-run probability of rejecting a 
+          +true null hypothesis to 5%. It is not the probability that an 
+          +observed difference is “due to chance.” Repeated unadjusted lo
+          +oks or multiple comparisons do not retain that error rate. See
+          + the [ASA's interpretation guidance](https://www.amstat.org/as
+          +a/files/pdfs/p-valuestatement.pdf).                           
+       35 +                                                              
+       36 +**Statistical power (80%)**: Means if there's a real effect of
+          + size MDE, you have 80% chance of detecting it.               
+       37 +                                                              
+       38 +---                                                           
+       39 +                                                              
+       40 +## Sample Size Quick Reference Tables                         
+     … 236 more lines (ctrl+o to expand)
+  ⎿  Created .claude/skills/ab-testing/references/test-templates.md (+277 
+     -0)
+        1 +# A/B Test Templates Reference                                
+        2 +                                                              
+        3 +Templates for planning, documenting, and analyzing experiments
+          +.                                                             
+        4 +                                                              
+        5 +## Contents                                                   
+        6 +- Test Plan Template                                          
+        7 +- Results Documentation Template                              
+        8 +- Test Repository Entry Template                              
+        9 +- Quick Test Brief Template                                   
+       10 +- Stakeholder Update Template                                 
+       11 +- Experiment Prioritization Scorecard                         
+       12 +- Hypothesis Bank Template                                    
+       13 +                                                              
+       14 +## Test Plan Template                                         
+       15 +                                                              
+       16 +```markdown                                                   
+       17 +# A/B Test: [Name]                                            
+       18 +                                                              
+       19 +## Overview                                                   
+       20 +- **Owner**: [Name]                                           
+       21 +- **Test ID**: [ID in testing tool]                           
+       22 +- **Page/Feature**: [What's being tested]                     
+       23 +- **Planned dates**: [Start] - [End]                          
+       24 +                                                              
+       25 +## Hypothesis                                                 
+       26 +                                                              
+       27 +Because [observation/data],                                   
+       28 +we believe [change]                                           
+       29 +will cause [expected outcome]                                 
+       30 +for [audience].                                               
+       31 +We'll know this is true when [metrics].                       
+       32 +                                                              
+       33 +## Test Design                                                
+       34 +                                                              
+       35 +| Element | Details |                                         
+       36 +|---------|---------|                                         
+       37 +| Test type | A/B / A/B/n / MVT |                             
+       38 +| Duration | X weeks |                                        
+       39 +| Sample size | X per variant |                               
+       40 +| Traffic allocation | 50/50 |                                
+     … 237 more lines (ctrl+o to expand)
+  ⎿  Created .claude/skills/accessibility/references/A11Y-PATTERNS.md (+233
+     -0)
+        1 +# Accessibility Code Patterns                                 
+        2 +                                                              
+        3 +Practical, copy-paste-ready patterns for common accessibility 
+          +requirements. Each pattern is self-contained and linked from t
+          +he main [SKILL.md](../SKILL.md).                              
+        4 +                                                              
+        5 +---                                                           
+        6 +                                                              
+        7 +## Modal focus trap                                           
+        8 +                                                              
+        9 +Trap keyboard focus inside a modal dialog so Tab/Shift+Tab cyc
+          +le through its focusable elements and Escape closes it.       
+       10 +                                                              
+       11 +```javascript                                                 
+       12 +function openModal(modal) {                                   
+       13 +  const focusableElements = modal.querySelectorAll(           
+       14 +    'button, [href], input, select, textarea, [tabindex]:not([
+          +tabindex="-1"])'                                              
+       15 +  );                                                          
+       16 +  const firstElement = focusableElements[0];                  
+       17 +  const lastElement = focusableElements[focusableElements.leng
+          +th - 1];                                                      
+       18 +                                                              
+       19 +  modal.addEventListener('keydown', (e) => {                  
+       20 +    if (e.key === 'Tab') {                                    
+       21 +      if (e.shiftKey && document.activeElement === firstElemen
+          +t) {                                                          
+       22 +        e.preventDefault();                                   
+       23 +        lastElement.focus();                                  
+       24 +      } else if (!e.shiftKey && document.activeElement === las
+          +tElement) {                                                   
+       25 +        e.preventDefault();                                   
+       26 +        firstElement.focus();                                 
+       27 +      }                                                       
+       28 +    }                                                         
+       29 +    if (e.key === 'Escape') {                                 
+       30 +      closeModal();                                           
+       31 +    }                                                         
+       32 +  });                                                         
+       33 +                                                              
+       34 +  firstElement.focus();                                       
+       35 +}                                                             
+       36 +```                                                           
+       37 +                                                              
+       38 +The native `<dialog>` element handles focus trapping automatic
+          +ally—prefer it when browser support allows.                   
+       39 +                                                              
+       40 +---                                                           
+     … 193 more lines (ctrl+o to expand)
+  ⎿  … 47 more files changed
+  ⎿  (timeout 5m)
+  ⎿  7 skills available
+
+⏺ Bash(ls -la .claude/skills && git status --short && jq '.skills|keys'
+      skills-lock.json && grep -rlE 'curl|fetch\(|https?://'
+      .claude/skills/{lead-magnets,copywriting…)
+  ⎿  total 0
+     drwxr-xr-x@ 16 martingnebus  staff  512 Oct 15 09:49 .
+     drwxr-xr-x@  3 martingnebus  staff   96 Oct 15 08:52 ..
+     … +58 lines (ctrl+o to expand)
+  ⎿  3 skills available
+
+⏺ Ten skills installed as copies, with no executable scripts. A quick scan for
+  anything risky inside them:
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/.claude/skills &&
+      grep -rniE 'ignore (all|previous)|curl .*\| *(ba)?sh|api[_-]?key|send .*
+      to http|webhook|n…)
+  ⎿  accessibility/SKILL.md:413:npx lighthouse https://example.com --only-c
+     ategories=accessibility
+     accessibility/SKILL.md:416:npm install @axe-core/cli -g
+     … +24 lines (ctrl+o to expand)
+
+⏺ Nothing risky: the matches are normal tool examples, and one is an eval that
+  tests resistance to prompt injection. I'll tick box 1.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task && sed -i '' 's/^- \[
+      \] Run `find-skills`/- [x] Run `find-skills`/' docs/TODO.md && grep -n
+      'find-skills' d…)
+  ⎿  9:- [x] Run `find-skills` to look for skills that could help here (lan
+     ding pages, lead magnets, conversion, analytics). Install the useful o
+     nes into the project's `.claude/skills/` so they are in the repo.
+  ⎿  Updated docs/TODO.md (+1 -1)
+       6  
+       7  ## C1 Research
+       8  
+       9 -- [ ] Run `find-skills` to look for skills that could help here
+         - (landing pages, lead magnets, conversion, analytics). Install 
+         -the useful ones into the project's `.claude/skills/` so they ar
+         -e in the repo.                                                 
+       9 +- [x] Run `find-skills` to look for skills that could help here
+         + (landing pages, lead magnets, conversion, analytics). Install 
+         +the useful ones into the project's `.claude/skills/` so they ar
+         +e in the repo.                                                 
+      10  - [ ] Agree in a short `/implementation-plan` what data to coll
+          ect (e.g. fund pairs, historical returns, holdings, brokers, ta
+          xes), then collect as much of it as possible from primary sourc
+          es, so later steps can pick from it. Write down what could not 
+          be verified. Everything goes to `docs/research.md`, each number
+           with its source URL, date and quote.
+      11  
+      12  ## C2 Decisions
+
+⏺ Skill(implementation-plan)
+  ⎿  Successfully loaded skill
+
+⏺ Box 1 is done: 10 skills are copied into .claude/skills/ and recorded in
+  skills-lock.json.
+
+  Scope of this planning session: decide what goes into docs/research.md: which
+  data categories, how wide (how many fund pairs and brokers), how deep (which
+  return periods, how many holdings), and what counts as a primary source. There
+  are no decisions.md, research.md or glossary.md files yet. This builds only
+  on docs/brief.md:
+  - US→EU pairs as the angle
+  - a "which index" choice and a "reinvest or pay out" choice
+  - top holdings as bars
+  - where to buy
+  - fees as one row
+  - historical returns as an anchor
+  - for the e-mail: Czech taxes in brief and S&P 500 vs World
+
+  The target group and the page content are C2 decisions, not this session's.
+  Here we only make sure C2 has enough real data to choose from.
+
+  Is that the right scope?
+
+✻ Crunched for 1m 33s · done 9:49 AM
+
+❯ I would probably keep the reinvest or pay out out of main elements, but kept  
+  it for later on, the email should provide the full possible summary user can  
+  get, website serves as a hook, email serves as full experience, are we on the 
+  same track? If so, let's continue.                                            
+
+⏺ Skill(grilling)
+  ⎿  Successfully loaded skill
+⏺ Yes, we agree. The page is the hook: pairs, what's inside, where to buy. The
+  e-mail is the full experience. Accumulating vs distributing moves out of the
+  main page elements, but research still records both share classes so the
+  e-mail can use them. One question at a time from here.
+
+  ---
+
+  ❓ Q1 - Which US funds and indices to pair
+
+  This sets the width of everything else: holdings, returns and broker
+  availability are all collected per pair. Options:
+
+  - A) Narrow: S&P 500 only (VOO / SPY / IVV → EU equivalents). It's the deepest
+    data but gives C2 nothing to choose from.
+  - B) Core four: S&P 500 (VOO, SPY, IVV), Nasdaq-100 (QQQ), total world (VT)
+    and MSCI World (URTH). These are the names a Czech beginner is most likely
+    to have heard, plus the "World" option the e-mail explains.
+  - C) Core four + dividends: B plus a popular US dividend fund (SCHD or VYM).
+    Dividend ETFs are popular in Czech investing communities, but a matching EU
+    fund on the same index may not exist. The research would check that and say
+    "no exact match" if so.
+
+  All tickers and index names above are candidates to verify, not facts yet.
+
+  ➡️ C. It costs one more pair to research, and C2 gets a real choice. Even a
+  "no exact EU match" finding is useful content: it's honest, and it's a natural
+  reason to get the full answer by e-mail.
+
+✻ Sautéed for 13s · done 9:52 AM
+
+❯ Maybe we should not aim to provide the same exact index at all times, but to  
+  suggest viable alternative. Core four + brief mention if dividends sounds     
+  fine, if you confirm the fact that dividends are popular.                     
+
+⏺ Agent(Verify Czech dividend ETF popularity)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+⏺ Settled: the core four, with dividends as a short mention only if their
+  popularity checks out. A sub-agent is now looking for Czech evidence (broker
+  rankings, Czech finance media), each claim with a source. I'll report what it
+  finds. Your "viable alternative" point opens the next question.
+
+  ---
+
+  ❓ Q2 - What counts as a "viable alternative"
+
+  If the EU fund doesn't need to track exactly the same index, research needs a
+  rule for what qualifies. Otherwise it can't say which matches are good and
+  which are weak. Options:
+
+  - A) Same index first, otherwise the closest exposure. Use a UCITS fund on the
+    same index when one exists (e.g. S&P 500 → an S&P 500 UCITS ETF). When none
+    does, take the closest fund by region and strategy, labelled "alternative,
+    not identical" with a one-line reason (e.g. VT's index → FTSE All-World
+    UCITS).
+  - B) Best fund for a beginner, whatever the index. For each US fund, pick the
+    EU fund you'd recommend. Simpler, but it reads like advice, and the "this is
+    your VOO in the EU" match gets weaker.
+  - C) Two picks per US fund: the same-index match plus a "popular alternative".
+    Gives C2 more to choose from but doubles the research.
+
+  For each EU candidate, research would collect: index, TER, size (AUM),
+  domicile, share class (acc/dist, for the e-mail), ISIN and the exchange or
+  currency the Czech brokers list it on.
+
+  ➡️ A. Keeping the "same index" label honest makes the page credible (each pair
+  says "identical" or "close alternative"), and it stays clear of advice.
+  Choosing between near-equal EU funds (e.g. iShares vs Vanguard vs Xtrackers on
+  the S&P 500) is a C2 decision. Research records 2–3 candidates per pair with
+  their numbers so C2 can pick.
+
+✻ Worked for 19s · done 9:54 AM
+
+❯ A                                                                             
+
+⏺ Settled: same index first, otherwise the closest exposure, labelled. 2–3 EU
+  candidates per pair.
+
+  ---
+
+  ❓ Q3 - Historical returns: which figures and in which currency
+
+  The brief lists returns as a "familiar anchor". The risks it names: returns
+  are not interest (úrok), and every figure needs a source and a date. Choices
+  to make:
+
+  - Whose returns: the index (index provider factsheet: S&P, MSCI, FTSE, Nasdaq)
+    or the EU fund (issuer factsheet). EU funds are often younger than 10
+    years, so their own history can be short.
+  - Periods: annualised 1 / 5 / 10 years, and/or calendar-year returns (which
+    show the bad years too, e.g. a negative year).
+  - Currency: USD (how factsheets usually publish), EUR (some UCITS share
+    classes), or CZK. CZK returns are rarely published by a primary source.
+    Computing them ourselves would mean adding exchange-rate data and our own
+    maths.
+
+  ➡️ Collect both index and fund returns, as published, in the currency the
+  source uses. That means annualised 1/5/10 years plus the last 10 calendar
+  years where the factsheet shows them. Each figure keeps its "as of" date. CZK
+  goes on the "not verified" list unless a primary source publishes it. The
+  calendar years give C2 an honest "it can also fall" figure, which supports the
+  disclaimer.
+
+✻ Churned for 8s · done 9:54 AM
+
+› Message from general-purpose
+  **Verdict: not verified.** I found no broker ranking, survey or report showing
+  dividend ETFs (SCHD, VYM, VHYL, the Dividend Aristocrats funds and similar)
+  among the most popular ETFs with Czech retail investors. Every Czech broker
+  ranking I found is led by broad index ETFs: S&P 500, FTSE All-World / MSCI
+  World and Nasdaq-100. Czech interest in dividends does show up, but for
+  individual high-dividend US stocks, not dividend ETFs.
+
+  **Evidence: top ETFs at Czech brokers (none are dividend ETFs)**
+
+  1. Ekonom.cz, 22. 1. 2025.
+  https://ekonom.cz/c1-67571290-do-etf-fondu-priteklo-loni-rekordni-mnozstvi-pen
+  ez-vime-ktere-jsou-nejpopularnejsi-a-na-kterych-cesi-nejvice-vydelali
+     - "Například u brokerů Patria, Fio, Cyrrus nebo investiční platformy Portu
+  byl na prvním místě ETF fond, který kopíruje…" / "Konkrétně šlo o iShares Core
+  S&P 500 USD." (At Patria, Fio, Cyrrus and Portu, first place was iShares Core
+  S&P 500 USD.)
+     - "Naopak u brokera XTB Češi nejvíce investovali do ETF fondu Vanguard FTSE
+  All-World UCITS ETF" (At XTB, Czechs invested most in Vanguard FTSE
+  All-World.)
+     - None of the 8 ETFs named in the article is a dividend ETF. The article
+  also says experts prefer accumulating ETFs: "je také lepší volit tzv.
+  akumulační ETF fondy před distribučními" (it is better to choose accumulating
+  ETFs over distributing ones).
+  2. Investujeme.cz (Revolut data), 30. 1. 2026.
+  https://www.investujeme.cz/clanky/nahlednuti-do-sveta-ceskych-investoru-co-v-r
+  oce-2025-nakupovali-prodavali-a-ceho-se-obavali/
+     - "Nejoblíbenějšími investičními plány byly ETF Vanguard S&P 500, které
+  představovaly 27 % všech ETF obchodů v roce 2025, následované fondem Vanguard
+  FTSE All-World ETF se 6 % všech obchodů." (The S&P 500 ETF made up 27% of all
+  ETF trades in 2025; FTSE All-World was second with 6%.)
+  3. CC.cz (XTB), 7. 8. 2024. https://cc.cz/do-ceho-nejvic-investuji-cesi-akciim
+  -vevodi-cez-apple-a-tesla-mezi-indexy-vede-sp-500-rika-xtb/
+     - "Nejčastější volbou investorů jsou populární ETF na index S&P 500
+  (iShares Core S&P 500 v eurech či dolarech), následované ETF na technologický
+  index NASDAQ (iShares NASDAQ 100), třetí volbou jsou pak ETF pokrývající
+  globální akciové trhy (Vanguard FTSE All-World, iShares Core MSCI World)."
+  (First choice is S&P 500, then Nasdaq-100, then global ETFs.)
+  4. CNN Prima (XTB), 22. 1. 2024. https://cnn.iprima.cz/stale-vice-cechu-realiz
+  uje-sve-plany-pomoci-pasivniho-investovani-423166
+     - "Vloni si investoři v Česku vybírali především indexové ETF (založené na
+  indexech S&P 500, MSCI World a NASDAQ 100)" (Last year Czech investors chose
+  mainly index ETFs on the S&P 500, MSCI World and Nasdaq-100.) ESG ETFs were
+  next. Dividend ETFs are not mentioned.
+  5. Seznam Zprávy, 20. 10. 2023.
+  https://www.seznamzpravy.cz/clanek/ekonomika-finance-akcie-fondy-do-jakych-akc
+  ii-investuji-cesi-veri-cez-ale-slysi-i-na-dividendy-z-ameriky-238659
+     - "U Patria Finance vedou investice skrze ETF do klíčových amerických
+  akciových indexů S&P 500 a Nasdaq." (At Patria, S&P 500 and Nasdaq ETFs lead.)
+     - Dividend interest, but in stocks (Fio, about AT&T and Verizon):
+  "preference českých investorů v podobě zájmu o tituly s vysokým dividendovým
+  výnosem" (Czech investors' preference for high-dividend-yield stocks).
+
+  **Weaker signal: editorial content only**
+
+  6. Finex.cz, "4 nejlepší investice pro pasivní příjem" (4 best investments for
+  passive income), updated 28. 9. 2026.
+  https://finex.cz/nejlepsi-dividendova-etf/
+     - The article recommends VHYL, SPDR S&P US Dividend Aristocrats (UDVD) and
+  Amundi MSCI Europe High Dividend (EHF1). It gives no popularity data.
+     - This shows Czech media write about dividend ETFs. It does not show that
+  investors hold them.
+
+  **Not checked or not found:** I found no Czech dividend-ETF data from Trading
+  212, Degiro, Anycoin, IBKR, AKAT or the Czech National Bank. I did not read
+  the forums.
+
+⏺ The dividend check is back, so I'll report it before you answer Q3.
+
+  Dividend ETFs: not verified as popular with Czech investors. None of the five
+  Czech broker reports the sub-agent found (2023–2026) lists a dividend ETF
+  among the top picks. Czech interest in dividends shows up in individual US
+  stocks such as AT&T and Verizon (Seznam Zprávy, citing Fio), not in dividend
+  ETFs. Only editorial articles push dividend ETFs (e.g. Finex.cz), and those
+  give no data on what people actually hold.
+
+  The same sources back the core four:
+  - The top ETF at Patria, Fio, Cyrrus and Portu is the S&P 500 (Ekonom, 22
+    Jan 2025).
+  - Revolut CZ: the S&P 500 made up 27% of ETF trades in 2025 and FTSE All-World
+    6% (Investujeme, 30 Jan 2026).
+  - XTB ranks them: S&P 500, then Nasdaq-100, then global funds (CC.cz, 7
+    Aug 2024).
+
+  Ekonom also quotes experts who prefer accumulating over distributing funds,
+  which supports moving that topic to the e-mail.
+
+  ➡️ Proposal: drop dividends from the research scope. At most one sentence in
+  the e-mail ("why we don't recommend chasing dividend ETFs"), sourced later if
+  C2 wants it. These five broker reports go into research.md as the "why these
+  funds" evidence, each with its URL, date and quote. I'll re-open each URL
+  myself before writing it in, so nothing goes in on the sub-agent's word alone.
+
+  Q3 (index + fund returns, as published, annualised 1/5/10 years + 10 calendar
+  years, CZK on the "not verified" list) is still open. Yes to both?
+
+✻ Crunched for 9s · done 9:56 AM
+
+⏺ Agent "Verify Czech dividend ETF popularity" finished · 2m 26s
+
+❯ I agree, do not show the CZK, keep it for USD, and collect both index and     
+  funds. If the history does not exist long enough, we should discuss this or   
+  just allow showing shorter year span, to be agreed once data collected. And   
+  drop the dividend ETFs, it seems like a different topic.                      
+
+⏺ Settled: returns in USD, index plus fund, as published. If a fund's history is
+  short, we decide once the data is in. Dividend ETFs are dropped entirely.
+
+  ---
+
+  ❓ Q4 - Holdings: how deep
+
+  The match screen shows "top holdings as bars", and the big company names are
+  the familiar anchor. The e-mail explains S&P 500 vs World, and that needs more
+  than the top names. Options for each index:
+
+  - A) Top 10 holdings with their weights.
+  - B) Top 10 + structure: number of companies in the index, the share of the
+    top 10 in total, and country split (most useful for World and All-World,
+    e.g. "the US is about X% of the World") and sector split.
+  - C) Full holdings list from the issuer's download. Complete, but heavy, and
+    it changes daily.
+
+  There is also the source: the index factsheet (S&P, MSCI, FTSE, Nasdaq,
+  updated monthly) or the EU fund's holdings file (updated daily, differs
+  slightly).
+
+  ➡️ B, from the index factsheets, each with its "as of" date. The funds on one
+  index hold the same companies, so index data serves every candidate fund at
+  once. The top-10 share and the US share of World are the facts behind the "S&P
+  500 vs World" explanation in the e-mail. The fund holdings file is only a
+  fallback when an index factsheet doesn't publish something.
+
+✻ Churned for 4m 1s · done 9:58 AM
+
+❯ can you give me an example how A or B would look like? Maybe I am thinking    
+  about TOP5 in the overview, so it does not feel crowded.                      
+
+⏺ Here are two sketches at 375 px width. The values are placeholders on purpose,
+  because no numbers are sourced yet.
+
+  A) Top holdings only (shown as top 5)
+  S&P 500 · top 5 firem
+  Apple       ████████████  X,X %
+  Microsoft   ███████████   X,X %
+  Nvidia      ██████████    X,X %
+  Amazon      ██████        X,X %
+  Meta        ████          X,X %
+  Zdroj: S&P DJI, k 30. 9. 2026
+  The company names here are illustrative; the real order comes from the
+  factsheet.
+
+  B) Top 5 + structure (one extra line, plus a detail behind a tap)
+  S&P 500 · top 5 firem
+  Apple       ████████████  X,X %
+  …(5 rows)
+  Top 10 = XX % fondu · 503 firem · 100 % USA
+                    [ Víc o složení ▾ ]
+     → sektory: Technologie XX %, Finance XX %, …
+  Zdroj: S&P DJI, k 30. 9. 2026
+  For a World fund, the structure line is the one that teaches something: "USA
+  XX % · 1 400+ firem · 23 zemí". That's the "S&P 500 vs World" point in one
+  line.
+
+  Top 5 fits your "not crowded" overview, but how many rows the page shows is a
+  C2/C3 display decision. For research, the question is only what to collect.
+
+  ➡️ Collect B with the top 10 (weights, top-10 share, number of companies,
+  country and sector split) from the index factsheets. Then C2/C3 can show top 5
+  on the page, put the rest in the e-mail, or use a tap-to-expand, without
+  another research round. Collecting 10 costs almost nothing extra: factsheets
+  list 10.
+
+✻ Worked for 8s · done 9:58 AM
+
+❯ OK agreed on the B                                                            
+
+⏺ Settled: B, top 10 plus structure, from the index factsheets.
+
+  ---
+
+  ❓ Q5 - Brokers: which ones, and what to record
+
+  "Where to buy" appears on the page, and the e-mail gives "fees for their
+  amount" and "steps to the first purchase". Both need broker data.
+
+  Which brokers: the evidence so far names Patria, Fio, Cyrrus, Portu, XTB and
+  Revolut as places Czechs buy ETFs. Trading 212, Degiro and Interactive Brokers
+  are also common choices, but I have no source yet that says so.
+
+  What to record per broker:
+  - accepts Czech residents, Czech-language app and support, regulator
+  - which of our candidate ISINs it lists (this is what makes a pair "buyable")
+  - buy commission, currency-conversion (FX) fee, custody or inactivity fee,
+    minimum deposit
+  - automatic savings plan (pravidelné investování) and its minimum
+
+  ➡️ Nine brokers: the six from the evidence plus Trading 212, Degiro and IBKR,
+  with all the fields above taken from each broker's own fee schedule (ceník)
+  and product pages. Portu is a robo-advisor (you don't pick funds), so it gets
+  a lighter record. Whether a ninth broker deserves space is up to C2; research
+  just makes sure no common choice is missing. A broker whose fee schedule I
+  can't open goes on the "not verified" list rather than being filled from
+  secondary articles.
+
+✻ Cooked for 11s · done 9:59 AM
+
+❯ Definitely not nine, the webpage should list only the popular, I am thinking  
+  about T212, IBKR, XTB, Revolut or eToro, we should not aim at companies like  
+  Portu. For this example the ones most popular in Czechia are fine             
+
+⏺ Agent(Rank broker popularity in Czechia)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+⏺ Understood: only popular global brokers, no robo-advisors. The candidate pool
+  is Trading 212, IBKR, XTB, Revolut and eToro, and the final 3–4 are picked by
+  evidence of popularity in Czechia. A sub-agent is now looking for client
+  numbers and Czech media data, and checking that each broker accepts Czech
+  residents and has a Czech app. I'll keep the per-broker fields from Q5 (listed
+  ISINs, commission, FX fee, other fees, savings plan) unless you object. The
+  next question doesn't depend on the broker result:
+
+  ---
+
+  ❓ Q6 - Czech taxes: how deep
+
+  The e-mail promises "Czech taxes in brief". Tax rules change and are easy to
+  get subtly wrong, so this needs primary sources: the law (zákon o daních z
+  příjmů, on zakonyprolidi.cz) and the Financial Administration
+  (financnisprava.cz). Topics:
+
+  1. Time test (časový test): tax-free sale after holding X years.
+  2. Annual sales limit: tax-free if total sales in a year stay under X CZK.
+  3. Tax rate on taxable gains, and whether a tax return is needed.
+  4. Reporting duty for tax-free income above a limit.
+  5. Dividends from distributing funds (withholding tax, double taxation). These
+     belong to the acc/dist topic you postponed.
+  6. Recent changes, e.g. a time-test cap; I don't know the current state.
+
+  ➡️ Collect 1–4 and 6 from the law text and Financial Administration pages,
+  each as a quoted paragraph (§) with its date of effect. Topic 5 gets one line
+  only, for the e-mail's acc/dist paragraph. Anything I can't pin to the law
+  goes on the "not verified" list. The page itself probably says at most "after
+  X years, tax-free"; the rest is e-mail material.
+
+✻ Worked for 18s · done 10:01 AM
+
+❯ Agreed, this needs deeper research with making sure we provide correct info,  
+  for web page the key points are fine, email should cover those as well, while 
+  referring to the key sources of truth based on laws                           
+
+⏺ Settled: taxes researched in depth from the law, key points on the page, the
+  full version in the e-mail with references to the law.
+
+  ---
+
+  ❓ Q7 - The "you can't buy VOO" claim: its source and the US side
+
+  The page's first screen rests on the claim that an EU retail investor can't
+  buy US-listed ETFs. It's the most important fact on the page, and it has to be
+  stated precisely. The usual explanation is that EU rules require a key
+  information document (KID) for retail investment products, and US issuers
+  don't publish one. I won't state that as fact until it's sourced. Research
+  would collect:
+
+  1. The rule: the EU regulation text (EUR-Lex) plus a regulator's explanation
+     (ESMA or the Czech National Bank), quoted.
+  2. Precise wording: who it applies to (retail vs professional clients) and
+     whether there are exceptions. Some brokers allow options, or US funds for
+     professional clients. This keeps the page from overclaiming.
+  3. A broker confirmation: one broker help-centre page saying US ETFs aren't
+     available to EU retail clients and why.
+  4. The US fund side of each pair: ticker, full name, index, expense ratio and
+     issuer, from the US issuer's own page. This is what makes "VOO → [EU fund]"
+     readable.
+
+  ➡️ Collect all four. Point 2 matters most: if the rule has exceptions, the
+  copy says "běžný investor v EU si je koupit nemůže" ("an ordinary EU investor
+  can't buy them") and not "nikdo" ("no one"). That still lets C2 decide the
+  headline wording safely.
+
+✻ Cogitated for 9s · done 10:03 AM
+❯ The claim should rather aim at not being able to buy from NYSE, but agreed on 
+  the collection                                                                
+
+⏺ Settled: all four, framed as buying from the NYSE. One thing research will
+  check for that framing: the restriction is usually tied to the product (a
+  missing KID), not to the exchange. US stocks on the NYSE seem to stay buyable
+  for EU retail; US ETFs don't. If that holds, it gives the page a sharp and
+  accurate line, along the lines of "Na NYSE si akcie Applu koupíte, ETF na S&P
+  500 ne" ("On the NYSE you can buy Apple shares, but not an S&P 500 ETF"). If
+  it doesn't hold, we adjust the wording in C2. I'm adding it as point 5 of the
+  collection.
+
+  ---
+
+  ❓ Q8 - research.md: format and source rules (last question)
+
+  Format: one section per topic (why these funds · the NYSE rule · pairs ·
+  holdings · returns · brokers · taxes · not verified). Each number is a row:
+  value | source URL | date (as-of + accessed) | quoted line. That maps 1:1 to
+  the src/data/ files in C4.
+
+  What counts as primary:
+  - Fund data: the issuer's page or factsheet (iShares, Vanguard, Xtrackers,
+    SPDR, Invesco).
+  - Index data: the index provider's factsheet.
+  - Brokers: their own fee schedule and help pages.
+  - Taxes and law: zakonyprolidi.cz, EUR-Lex, financnisprava.cz, the Czech
+    National Bank and ESMA.
+  - Popularity: brokers' own client data first, Czech media second (labelled as
+    such).
+  - Aggregators like justETF or Morningstar may only find a fund and are never
+    quoted as the source.
+
+  Process: parallel sub-agents, one per topic, each told the rules above. Then I
+  re-open every URL and check each quote word for word before it goes in.
+  Anything that fails moves to "not verified".
+
+  ➡️ Yes to all three, plus one detail: factsheets are PDFs whose URLs change
+  monthly, so each row also records the document's title and as-of date, so it
+  can be found again.
+
+✻ Brewed for 12s · done 10:04 AM
+
+❯ Agreed                                                                        
+
+⏺ The frontier is empty except for the broker ranking, which is still running.
+  Here are the agreed decisions:
+
+  1. Pairs: S&P 500 (VOO/SPY/IVV), Nasdaq-100 (QQQ), total world (VT), MSCI
+     World (URTH) → EU funds. These are the names Czech brokers report as top
+     picks.
+  2. Matching rule: same index first, otherwise the closest exposure labelled
+     "alternative". 2–3 EU candidates per pair with index, TER, AUM, domicile,
+     acc/dist, ISIN, exchange and currency. This keeps the labels honest and
+     avoids sounding like advice; C2 picks the final funds.
+  3. Dividend ETFs dropped. No Czech evidence of popularity, and it's a
+     different topic.
+  4. Acc vs dist goes to the e-mail, not the page. Research still records both
+     share classes. The page is the hook, the e-mail is the full experience.
+  5. Returns: index and fund, in USD as published, annualised 1/5/10 years plus
+     calendar years. No CZK. Short fund histories get discussed once the data is
+     in. USD avoids our own currency maths, which nobody could verify.
+  6. Holdings: top 10 plus structure (number of companies, top-10 share, country
+     and sector split) from the index factsheets. The page can show the top 5;
+     the structure supports S&P 500 vs World.
+  7. Brokers: 3–4 popular global ones from T212, IBKR, XTB, Revolut and eToro,
+     ranked by Czech evidence (pending). Each with Czech availability, listed
+     ISINs, commission, FX fee, other fees and savings plan. No robo-advisors.
+     Visitors know these names.
+  8. Taxes: deep research from the law (time test, annual limit, rate, reporting
+     duty, recent changes, one line on dividends). Key points on the page, the
+     full version in the e-mail with references to the law. Getting it wrong is
+     the biggest credibility risk.
+  9. The NYSE claim: the rule (EUR-Lex plus a regulator), retail vs professional
+     exceptions, a broker confirmation, the US fund side of each pair, and
+     stocks vs ETFs on the NYSE. It's the first-screen claim, so it gets the
+     most care.
+  10. Format and process: a section per topic with rows of value | URL | doc 
+      title + as-of date + accessed | quote. Primary sources only, aggregators
+      only for discovery. Parallel sub-agents, then I re-check every quote
+      myself before it goes in.
+
+  These are research-scope decisions, not page decisions. I'd write them as a
+  short "Scope" section at the top of docs/research.md rather than in
+  decisions.md, which starts in C2. Confirm, and I'll start the collection
+  agents.
+
+✻ Cogitated for 9s · done 10:06 AM
+
+› Message from general-purpose
+  **Czech broker popularity: findings (accessed 2026-10-15)**
+
+  **Suggested ranking (the evidence is weak overall)**
+  1. **Revolut.** This is the only candidate with a Czech investor figure that
+  the company itself states. That figure covers all of its investment services,
+  not only ETFs.
+  2. **XTB.** It has a Czech branch, Czech media call it heavily used by Czechs,
+  and it won reader polls. It publishes no Czech client count.
+  3. **Trading 212.** I found only qualitative mentions from comparison sites.
+  Not verified.
+  4. **eToro** and 5. **IBKR.** I found no Czech figures for either. Not
+  verified.
+
+  None of the five publishes Czech client numbers except Revolut. XTB's investor
+  factsheet lists "Czech Republic" as a market but gives no figure for it. I
+  found no survey that measures which broker Czechs use. Fio and Patria: nothing
+  comparable found.
+
+  **Revolut**
+  - https://www.seznamzpravy.cz/clanek/ekonomika-firmy-zavadeni-ai-neni-tak-jedn
+  oduche-jak-se-tvrdi-rika-zakladatel-revolutu-290989 (7 Nov 2025)
+    - „Investičních služeb využívají podle spoluzakladatele Revolutu Vlada
+  Jacenka už stovky tisíc českých zákazníků" (Per co-founder Vlad Yatsenko,
+  hundreds of thousands of Czech customers already use its investment services.)
+    - „Jen letos se jejich počet zvýšil o 45 procent" (This year alone their
+  number grew by 45 percent.)
+  - https://cc.cz/revolut-v-cesku-dal-roste-ma-13-milionu-uzivatelu-kteri-s-nim-
+  uz-zdaleka-neplati-jen-v-zahranici/ (24 Mar 2026)
+    - „V Česku má aktuálně Revolut podle svého vyjádření 1,3 milionu uživatelů."
+  (Revolut says it now has 1.3 million users in Czechia.) This counts all
+  users, not investors.
+    - „počet investorů se zvýšil o 41 procent" (the number of investors rose by
+  41 percent)
+  - Czech app: the Apple CZ App Store lists „čeština a další (23)" (Czech and 23
+  more). https://apps.apple.com/cz/app/revolut/id932493382?l=cs (date not
+  shown). revolut.com returned 403 to my requests.
+
+  **XTB**
+  - https://www.e15.cz/byznys/burzy-a-trhy/megatrest-pro-brokera-oblibeneho-v-ce
+  sku-polaci-vytrestali-xtb-jeho-akcie-jsou-mezitim-hitem-1432137 (14 Apr 2026):
+  „Populární broker, jehož služby masivně využívají i Češi" (A popular broker
+  whose services Czechs also use massively). There is no number.
+  - https://www.mesec.cz/clanky/vladimir-holovka-xtb-investicni-aplikace-si-vytv
+  arime-sami-pred-bankami-jsme-10-let-napred/ (29 Jan 2024): „Mohu říci jen
+  globální čísla" (I can only give global numbers). XTB declined to give a Czech
+  figure.
+  - Weaker evidence (a reader poll, and old): https://finex.cz/vysledky-ankety-b
+  roker-roku-jsou-tu-letosni-11-rocnik-jiz-zna-sveho-viteze/ (6 Dec 2022)
+    - „Vítězem se pro letošní rok stala společnost XTB" (XTB became this year's
+  winner)
+    - „hlasovalo 5 319 traderů a investorů" (5,319 traders and investors voted)
+    - Only brokers with Czech-language support could be nominated.
+  - Czech residents and Czech website: https://www.xtb.com/cz (date not shown)
+  is in Czech. Its footer reads „XTB S.A., organizační složka se sídlem Praha
+  8-Libeň" (XTB S.A., branch based in Prague 8-Libeň).
+
+  **Trading 212**
+  - No Czech client number found. An old article,
+  https://finex.cz/trading-212-opet-otevira-registrace-pro-ceske-klienty/ (1 Oct
+  2021), says „Trading 212 opět otevřel registrace pro české klienty" (Trading
+  212 reopened registration for Czech clients). It also said Czech was not
+  offered then, which is now out of date.
+  - Czech app: the Apple CZ App Store lists „čeština a další (16)" (Czech and 16
+  more). https://apps.apple.com/cz/app/trading-212-stocks-etfs/id566325832?l=cs
+  (date not shown). trading212.com/cs returned 403, so the broker's own page is
+  not verified.
+
+  **eToro**
+  - No Czech user number found.
+  - Czech site: https://www.etoro.com/cs-cz/ (date not shown) is in Czech.
+  Headline: „Podívejte se, co dělají miliony investorů" (See what millions of
+  investors are doing).
+
+  **IBKR**
+  - No Czech client number found.
+  - Accepts Czech residents: https://www.interactivebrokers.eu/en/home.php (date
+  not shown) says "Interactive Brokers Ireland Limited (IBIE) serving all EU
+  and EEA residents."
+  - Not in Czech: the language menu on
+  https://www.interactivebrokers.ie/en/home.php lists Deutsch, English, Español,
+  Français, Italiano, Magyar and Português. There is no Czech option.
+
+  **Not verified:** a Czech client or account count for XTB, Trading 212, eToro
+  or IBKR, and any survey of which broker Czechs use. Comparison sites call XTB
+  and Trading 212 the most visible brokers, but those are editorial claims
+  rather than measurements.
+
+⏺ The broker ranking is back. Evidence of popularity in Czechia is thin for
+  every broker:
+
+  Broker: Revolut
+  Czech evidence: The only one with a number the company itself gives: "hundreds
+
+  of thousands" of Czech investment customers (Seznam Zprávy, Nov 2025).
+  Investors up 41% (CC.cz, Mar 2026).
+  Czech app/site: Yes (App Store CZ)
+  ────────────────────────────────────────
+  Broker: XTB
+  Czech evidence: Prague branch. E15 (Apr 2026) says Czechs "use it massively",
+  but gives no number. Won the Finex reader poll in 2022 (old, weak). XTB
+  itself declines to give Czech figures.
+  Czech app/site: Yes (xtb.com/cz)
+  ────────────────────────────────────────
+  Broker: Trading 212
+  Czech evidence: Only qualitative mentions on comparison sites. Not verified.
+  Czech app/site: Yes (App Store CZ)
+  ────────────────────────────────────────
+  Broker: eToro
+  Czech evidence: Nothing found.
+  Czech app/site: Yes (etoro.com/cs-cz)
+  ────────────────────────────────────────
+  Broker: IBKR
+  Czech evidence: Nothing found. Accepts all EU residents through its Irish
+  entity.
+  Czech app/site: No Czech language
+
+  ➡️ Proposal for decision 7: research Revolut, XTB and Trading 212. All three
+  have a Czech app, and two have at least some Czech evidence. Drop IBKR (no
+  Czech interface, a real hurdle for a beginner) and eToro (no evidence).
+  research.md will say plainly that "popular in Czechia" is only partly verified
+  (Revolut has a number; XTB and T212 only have media mentions). The page
+  should then say "oblíbení brokeři s českou aplikací" ("popular brokers with a
+  Czech app") rather than claim a ranking.
+
+  If you agree with this and the ten decisions above, I'll write the Scope
+  section and start the collection agents (pairs + US side, holdings + returns,
+  brokers, taxes, NYSE rule) in parallel.
+
+✻ Baked for 7s · done 10:06 AM
+
+⏺ Agent "Rank broker popularity in Czechia" finished · 5m 11s
+
+❯ 3 is fine, the app should not act as their sponsor, just a pointer towards    
+  them, after confirming you can get the ETFs there                             
+
+⏺ Confirmed: Revolut, XTB and Trading 212, each shown as a pointer and not an
+  endorsement, and only after confirming the chosen ETFs are actually listed
+  there. First I'll write the Scope section.
+
+⏺ Write(docs/research.md)
+  ⎿  Wrote 49 lines to docs/research.md
+       1 # Research
+       2 
+         here is a
+       4 page decision yet (those are made in C2 and recorded in `docs/de
+         cisions.md`).
+       6 ## Scope
+       7 
+       8 Agreed in the C1 planning session, 2026-10-15.
+      10 1. **Pairs.** S&P 500 (VOO, SPY, IVV), Nasdaq-100 (QQQ), total w
+         orld (VT),
+     … +70 lines (ctrl+o to expand)
+
+⏺ Now the five collection agents, run in parallel. Each writes to its own
+  scratchpad file, and I check the quotes against the sources afterwards.
+
+⏺ 5 background agents launched (↓ to manage)
+   ├ Collect fund pairs and US side
+   ├ Collect index holdings and returns
+   ├ Collect broker fees and availability
+   ├ Collect Czech tax rules
+   └ Collect EU rule on US ETFs
+
+⏺ While the five collection agents (fund pairs, index data, brokers, taxes, and
+  the NYSE rule) run, I'll build a quote checker that re-fetches each source and
+  verifies every quote against it.
+
+⏺ Bash(which pdftotext python3 curl; python3 --version)
+  ⎿  pdftotext not found
+     /opt/homebrew/bin/python3
+     /usr/bin/curl
+     Python 3.14.7
+
+⏺ Bash(python3 -c "import pypdf" 2>&1; python3 -c "import fitz" 2>&1; brew list
+      poppler 2>&1 | head -1)
+  ⎿  Traceback (most recent call last):
+       File "<string>", line 1, in <module>
+         import pypdf
+     … +6 lines (ctrl+o to expand)
+  ⎿  (another command ran in this repository at the same time; a change 
+     made by either may show under either result)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && python3 -m venv venv
+      && ./venv/bi…)
+  ⎿  ok
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (another command ran in this repository at the same time; a change 
+     made by either may show under either result)
+  ⎿  (timeout 3m)
+
+  Made 1 scratchpad edit +97 (ctrl+o to expand)
+
+⏺ While the collectors run, I'll also put the popularity evidence from the two
+  earlier agents through the same check:
+
+  Made 1 scratchpad edit +29 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿  ## research/popularity.md
+     MISSING    | Top ETF at Patria, Fio, Cyrrus, Portu    | https://ekonom
+     .cz/c1-67571290-do-etf-fondu-priteklo-loni-rekordni-mnozstvi-penez-vim
+     … +69 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (another command ran in this repository at the same time; a change 
+     made by either may show under either result)
+  ⎿  (timeout 5m)
+
+⏺ The checker works: 14 of 17 quotes match. The 3 misses are all on Ekonom.cz,
+  which is probably a paywall. I'll check what the page actually serves:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      -c "
+      import…)
+  ⎿  ishares core s&p -> lad u broker patria, fio, cyrrus nebo investin pla
+     tformy portu byl na prvnm mst etf fond, kter kopruje prv nejznmj ameri
+     ck akciov index. konkrtn lo o ishares core s&p 500 usd . u fintechov s
+     … +16 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (another command ran in this repository at the same time; a change 
+     made by either may show under either result)
+
+⏺ The quotes are present, but the page isn't UTF-8 encoded, which stripped out
+  the Czech characters — I also noticed the article incorrectly claims the
+  Vanguard FTSE All-World tracks MSCI World, reinforcing that media sources are
+  only good for popularity, not fund facts. I'll fix the encoding handling now.
+
+  Made 1 scratchpad edit +2 -2 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿  ## research/popularity.md
+     OK         | Top ETF at Patria, Fio, Cyrrus, Portu    | http
+     OK         | Top ETF at XTB                           | http
+     … +15 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ All 17 popularity quotes now check out against their live sources. The five
+  collection agents are still running. I'll check each file as it arrives, then
+  put together docs/research.md.
+✻ Churned for 2m 50s · done 10:11 AM
+
+› Message from general-purpose
+  The research file is written, with one table per question and a "Not verified
+  / interpretation" list at the end. I checked all 50 Czech quotes by script
+  against the downloaded source text, and every one matches word for word.
+  Sources are the ZDP on zakonyprolidi.cz (current version, valid
+  01.08.2026–31.12.2026), the amending laws, the daňový řád, and Finanční správa
+  press releases. The Finanční správa site has moved to financnisprava.gov.cz.
+
+  1. **Time test:** 3 years, under § 4 odst. 1 písm. **u)** ZDP, not w). The 40
+  mil. Kč cap (from 349/2023) applied to securities only for tax year 2025.
+  Zákon 360/2025 removed it for securities from 1 Jan 2026; it now covers only
+  crypto.
+  2. **Annual limit:** 100 000 Kč of gross sale proceeds per year, § 4 odst. 1
+  písm. t). Popular sources say it started in 2014, but the law text shows zákon
+  267/2014, effective 1 Jan 2015.
+  3. **Taxable gains:** § 10 other income, taxed at 15 % / 23 %. The 23 % starts
+  above 1 762 812 Kč in 2026 and 1 676 052 Kč in 2025. A tax return is required
+  above 50 000 Kč of income, or above 20 000 Kč of other income for an employee
+  (§ 38g). Deadline: 3 months, 4 if electronic, 6 via an advisor (§ 136 DŘ).
+  4. **Reporting exempt income:** each single exempt income above 5 000 000 Kč
+  must be reported by the tax return deadline (§ 38v). Penalties are 0.1 %, 10 %
+  or 15 % (§ 38w).
+  5. **Dividends:** § 8 odst. 1 písm. a) income, taxed at 15 % / 23 %, or by
+  choice in a separate base at 15 % (§ 8 odst. 8, § 16a).
+  6. **Other changes and DIP:** a DIP (from 1 Jan 2024) lets you deduct up to 48
+  000 Kč a year from the tax base. The 2027 changes already enacted don't touch
+  these rules.
+
+  Still open, and needing an FS source or a tax advisor: FIFO for repeat buys,
+  whether the 50k/20k thresholds use gross or net income, whether each sale
+  order counts as one income for § 38v, and Irish withholding tax.
+
+  File: /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task
+  /45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/research/taxes.md
+
+⏺ Taxes are in. The agent says it checked its own quotes, but I'll run my own
+  checker anyway:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿  ## research/taxes.md||
+     MISSING    | Time test: length and §                  | https://www.za
+     konyprolidi.cz/cs/1992-586
+     … +84 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 6m 40s)
+
+⏺ Agent "Collect Czech tax rules" finished · 9m 12s
+
+⏺ Many misses, although the agent reported every quote as matching. I'll look at
+  how its rows are written before trusting either side:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -nE '^\| (Time
+      test: length|…)
+  ⎿  26:| Time test: length and § | Income from selling a security is exemp
+     t if more than 3 years passed between buying it and selling it. Legal
+     basis: **§ 4 odst. 1 písm. u) ZDP**. It is písm. u), not w). The old l
+     … +71 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The quote cells hold several quoted fragments, each followed by a translation.
+  My checker treated the whole cell as one string. I'll make it check each
+  quoted fragment on its own:
+
+  Made 1 scratchpad edit +5 -4 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿  ## research/taxes.md||
+     MISSING    | 40 mil. Kč cap: removed for securities   | income exempt
+     under para. 1(q), income from the paid transfer of a security exem
+     … +4 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (another command ran in this repository at the same time; a change 
+     made by either may show under either result)
+  ⎿  (timeout 6m 40s)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -nE '^\| (40
+      mil. Kč cap: re…)
+  ⎿  30:| 40 mil. Kč cap: removed for securities | **360/2025 Sb.**, čl. VI
+      bod 5, deleted securities (and business shares) from § 4 odst. 3, eff
+     ective **1 Jan 2026**. Bod 5 is not among the later-effective exceptio
+     … +21 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Taxes pass. The only three "misses" are English translations inside the
+  translation brackets; every Czech quote matches the law text or the Financial
+  Administration page.
+
+  Two findings worth knowing now:
+  - The time test is § 4 odst. 1 písm. u), not w) as I had guessed in the
+    agent's brief. My memory was wrong there, and the check caught it.
+  - The 40 mil. Kč cap applied to securities in 2025 only. Zákon 360/2025
+    removed it for securities from 1 Jan 2026.
+
+  Waiting for the other four agents: pairs, indices, brokers and the NYSE rule.
+
+✻ Worked for 56s · done 10:20 AM
+
+› Message from general-purpose
+  The research file is written for all six indices, as of 30 Sep 2026, with
+  every row sourced and quoted. Two gaps remain: for the S&P 500, the top-10
+  weights, sector weights and total returns come from S&P's own data feed, not
+  the factsheet. FTSE gives no 10-year return. File:
+  /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/45fb4
+  b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/research/indices.md
+
+  | Index | Constituents | Top-10 share | US weight | Returns used |
+  |---|---|---|---|---|
+  | S&P 500 | 503 | 39.1 % | 100 % | price (factsheet), total (data feed) |
+  | Nasdaq-100 | 101 securities | not stated | not stated | total (XNDX
+  factsheet) + price |
+  | FTSE All-World | 4,204 | 24.81 % | 62.28 % | "Total Return" (net/gross not
+  stated) |
+  | FTSE Global All Cap | 10,222 | 22.64 % | 62.35 % | "Total Return" (net/gross
+  not stated) |
+  | MSCI World | 1,249 | 27.85 % | 72.94 % | net |
+  | MSCI ACWI | 2,414 | 25.40 % | 64.21 % | net |
+
+  - **Quote check:** an automated check confirmed every quote from the Nasdaq,
+  FTSE and MSCI PDFs appears verbatim in their extracted text.
+  - **S&P 500:** curl gets HTTP 403, so I read the factsheet in a browser. It
+  shows price returns only and draws top-10 and sector weights as a chart. Those
+  weights and the 1/3/5/10-year total returns come from S&P's data feed for the
+  index page, recorded as raw fractions (0.0838 = 8.38 %) and flagged in the
+  file. Calendar-year total returns are under "Not verified".
+  - **FTSE:** no 10-year return is given (3- and 5-year only). In the Global All
+  Cap PDF the index name in the returns row comes out garbled, so those quotes
+  start at "wi All".
+  - **MSCI World:** one MSCI link turns up a stale 2022 factsheet; the file
+  names it and warns against it.
+  - **Not looked up:** Nasdaq-100 net total return.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿     1 FETCH_FAIL | SP-JSON                                  | https://w
+     ww.spglobal.com/spdji/en/util/redesign/index-data/get-perfor| Sep 30,
+     2026
+     … +12 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 6m 40s)
+
+⏺ Agent "Collect index holdings and returns" finished · 12m 5s
+
+⏺ Only 13 rows were checked, which means most rows in this file aren't in the
+  expected format. I'll look at its structure:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && wc -l
+      research/indices.md && sed…)
+  ⎿       422 research/indices.md
+     # Index holdings, structure and returns (provider factsheets)
+     … +80 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Rows point to sources by short name (e.g. SP-JSON), and the quotes sit in
+  backticks. I'll extend the checker to read the source table and backtick
+  quotes:
+
+  Made 1 scratchpad edit +14 -9 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && rm -f
+      checker/cache/* && for f in…)
+  ⎿  popularity:   17 OK
+     taxes:    3 MISSING   50 OK
+     indices:   37 FETCH_FAIL  193 OK    9 PARTIAL
+     … +163 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+› Message from general-purpose
+  I wrote `/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-t
+  ask/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/research/brokers.md`.
+  Every row has a quote copied verbatim from the broker's own page, help centre
+  or PDF, accessed 2026-10-15. Trading 212's main site and all of Revolut's site
+  block automated fetching (403), so I read those pages in Chrome.
+
+  - **XTB:** Czech clients are served by XTB S.A.'s Prague branch, supervised by
+  KNF (Poland) with ČNB oversight. Website and platform are in Czech. ETFs are
+  0 % commission up to €100,000 a month, then 0.2 % (min €10); FX 0.5 %;
+  €10/month inactivity fee only after 365 days without trades and 90 without
+  deposits; no minimum deposit. Investiční plány with Auto Invest start at €15,
+  though the same page also says 350 CZK.
+  - **Trading 212:** Czech residents go to Trading 212 Markets Ltd (CySEC
+  398/21). Commission and custody are free, FX 0.15 %, no inactivity fee,
+  minimum deposit 30 CZK and minimum order 25 CZK / €1. Pies and AutoInvest work
+  with ETFs; the minimum depends on the Pie, not a fixed amount.
+  - **Revolut:** Revolut Securities Europe UAB, regulated by the Bank of
+  Lithuania. Commission is 25 Kč per order outside the plan allowance (Standard
+  0, Premium 5, Metal/Ultra 10). No custody fee; investment-plan ETF buys are
+  commission-free. The terms state the client stays beneficial owner of shares
+  held in a pooled account.
+  - **ETF availability:** Trading 212 lists all 11 ISINs. XTB has all 11, but
+  its pages show the ISIN only for IE00B5BMR087; the other ten are matched by
+  fund name. Revolut is unknown for all 11, because its ETF list is only in the
+  app.
+
+  The "Not verified" section has 12 items, including a conflict in Revolut's
+  sources: the terms say €1.00 or the country minimum (25 CZK), the help article
+  just 25 Kč.
+
+⏺ Agent "Collect broker fees and availability" finished · 12m 36s
+
+› Message from general-purpose
+  I wrote `/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-t
+  ask/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/research/pairs.md`. A
+  script checked all 283 quotes against the downloaded issuer pages and PDFs;
+  every real quote was found.
+
+  **Collected**
+  - **US side:** all six funds (VOO, SPY, IVV, QQQ, VT, URTH) from Vanguard,
+  State Street, iShares and Invesco pages or factsheets. VT's index is confirmed
+  as FTSE Global All Cap. URTH tracks MSCI World Index (Net).
+  - **EU candidates**, with ISINs (both share classes where they exist), TER,
+  fund size with date, domicile, acc/dist, inception and Xetra/London listings:
+    - S&P 500: iShares CSPX, Vanguard VUSA/VUAA, State Street SPDR SPY5/SPYL,
+  and Invesco S&P 500 (synthetic, labelled as such).
+    - Nasdaq-100: iShares CNDX, Invesco EQQQ Dist/Acc.
+    - MSCI World: iShares SWDA, Xtrackers XDWD, Amundi Core (launched 2024).
+    - VT: no UCITS ETF on its exact index turned up, so Vanguard FTSE All-World,
+  iShares MSCI ACWI and SPDR ACWI IMI are listed as "alternative, not
+  identical", each with a reason.
+  - **Returns:** USD figures for every fund, with as-of dates (31 Aug or 30 Sep
+  2026).
+
+  **Not verified**
+  - Vanguard and Xtrackers do not publish calendar-year returns in readable
+  form; I recorded their rolling 12-month figures instead.
+  - The iShares UK factsheets have no 10-year return.
+  - Invesco publishes only cumulative returns, not annualised ones.
+  - Invesco's Xetra and London listings could not be read; its EU product pages
+  redirect to the US site.
+  - Some distributing share classes were not found or not checked.
+
+⏺ Agent "Collect fund pairs and US side" finished · 13m 47s
+
+› Message from general-purpose
+  The page's claim that a Czech retail investor *cannot* buy US ETFs is not safe
+  as written. The sources support "most EU brokers don't let you", not "it's
+  banned".
+
+  - **The rule:** the EU PRIIPs regulation (Art. 5(1) and 13(1)) says a fund
+  needs a key information document (KID) before it is sold to retail investors.
+  A Commission guideline says this covers non-EU products too. Shares held
+  directly are excluded (recital 7), so US company shares stay available.
+  - **The UCITS change in 2023** doesn't apply to US ETFs. Their KID requirement
+  has applied since 1 Jan 2018.
+  - **The Czech twist:** the ČNB's 2018 Q&A, still valid, says a broker that
+  only executes orders on a foreign exchange, without offering or advising, is
+  not bound by the KID-delivery duty. Fio banka wrote in 2022 that its clients
+  can buy US ETFs "bez omezení" (without restriction). SPY is still on Fio's ETF
+  list today, but I couldn't confirm it is actually tradable now.
+  - **Brokers confirmed:** XTB (international help page only, not the Czech
+  one), Saxo, and Revolut CZ, which offers only "ETFs registered in the EU" and
+  gives no reason.
+  - **Not verified:** Trading 212 (no help-centre page on this), Interactive
+  Brokers (help pages unreadable), and getting US ETFs through options exercise.
+  - **Exceptions:** professional clients on request (MiFID II Annex II). The
+  French regulator's ombudsman says people who already hold US ETFs should still
+  be able to sell them.
+  - **NYSE example:** Apple is on Nasdaq. Coca-Cola is on NYSE (SEC record).
+
+  The file has the verbatim quotes and three safe sentences:
+  /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/45fb4
+  b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/research/nyse-rule.md
+
+⏺ Agent "Collect EU rule on US ETFs" finished · 13m 53s
+
+⏺ All five agents are done. I'll run the remaining three files through the
+  checker, then deal with the gaps.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && for f in pairs
+      brokers nyse-rule;…)
+  ⎿  pairs:    8 OK
+     brokers:   35 FETCH_FAIL   37 OK
+     nyse-rule:    2 FETCH_FAIL    8 MISSING   17 OK
+     … +143 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+⏺ I've got three issues to tackle: the pairs file only read 8 of ~283 rows due
+  to a format mismatch, brokers like Trading 212 and Revolut block plain
+  fetches, and the EUR-Lex links use a different publications.europa.eu format.
+  I'll start by fixing the pairs issue.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && wc -l research/*.md
+      && grep -n '^…)  ⎿       164 research/brokers.md
+          422 research/indices.md
+          125 research/nyse-rule.md
+     … +64 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Rows say same instead of repeating the URL, and some cells contain an escaped
+  \|. I'll teach the checker both:
+
+  Made 1 scratchpad edit +14 -10 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && for f in pairs taxes
+      indices popu…)
+  ⎿  pairs:   47 MISSING   33 OK   11 PARTIAL
+     taxes:    3 MISSING   50 OK
+     indices:   37 FETCH_FAIL  193 OK    9 PARTIAL
+     … +193 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+⏺ Most of these "misses" come from my parser: same here points to a URL given
+  above the table, not to the previous row. I'll look at one EU candidate block:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && sed -n
+      '41,67p;369,386p' research…)
+  ⎿  ### EU candidates
+
+     All three candidates below track the same index (S&P 500). The Invesco
+     … +71 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Short names like P1/F1 are defined in bullet lists above each table and reused
+  per fund, so they need section scope. I'll rewrite the row parser to read the
+  file top to bottom:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -n 'def rows'
+      -A 30 checker/…)
+  ⎿  60:def rows(md: str):
+     61-    lines = [l for l in md.splitlines() if l.startswith("|") and no
+     t re.match(r"^\|\s*:?-", l)]
+     … +28 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      fr…)
+  ⎿  pairs:   29 FETCH_FAIL    3 MISSING  188 OK
+     taxes:    3 MISSING   50 OK
+     indices:   37 FETCH_FAIL  193 OK    9 PARTIAL
+     … +116 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+⏺ Most rows now pass. What's left is mostly fetch problems (Invesco, S&P,
+  Trading 212, Revolut, EUR-Lex). I'll try better request headers and canonical
+  URLs before turning to the browser:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && UA="Mozilla/5.0
+      (Macintosh; Intel…)
+  ⎿  406   https://www.invesco.com/content/dam/invesco/uk/en/product-docume
+     nts/etf/share-class/factsh
+     403 text/html  https://www.spglobal.com/spdji/en/idsenhancedfactsheet/
+     … +12 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Trading 212, Revolut, S&P, Invesco, and EUR-Lex are all blocking scripted
+  access, so I'll re-check them using Chrome instead and run the quote check
+  directly in-page, returning only pass/fail results.
+
+⏺ Skill(claude-in-chrome)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && cat >
+      checker/failed.py <<'EOF'
+      "…)
+  ⎿  1 https://www.xtb.com/cz/investicni-plany
+     5 https://www.xtb.com/cz/ucet-a-poplatky
+     3 https://www.trading212.com/cs
+     … +67 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 5m)
+
+⏺ Before the browser, I'll look at the misses that were fetched (XTB, Nasdaq,
+  FTSE, DWS), since those could be real quote errors:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿  ==== https://www.xtb.com/cz/investicni-plany len 226927
+       Q: 0,8 % z hodnoty převodu provedeného o víkendech a svátcích z účtu
+      v CZK
+     … +59 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿  XNDX 24.00% True
+     XNDX 37.48% True
+     XNDX 111.26% True
+     … +26 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The Nasdaq figures check out in the PDF, though table extraction scrambled the
+  layout—I'll verify the period mapping visually later. XTB's live
+  inactivity-fee wording doesn't match the agent's quote, so I'll dig into more
+  context there.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿   ale pouze spekulujete na změnu jeho ceny. vlastnosti těchto instrumen
+     tů umožňují investovat i do poklesu ceny." role="tooltip" tabindex="0"
+     >jaký je v tom rozdíl?</span></p></div> </div> <div class="info-list-m
+     … +41 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ I found a real discrepancy: the live XTB page says the fee is waived if
+  clients meet any one of three conditions (recent trade, recent deposit, or an
+  open position), while the agent claimed both conditions must be met and
+  omitted the open-position rule. I'll check where the agent's quote originated.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -n 'Pouze
+      pokud\|250 000\|0,…)
+  ⎿  27:| Manual cash-to-cash FX between sub-accounts | 0.5 % weekdays; 0.8
+      % on weekends and holidays | tabulkapoplatkuaprovizi30092026.pdf | sa
+     me | "0,8 % z hodnoty převodu provedeného o víkendech a svátcích z účt
+     … +39 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The quote rows reference XTB's fee-table PDF by filename, but my parser
+  incorrectly validated them against the web page instead. I'll locate the PDF's
+  full URL and verify against that.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -o 'https://[^
+      |)"]*tabulkap…)
+  ⎿  https://www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi20102026.pdf
+     https://www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi30092026.pdf
+     fetched True
+     … +19 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ The quotes check out, but the row omits the exception that no fee applies if
+  the client holds any open position — I'll add that. I also noticed a new fee
+  table taking effect Oct 20, 2026, so I'll check whether it changes anything
+  we're relying on.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿  new fetched True
+     MISSING MISSING XTB je plně licencována společnost dozorovaná polským
+     orgánem dohledu Komisí pro finanční
+     … +67 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Found two real issues so far: XTB has no inactivity fee while a position is
+  open, and card deposit fees change from 0.77% to free on 20 Oct 2026. Next
+  I'll check the script-blocking sites (Trading 212, Revolut, S&P, Invesco,
+  EUR-Lex) in Chrome, then write research.md.
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && mkdir -p checker/js
+      && ./venv/bin…)
+  ⎿  4e3418e3 https://www.trading212.com/cs
+     9165173d https://www.trading212.com/cs/terms/invest
+     f84fc532 https://www.trading212.com/cs/trading-instruments/invest
+     … +34 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 1 file, called claude-in-chrome (ctrl+o to expand)
+
+⏺ Trading 212's fee page checks out (11/11, each value right next to its label).
+  Moving on to Trading 212's other two pages and Revolut's pages.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad/checker/js && for f in
+      4e3418e3 f84f…)
+  ⎿  4e3418e3: const qs=["Společnost Trading 212 Markets Ltd. je registrová
+     na na Kypru, autorizována a podléhá regulaci Kyperské komisi pro cenné
+      papíry a burzy (č. licence 398/21).", "Ochrana Kompenzačním fondem pr
+     … +90 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Now Trading 212's home and instrument-list pages. For instrument rows, the
+  check makes sure every cell of the row (ticker, name, ISIN, exchange) appears
+  together around the ISIN.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ All 11 ISINs are on Trading 212's list. The exchange cell isn't next to them
+  in the text, so I'll look at how one row is actually laid out:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Confirmed: all 11 ISINs are in Trading 212's instrument data, each in several
+  currency listings (EUR, USD, GBP). Now the Revolut pages:
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Revolut terms and help pages pass (20/20). Next, the last three Revolut pages
+  and S&P's data feed:
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Revolut checks out fully, and all 27 S&P data-feed values match. I still need
+  to verify the feed's return type matches the gross total return used by the
+  agent, since the feed includes price, total, and net total variants.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Confirmed the S&P figures match the feed's gross Total Return month-end data
+  (1y 15.74%, 5y 13.79%, 10y 15.33%), and the factsheet's price returns align
+  with the feed's month-end price figures too. Now I'll try opening the
+  remaining blocked PDFs (S&P factsheet, Invesco) in-browser using pdf.js.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ pdf.js reads the tables in a different order, so whole-row matching fails.
+  I'll check by position instead: pair each value with the label in the same row
+  or column using the coordinates on the page.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Verified the S&P factsheet across all key metrics—holdings count,
+  concentration, geographic allocation, and returns all check out. Moving on to
+  the three Invesco factsheets next.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      -c "
+      import…)
+  ⎿  {
+       "https://www.invesco.com/content/dam/invesco/uk/en/product-documents
+     /etf/share-class/factsheet/IE00B3YCGJ38_factsheet_en-uk.pdf": [
+     … +34 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The PDF opens in Chrome's viewer, so the browser can reach it. I'll fetch it
+  from an invesco.com page instead and parse it with pdf.js:
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Both misses look like rows attached to the sibling share class's factsheet.
+  Cross-checking:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ All Invesco values check out: each row belongs to its own share class's
+  factsheet. Last group, EUR-Lex:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      -c "
+      import…)
+  ⎿  {
+       "32014R1286": [
+         "Before a PRIIP is made available to retail investors, the PRIIP m
+     … +55 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The EUR-Lex bot check redirected mid-script. Retrying now that it has passed:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ I've verified all the EUR-Lex sources, including PRIIPs Art. 5(1) and 13(1),
+  the "assets held directly" recital, the Commission's non-EU PRIIPs guideline,
+  date changes, and MiFID II professional-client criteria. Closing this tab now.
+
+  Called claude-in-chrome (ctrl+o to expand)
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && mkdir -p pdfs &&
+      ./venv/bin/pytho…)
+  ⎿  total 1248
+     drwxr-xr-x@  4 martingnebus  wheel     128 Oct 15 10:39 .
+     drwx------@ 15 martingnebus  wheel     480 Oct 15 10:39 ..
+     … +12 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ DWS checks out—its figures run September-to-September rather than calendar
+  years, so I'll label them accordingly. Next, I'll visually check the
+  Nasdaq-100 factsheet to confirm which return matches which period.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ No PDF renderer installed, so I'll use the same positional method: pypdf with
+  text coordinates.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && cat > checker/pos.py
+      <<'EOF'
+      """P…)
+  ⎿  p1 y=532: 1-YEAR PERFORMANCE | QUICK FACTS
+     p2 y=723: ANNUAL | CUMULATIVE | CUMULATIVE ANNUALIZED
+     p2 y=705: 1 Year | 24.00% | 1 Year | 24.00% | 1 Year | 24.00%
+     … +25 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿  p2 y=705: 1 Year | 23.21% | 1 Year | 23.21% | 1 Year | 23.21%
+     p2 y=670: 3 Year | 36.33% | 3 Year | 106.65% | 3 Year | 27.37%
+     p2 y=636: 5 Year | -25.31% | 5 Year | 107.01% | 5 Year | 15.66%
+     … +25 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/pos.…)
+  ⎿  p1 y=389: Index (USD) | Return % | Return pa %* | Volatility %**
+     p1 y=386: are freely available on the FTSE Russell
+     p1 y=375: 3M | 6M | YTD | 12M | 3YR | 5YR | 3YR | 5YR | 1YR | 3YR | 5Y
+     … +14 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Verification done — every quote across the six files has been matched to its
+  live source, with the scrambled tables (S&P, Nasdaq, FTSE) tied to labels by
+  page position. Now I'll read through the files fully to compile research.md.
+
+  Read 5 files (ctrl+o to expand)
+
+⏺ I have everything I need. Before assembling, I'll pull the exact wording of
+  the XTB sentence the agent left out, so it goes in verbatim:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      - <<'EOF'
+      im…)
+  ⎿  kapoplatkuaprovizi30092026.pdf | očítány na měnu účtu. Pokud má Zákazn
+     ík otevřenou pozici na jakémkoliv účtu, není účtován žádný poplatek. 2
+     ) Poplatek je
+     … +5 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Now I'll write the summary for the top of research.md. Every number in it is
+  copied from the verified evidence tables, which a script appends below
+  unchanged so no number gets retyped by hand.
+
+  Made 2 scratchpad edits +157 -1 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && cat >
+      assemble/build.py <<'EOF'
+      "…)
+  ⎿  1485 lines
+     6:## Scope
+     51:## Key findings
+     … +49 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  1 file changed (binary, mode only or too large to show)
+
+⏺ The checker runs once more over the final docs/research.md, so the assembled
+  file itself is verified, not just the agents' drafts:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && grep -o
+      'CELEX:52017XC0707[^ |]*'…)
+  ⎿  CELEX:52017XC0707(02)
+      134 FETCH_FAIL
+        6 MISSING
+     … +40 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+⏺ The final file passes — remaining unconfirmed rows are ones already verified
+  manually in Chrome, matched by position, or English translation fragments.
+  I'll now tick box 2 and update the Map.
+
+⏺ Bash(sed -i '' 's/^- \[ \] Agree in a short `\/implementation-plan`/- [x]
+      Agree in a short `\/implementation-plan`/' docs/TODO.md && grep -n '^- \['
+      docs/TODO.md | h…)
+  ⎿  9:- [x] Run `find-skills` to look for skills that could help here (lan
+     ding pages, lead magnets, conversion, analytics). Install the useful o
+     nes into the project's `.claude/skills/` so they are in the repo.
+     … +12 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+1 -1)
+       7  ## C1 Research
+       8  
+       9  - [x] Run `find-skills` to look for skills that could help here
+           (landing pages, lead magnets, conversion, analytics). Install 
+          the useful ones into the project's `.claude/skills/` so they ar
+          e in the repo.
+      10 -- [ ] Agree in a short `/implementation-plan` what data to coll
+         -ect (e.g. fund pairs, historical returns, holdings, brokers, ta
+         -xes), then collect as much of it as possible from primary sourc
+         -es, so later steps can pick from it. Write down what could not 
+         -be verified. Everything goes to `docs/research.md`, each number
+         - with its source URL, date and quote.                          
+      10 +- [x] Agree in a short `/implementation-plan` what data to coll
+         +ect (e.g. fund pairs, historical returns, holdings, brokers, ta
+         +xes), then collect as much of it as possible from primary sourc
+         +es, so later steps can pick from it. Write down what could not 
+         +be verified. Everything goes to `docs/research.md`, each number
+         + with its source URL, date and quote.                          
+      11  
+      12  ## C2 Decisions
+      13  
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 1 line
+      39  - `docs/research.md` sourced data collected in C1
+      40  - `.claude/skills/implementation-start` and `implementation-end
+          ` open and close a TODO section
+      41  - `.claude/skills/implementation-plan` grilling for planning st
+          eps, one question at a time
+      42 +- `.claude/skills/` third-party skills, pinned in `skills-lock.
+         +json`: lead-magnets, copywriting, cro, ad-creative, analytics, 
+         +ab-testing, frontend-design, performance, core-web-vitals, acce
+         +ssibility                                                      
+
+⏺ Bash(git status --short && wc -l CLAUDE.md)
+  ⎿   M CLAUDE.md
+      M docs/TODO.md
+      M skills-lock.json
+     … +12 lines (ctrl+o to expand)
+
+⏺ I've completed both C1 tasks, producing docs/research.md with sourced
+  findings, adding 10 third-party skills under .claude/skills/, and updating
+  CLAUDE.md and TODO.md accordingly. Now running the closing step.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(ls package.json 2>&1; git log --format='%s%n%b---' -3; git diff --stat;
+      ls ai-log; git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  ⎿  ls: package.json: No such file or directory
+     set up briefing and TODO, added custom skills
+     ---
+     … +10 lines (ctrl+o to expand)
+
+⏺ I've finished C1 and it's ready to commit. I'm waiting for your OK on the
+  commit message below.
+
+  There's no package.json yet, so I skipped pnpm check, pnpm test and pnpm build
+  (Setup comes in C4). Both C1 boxes in docs/TODO.md are ticked.
+
+  What the research found (summary at the top of docs/research.md; every quote
+  re-checked against its live source):
+  - "You can't buy VOO" isn't a legal ban. Most EU brokers won't sell US ETFs to
+    ordinary investors because their US issuers don't publish the key
+    information document (KID) EU rules require. But the ČNB says a broker that
+    only executes orders isn't bound by that duty, and Fio said in 2022 its
+    clients can still buy US ETFs. I couldn't confirm that's still true today.
+    Safe wording for C2: "most brokers in the EU won't sell you VOO", not "it's
+    banned".
+  - Pairs: S&P 500, Nasdaq-100 and MSCI World each have UCITS ETFs on the same
+    index. VT has no exact match; three close alternatives are labelled "not
+    identical".
+  - Returns aren't comparable as published. The S&P 500 figure is gross total
+    return, MSCI is net, FTSE doesn't say. Fund as-of dates also differ
+    (Vanguard 31 Aug, others 30 Sep). C2 has to pick one basis for side-by-side
+    numbers.
+  - Brokers: Trading 212 lists all 11 candidate ETFs; XTB lists all 11 by fund
+    name. Revolut's ETF list is only inside its app, so under our rule it can't
+    be named for a specific fund until someone checks there.
+  - XTB's inactivity fee never applies while you hold a position. The agent's
+    row had left that out; it's now in the file.
+
+  Before committing, please /export this session to ai-log/001-research.txt.
+  ai-log/ is empty, so 001 is next.
+
+  AI mistakes caught this session, for ai-log/mistakes.md (I won't write that
+  file):
+  1. My brief to the tax agent gave the time test as § 4 odst. 1 písm. w); the
+     law says u).
+  2. In Q7 I proposed the line "Na NYSE si akcie Applu koupíte" (you can buy
+     Apple shares on the NYSE). Apple is listed on Nasdaq; Coca-Cola is a valid
+     NYSE example.
+  3. My Q7 framing ("an ordinary EU investor can't buy them") overclaimed. The
+     research showed it's broker practice, not a ban.
+  4. The broker agent's XTB inactivity-fee row left out the "no fee while any
+     position is open" sentence from XTB's own fee table.
+  5. My quote checker first reported false misses: it mangled Czech letters on
+     non-UTF-8 pages and misread table formats. I fixed it before trusting any
+     result.
+
+  Proposed commit message, in the lowercase style of git log:
+
+  add C1 research: fund pairs, index data, brokers, czech taxes
+
+  - install 10 third-party skills (marketing, analytics, design, web
+    quality) into .claude/skills, pinned in skills-lock.json
+  - docs/research.md: agreed scope, key findings for C2, and evidence
+    tables with source URL, date and verbatim quote for every number
+  - every quote re-checked against its live source (script + browser);
+    corrections and unverified items listed in the file
+  - tick C1 in TODO, add the installed skills to the CLAUDE.md map
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage, by name:
+  - CLAUDE.md
+  - docs/TODO.md
+  - docs/research.md
+  - skills-lock.json
+  - .claude/skills/ab-testing/, accessibility/, ad-creative/, analytics/,
+    copywriting/, core-web-vitals/, cro/, frontend-design/, lead-magnets/,
+    performance/
+  - ai-log/001-research.txt (after you export)
+
+  The commit goes to main and gets pushed to origin/main. Approve the message or
+  edit it, and tell me once the export is in place.
+
+✻ Cogitated for 43m 22s · done 10:44 AM
+
+❯ Can you split the research into smaller pieces? It has lot of rows, maybe     
+  create folder research and there categorize per findings...Note it in         
+  relevant docs pointing at it.                                                 
+
+⏺ Yes. Here's the split I'll make:
+
+  - docs/research/README.md: the index, holding the scope, key findings (each
+    linking to its file), how it was checked, and the file list
+  - topic files: popularity.md, us-etf-rule.md, pairs.md, holdings.md,
+    returns.md (index and fund returns together), brokers.md, taxes.md
+  - each file keeps its own "Not verified" list
+
+  I'll generate the files from the verified sources with a script so no number
+  gets retyped, then re-run the quote checker as a regression. Checking which
+  docs point at docs/research.md:
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Five references to update: the CLAUDE.md Map, the implementation-plan skill (2
+  places) and the TODO (3 places). Now the split script:
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && sed -n '6,50p'
+      /Users/martingnebu…)
+  ⎿      (justETF, Morningstar) are used to find things, never cited. Czech
+         media only for popularity, labelled as weaker. Every quote is re-c
+     hecked
+     … +48 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Made 1 scratchpad edit +192 (ctrl+o to expand)
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      assemble/spl…)
+  ⎿  popularity.md: 32 lines
+     us-etf-rule.md: 127 lines
+     pairs.md: 369 lines
+     … +120 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  Created docs/research/README.md (+218 -0)
+        1 +# Research                                                    
+        2 +                                                              
+        3 +Sourced data collected in C1. Later steps pick from it; nothin
+          +g here is a                                                   
+        4 +page decision yet (those are made in C2 and recorded in `docs/
+          +decisions.md`).                                               
+        5 +                                                              
+        6 +## Files                                                      
+        7 +                                                              
+        8 +| File | What it holds |                                      
+        9 +|---|---|                                                     
+       10 +| [popularity.md](popularity.md) | Which ETFs and brokers Czec
+          +hs use (Czech media, broker statements) |                     
+       11 +| [us-etf-rule.md](us-etf-rule.md) | Why US ETFs are unavailab
+          +le: PRIIPs, ČNB, broker pages, safe wording |                 
+       12 +| [pairs.md](pairs.md) | US funds and their EU (UCITS) candida
+          +tes: ISIN, TER, size, listings |                              
+       13 +| [holdings.md](holdings.md) | Index top 10, number of compani
+          +es, country and sector split |                                
+       14 +| [returns.md](returns.md) | Index returns and fund returns, w
+          +ith their return types and dates |                            
+       15 +| [brokers.md](brokers.md) | Revolut, XTB, Trading 212: entity
+          +, fees, savings plans, ETF availability |                     
+       16 +| [taxes.md](taxes.md) | Czech tax rules from the law: time te
+          +st, annual limit, rates, reporting |                          
+       17 +                                                              
+       18 +Each file ends with its own "Not verified" list.              
+       19 +                                                              
+       20 +## Scope                                                      
+       21 +                                                              
+       22 +Agreed in the C1 planning session, 2026-10-15.                
+       23 +                                                              
+       24 +1. **Pairs.** S&P 500 (VOO, SPY, IVV), Nasdaq-100 (QQQ), total
+          + world (VT),                                                  
+       25 +   MSCI World (URTH) → EU funds. These are the names Czech bro
+          +ker reports                                                   
+       26 +   list as top picks.                                         
+       27 +2. **Matching rule.** Same index first; otherwise the closest 
+          +exposure,                                                     
+       28 +   labelled "alternative" with a one-line reason. 2–3 EU candi
+          +dates per                                                     
+       29 +   pair: index, TER, AUM, domicile, acc/dist, ISIN, exchange a
+          +nd currency.                                                  
+       30 +   C2 picks the final fund.                                   
+       31 +3. **Dividend ETFs are out.** No Czech evidence that they are 
+          +popular; a                                                    
+       32 +   different topic.                                           
+       33 +4. **Accumulating vs distributing** belongs in the e-mail, not
+          + on the page.                                                 
+       34 +   Both share classes are still recorded. The page is the hook
+          +, the e-mail                                                  
+       35 +   the full experience.                                       
+       36 +5. **Returns.** Index and fund, in USD as published, annualise
+          +d 1/5/10 years                                                
+       37 +   plus calendar years. No CZK (no primary source; we do no cu
+          +rrency maths                                                  
+       38 +   of our own). What to do about short fund histories is decid
+          +ed once the                                                   
+       39 +   data is in.                                                
+       40 +6. **Holdings.** Top 10 plus structure (number of companies, t
+          +op-10 share,                                                  
+     … 178 more lines (ctrl+o to expand)
+  ⎿  Created docs/research/brokers.md (+166 -0)
+        1 +# Brokers for Czech retail investors: UCITS ETF access        
+        2 +                                                              
+        3 +Collected and re-checked against the live sources on 2026-10-1
+          +5. Overview and scope: [README](README.md).                   
+        4 +                                                              
+        5 +Accessed 2026-10-15 for every row. These are primary sources o
+          +nly: broker web pages, help centres, terms and fee PDFs.      
+        6 +Quotes are copied verbatim. Line breaks and runs of whitespace
+          + from PDFs or tables are collapsed to single spaces.          
+        7 +Where a quote was assembled from table cells, the cells are jo
+          +ined with " | " and the row says so.                          
+        8 +                                                              
+        9 +Fetch notes:                                                  
+       10 +- XTB: all pages and PDFs were fetched directly with curl (HTT
+          +P 200).                                                       
+       11 +- Trading 212: the help centre was read through its public Zen
+          +desk API (`/api/v2/help_center/en-us/articles/{id}.json`). The
+          + help centre has no Czech locale, so quotes from it are in Eng
+          +lish. `www.trading212.com` returns 403 to curl and WebFetch, s
+          +o its pages were read in a real Chrome browser. The terms page
+          + showed CZK values; the Czech URL is cited.                   
+       12 +- Revolut: `www.revolut.com` and `help.revolut.com` return 403
+          + or a "security check" page to curl and WebFetch, so they were
+          + read in a real Chrome browser (cs-CZ pages). The cdn.revolut.
+          +com PDF was fetched with curl.                                
+       13 +                                                              
+       14 +---                                                           
+       15 +                                                              
+       16 +## 1. XTB                                                     
+       17 +                                                              
+       18 +| Field | Value | Source URL | Doc title, date, accessed | Quo
+          +te (verbatim) |                                               
+       19 +|---|---|---|---|---|                                         
+       20 +| Entity serving CZ clients | XTB S.A. (Warsaw), operating in 
+          +CZ through its Prague branch "XTB S.A., organizační složka" (I
+          +ČO 27867102) | https://www.xtb.com/cz/zakladni_informace_o_xtb
+          +_27092025.pdf | Základní informace o XTB (file dated 27092025)
+          +; accessed 2026-10-15 | "podnikající na území České republiky 
+          +prostřednictvím své organizační složky XTB S.A., organizační s
+          +ložka, IČ: 278 67 102" |                                      
+       21 +| Home regulator | KNF (Komisja Nadzoru Finansowego, Poland) |
+          + same PDF | same | "XTB je plně licencována společnost dozorov
+          +aná polským orgánem dohledu Komisí pro finanční dohled (Komisj
+          +a Nadzoru Finansowego)" |                                     
+       22 +| CZ branch supervision | ČNB, for the conduct-of-business sec
+          +tions listed | same PDF | same | "Dohled nad činností XTB v Če
+          +ské republice prostřednictvím Organizační složky dle ustanoven
+          +í" … "je vykonáván Českou národní bankou" |                   
+       23 +| Czech-language website | Yes (`<html lang="cs">`, Czech UI) 
+          +| https://www.xtb.com/cz | XTB CZ homepage; accessed 2026-10-1
+          +5 | "Český" (language selector) |                             
+       24 +| Czech-language app/platform | Yes | https://www.xtb.com/cz/p
+          +latforma | Obchodní platforma; accessed 2026-10-15 | "Platform
+          +a je k dispozici v češtině" |                                 
+       25 +| ETF commission | 0 % up to €100,000 monthly volume; above th
+          +at 0.2 %, minimum €10 | https://www.xtb.com/cz/ucet-a-poplatky
+          + | Informace o účtech / Typy účtů a poplatky; page lists fee t
+          +ables valid from 30.09.2026 and 20.10.2026; accessed 2026-10-1
+          +5 | "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 1
+          +0 EUR)." |                                                    
+       26 +| ETF commission (fee table) | same | https://www.xtb.com/cz/s
+          +oubory/tabulkapoplatkuaprovizi30092026.pdf | TABULKA POPLATKŮ 
+          +A PROVIZÍ XTB ze dne 30. září 2026 (in force on access date; n
+          +ext version dated 20. října 2026); accessed 2026-10-15 | "0%, 
+          +minimálně 0 EUR 0.2%, minimálně 10 EUR 0,5%" (row: commission 
+          +before €100k / after €100k / FX fee) |                        
+       27 +| FX conversion fee (trades) | 0.5 % | https://www.xtb.com/cz/
+          +investicni-plany | Investiční plány; accessed 2026-10-15 | "Mů
+          +že být účtován poplatek 0,5 % za konverzi měn." |             
+       28 +| FX conversion fee (fee table) | 0.5 % mark-up on the XTB rat
+          +e | https://www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi3009
+          +2026.pdf | same as above | "Všechny měnové konverze souvisejíc
+          +í s obchodováním a korporátní události v rámci OMI a Frakčních
+          + práv podléhají 0,5% přirážce na vrcholu kurzu" |             
+       29 +| Manual cash-to-cash FX between sub-accounts | 0.5 % weekdays
+          +; 0.8 % on weekends and holidays | https://www.xtb.com/cz/soub
+          +ory/tabulkapoplatkuaprovizi30092026.pdf | same | "0,8 % z hodn
+          +oty převodu provedeného o víkendech a svátcích z účtu v CZK" |
+       30 +| Account opening and maintenance | Free | https://www.xtb.com
+          +/cz/ucet-a-poplatky | same as above | "Zdarma pro všechny akti
+          +vní klienty bez ohledu na zůstatek na účtu" |                 
+       31 +| Inactivity fee | €10 a month, only if there was no position 
+          +opened or closed in 365 days and no deposit in 90 days, and ne
+          +ver while the client holds an open position on any account (se
+          +ntence added during verification; unchanged in the 20.10.2026 
+          +table) | https://www.xtb.com/cz/soubory/tabulkapoplatkuaproviz
+          +i30092026.pdf | same | "Pouze pokud jsou následující dvě podmí
+          +nky splněny, tak je účtován měsíční poplatek ve výši 10 EUR" …
+          + "v posledních 365 dnech nedošlo k otevření nebo uzavření pozi
+          +ce na účtu Zákazníka" … "během posledních 90 dnů nebyl na účet
+          + proveden žádný vklad peněžních prostředků" … "Pokud má Zákazn
+          +ík otevřenou pozici na jakémkoliv účtu, není účtován žádný pop
+          +latek." |                                                     
+       32 +| Custody fee | 0.02 % a year, charged only if the average dai
+          +ly portfolio value exceeds €250,000 | https://www.xtb.com/cz/s
+          +oubory/tabulkapoplatkuaprovizi30092026.pdf | same | "0.02 % ro
+          +čně, účtováno měsíčně pokud průměrná denní hodnota portfolia p
+          +řekročí 250 000 EUR" |                                        
+       33 +| Minimum deposit | None | https://www.xtb.com/cz/ucet-a-popla
+          +tky | same | "Žádná minimální částka" |                       
+       34 +| Deposit by bank transfer | Free (0 %) | https://www.xtb.com/
+          +cz/ucet-a-poplatky | same | "Poplatek 0 %" (bank transfer, CZK
+          +/EUR/USD) |                                                   
+       35 +| Deposit by card (until 19.10.2026) | 0.77 % (CZK) | https://
+          +www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi30092026.pdf | s
+          +ame | "0,77 % z vložené částky (vklad v CZK)" |               
+       36 +| Deposit by card (from 20.10.2026) | Free | https://www.xtb.c
+          +om/cz/soubory/tabulkapoplatkuaprovizi20102026.pdf | TABULKA PO
+          +PLATKŮ A PROVIZÍ XTB ze dne 20. října 2026 (future version); a
+          +ccessed 2026-10-15 | "Poplatek za vklad kreditní nebo debetní 
+          +kartou Zdarma" |                                              
+       37 +| Minimum order (general page) | €10 for stocks | https://www.
+          +xtb.com/cz/ucet-a-poplatky | same | "Minimální hodnota investi
+          +c do akcií" … "10 EUR" |                                      
+       38 +| Minimum order (ETF instrument pages) | €1 (EUR lines) / 1 US
+          +D / 1 GBP, depending on the line | e.g. https://www.xtb.com/cz
+          +/etf/vanguard-ftse-all-world-ucits-acc-eur- | ETF instrument p
+          +age; accessed 2026-10-15 | "Minimální hodnota pokynu" … "1 EUR
+          +" |                                                           
+       39 +| Savings plan | Yes: "Investiční plány" with Auto Invest (rec
+          +urring deposits invested automatically) | https://www.xtb.com/
+          +cz/investicni-plany | Investiční plány; accessed 2026-10-15 | 
+          +"Pravidelně vkládejte prostředky na svůj účet a investujte aut
+          +omaticky pomocí funkce Auto Invest." |                        
+       40 +| Savings plan: ETFs | Yes: stocks and ETFs | same | same | "K
+          +ombinujte akcie a ETF v jednom investičním plánu" |           
+     … 126 more lines (ctrl+o to expand)
+  ⎿  Created docs/research/holdings.md (+276 -0)
+        1 +# What is inside: index holdings and structure                
+        2 +                                                              
+        3 +Collected and re-checked against the live sources on 2026-10-1
+          +5. Overview and scope: [README](README.md).                   
+        4 +                                                              
+        5 +Accessed 2026-10-15 for every row. All values in USD. Quotes a
+          +re copied from the                                            
+        6 +text layer of each PDF (pdfplumber; S&P via pdf.js in a browse
+          +r) or from the raw JSON                                       
+        7 +where marked. Where a PDF's text layer splits a label from its
+          + value, the note says so.                                     
+        8 +                                                              
+        9 +Sources used (short names used in tables):                    
+       10 +                                                              
+       11 +| Short | URL | Title / as-of |                               
+       12 +|---|---|---|                                                 
+       13 +| SP-FS | https://www.spglobal.com/spdji/en/idsenhancedfactshe
+          +et/file.pdf?calcFrequency=M&force_download=true&hostIdentifier
+          +=48190c8c-42c4-46af-8d1a-0cd5db894797&languageId=1&indexId=340
+          + | "S&P 500®" factsheet, "Return Type: Price Return", AS OF SE
+          +PTEMBER 30, 2026 (curl gets HTTP 403; I read it in a browser s
+          +ession on spglobal.com) |                                     
+       14 +| SP-JSON | https://www.spglobal.com/spdji/en/util/redesign/in
+          +dex-data/get-performance-data-for-datawidget-redesign.dot?inde
+          +xId=340&language_id=1 | S&P DJI's own data feed behind spgloba
+          +l.com/spdji/en/indices/equity/sp-500/ (NOT the factsheet), mon
+          +th-end data "Sep 30, 2026". Browser session only (curl gets 40
+          +3) |                                                          
+       15 +| NDX-FS | https://indexes.nasdaqomx.com/docs/FS_NDX.pdf | "NA
+          +SDAQ-100" factsheet (PR version), "All Information as of 09/30
+          +/2026." |                                                     
+       16 +| XNDX-FS | https://indexes.nasdaqomx.com/docs/FS_XNDX.pdf | "
+          +Nasdaq-100" factsheet (TR version, XNDX), "All Information as 
+          +of 09/30/2026." |                                             
+       17 +| FAW-FS | https://research.ftserussell.com/Analytics/FactShee
+          +ts/Home/DownloadSingleIssue?issueName=AWORLDS&IsManual=false |
+          + "FTSE All-World Index" factsheet, "Data as at: 30 September 2
+          +026" |                                                        
+       18 +| FGAC-FS | https://research.ftserussell.com/Analytics/FactShe
+          +ets/Home/DownloadSingleIssue?issueName=GEISLMS&IsManual=false 
+          +| "FTSE Global All Cap Index" factsheet, "Data as at: 30 Septe
+          +mber 2026" |                                                  
+       19 +| MW-FS | https://www.msci.com/documents/10199/4db922ce-68d2-4
+          +46d-2f9e-4ed408a9db29 | "MSCI World Index (USD)" factsheet, NE
+          +T RETURNS, SEP 30, 2026 |                                     
+       20 +| MA-FS | https://www.msci.com/documents/10199/a71b65b5-d0ea-4
+          +b5c-a709-24b1213bc3c5 | "MSCI ACWI Index (USD)" factsheet, NET
+          + RETURNS, SEP 30, 2026 |                                      
+       21 +                                                              
+       22 +The same MSCI factsheets also exist with GROSS returns. World 
+          +gross: https://www.msci.com/documents/10199/178e6643-6ae6-47b9
+          +-82be-e1fc565ededb. ACWI gross: https://www.msci.com/documents
+          +/10199/8d97d244-4685-4200-a24c-3e2942e3adeb. Do NOT use https:
+          +//www.msci.com/documents/10199/149ed7bc-316e-4b4c-8ea4-43fcb5b
+          +d6523: it is a stale MSCI World net factsheet from JUL 29, 202
+          +2.                                                            
+       23 +                                                              
+       24 +## 1. S&P 500 (S&P Dow Jones Indices)                         
+       25 +                                                              
+       26 +### Holdings (top 10)                                         
+       27 +                                                              
+       28 +The factsheet's text layer gives the top-10 names, but not the
+          +ir weights. Page 4 draws the weights as a chart, so they canno
+          +t be extracted as text. The weights below come from SP-JSON as
+          + raw fractions of 1 (0.0838… = 8.38 %). The as-of is the const
+          +ituents' effectiveDate 1790740800000 (= Sep 30, 2026).        
+       29 +                                                              
+       30 +| field | value | source URL | doc title, as-of, accessed | qu
+          +ote |                                                         
+       31 +|---|---|---|---|---|                                         
+       32 +| #1 Nvidia | 0.0838272625120269503 (≈8.38 %) | SP-JSON | S&P 
+          +DJI data feed, Sep 30, 2026, accessed 2026-10-15 | `"indexWeig
+          +ht":0.0838272625120269503,"instrumentKey":"27016","instrumentN
+          +ame":"Nvidia Corp"` |                                         
+       33 +| #2 Apple | 0.07371601745744708571 (≈7.37 %) | SP-JSON | same
+          + | `"indexWeight":0.07371601745744708571,"instrumentKey":"5080
+          +","instrumentName":"Apple Inc."` |                            
+       34 +| #3 Microsoft | 0.05776607805391440041 (≈5.78 %) | SP-JSON | 
+          +same | `"indexWeight":0.05776607805391440041,"instrumentKey":"
+          +4844","instrumentName":"Microsoft Corp"` |                    
+       35 +| #4 Amazon | 0.03709259281171551077 (≈3.71 %) | SP-JSON | sam
+          +e | `"indexWeight":0.03709259281171551077,"instrumentKey":"224
+          +80","instrumentName":"Amazon.com Inc"` |                      
+       36 +| #5 Alphabet A | 0.03062396248365077191 (≈3.06 %) | SP-JSON |
+          + same | `"indexWeight":0.03062396248365077191,"instrumentKey":
+          +"41032","instrumentName":"Alphabet Inc A"` |                  
+       37 +| #6 Broadcom | 0.02534195352853837118 (≈2.53 %) | SP-JSON | s
+          +ame | `"indexWeight":0.02534195352853837118,"instrumentKey":"2
+          +10176","instrumentName":"Broadcom Inc"` |                     
+       38 +| #7 Alphabet C | 0.02456534592831951464 (≈2.46 %) | SP-JSON |
+          + same | `"indexWeight":0.02456534592831951464,"instrumentKey":
+          +"351217","instrumentName":"Alphabet Inc C"` |                 
+       39 +| #8 Meta | 0.02425446324868433352 (≈2.43 %) | SP-JSON | same 
+          +| `"indexWeight":0.02425446324868433352,"instrumentKey":"29977
+          +4","instrumentName":"Meta Platforms, Inc. Class A"` |         
+       40 +| #9 Micron | 0.01824531657196964534 (≈1.82 %) | SP-JSON | sam
+          +e | `"indexWeight":0.01824531657196964534,"instrumentKey":"440
+          +5","instrumentName":"Micron Technology Inc"` |                
+     … 236 more lines (ctrl+o to expand)
+  ⎿  Created docs/research/pairs.md (+369 -0)
+        1 +# Fund pairs: US ETF → EU-buyable (UCITS) candidates          
+        2 +                                                              
+        3 +Collected and re-checked against the live sources on 2026-10-1
+          +5. Overview and scope: [README](README.md).                   
+        4 +                                                              
+        5 +Returns of these funds are in [returns.md](returns.md).       
+        6 +                                                              
+        7 +Collected 2026-10-15 from issuer websites, factsheets and KIDs
+          + only. justETF was not used, either to find funds or as a sour
+          +ce.                                                           
+        8 +                                                              
+        9 +**How to read the quotes**                                    
+       10 +- Each quote is copied from the extracted text of the page or 
+          +PDF.                                                          
+       11 +- Where the source splits a label and its value across table c
+          +ells or lines, the quote joins them with a single space. Runs 
+          +of whitespace are collapsed to one space. No other characters 
+          +were changed.                                                 
+       12 +- PDF text was extracted with pypdf. Some State Street and DWS
+          + PDFs extract with stray spaces (e.g. "T otal", "Ye s"). Quote
+          +s avoid those words where possible. Where one could not be avo
+          +ided, the quote keeps it exactly as extracted.                
+       13 +- "Accessed" is 2026-10-15 for every row.                     
+       14 +                                                              
+       15 +**Final URLs and redirects**                                  
+       16 +- iShares factsheet links redirect from `/uk/individual/en/lit
+          +erature/fact-sheet/...` to `/gls-download/literature/fact-shee
+          +t/...`. The tables give the final URL.                        
+       17 +- iShares UK product pages need `?switchLocale=y&siteEntryPass
+          +through=true` to skip the investor-type gate.                 
+       18 +- etf.dws.com product pages are JS-rendered for normal browser
+          +s. The text quoted here is the server-rendered version the sit
+          +e serves to crawler user agents, at the same URL.             
+       19 +- Invesco EMEA product pages (etf.invesco.com) redirect to the
+          + Invesco US site from this location, and direct curl gets HTTP
+          + 406. The Invesco UCITS factsheet PDFs were read through WebFe
+          +tch, which saved the PDF, and the text was then extracted loca
+          +lly.                                                          
+       20 +                                                              
+       21 +## 1. S&P 500 (US: VOO, SPY, IVV)                             
+       22 +                                                              
+       23 +### US side                                                   
+       24 +                                                              
+       25 +| field | value | source URL | doc title, as-of, accessed | qu
+          +ote |                                                         
+       26 +|---|---|---|---|---|                                         
+       27 +| VOO ticker / full name | VOO, Vanguard S&P 500 ETF | https:/
+          +/fund-docs.vanguard.com/F0968.pdf | Vanguard fact sheet "Vangu
+          +ard S&P 500 ETF \| VOO", as of June 30, 2026, accessed 2026-10
+          +-15 | "Vanguard S&P 500 ETF \| VOO" |                         
+       28 +| VOO index | S&P 500 Index | same | same | "Benchmark S&P 500
+          + Index" |                                                     
+       29 +| VOO expense ratio | 0.03% | same | same | "Expense ratio 1 0
+          +.03%" |                                                       
+       30 +| VOO issuer | Vanguard | same | same | "Vanguard S&P 500 ETF 
+          +\| VOO" |                                                     
+       31 +| VOO inception | 2010-09-07 | same | same | "Inception date 2
+          +010-09-07" |                                                  
+       32 +| SPY ticker / full name | SPY, State Street® SPDR® S&P 500® E
+          +TF Trust | https://www.ssga.com/us/en/intermediary/etfs/state-
+          +street-spdr-sp-500-etf-trust-spy | ssga.com product page "SPY:
+          + State Street® SPDR® S&P 500® ETF Trust", data as of Oct 14–15
+          + 2026, accessed 2026-10-15 | "SPY: State Street® SPDR® S&P 500
+          +® ETF Trust" |                                                
+       33 +| SPY index | S&P 500 Index | same | same | "Benchmark S&P 500
+          + Index" |                                                     
+       34 +| SPY expense ratio | 0.0945% (gross = net) | https://www.ssga
+          +.com/us/en/intermediary/library-content/products/factsheets/et
+          +fs/us/factsheet-us-en-spy.pdf | SPY fact sheet, as of 06/30/20
+          +26, accessed 2026-10-15 | "Gross Expense Ratio (%) 0.0945" / "
+          +Net Expense Ratio (%) 0.0945" |                               
+       35 +| SPY issuer | State Street Investment Management (formerly SS
+          +GA) | same factsheet | same | "State Street Global Advisors (S
+          +SGA) is now State Street Investment Management." |            
+       36 +| SPY inception | 1993-01-22 | https://www.ssga.com/us/en/inte
+          +rmediary/etfs/state-street-spdr-sp-500-etf-trust-spy | product
+          + page, accessed 2026-10-15 | "Inception Date Jan 22 1993" |   
+       37 +| IVV ticker / full name | IVV, iShares Core S&P 500 ETF | htt
+          +ps://www.ishares.com/us/products/239726/ishares-core-sp-500-et
+          +f | ishares.com product page "iShares Core S&P 500 ETF \| IVV"
+          +, data as of Oct 14, 2026, accessed 2026-10-15 | "iShares Core
+          + S&P 500 ETF \| IVV" |                                        
+       38 +| IVV index | S&P 500 Index | same | same | "Benchmark Index S
+          +&P 500 Index" |                                               
+       39 +| IVV expense ratio | 0.03% | same | same | "Expense Ratio: Fe
+          +es as stated in the prospectus 0.03%" |                       
+       40 +| IVV issuer | iShares (BlackRock) | same | same | "iShares Co
+          +re S&P 500 ETF \| IVV" |                                      
+     … 329 more lines (ctrl+o to expand)
+  ⎿  Created docs/research/popularity.md (+32 -0)
+       1 +# Popularity: which ETFs and brokers Czechs use                
+       2 +                                                               
+       3 +Collected and re-checked against the live sources on 2026-10-15
+         +. Overview and scope: [README](README.md).                     
+       4 +                                                               
+       5 +Czech media and broker statements are cited here for popularity
+         + only, never for fund facts.                                   
+       6 +                                                               
+       7 +## ETFs                                                        
+       8 +                                                               
+       9 +| claim | value | source URL | doc, date, accessed | quote |   
+      10 +|---|---|---|---|---|                                          
+      11 +| Top ETF at Patria, Fio, Cyrrus, Portu | iShares Core S&P 500 
+         +| https://ekonom.cz/c1-67571290-do-etf-fondu-priteklo-loni-reko
+         +rdni-mnozstvi-penez-vime-ktere-jsou-nejpopularnejsi-a-na-kteryc
+         +h-cesi-nejvice-vydelali | Ekonom, 2025-01-22, accessed 2026-10-
+         +15 | Konkrétně šlo o iShares Core S&P 500 USD |                
+      12 +| Top ETF at XTB | Vanguard FTSE All-World | https://ekonom.cz/
+         +c1-67571290-do-etf-fondu-priteklo-loni-rekordni-mnozstvi-penez-
+         +vime-ktere-jsou-nejpopularnejsi-a-na-kterych-cesi-nejvice-vydel
+         +ali | Ekonom, 2025-01-22, accessed 2026-10-15 | Naopak u broker
+         +a XTB Češi nejvíce investovali do ETF fondu Vanguard FTSE All-W
+         +orld UCITS ETF |                                               
+      13 +| Experts prefer accumulating | acc over dist | https://ekonom.
+         +cz/c1-67571290-do-etf-fondu-priteklo-loni-rekordni-mnozstvi-pen
+         +ez-vime-ktere-jsou-nejpopularnejsi-a-na-kterych-cesi-nejvice-vy
+         +delali | Ekonom, 2025-01-22, accessed 2026-10-15 | je také lepš
+         +í volit tzv. akumulační ETF fondy před distribučními |         
+      14 +| Revolut CZ ETF trades 2025 | S&P 500 27 %, FTSE All-World 6 %
+         + | https://www.investujeme.cz/clanky/nahlednuti-do-sveta-ceskyc
+         +h-investoru-co-v-roce-2025-nakupovali-prodavali-a-ceho-se-obava
+         +li/ | Investujeme.cz, 2026-01-30, accessed 2026-10-15 | Nejoblí
+         +benějšími investičními plány byly ETF Vanguard S&P 500, které p
+         +ředstavovaly 27 % všech ETF obchodů v roce 2025 |              
+      15 +| XTB order of choice | S&P 500, Nasdaq-100, global | https://c
+         +c.cz/do-ceho-nejvic-investuji-cesi-akciim-vevodi-cez-apple-a-te
+         +sla-mezi-indexy-vede-sp-500-rika-xtb/ | CC.cz, 2024-08-07, acce
+         +ssed 2026-10-15 | následované ETF na technologický index NASDAQ
+         + (iShares NASDAQ 100) |                                        
+      16 +| XTB 2023 index ETFs | S&P 500, MSCI World, Nasdaq-100 | https
+         +://cnn.iprima.cz/stale-vice-cechu-realizuje-sve-plany-pomoci-pa
+         +sivniho-investovani-423166 | CNN Prima News, 2024-01-22, access
+         +ed 2026-10-15 | založené na indexech S&P 500, MSCI World a NASD
+         +AQ 100 |                                                       
+      17 +| Patria top ETFs | S&P 500, Nasdaq | https://www.seznamzpravy.
+         +cz/clanek/ekonomika-finance-akcie-fondy-do-jakych-akcii-investu
+         +ji-cesi-veri-cez-ale-slysi-i-na-dividendy-z-ameriky-238659 | Se
+         +znam Zprávy, 2023-10-20, accessed 2026-10-15 | U Patria Finance
+         + vedou investice skrze ETF do klíčových amerických akciových in
+         +dexů S&P 500 a Nasdaq |                                        
+      18 +| Dividend interest is in stocks | high-yield stocks | https://
+         +www.seznamzpravy.cz/clanek/ekonomika-finance-akcie-fondy-do-jak
+         +ych-akcii-investuji-cesi-veri-cez-ale-slysi-i-na-dividendy-z-am
+         +eriky-238659 | Seznam Zprávy, 2023-10-20, accessed 2026-10-15 |
+         + preference českých investorů v podobě zájmu o tituly s vysokým
+         + dividendovým výnosem |                                        
+      19 +                                                               
+      20 +## Brokers                                                     
+      21 +                                                               
+      22 +| claim | value | source URL | doc, date, accessed | quote |   
+      23 +|---|---|---|---|---|                                          
+      24 +| Revolut CZ investment customers | hundreds of thousands | htt
+         +ps://www.seznamzpravy.cz/clanek/ekonomika-firmy-zavadeni-ai-nen
+         +i-tak-jednoduche-jak-se-tvrdi-rika-zakladatel-revolutu-290989 |
+         + Seznam Zprávy, 2025-11-07, accessed 2026-10-15 | už stovky tis
+         +íc českých zákazníků |                                         
+      25 +| Revolut CZ users | 1.3 million | https://cc.cz/revolut-v-cesk
+         +u-dal-roste-ma-13-milionu-uzivatelu-kteri-s-nim-uz-zdaleka-nepl
+         +ati-jen-v-zahranici/ | CC.cz, 2026-03-24, accessed 2026-10-15 |
+         + V Česku má aktuálně Revolut podle svého vyjádření 1,3 milionu 
+         +uživatelů |                                                    
+      26 +| Revolut CZ investors growth | +41 % | https://cc.cz/revolut-v
+         +-cesku-dal-roste-ma-13-milionu-uzivatelu-kteri-s-nim-uz-zdaleka
+         +-neplati-jen-v-zahranici/ | CC.cz, 2026-03-24, accessed 2026-10
+         +-15 | počet investorů se zvýšil o 41 procent |                 
+      27 +| XTB used by Czechs | "massively", no number | https://www.e15
+         +.cz/byznys/burzy-a-trhy/megatrest-pro-brokera-oblibeneho-v-cesk
+         +u-polaci-vytrestali-xtb-jeho-akcie-jsou-mezitim-hitem-1432137 |
+         + E15, 2026-04-14, accessed 2026-10-15 | jehož služby masivně vy
+         +užívají i Češi |                                               
+      28 +| XTB gives no CZ figure | global only | https://www.mesec.cz/c
+         +lanky/vladimir-holovka-xtb-investicni-aplikace-si-vytvarime-sam
+         +i-pred-bankami-jsme-10-let-napred/ | Měšec, 2024-01-29, accesse
+         +d 2026-10-15 | Mohu říci jen globální čísla |                  
+      29 +| XTB Broker roku 2022 (reader poll) | winner | https://finex.c
+         +z/vysledky-ankety-broker-roku-jsou-tu-letosni-11-rocnik-jiz-zna
+         +-sveho-viteze/ | Finex, 2022-12-06, accessed 2026-10-15 | Vítěz
+         +em se pro letošní rok stala společnost XTB |                   
+      30 +| XTB Prague branch | organizační složka | https://www.xtb.com/
+         +cz | xtb.com/cz, date not shown, accessed 2026-10-15 | organiza
+         +ční složka |                                                   
+      31 +| Revolut Czech app | yes | https://apps.apple.com/cz/app/revol
+         +ut/id932493382?l=cs | App Store CZ, date not shown, accessed 20
+         +26-10-15 | čeština |                                           
+      32 +| Trading 212 Czech app | yes | https://apps.apple.com/cz/app/t
+         +rading-212-stocks-etfs/id566325832?l=cs | App Store CZ, date no
+         +t shown, accessed 2026-10-15 | čeština |                       
+  ⎿  … 3 more files changed
+
+⏺ The structure looks right. Quick look at the joins in returns.md (fund sources
+  block and the merged "Not verified" list):
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/docs/research && sed
+      -n '1,12p;173,196p' returns.md | cut -c1-200; echo ...; sed -n '242,260p'
+      returns.md |…)
+  ⎿  # Returns: indices and funds (USD)
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +118 lines (ctrl+o to expand)
+
+⏺ Looks right. Regression check, which should give the same totals as the single
+  file had (527 OK, 134 browser-only, 9 positional, 6 known):
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/45fb4b62-09fd-453e-bdaf-8f879bc0d50f/scratchpad && ./venv/bin/python -I
+      checker/veri…)
+  ⎿   134 FETCH_FAIL
+        6 MISSING
+      527 OK
+        9 PARTIAL
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 10m)
+
+⏺ The totals match exactly, so no rows were lost or changed in the split. Now
+  I'll remove the old single file (untracked, generated by me in this session)
+  and update the references:
+
+⏺ Bash(git ls-files --error-unmatch docs/research.md 2>&1 | head -1; rm
+      docs/research.md && \
+      sed -i '' 's|Everything goes to `docs/research.md`, each
+      number|Everythin…)
+  ⎿  error: pathspec 'docs/research.md' did not match any file(s) known to
+     git
+     CLAUDE.md:39:- `docs/research/` sourced data from C1, one file per top
+     … +19 lines (ctrl+o to expand)
+  ⎿  Updated .claude/skills/implementation-plan/SKILL.md (+2 -2)
+       7  
+       8  A thin wrapper around the `grilling` skill for this repo.
+       9  
+      10 -1. Read the context first: `CLAUDE.md`, `docs/brief.md`, the cu
+         -rrent section of `docs/TODO.md`, and `docs/decisions.md`, `docs
+         -/research.md` and `docs/glossary.md` if they exist. Do not ask 
+         -about anything they already settle; build on it.               
+      10 +1. Read the context first: `CLAUDE.md`, `docs/brief.md`, the cu
+         +rrent section of `docs/TODO.md`, and `docs/decisions.md`, `docs
+         +/research/README.md` (and the topic files it links) and `docs/g
+         +lossary.md` if they exist. Do not ask about anything they alrea
+         +dy settle; build on it.                                        
+      11  2. In one short paragraph, state what this session has to decid
+          e and which existing decisions it builds on. Ask the user to co
+          nfirm the scope.
+      12  3. Call the Skill tool with "grilling" and follow it, with one 
+          change: ask **one question at a time**, not a whole round. Pick
+           the frontier question that unblocks the most others, give your
+           recommended answer, and wait.
+      13 -4. Facts come from `docs/research.md` or a sub-agent with a sou
+         -rce URL, never from memory. If a fact is missing, say so and ma
+         -rk the question as depending on it.                            
+      13 +4. Facts come from `docs/research/` or a sub-agent with a sourc
+         +e URL, never from memory. If a fact is missing, say so and mark
+         + the question as depending on it.                              
+      14  5. When the frontier is empty, list the agreed decisions, each 
+          with a one-line reason, and wait for confirmation. Then write t
+          hem where the TODO task says (usually `docs/decisions.md`).
+  ⎿  Updated CLAUDE.md (+1 -1)
+      36  - `docs/TODO.md` the commit plan, one section per commit
+      37  - `docs/decisions.md` decisions with reasons
+      38  - `docs/glossary.md` term · plain explanation · Czech page word
+          ing
+      39 -- `docs/research.md` sourced data collected in C1              
+      39 +- `docs/research/` sourced data from C1, one file per topic; st
+         +art at its README                                              
+      40  - `.claude/skills/implementation-start` and `implementation-end
+          ` open and close a TODO section
+      41  - `.claude/skills/implementation-plan` grilling for planning st
+          eps, one question at a time
+      42  - `.claude/skills/` third-party skills, pinned in `skills-lock.
+          json`: lead-magnets, copywriting, cro, ad-creative, analytics, 
+          ab-testing, frontend-design, performance, core-web-vitals, acce
+          ssibility
+  ⎿  Updated docs/TODO.md (+3 -3)
+       7  ## C1 Research
+       8  
+       9  - [x] Run `find-skills` to look for skills that could help here
+           (landing pages, lead magnets, conversion, analytics). Install 
+          the useful ones into the project's `.claude/skills/` so they ar
+          e in the repo.
+      10 -- [x] Agree in a short `/implementation-plan` what data to coll
+         -ect (e.g. fund pairs, historical returns, holdings, brokers, ta
+         -xes), then collect as much of it as possible from primary sourc
+         -es, so later steps can pick from it. Write down what could not 
+         -be verified. Everything goes to `docs/research.md`, each number
+         - with its source URL, date and quote.                          
+      10 +- [x] Agree in a short `/implementation-plan` what data to coll
+         +ect (e.g. fund pairs, historical returns, holdings, brokers, ta
+         +xes), then collect as much of it as possible from primary sourc
+         +es, so later steps can pick from it. Write down what could not 
+         +be verified. Everything goes to `docs/research/` (one file per 
+         +topic, overview in its README), each number with its source URL
+         +, date and quote.                                              
+      11  
+      12  ## C2 Decisions
+      13  
+      14 -- [ ] Using `docs/research.md`, suggest the key elements of the
+         - page, then run `/implementation-plan` on them together with th
+         -e "Decide first" list in `docs/brief.md`, starting from its "Th
+         -e idea" section.                                               
+      14 +- [ ] Using `docs/research/` (start with its README), suggest t
+         +he key elements of the page, then run `/implementation-plan` on
+         + them together with the "Decide first" list in `docs/brief.md`,
+         + starting from its "The idea" section.                         
+      15  - [ ] Write docs/decisions.md and docs/glossary.md. They are th
+          e input for the HTML mockups in C3.
+      16  
+      17  ## C3 Design Prep
+     ...
+      24  - [ ] Run `pnpm dev` once
+      25  - [ ] Replace the boilerplate with an empty shell (title + one 
+          sentence); delete sample assets and unused CSS.
+      26  - [ ] Scripts: add typecheck (`next typegen && tsc --noEmit`), 
+          check = typecheck + lint, test = `vitest run`.
+      27 -- [ ] Move the verified numbers from `docs/research.md` into ty
+         -ped files in `src/data/` (value, source URL, date, quote).     
+      27 +- [ ] Move the verified numbers from `docs/research/` into type
+         +d files in `src/data/` (value, source URL, date, quote).       
+      28  - [ ] Set up the design tokens from the agreed mockup (colours,
+           fonts, spacing) in the Tailwind theme.
+      29  - [ ] Deploy the empty shell to Vercel from GitHub, so every la
+          ter commit has a live URL. Note the URL in the README.
+      30  - [ ] README: how to run, project structure rules.
+  ⎿  … 1 more file changed
+
+⏺ I split the research into docs/research/: an overview README plus one file per
+  topic. The old docs/research.md is deleted; it was never committed.
+
+  ┌────────────────┬───────┬─────────────────────────────────────────────────┐
+  │      File      │ Lines │                    Contents                     │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ README.md      │ 218   │ file list, agreed scope, key findings (each     │
+  │                │       │ linking to its topic file), how it was checked  │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ popularity.md  │ 32    │ which ETFs and brokers Czechs use               │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ us-etf-rule.md │ 127   │ why US ETFs are unavailable, and the safe page  │
+  │                │       │ wording                                         │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ pairs.md       │ 369   │ US funds and their EU candidates: ISIN, TER,    │
+  │                │       │ size, listings                                  │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ holdings.md    │ 276   │ index top 10, number of companies, country and  │
+  │                │       │ sector split                                    │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ returns.md     │ 254   │ index and fund returns, with return types and   │
+  │                │       │ dates                                           │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ brokers.md     │ 166   │ Revolut, XTB, Trading 212: fees, savings plans, │
+  │                │       │  ETF availability                               │
+  ├────────────────┼───────┼─────────────────────────────────────────────────┤
+  │ taxes.md       │ 104   │ Czech tax rules from the law                    │
+  └────────────────┴───────┴─────────────────────────────────────────────────┘
+
+  A script built the files straight from the checked data, so no number was
+  retyped by hand. The quote checker gives exactly the same totals on the split
+  files as on the single file, so no row was lost or changed. Each file ends
+  with its own "Not verified" list.
+
+  Five references now point to the new folder:
+  - CLAUDE.md Map: docs/research/, starting at its README.
+  - docs/TODO.md: the C1 box, the C2 "Using…" box and the C4 "Move the verified
+    numbers…" box.
+  - .claude/skills/implementation-plan/SKILL.md: step 1 reads
+    docs/research/README.md and the files it links; step 4 takes facts from
+    docs/research/.
+
+  Updated commit message:
+
+  add C1 research: fund pairs, index data, brokers, czech taxes
+
+  - install 10 third-party skills (marketing, analytics, design, web
+    quality) into .claude/skills, pinned in skills-lock.json
+  - docs/research/: README with scope and key findings for C2, plus one
+    file per topic, each number with source URL, date and verbatim quote
+  - every quote re-checked against its live source (script + browser);
+    corrections and unverified items listed per file
+  - point CLAUDE.md, TODO and the implementation-plan skill at the folder
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage, by name:
+  - CLAUDE.md
+  - docs/TODO.md
+  - docs/research/ (the 8 files above)
+  - skills-lock.json
+  - .claude/skills/implementation-plan/SKILL.md
+  - .claude/skills/ab-testing/, accessibility/, ad-creative/, analytics/,
+    copywriting/, core-web-vitals/, cro/, frontend-design/, lead-magnets/,
+    performance/
+  - ai-log/001-research.txt, once you've run /export to create it
+
+  The mistakes list for ai-log/mistakes.md hasn't changed. Approve the message
+  or edit it, then tell me once the export is in place and I'll commit and push
+  to origin/main.
+
+✻ Cooked for 3m 49s · done 10:49 AM
+
+❯ /export                                                                       
+  ⎿  Conversation copied to clipboard
+
+❯ /context 
+  ⎿  Context Usage
+     ⛁ ⛁ ⛁ ⛁ ⛀ ⛀ ⛀ ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   Opus 5.5
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   claude-opus-5-5
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   344.9k/1m tokens (34%)
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ 
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Estimated usage by category
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 4.4k tokens (0.4%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 17.1k tokens (1.7%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ MCP tools: 1.6k tokens (0.2%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ MCP server instructions: 717 tokens (0.1%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛁ Memory files: 697 tokens (0.1%)
+                                               ⛁ Skills: 8.4k tokens (0.8%)
+                                               ⛁ Messages: 311.9k tokens (31.2%)
+                                               ⛶ Free space: 622.1k (62.2%)
+                                               ⛝ Autocompact buffer: 33k tokens (3.3%)
+
+     Auto-compact window: 1m tokens
+
+     MCP tools · /mcp (loaded on-demand)
+
+     Loaded
+     ├ mcp__claude-in-chrome__browser_batch: 682 tokens
+     ├ mcp__claude-in-chrome__javascript_tool: 432 tokens
+     ├ mcp__claude-in-chrome__tabs_close_mcp: 221 tokens
+     └ mcp__claude-in-chrome__tabs_context_mcp: 303 tokens
+
+     Available
+     ├ mcp__claude_ai_Claude_Docs__batch
+     ├ mcp__claude_ai_Claude_Docs__create
+     ├ mcp__claude_ai_Claude_Docs__delete
+     ├ mcp__claude_ai_Claude_Docs__export
+     ├ mcp__claude_ai_Claude_Docs__guide
+     ├ mcp__claude_ai_Claude_Docs__query
+     ├ mcp__claude_ai_Claude_Docs__read
+     ├ mcp__claude_ai_Claude_Docs__update
+     ├ mcp__claude_ai_Google_Drive__authenticate
+     ├ mcp__claude_ai_Google_Drive__complete_authentication
+     ├ mcp__claude-in-chrome__computer
+     ├ mcp__claude-in-chrome__file_upload
+     ├ mcp__claude-in-chrome__find
+     ├ mcp__claude-in-chrome__form_input
+     ├ mcp__claude-in-chrome__get_page_text
+     ├ mcp__claude-in-chrome__gif_creator
+     ├ mcp__claude-in-chrome__list_connected_browsers
+     ├ mcp__claude-in-chrome__navigate
+     ├ mcp__claude-in-chrome__read_console_messages
+     ├ mcp__claude-in-chrome__read_network_requests
+     ├ mcp__claude-in-chrome__read_page
+     ├ mcp__claude-in-chrome__resize_window
+     ├ mcp__claude-in-chrome__select_browser
+     ├ mcp__claude-in-chrome__shortcuts_execute
+     ├ mcp__claude-in-chrome__shortcuts_list
+     ├ mcp__claude-in-chrome__switch_browser
+     ├ mcp__claude-in-chrome__tabs_create_mcp
+     └ mcp__claude-in-chrome__upload_image
+
+     Memory files · /memory
+     └ CLAUDE.md: 697 tokens
+
+     Skills · /skills
+
+     Project
+     ├ ad-creative: ~340 tokens
+     ├ copywriting: ~330 tokens
+     ├ analytics: ~300 tokens
+     ├ ab-testing: ~270 tokens
+     ├ lead-magnets: ~250 tokens
+     ├ cro: ~220 tokens
+     ├ implementation-plan: ~90 tokens
+     ├ core-web-vitals: ~90 tokens
+     ├ implementation-end: ~80 tokens
+     ├ performance: ~80 tokens
+     ├ accessibility: ~80 tokens
+     ├ frontend-design: ~70 tokens
+     ├ implementation-start: ~60 tokens
+     └ grilling: ~60 tokens
+
+     User
+     ├ supabase-postgres-best-practices: ~290 tokens
+     ├ supabase: ~170 tokens
+     ├ code-review: ~140 tokens
+     ├ vitest: ~120 tokens
+     ├ agent-device: ~110 tokens
+     ├ security-audit: ~110 tokens
+     ├ vercel-react-native-skills: ~110 tokens
+     ├ find-skills: ~110 tokens
+     ├ codebase-design: ~100 tokens
+     ├ research: ~80 tokens
+     ├ dogfood: ~80 tokens
+     ├ prototype: ~60 tokens
+     ├ diagnosing-bugs: ~60 tokens
+     ├ tdd: ~50 tokens
+     └ resolving-merge-conflicts: ~30 tokens
+
+     claude.ai sync
+     ├ docs: ~340 tokens
+     ├ pptx: ~330 tokens
+     ├ google-workspace: ~330 tokens
+     ├ xlsx: ~320 tokens
+     ├ docx: ~320 tokens
+     ├ pdf: ~150 tokens
+     ├ morning: ~120 tokens
+     ├ skill-creator: ~120 tokens
+     └ import-memory: ~60 tokens
+
+     Built-in
+     ├ dataviz: ~480 tokens
+     ├ claude-api: ~360 tokens
+     ├ artifact-capabilities: ~250 tokens
+     ├ update-config: ~240 tokens
+     ├ claude-in-chrome: ~180 tokens
+     ├ schedule: ~130 tokens
+     ├ run: ~120 tokens
+     ├ loop: ~120 tokens
+     ├ plugin-authoring: ~90 tokens
+     ├ workflow-authoring: ~80 tokens
+     ├ keybindings-help: ~80 tokens
+     ├ artifact-diagramming: ~70 tokens
+     ├ artifact-design: ~70 tokens
+     ├ fewer-permission-prompts: ~60 tokens
+     ├ simplify: ~60 tokens
+     ├ security-review: ~30 tokens
+     └ init: ~20 tokens

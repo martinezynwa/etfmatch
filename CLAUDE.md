@@ -36,6 +36,7 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
 - `docs/TODO.md` the commit plan, one section per commit
 - `docs/decisions.md` decisions with reasons
 - `docs/glossary.md` term · plain explanation · Czech page wording
-- `docs/research.md` sourced data collected in C1
+- `docs/research/` sourced data from C1, one file per topic; start at its README
 - `.claude/skills/implementation-start` and `implementation-end` open and close a TODO section
 - `.claude/skills/implementation-plan` grilling for planning steps, one question at a time
+- `.claude/skills/` third-party skills, pinned in `skills-lock.json`: lead-magnets, copywriting, cro, ad-creative, analytics, ab-testing, frontend-design, performance, core-web-vitals, accessibility

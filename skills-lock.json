@@ -1,11 +1,71 @@
 {
   "version": 1,
   "skills": {
+    "ab-testing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/ab-testing/SKILL.md",
+      "computedHash": "1b2e30a097502bddbfac91d6b97d37a286c0c1eeef197e3fd00fedf10a60e883"
+    },
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/accessibility/SKILL.md",
+      "computedHash": "612f913bcb03f0787b103c848cd7664b676a9aaf31f25d3270cc69cf5caaab95"
+    },
+    "ad-creative": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/ad-creative/SKILL.md",
+      "computedHash": "d698c20395e0ae36b35c03a8a6f9619af34814b487dacdc96272e5424e63531d"
+    },
+    "analytics": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/analytics/SKILL.md",
+      "computedHash": "0a586afc77c6d9a0d623e445ad78dd987f5da5a2d77ff7fc2aa587c008c251e7"
+    },
+    "copywriting": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/copywriting/SKILL.md",
+      "computedHash": "6341d240554cb1bcdcce414e9024af9a45f2606bd15493fb6c9a170945a0a0e9"
+    },
+    "core-web-vitals": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/core-web-vitals/SKILL.md",
+      "computedHash": "601b2cbb920fb0ea9814a3f11232d7883e1eb0923865218502ab1d73e9fc5172"
+    },
+    "cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/cro/SKILL.md",
+      "computedHash": "f1974581536c4c860a0f7da4b663e2520dfc79a065327b576b12013dd62ad45e"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
     "grilling": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/grilling/SKILL.md",
       "computedHash": "ef1641a2047b71b60f1942cd35efb47d3afc9d584dff5a0b01f8c7db923aaa08"
+    },
+    "lead-magnets": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/lead-magnets/SKILL.md",
+      "computedHash": "1956a2253be6ce5f59361d4af7757eb230d92835bff1dd4f7b19af2a1dac89bd"
+    },
+    "performance": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performance/SKILL.md",
+      "computedHash": "ce9d36f139a1b2a6a8ac2cb222698963b8076d2dd8b41685e8e8ae589cdcf1e4"
     }
   }
 }
