@@ -11,8 +11,8 @@ C3 turns them into concrete sections.
 
 ## C2 Decisions
 
-- [ ] Using `docs/research/` (start with its README), suggest the key elements of the page, then run `/implementation-plan` on them together with the "Decide first" list in `docs/brief.md`, starting from its "The idea" section.
-- [ ] Write docs/decisions.md and docs/glossary.md. They are the input for the HTML mockups in C3.
+- [x] Using `docs/research/` (start with its README), suggest the key elements of the page, then run `/implementation-plan` on them together with the "Decide first" list in `docs/brief.md`, starting from its "The idea" section.
+- [x] Write docs/decisions.md and docs/glossary.md. They are the input for the HTML mockups in C3.
 
 ## C3 Design Prep
 

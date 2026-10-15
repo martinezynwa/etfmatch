@@ -1,0 +1,1480 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /model                                                                        
+  ⎿  Set model to Opus 5.5 and saved as your default for new sessions
+
+❯ /implementation-start C2                                                      
+
+  Listed 2 directories (ctrl+o to expand)
+
+⏺ Bash(cat docs/research/popularity.md; for f in pairs holdings returns brokers
+      taxes us-etf-rule; do echo "=== $f"; awk '/^## Not verified/{p=1} p'
+      docs/research/$f.m…)
+  ⎿  # Popularity: which ETFs and brokers Czechs use
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +314 lines (ctrl+o to expand)
+
+⏺ Plan for C2
+  1. I read the TODO section, the brief, the research README and the "Not
+     verified" list in every topic file. My suggested page elements are below.
+  2. Next comes /implementation-plan, one question at a time, starting from "The
+     idea". The order is target group → what they get and when we ask → page
+     elements → two ads → funnel events → e-mail preview.
+  3. Then I write docs/decisions.md (each decision with its reason and a link to
+     the research) and docs/glossary.md (term · plain explanation · Czech
+     wording).
+  4. CLAUDE.md already lists both files in its Map, so it probably needs no
+     change.
+  5. One conflict needs a decision: the brief's "reinvest or pay out" tap goes
+     against C1 scope point 4, which put accumulating vs distributing in the
+     e-mail only. I'll ask about it when we get to page elements.
+
+  Suggested key elements (page order)
+  1. Header "ETF Match".
+  2. Hook that picks up the ad: "VOO, SPY nebo QQQ si tu většinou nekoupíte.
+     Jejich evropské dvojče ano." Below it, one line from the research's safe
+     wording (no KID, so most EU brokers don't sell US ETFs). Never "zakázané"
+     (banned).
+  3. Pairs list, US → EU, one chosen EU fund per row: S&P 500, Nasdaq-100, MSCI
+     World, and VT → All-World labelled "alternativa".
+  4. Tap choice: which index (S&P 500 / Nasdaq-100 / celý svět). Whether to also
+     have an acc/dist tap is still open.
+  5. Match card, all numbers from the 30 Sep 2026 factsheets:
+     - fund name, ticker and ISIN
+     - TER vs the US fund (honest: on the Nasdaq-100 the EU fund costs more,
+       0.30 % vs 0.18 %)
+     - top 5 holdings as bars, number of companies, US share
+     - one return figure on one consistent basis, plus the worst year
+     - where to buy: Trading 212 and XTB are verified; Revolut can't be named
+       because it's not verified
+     - fees as one row
+  6. The ask, a dark block:
+     - checklist of what the e-mail contains: S&P 500 vs World, fees for your
+       amount, taxes (3-year test, 100 000 Kč limit), steps to a first purchase
+     - one e-mail field, GDPR consent and a named data controller
+  7. After submit, a preview of the e-mail.
+  8. FAQ: "Je to zakázané?", akumulační vs distribuční, daně in brief, "Proč je
+     to v EU dražší?".
+  9. Disclaimer and a source next to every number.
+
+  Scope of this session: we decide the five "Decide first" items in the brief,
+  plus the final page elements, the EU fund chosen for each pair and the returns
+  basis. This builds on the C1 research scope (pairs, brokers, no dividend
+  ETFs, no CZK maths). Is that the right scope? If it is, here's the first
+  question:
+
+  ---
+
+  ❓ Q1 – Target group: Who exactly is the visitor? Everything after this
+  depends on it: the ad wording, how much we explain, what the e-mail promises.
+
+  - A) A Czech beginner, 20–40, on a phone. They know "S&P 500" and maybe VOO
+    from US-made content (YouTube, Reddit, podcasts), and either haven't bought
+    an ETF yet or have just opened Revolut or XTB. They want to invest regularly
+    from their salary and are unsure which fund is the "right" one in Europe.
+  - B) An existing investor who already holds an EU ETF and wants to check
+    whether theirs is the right one. Lower need, and the page gives them less.
+  - C) A complete novice who doesn't know what an index is. The "US → EU" angle
+    means nothing to them.
+
+  ➡️ A. It fits the research. The S&P 500 is the top ETF at most Czech brokers,
+  and at Revolut CZ it made up 27 % of ETF trades in 2025. The "can't buy VOO"
+  moment hits exactly this person. B stays a secondary audience the page still
+  serves. The age range is my assumption: it's a description of the persona, not
+  a number shown on the page.
+
+✻ Crunched for 47s · done 1:09 PM
+
+❯ A makes sense, it is beginner with some basic knowledge                       
+
+⏺ Noted: Q1 = A, a beginner with some basic knowledge.
+
+  ---
+
+  ❓ Q2 – What they get for the e-mail: What exactly is the e-mail offer, the
+  thing named on the button and in the checklist?
+
+  - A) A personal plan for the index they picked, built from their tap choices,
+    with five parts:
+    a. S&P 500 vs World in plain words
+    b. what their chosen EU fund costs at Trading 212 and XTB, for the amount
+       they invest
+    c. Czech taxes in brief (3-year test, 100 000 Kč limit)
+    d. akumulační vs distribuční
+    e. steps to a first purchase
+
+    Working name: "Váš ETF plán".
+  - B) A general PDF guide, the same for everyone ("Průvodce ETF pro Čechy").
+  - C) A short e-mail course (5 e-mails over 5 days).
+
+  ➡️ A. The brief says the visitor gives an e-mail "for something concrete". A
+  plan shaped by their own choices feels concrete, and the post-submit preview
+  can show it filled in. B is weaker, because generic guides are everywhere. C
+  promises a sequence we don't build in this demo.
+
+  One note: "costs for your amount" means multiplying a sourced fee % by their
+  amount. That is arithmetic on sourced numbers, not a new figure, so I think
+  the data rule allows it. Whether we ask for the amount at all is a later
+  question.
+
+✻ Crunched for 11s · done 1:10 PM
+
+❯ A is valid, but let's skip the E - steps for a first purchase, it should just 
+  act as a reference, explaining steps for a first purchase for various         
+  sources feels tedious.                                                        
+  can you give me a brief overview of what exactly would the email look like?   
+  Just to get the values idea                                                   
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Noted: Q2 = A without the steps to a first purchase. The e-mail is a reference
+  with 4 parts: S&P 500 vs World, costs at T212 and XTB, taxes, akumulační vs
+  distribuční.
+
+  Below is a sketch of the e-mail for someone who picked S&P 500 and 5 000 Kč a 
+  month. The amount is an example only. Every figure is from docs/research/,
+  apart from the Kč amounts, which are simple arithmetic on sourced percentages.
+
+  Předmět: Váš ETF plán: S&P 500
+
+  Vaše evropské dvojče k VOO
+  iShares Core S&P 500 UCITS ETF (Acc) · ISIN IE00B5BMR087
+  Roční poplatek fondu (TER) 0,07 % · u VOO 0,03 %
+
+  1) S&P 500, nebo celý svět?
+                   S&P 500        MSCI World
+  Firem            503            1 249
+  Podíl USA        100 %          72,94 %
+  10 let ročně     15,33 %*       12,81 %*
+  Nejhorší rok     2022: −19,44 % 2022: −18,14 %
+  Top 3 v obou: Nvidia, Apple, Microsoft.
+  * jiný typ výnosu (hrubý vs. čistý), proto jen orientačně
+
+  2) Kolik zaplatíte při 5 000 Kč měsíčně
+                   Trading 212    XTB
+  Provize          0 Kč           0 Kč (do 100 000 € měsíčně)
+  Směna měny       0,15 % = 7,50 Kč   0,5 % = 25 Kč   (za nákup)
+  Poplatek fondu   0,07 % ročně = cca 42 Kč z 60 000 Kč za rok
+
+  3) Daně v kostce
+  • Držíte déle než 3 roky → prodej je bez daně.
+  • Prodáte za max. 100 000 Kč za rok → bez daně.
+  • Jinak zisk daníte 15 % (23 % nad 1 762 812 Kč).
+  • Zdroj: zákon o daních z příjmů § 4 odst. 1 písm. t), u)
+
+  4) Akumulační, nebo distribuční?
+  Akumulační fond dividendy sám znovu investuje.
+  Distribuční je vyplácí a vy z nich platíte 15 % daň.
+
+  Zdroje u každého čísla · Nejde o investiční doporučení.
+  Minulé výnosy nezaručují budoucí.
+
+  Two things this sketch shows:
+  - The returns row mixes the S&P 500 gross total return with the MSCI World net
+    total return. We have to settle a consistent basis later, or show only the
+    worst year.
+  - The FX row assumes a CZK account buying a fund priced in EUR or USD. In the
+    e-mail it needs the words "pokud máte účet v Kč" (if your account is in Kč).
+    Revolut is left out because its fund availability isn't verified.
+
+  ---
+
+  ❓ Q3 – When the page asks for the e-mail: Where does the form appear?
+
+  - A) After the match card. The visitor taps an index and sees the EU fund,
+    what's inside it and where to buy it. Then the dark block says "Pošleme vám
+    celý plán k S&P 500". The value is clear before we ask, as the brief wants.
+  - B) On the first screen, next to the pairs, for visitors in a hurry. That
+    risks asking before they've seen any value.
+  - C) Both: a small "pošlete mi plán" link in the first screen that scrolls
+    down to the single form after the match.
+
+  ➡️ C, with only one form, placed after the match card. The real ask sits where
+  the value has already landed (A). The first-screen link catches people who
+  are ready straight from the ad without adding a second form. It also meets the
+  brief's "every interactive element leads to the form".
+
+✻ Crunched for 25s · done 1:15 PM
+
+❯ In realtime we'd send the email, instead, I suggest to show some popup or     
+  modal with the exact email texting, with the ability to close it an repeat    
+  infinite times. The full email content is not displayed elswehre              
+  Also, not not show the worst year, I am also missing some information of      
+  potential income when ivesting certain amount, can you include it and show    
+  updated version of the email again? Let's talk about the email content until  
+  clarified                                                                     
+
+⏺ Bash(python3 -c "
+      for name,r in [('SP500',0.1533),('World',0.1281),('NDX',0.2116)]:…)
+  ⎿  SP500 1322774 722774 4.163
+     World 1157939 557939 3.338
+     NDX 1803857 1203857 6.817
+
+⏺ Noted, and this replaces the old "e-mail preview" item:
+  - After submit, a modal shows the exact e-mail. It can be closed and opened
+    again any number of times.
+  - The full e-mail text appears only in that modal, nowhere else on the page.
+  - In the e-mail, the worst year is gone and an income illustration is added.
+
+  The question of when the page asks for the e-mail (Q3) waits until the e-mail
+  content is settled.
+
+  Updated e-mail (S&P 500, 5 000 Kč a month, with my recommended answer to Q4
+  below applied):
+
+  Předmět: Váš ETF plán: S&P 500
+
+  Vaše evropské dvojče k VOO
+  iShares Core S&P 500 UCITS ETF (Acc) · ISIN IE00B5BMR087
+  Roční poplatek fondu (TER) 0,07 % · u VOO 0,03 %
+
+  1) Kolik by z toho mohlo být
+  5 000 Kč měsíčně po dobu 10 let:
+  Vložíte celkem      600 000 Kč
+  S&P 500             cca 1,32 mil. Kč (z toho výnos cca 720 000 Kč)
+  Celý svět (MSCI World)  cca 1,16 mil. Kč (z toho výnos cca 560 000 Kč)
+  Ilustrace, ne předpověď: počítáme, jako by index rostl každý rok
+  svým průměrem za posledních 10 let (S&P 500 15,33 %, MSCI World
+  12,81 % ročně, v dolarech). Skutečný výnos kolísá, některé roky
+  je záporný, a ovlivní ho i kurz koruny k dolaru.
+
+  2) S&P 500, nebo celý svět?
+                   S&P 500        MSCI World
+  Firem            503            1 249
+  Podíl USA        100 %          72,94 %
+  Top 3 v obou: Nvidia, Apple, Microsoft.
+
+  3) Kolik zaplatíte při 5 000 Kč měsíčně
+                   Trading 212        XTB
+  Provize          0 Kč               0 Kč (do 100 000 € měsíčně)
+  Směna měny*      0,15 % = 7,50 Kč   0,5 % = 25 Kč   (za nákup)
+  Poplatek fondu   0,07 % ročně = cca 42 Kč z 60 000 Kč za rok
+  * pokud máte účet v Kč
+
+  4) Daně v kostce
+  • Držíte déle než 3 roky → prodej je bez daně.
+  • Prodáte za max. 100 000 Kč za rok → bez daně.
+  • Jinak zisk daníte 15 % (23 % nad 1 762 812 Kč).
+  • Zdroj: zákon o daních z příjmů § 4 odst. 1 písm. t), u)
+
+  5) Akumulační, nebo distribuční?
+  Akumulační fond dividendy sám znovu investuje.
+  Distribuční je vyplácí a vy z nich platíte 15 % daň.
+
+  Zdroje u každého čísla · Nejde o investiční doporučení.
+  Minulé výnosy nezaručují budoucí.
+
+  ---
+
+  ❓ Q4 – How to show the income illustration: The research has only the annual
+  average over 10 years. It has no month-by-month index history, so we can't
+  calculate "what you would really have today". Each option is a trade-off:
+
+  - A) A monthly amount at the historical 10-year average, in Kč (shown above).
+    It's concrete and easy for a beginner to read. The weakness is that it
+    applies a dollar return to a koruna amount. That only holds if the exchange
+    rate stays the same, so the caveat names it. The figures are rounded ("cca
+    1,32 mil.") to avoid false precision.
+  - B) Only a multiple: "Za posledních 10 let index zhruba 4,2× (v dolarech)."
+    This is exact maths on a sourced figure with no currency assumption, but
+    it's abstract and doesn't use their amount.
+  - C) Assumed rates (for example 4 % / 7 % / 10 %). This breaks the "nothing
+    from memory" rule, because no source backs these rates.
+
+  ➡️ A, with B's multiple as a smaller line under it. Two points to agree on
+  with it:
+  - The basis differs: the S&P 500's 15.33 % is gross total return from S&P's
+    data feed, while MSCI World's 12.81 % is net. Both labels stay in the source
+    note.
+  - This bends the C1 "no CZK maths" rule. We don't convert anything, but we do
+    put a koruna amount next to a dollar return. I'd record that in decisions.md
+    as a deliberate exception, with the caveat as its condition.
+
+✻ Worked for 46s · done 1:18 PM
+
+❯ The example is valid, it is also crucial to emphasize that this is not        
+  investment reccomendation but just historical statistic                       
+
+⏺ Noted: Q4 = A, as in the example. I'll leave out the B "4,2×" multiple line,
+  since you accepted the example as it was.
+
+  For the emphasis, the disclaimer goes directly above the numbers in section 1,
+  not only in the footer:
+
+  1) Kolik by z toho mohlo být
+  ┌──────────────────────────────────────────────────────────┐
+  │ Nejde o investiční doporučení. Je to jen historická       │
+  │ statistika indexu, ne předpověď. Minulé výnosy nezaručují │
+  │ budoucí a investice může ztratit hodnotu.                 │
+  └──────────────────────────────────────────────────────────┘
+  5 000 Kč měsíčně po dobu 10 let: …
+
+  The same line also stays in the footer of the e-mail, and the page itself gets
+  its own disclaimer, as the brief requires.
+
+  ---
+
+  ❓ Q5 – Where the e-mail's inputs come from: The e-mail needs two things from
+  the visitor: the index (S&P 500 / Nasdaq-100 / celý svět) and the monthly 
+  amount. How do we get the amount?
+
+  - A) Tap choices on the page, next to the index choice, for example 1 000 / 3
+    000 / 5 000 / 10 000 Kč. The form stays a single e-mail field, and each tap
+    is one more interactive step that leads to the form.
+  - B) A number field in the form. It's exact, but it adds a field and some
+    friction.
+  - C) No amount: always 5 000 Kč as an example.
+
+  ➡️ A. The default is 5 000 Kč, and the time span is fixed at 10 years, because
+  that's the period the sourced average covers. A longer span would stretch the
+  data past what it says.
+
+✻ Crunched for 12s · done 1:19 PM
+
+❯ A                                                                             
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 298,345p docs/research/pairs.md | grep -i -E
+      "####|AUM|inception|TER")
+  ⎿  #### A. iShares Core MSCI World UCITS ETF (SWDA / IWDA / EUNL)
+     - F4 = https://www.ishares.com/gls-download/literature/fact-sheet/swda
+     -ishares-core-msci-world-ucits-etf-fund-fact-sheet-en-gb.pdf. Fact she
+     … +18 lines (ctrl+o to expand)
+
+⏺ Noted: Q5 = A. The page has amount taps (1 000 / 3 000 / 5 000 / 10 000 Kč,
+  default 5 000), and the illustration always covers 10 years.
+
+  ---
+
+  ❓ Q6 – One EU fund per index: The e-mail (and the match card) names one fund
+  for each index. Which one?
+
+  Index: S&P 500
+  Recommended fund: iShares Core S&P 500 (Acc), IE00B5BMR087, TER 0.07 %
+  Why: Top ETF at Patria, Fio, Cyrrus and Portu; the largest (USD 159 bn);
+  running since 2010; the only one XTB confirms by ISIN
+  Runner-up: Vanguard S&P 500 (Acc), same TER, the top pick at Revolut, but we
+  can't name Revolut
+  ────────────────────────────────────────
+  Index: Nasdaq-100
+  Recommended fund: iShares NASDAQ 100, IE00B53SZB19, TER 0.30 %
+  Why: XTB names it as Czechs' second pick; the larger of the two candidates;
+  since 2010
+  Runner-up: Invesco EQQQ, same TER
+  ────────────────────────────────────────
+  Index: Svět
+  Recommended fund: iShares Core MSCI World (Acc), IE00B4L5Y983, TER 0.20 %
+  Why: The largest (USD 152 bn), since 2009; keeps all three funds from one
+  issuer
+  Runner-up: Xtrackers MSCI World 1C, TER 0.12 % (cheaper, USD 31 bn)
+
+  A consequence for "Svět": it has to be MSCI World, not FTSE All-World (VWCE).
+  VWCE is the top pick at XTB, but FTSE publishes no 10-year return, so the
+  income illustration couldn't work for it. VT → All-World would then stay off
+  the page.
+
+  ➡️ Yes to the three iShares funds above, all accumulating (Acc). The
+  distributing class comes up only as an explanation in e-mail section 5. One
+  open trade-off: Xtrackers is 0.08 points cheaper. Take it instead of iShares
+  if you'd rather have the lowest fee than one issuer and the largest fund.
+
+✻ Churned for 30s · done 1:21 PM
+
+❯ Agreed                                                                        
+
+⏺ Noted: Q6 = the three iShares Acc funds. "Svět" means MSCI World, and VT →
+  All-World stays off the page.
+
+  ---
+
+  ❓ Q7 – What the comparison shows for each choice: Sections 1 (income
+  illustration) and 2 (what's inside) were sketched for S&P 500 vs World. What
+  does someone who picked Nasdaq-100, or World, see?
+
+  - A) Always all three indexes side by side, with the chosen one highlighted.
+    Rows: number of companies, US share, top 3, the 10-year illustration for
+    their amount. One gap: Nasdaq publishes no US share and no top-10 share, so
+    that cell reads "neuvádí" (not stated).
+  - B) The chosen index vs one fixed benchmark: S&P 500 → World, World → S&P
+    500, Nasdaq-100 → S&P 500. Two columns read easily on a phone, and the
+    Nasdaq gap stays smaller.
+  - C) Only the chosen index, with no comparison.
+
+  ➡️ A. The comparison is the e-mail's value: the visitor sees what they would
+  get with the other choices too. One consequence for the Nasdaq-100: it
+  averaged 21.16 % a year (total return), so with 5 000 Kč a month it shows cca 
+  1,80 mil. Kč. That's the most tempting number in the e-mail. I'd add one
+  sentence of context to its column: "100 firem, převážně technologie" (100
+  companies, mostly technology). The disclaimer already sits above the table.
+  Whether the "mostly technology" wording is supported has to be checked against
+  the sector split in holdings.md.
+✻ Crunched for 14s · done 1:22 PM
+
+❯ A is valid                                                                    
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Noted: Q7 = A. I checked the Nasdaq context line against holdings.md: the
+  Nasdaq-100 factsheet (30 Sep 2026) gives Technology 68.01 %. So the Nasdaq
+  column can say "100 firem, 68 % technologie", sourced, rather than the vaguer
+  "převážně".
+
+  Notes on the gaps:
+  - The US share for Nasdaq-100 shows "neuvádí" (not stated).
+  - The sector figure stays in the Nasdaq column only. The indexes use different
+    sector systems (ICB vs GICS), so a sector row across all three columns
+    wouldn't compare like with like.
+
+  ---
+
+  ❓ Q8 – Sources inside the e-mail: The brief wants "its source next to" every
+  number. In an e-mail opened on a phone, how?
+
+  - A) A small number by each figure, plus a "Zdroje" list at the end. Each
+    entry gives the document name, its date and a link, for example "¹ S&P 500
+    factsheet, 30. 9. 2026". The table stays readable, and every number can be
+    traced.
+  - B) A link straight on each number. That's cluttered, and a mis-tap on a
+    phone opens a PDF.
+  - C) One line, "Zdroje: factsheety indexů a ceníky brokerů", with no
+    per-number link. Too vague for our data rule.
+
+  ➡️ A. The modal shows it the same way, so the sources stay inside the e-mail
+  and aren't repeated elsewhere. If the user confirms, the e-mail content is
+  settled, and I'll go back to Q3, when the page asks.
+
+✻ Baked for 15s · done 1:23 PM
+
+❯ A                                                                             
+
+⏺ Noted: Q8 = A. That settles the e-mail content:
+  - 5 sections: income illustration (with the disclaimer box above it), what's
+    inside, fees, taxes, Acc/Dist.
+  - 3 indexes side by side, with the chosen one highlighted.
+  - Numbered sources in a list at the end.
+
+  Back to the question we parked:
+
+  ---
+
+  ❓ Q3 – When the page asks for the e-mail: Where does the form sit?
+
+  - A) After the match card only. The visitor taps an index and an amount, sees
+    the EU fund, what's inside it and where to buy it, and then the dark block
+    says "Pošleme vám celý plán k S&P 500".
+  - B) On the first screen. That asks before any value has been shown.
+  - C) One form after the match card, plus a small "Pošlete mi plán" link on the
+    first screen that scrolls down to it.
+
+  ➡️ C. The real ask comes after the value (A). The first-screen link catches
+  visitors who are already convinced by the ad, without a second form. It also
+  meets the brief's "every interactive element leads to the form": the taps
+  update the match card, and the card ends in the form.
+
+✻ Cogitated for 5s · done 1:24 PM
+
+❯ A                                                                             
+
+⏺ Noted: Q3 = A. The form sits only after the match card, with no shortcut link.
+  The red CTA on the first screen then leads to the taps, not to the form, for
+  example "Najít moje dvojče" (find my twin).
+
+  Next are the page elements.
+
+  ---
+
+  ❓ Q9 – The tap choices on the page: The brief's design direction has two
+  taps: which index and reinvest or pay out. Since then we decided that all
+  three funds are Acc and that Acc vs Dist is explained only in the e-mail. We
+  also added an amount tap (Q5).
+
+  - A) Index + amount. The acc/dist tap is dropped. Two rows of chips:
+    - S&P 500 / Nasdaq-100 / Svět
+    - 1 000 / 3 000 / 5 000 / 10 000 Kč
+  - B) Index + amount + acc/dist, with three rows. That brings back the Dist
+    share classes, so 3 more ISINs, TERs and broker checks. It also adds a
+    choice a beginner can't yet judge.
+  - C) Index only; the amount is asked in the form. That goes against Q5.
+
+  ➡️ A. Each tap changes something visible: the index switches the match card,
+  and the amount is used in the e-mail. Since the amount only reaches the
+  e-mail, the match card should show one line that uses it, so the tap doesn't
+  feel dead. For example "Vaše měsíční poplatky: 7,50 Kč u Trading 212". That's
+  the fees row the brief asks for.
+
+✻ Churned for 10s · done 1:26 PM
+
+❯ A                                                                             
+
+⏺ Noted: Q9 = A. The page has two rows of chips (index, amount), and the match
+  card shows one fees line computed from the chosen amount.
+
+  ---
+
+  ❓ Q10 – What the match card shows (free on the page, with the rest in the
+  e-mail): proposed contents, top to bottom:
+
+  1. Fund: "Místo VOO, SPY, IVV → iShares Core S&P 500 (Acc)", plus the ISIN to
+     copy into a broker's search.
+  2. Fees: TER 0.07 % vs VOO 0.03 %.
+  3. Top 5 companies as bars with their weights, plus the number of companies.
+  4. Historical return: "Za 10 let průměrně 15,33 % ročně (v USD)", with the
+     return type and "minulé výnosy nezaručují budoucí".
+  5. Where to buy: Trading 212 and XTB, the two where the fund is verified as
+     listed.
+  6. Fees row for their amount: "Při 5 000 Kč: Trading 212 7,50 Kč, XTB 25 Kč za
+     nákup (směna měny, pokud máte účet v Kč)".
+
+  What stays only in the e-mail: the Kč illustration, the three-index
+  comparison, taxes, Acc/Dist.
+
+  ➡️ Yes, all six. Two notes:
+  - S&P 500 weights: the factsheet draws the S&P 500 top-10 weights as a chart
+    with no text. The numbers come from S&P's own data feed as fractions (0.0836
+    → 8.36 %). I'd accept that ×100 as a unit change, not a new figure, and
+    record it. MSCI World and Nasdaq-100 weights are printed in their
+    factsheets.
+  - Return on the page vs in the e-mail: the page shows the % a year, and the
+    e-mail turns it into Kč for their amount. That keeps the page useful without
+    giving the e-mail's value away.
+
+✻ Cooked for 14s · done 1:26 PM
+
+❯ please generate a wireframe for better idea                                   
+
+⏺ Bash(sed -n 30,40p docs/research/holdings.md | cut -c1-90)
+  ⎿  | field | value | source URL | doc title, as-of, accessed | quote |
+     |---|---|---|---|---|
+     | #1 Nvidia | 0.0838272625120269503 (≈8.38 %) | SP-JSON | S&P DJI data
+     … +16 lines (ctrl+o to expand)
+
+⏺ This is a text wireframe at phone width, with real numbers for the S&P 500
+  case. It's for layout only: look and final copy come in C3.
+
+  ┌─ SCREEN 1 (fits 375 × 667) ────────────┐
+  │ ETF Match                              │
+  │                                        │
+  │ VOO si tu většinou                     │
+  │ nekoupíte. Jeho evropské               │
+  │ dvojče ano.                            │
+  │                                        │
+  │ Většina brokerů v EU americká ETF      │
+  │ neprodává (chybí jim dokument KID).    │
+  │ Stejný index ale koupíte v EU fondu.   │
+  │                                        │
+  │ ┌────────────────────────────────────┐ │
+  │ │ VOO · SPY · IVV  →  iShares S&P 500│ │
+  │ │ QQQ              →  iShares NDX 100│ │
+  │ │ URTH             →  iShares MSCI W.│ │
+  │ └────────────────────────────────────┘ │
+  │                                        │
+  │ [██████ Najít moje dvojče ↓ ██████]   │  red CTA → scrolls to taps
+  └────────────────────────────────────────┘
+
+  ┌─ TAPS ─────────────────────────────────┐
+  │ Který index znáte?                     │
+  │ (●S&P 500) ( Nasdaq-100) ( Svět)       │
+  │                                        │
+  │ Kolik chcete měsíčně investovat?       │
+  │ (1 000) (3 000) (●5 000) (10 000) Kč   │
+  └────────────────────────────────────────┘
+
+  ┌─ MATCH CARD (changes with the taps) ───┐
+  │ Místo VOO, SPY, IVV                    │
+  │ iShares Core S&P 500 (Acc)             │
+  │ ISIN IE00B5BMR087  [kopírovat]         │
+  │                                        │
+  │ Poplatek fondu  0,07 % ročně           │
+  │                 VOO: 0,03 %          ¹ │
+  │                                        │
+  │ Co je uvnitř: 503 firem              ² │
+  │ Nvidia     ████████████████  8,38 %    │
+  │ Apple      ██████████████    7,37 %    │
+  │ Microsoft  ███████████       5,78 %    │
+  │ Amazon     ███████           3,71 %    │
+  │ Alphabet   ██████            3,06 %    │
+  │                                        │
+  │ Za 10 let průměrně 15,33 % ročně     ³ │
+  │ (v USD, včetně dividend; minulé výnosy │
+  │  nezaručují budoucí)                   │
+  │                                        │
+  │ Kde koupit                             │
+  │ Trading 212 · XTB                    ⁴ │
+  │                                        │
+  │ Při 5 000 Kč za nákup zaplatíte:       │
+  │ Trading 212 7,50 Kč · XTB 25 Kč      ⁵ │
+  │ (směna měny, pokud máte účet v Kč)     │
+  └────────────────────────────────────────┘
+
+  ┌─ THE ASK (dark block) ─────────────────┐
+  │ Pošleme vám celý plán k S&P 500        │
+  │ ✓ Kolik by z 5 000 Kč měsíčně mohlo    │
+  │   být za 10 let (historická statistika)│
+  │ ✓ S&P 500 vs Nasdaq-100 vs Svět        │
+  │ ✓ Poplatky u Trading 212 a XTB         │
+  │ ✓ Daně v Česku v kostce                │
+  │ ✓ Akumulační, nebo distribuční?        │
+  │                                        │
+  │ [ váš@email.cz                       ] │
+  │ Souhlas se zpracováním… správce: TBD   │
+  │ [█████████ Poslat plán █████████]      │  red submit
+  └────────────────────────────────────────┘
+
+  ┌─ FAQ (accordions) — items TBD ─────────┐
+  │ ▸ Je nákup VOO v Česku zakázaný?       │
+  │ ▸ …                                    │
+  ├─ DISCLAIMER + SOURCES ─────────────────┤
+  │ Nejde o investiční doporučení. …       │
+  │ ¹ iShares, 14. 10. 2026  ² S&P DJI …   │
+  └────────────────────────────────────────┘
+
+  ┌─ MODAL after submit (close ✕, reopen) ─┐
+  │ Ukázka e-mailu (demo, nic se neodeslalo│
+  │ Předmět: Váš ETF plán: S&P 500         │
+  │ 1) Kolik by z toho mohlo být  [!box]   │
+  │ 2) Co je uvnitř (3 indexy vedle sebe)  │
+  │ 3) Poplatky  4) Daně  5) Acc/Dist      │
+  │ Zdroje ¹…ⁿ                             │
+  │                       [Zobrazit znovu] │  button stays on page
+  └────────────────────────────────────────┘
+
+  Notes on the wireframe:
+  - Fund names in the pairs list are shortened to fit the width. The full names
+    appear in the match card.
+  - Ticker vs fund name: a broker shows a ticker (CSPX, SXR8…) that differs by
+    exchange, so I used the fund name plus the ISIN to copy into the broker's
+    search. Whether to also show a ticker is a small open point.
+  - Still open: the FAQ items, the data controller and consent text, the two
+    ads, and the funnel events.
+
+  Does this match what you had in mind for Q10? If so, Q10 = all six elements as
+  drawn.
+
+✻ Crunched for 25s · done 1:28 PM
+
+❯ It is valid                                                                   
+  Just for the mention, this main title "VOO si tu většinou                     
+  │                                                                             
+    │ nekoupíte. Jeho evropské               │                                  
+    │ dvojče ano. "                                                             
+                                                                                
+  should not mention directly the VOO, instead make it more general mentioning  
+  the NYSE                                                                      
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Agent(Verify US ETF listing exchanges)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+⏺ Noted: Q10 is settled as drawn, and the headline will name the NYSE, not VOO.
+
+  Two things from the research shape that headline:
+  - It's the product, not the exchange. us-etf-rule.md (Q6) says the trigger is
+    "the product type plus a missing KID". US company shares on the NYSE stay
+    buyable (Coca-Cola is the sourced example). So the headline must say ETF,
+    never just "z NYSE".
+  - Which of our US funds are on the NYSE is not in the research. I'm fairly
+    sure QQQ is on Nasdaq, but that's from memory, so I've sent a sub-agent to
+    check the listing exchange of VOO, SPY, IVV, URTH and QQQ against issuer
+    pages and SEC EDGAR. It's still running.
+
+  ---
+
+  ❓ Q11 – Headline: Candidates, all kept to ETFs:
+
+  - A) "ETF z NYSE si tu většinou nekoupíte. Jejich evropská dvojčata ano."
+  - B) "Americká ETF z NYSE? V EU koupíte jejich dvojčata." This one is shorter,
+    uses a question as the hook, and has no "nekoupíte" up front.
+  - C) "Stejný index jako na NYSE, jen z Evropy. Najděte dvojče svého ETF."
+
+  ➡️ A. It continues the "cannot buy → can buy" promise from the brief most
+  directly, and "většinou" keeps it within the safe wording (not "banned"). If
+  the check confirms QQQ is on Nasdaq, I'd keep the headline and tag the QQQ row
+  in the pairs list "(Nasdaq)". The alternative, "z NYSE a Nasdaqu", is
+  accurate but heavier. That last part waits for the sub-agent.
+
+✻ Worked for 32s · done 1:29 PM
+
+❯ Don't mention the "twin" word                                                 
+
+⏺ Noted: no "dvojče" (twin) anywhere, in the headline, the CTA or the e-mail.
+  I'll add it to the glossary as a word to avoid.
+
+  ---
+
+  ❓ Q11 – Headline, without "dvojče" (still kept to ETFs):
+
+  - A) "ETF z NYSE si tu většinou nekoupíte. Stejný index v evropském fondu
+    ano."
+  - B) "ETF z NYSE si tu většinou nekoupíte. Jejich evropskou obdobu ano."
+  - C) "ETF z NYSE si tu většinou nekoupíte. Evropský fond na stejný index ano."
+
+  Red CTA under it: "Najít evropský fond ↓"
+
+  ➡️ A. "Stejný index" teaches the one idea the page rests on: the EU fund
+  tracks the same index as the one they know. "Obdoba" (B) is vaguer, and C
+  reads more stiffly. The QQQ/Nasdaq detail still waits for the sub-agent's
+  check.
+
+✻ Worked for 6s · done 1:30 PM
+
+❯ A as long it is truly the same, else use B                                    
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ I checked "truly the same" against pairs.md: each of the three EU funds names
+  the same benchmark as its US fund in the issuer's own documents.
+  - S&P 500 → "Benchmark Index S&P 500 Index" (iShares)
+  - Nasdaq-100 → "NASDAQ 100 Index" (iShares)
+  - MSCI World → "MSCI World Index (Net)" (iShares)
+
+  The only pair that wasn't the same index (VT → All-World) is already off the
+  page. So Q11 = A: "ETF z NYSE si tu většinou nekoupíte. Stejný index v
+  evropském fondu ano."
+
+  ---
+
+  ❓ Q12 – The two ads: The first screen now continues this headline, so both
+  ads must lead into it. What do A and B test?
+
+  - A) One variable, the hook. Same format: a static Meta image 
+    (Instagram/Facebook feed, 4:5).
+    - Ad A (problem): "Chcete ETF z NYSE? V Česku ho většinou nekoupíte." CTA
+      "Co místo toho".
+    - Ad B (answer): "S&P 500 i Nasdaq-100 koupíte i v Evropě. Ukážeme vám který
+      fond a kde." CTA "Najít fond".
+
+    The test tells us whether the "can't buy" tension or the direct, practical
+    answer brings more e-mails.
+  - B) Different formats (static vs short video). That mixes two variables, so
+    the result can't be read.
+  - C) A hook built on returns ("Kolik by z 5 000 Kč…"). It promises returns in
+    an ad, which is risky and goes against the disclaimer tone we just set.
+
+  ➡️ A. Each visit carries utm_content=ad-a or ad-b, which the track function
+  reads later. Both ads point to the same page, and the first screen works for
+  both: A sets up the problem, B gets the answer straight away. The final
+  wording of each ad is drafted in C3.
+
+✻ Churned for 17s · done 1:31 PM
+❯ I like it, agreed                                                             
+
+⏺ Noted: Q12 = A. The two ads differ only in the hook (A problem / B answer),
+  both as static Meta 4:5 images, tagged utm_content=ad-a / ad-b.
+
+  ---
+
+  ❓ Q13 – Funnel events: One track(event, props) call, console.log only for
+  now. Every event automatically carries variant (ad-a / ad-b / none, read from
+  utm_content) and utm_source, utm_medium and utm_campaign.
+
+  ┌─────┬────────────────────┬─────────────────────┬────────────────────────┐
+  │  #  │       Event        │        When         │      Extra props       │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 1   │ page_view          │ page load           │ referrer               │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 2   │ hero_cta_click     │ red CTA tapped      │ –                      │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 3   │ index_select       │ index chip tapped   │ index                  │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 4   │ amount_select      │ amount chip tapped  │ amount                 │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 5   │ match_view         │ match card ≥ 50 %   │ index, amount          │
+  │     │                    │ in view (once)      │                        │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 6   │ isin_copy          │ "kopírovat" tapped  │ index                  │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 7   │ form_view          │ ask block ≥ 50 % in │ index, amount          │
+  │     │                    │  view (once)        │                        │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 8   │ form_start         │ first focus in the  │ –                      │
+  │     │                    │ e-mail field        │                        │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 9   │ form_error         │ submit blocked      │ reason (invalid_email  │
+  │     │                    │                     │ / no_consent)          │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 10  │ form_submit        │ valid submit        │ index, amount          │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 11  │ email_preview_open │ modal opened        │ index, amount, count   │
+  │     │                    │                     │ (1 = first)            │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 12  │ faq_open           │ an accordion opened │ question               │
+  ├─────┼────────────────────┼─────────────────────┼────────────────────────┤
+  │ 13  │ source_open        │ a source link       │ source                 │
+  │     │                    │ tapped              │                        │
+  └─────┴────────────────────┴─────────────────────┴────────────────────────┘
+
+  ➡️ Yes, these 13. The main funnel is 1 → 5 → 7 → 8 → 10, and each step's
+  drop-off shows where to work next. 11 with count > 1 tells us whether people
+  read the e-mail again. The e-mail address itself is never logged (personal
+  data). Scroll-depth events are left out, because 5 and 7 already cover the
+  steps that matter.
+
+✻ Cooked for 9s · done 1:35 PM
+
+❯ I don't have a lot of experience with this, would be great to refer to this   
+  in the skills or perform a research. Agreed on the email address, console log 
+  only, noted in readme as thing to build on later                              
+
+⏺ Bash(cd
+      /Users/martingnebus/Martin/GIT-MG/clientelo-task/.claude/skills/analytics
+      && wc -l SKILL.md references/*; grep -n -i -E
+      "^#|naming|object_action|snake|lead|f…)
+  ⎿       338 SKILL.md
+          260 references/event-library.md
+          304 references/ga4-implementation.md
+     … +75 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 25,160p SKILL.md; sed -n 205,230p SKILL.md; sed -n 255,275p
+      SKILL.md; grep -n -i -E "^#|lead|form|scroll|cta|faq|copy|modal"
+      references/event-library.md…)
+  ⎿  ## Core Principles
+
+     ### 1. Track for Decisions, Not Data
+     … +220 lines (ctrl+o to expand)
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/.claude/skills &&
+      grep -rn -i -E "generate_lead|recommended event|page_view"
+      analytics/references/ga4-implem…)
+  ⎿  analytics/references/ga4-implementation.md:6:- Configuration (data str
+     eams, enhanced measurement events, recommended events)
+     analytics/references/ga4-implementation.md:28:| page_view | Page loads
+     … +40 lines (ctrl+o to expand)
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/.claude/skills && sed
+      -n 235,260p analytics/references/event-library.md; sed -n 1,80p
+      ab-testing/SKILL.md |…)
+  ⎿  ---
+
+     ## Funnel Event Sequences
+     … +27 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 20,60p analytics/references/ga4-implementation.md; grep -n -i -A12
+      "^#.*measur" cro/references/form.md | head -40)
+  ⎿  - Enable enhanced measurement for automatic tracking
+     - Configure data retention (2 months default, 14 months max)
+     - Enable Google Signals (for cross-device, if consented)
+     … +51 lines (ctrl+o to expand)
+
+⏺ I checked the installed skills rather than running a web search, because they
+  cover this directly: analytics (core principles, naming, event library),
+  analytics/references/ga4-implementation.md, the "Measurement" part of
+  cro/references/form.md, and ab-testing (metrics). Their rules changed my list:
+
+  1. "Track for decisions, not data. Every event should inform a decision." Each
+     event below now names the question it answers. source_open is dropped: no
+     decision follows from it.
+  2. Naming is object_action in the past tense (form_submitted, cta_clicked),
+     with context in props, not in the name.
+  3. The form metrics from cro: form views, first field focus, completion rate,
+     error rate, mobile vs desktop. That adds a device prop.
+  4. "Avoid PII in properties", so the e-mail is never logged, as you agreed.
+  5. The A/B test needs one primary metric: form_submitted ÷ page_viewed per
+     variant.
+
+  ---
+
+  ❓ Q13 – Funnel events (revised): Every event carries variant (ad-a / ad-b /
+  none, from utm_content), utm_source, utm_medium, utm_campaign and device
+  (mobile/desktop by viewport width).
+
+  ┌─────┬──────────────────────┬───────────────┬────────────┬───────────────┐
+  │  #  │        Event         │     When      │   Extra    │ Question it   │
+  │     │                      │               │   props    │    answers    │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ How many      │
+  │ 1   │ page_viewed          │ load          │ referrer   │ arrived from  │
+  │     │                      │               │            │ each ad?      │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ Does the      │
+  │ 2   │ cta_clicked          │ red CTA on    │ location   │ first screen  │
+  │     │                      │ first screen  │            │ move people   │
+  │     │                      │               │            │ on?           │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ Which index   │
+  │ 3   │ index_selected       │ index chip    │ index      │ do they care  │
+  │     │                      │               │            │ about?        │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ What amounts  │
+  │ 4   │ amount_selected      │ amount chip   │ amount     │ are they      │
+  │     │                      │               │            │ thinking of?  │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ Did the ad    │
+  │ 5   │ match_viewed         │ card ≥ 50 %   │ index,     │ hook carry    │
+  │     │                      │ in view, once │ amount     │ them to the   │
+  │     │                      │               │            │ answer?       │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ Do they       │
+  │ 6   │ isin_copied          │ "kopírovat"   │ index      │ intend to     │
+  │     │                      │               │            │ buy?          │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │ ask block ≥   │ index,     │ Do they reach │
+  │ 7   │ form_viewed          │ 50 % in view, │ amount     │  the ask?     │
+  │     │                      │  once         │            │               │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │ first focus   │            │ Does the      │
+  │ 8   │ form_started         │ in the e-mail │ –          │ offer tempt   │
+  │     │                      │  field        │            │ them?         │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │ submit        │            │ Is the form   │
+  │ 9   │ form_error           │ blocked       │ error_type │ itself losing │
+  │     │                      │               │            │  people?      │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │ 10  │ form_submitted       │ valid submit  │ index,     │ Primary       │
+  │     │                      │               │ amount     │ conversion    │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │     │                      │               │            │ Do they come  │
+  │ 11  │ email_preview_opened │ modal opened  │ count      │ back to the   │
+  │     │                      │               │            │ e-mail?       │
+  ├─────┼──────────────────────┼───────────────┼────────────┼───────────────┤
+  │ 12  │ faq_opened           │ an accordion  │ question   │ Which doubts  │
+  │     │                      │ opened        │            │ block them?   │
+  └─────┴──────────────────────┴───────────────┴────────────┴───────────────┘
+
+  ➡️ Yes, these 12.
+  - A/B readout: the primary metric is form_submitted / page_viewed per variant.
+    The secondary metric is match_viewed / page_viewed, which shows whether
+    hook A or B carries people further.
+  - README "to build on later" gets three notes:
+    - console.log only
+    - a real tool (e.g. GA4) later replaces the inside of track()
+    - analytics needs a cookie-consent step before it goes live.
+
+  The skill says that last point explicitly ("Cookie consent required in EU").
+
+✻ Brewed for 31s · done 1:36 PM
+
+❯ DO I need to confirm anything else right now?                                 
+
+⏺ Yes, four small ones. They don't depend on each other, so here they are
+  together. A "yes" accepts all four recommendations.
+
+  ❓ Q13 – Funnel events: the 12 events above, with form_submitted / page_viewed
+  as the A/B metric.
+  ➡️ Yes.
+
+  ❓ Q14 – FAQ items (accordions under the form):
+  1. "Je nákup ETF z NYSE v Česku zakázaný?" Not banned: most brokers don't
+     offer them because they lack a KID. Uses the safe wording.
+  2. "Můžu koupit akcie amerických firem?" Yes, shares aren't affected.
+     Coca-Cola (NYSE) is the sourced example.
+  3. "Proč je evropský fond někdy dražší?" Nasdaq-100: 0.30 % vs QQQ 0.18 %.
+  4. "Co je ISIN a jak fond najdu u brokera?"
+
+  ➡️ Yes, these four. Taxes and Acc/Dist stay out of the FAQ, because they're
+  what the e-mail offers.
+
+  ❓ Q15 – Data controller in the consent text: the brief needs a named
+  controller. I can't invent a company.
+  ➡️ Use your name as the demo controller, for example "Správce: Martin G. (demo
+  projekt)", with the contact e-mail. Tell me the exact name and e-mail you
+  want shown, or say "placeholder" and it stays to be filled in at C5.
+
+  ❓ Q16 – Ticker on the match card: besides the ISIN, show a ticker (CSPX /
+  SXR8 …)?
+  ➡️ No, only the ISIN. Tickers differ by exchange and broker, and the ISIN
+  finds the fund everywhere.
+
+  The one open item that isn't a decision is the sub-agent's check of which US
+  funds are on the NYSE. When it's back, I'll settle whether the QQQ row gets
+  "(Nasdaq)". After that I write decisions.md and glossary.md.
+
+✻ Churned for 11s · done 1:37 PM
+
+› Message from general-purpose
+  All five funds are confirmed from SEC EDGAR filings. Four are listed on NYSE
+  Arca and QQQ is listed on Nasdaq. Each quote below was checked against the
+  text I fetched from the filing.
+
+  | ticker | exchange | source URL | document title, as-of date, accessed
+  2026-10-15 | exact quote from the source |
+  |---|---|---|---|---|
+  | VOO | NYSE Arca |
+  https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm
+  | Vanguard S&P 500 ETF Summary Prospectus (Form 497K), April 28, 2026 | "The
+  Fund's ETF Shares are listed for trading on NYSE Arca" |
+  | SPY | NYSE Arca | https://www.sec.gov/Archives/edgar/data/884394/00011931252
+  6022316/d77353d485bpos.htm | State Street SPDR S&P 500 ETF Trust Prospectus
+  (Form 485BPOS), January 26, 2026 | "Principal U.S. Listing Exchange for State
+  Street ® SPDR ® S&P 500 ® ETF Trust: NYSE Arca, Inc. under the symbol "SPY"" |
+  | IVV | NYSE Arca | https://www.sec.gov/Archives/edgar/data/1100663/0001193125
+  26327930/d113852d497k.htm | iShares Core S&P 500 ETF Summary Prospectus (Form
+  497K), July 31, 2026 | "iShares Core S&P 500 ETF IVV \| NYSE Arca Summary
+  Prospectus — July 31, 2026" |
+  | URTH | NYSE Arca | https://www.sec.gov/Archives/edgar/data/930667/0001193125
+  25336654/d72128d497k.htm | iShares MSCI World ETF Summary Prospectus (Form
+  497K), December 30, 2025 | "Ticker: URTH Stock Exchange: NYSE Arca" |
+  | QQQ | Nasdaq (The Nasdaq Stock Market LLC) | https://www.sec.gov/Archives/ed
+  gar/data/1067839/000110465925123273/tm2529177d1_485bpos.htm | Invesco QQQ
+  Trust, Series 1 Prospectus (Form 485BPOS), December 22, 2025 | "Shares of the
+  Trust are listed on The Nasdaq Stock Market LLC (the "Exchange")." |
+
+  Notes:
+  - **SPY ticker file:** SEC's `company_tickers_exchange.json` and SPY's
+  submissions JSON both list SPY's exchange as plain "NYSE", without the "Arca".
+  The prospectus is more precise and names NYSE Arca, Inc., so cite the
+  prospectus. The SPY prospectus also says the units are listed on the Singapore
+  Exchange.
+  - **No exchange field for the other four:** Vanguard Index Funds, iShares,
+  Inc., iShares Trust and Invesco QQQ Trust have empty "tickers" and "exchanges"
+  fields in EDGAR's submissions JSON. For those funds the prospectuses are the
+  only primary source I used.
+  - **Newest documents:** Each document above is the newest summary prospectus
+  or prospectus I found for that fund on EDGAR. Two later QQQ 497K filings
+  (April 30 and June 10, 2026) are supplements about the index methodology.
+
+  Nothing was written to disk.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/451e71a6-1299-4a49-b501-757a92cb0ef7/scratchpad && UA="research
+      gnebus.martin@gmail.…)
+  ⎿  VOO -> FOUND
+     SPY -> FOUND
+     IVV -> FOUND
+     … +2 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Agent "Verify US ETF listing exchanges" finished · 8m 18s
+
+⏺ The listing-exchange check is back. I re-matched each quote against the SEC
+  filing myself, and all 5 were found.
+
+  ┌──────────────────┬──────────┬──────────────────────────────────────────┐
+  │     US fund      │ Exchange │                  Source                  │
+  ├──────────────────┼──────────┼──────────────────────────────────────────┤
+  │ VOO, SPY, IVV,   │ NYSE     │ Each fund's prospectus on SEC EDGAR      │
+  │ URTH             │ Arca     │ (2025–2026)                              │
+  ├──────────────────┼──────────┼──────────────────────────────────────────┤
+  │ QQQ              │ Nasdaq   │ Invesco QQQ Trust prospectus, 22 Dec     │
+  │                  │          │ 2025                                     │
+  └──────────────────┴──────────┴──────────────────────────────────────────┘
+
+  I'll add these 5 rows to docs/research/pairs.md with their quotes, so the
+  headline's NYSE claim is sourced like every other number.
+
+  That adds one more item to the batch:
+
+  ❓ Q17 – The QQQ row: The headline says "ETF z NYSE", and four of our five US
+  funds are on NYSE Arca.
+  ➡️ Keep the headline as it is, and tag the row in the pairs list "QQQ (Nasdaq)
+  → iShares NASDAQ 100". "NYSE Arca" is too technical for a beginner. The
+  source note says Arca precisely.
+
+  So Q13–Q17 are open, and "yes" accepts all five recommendations. For Q15, I
+  also need the name and e-mail to show, or "placeholder".
+
+✻ Cooked for 8m 56s · done 1:37 PM
+
+❯ Accepting, but I would not mention the specific shares(Coca COla) since it is 
+  irrelevant                                                                    
+
+⏺ Noted: the FAQ question about US company shares stays, but names no specific
+  stock. Since "accepting" didn't say which option for Q15, I'll write the
+  controller as "Martin G (demo projekt)" and leave the contact as a placeholder
+  for C5. I won't put your e-mail on a public page unless you ask.
+
+  The frontier is empty. Here are the agreed decisions, each with its reason.
+  Once you confirm, I'll write them to docs/decisions.md and draft
+  docs/glossary.md.
+
+  #: 1
+  Decision: Target group: Czech beginner on a phone who knows S&P 500 or VOO but
+
+  not the EU limit
+  Reason: The S&P 500 leads at Czech brokers; the "can't buy" moment hits this
+  person
+  ────────────────────────────────────────
+  #: 2
+  Decision: Offer: "Váš ETF plán" e-mail: income illustration, 3-index
+  comparison, fees T212/XTB, taxes, Acc/Dist. No first-purchase steps
+  Reason: Concrete and personal; steps per broker would be tedious, the e-mail
+  is
+  a reference
+  ────────────────────────────────────────
+  #: 3
+  Decision: After submit: a modal shows the exact e-mail, can be closed and
+  reopened; the full text appears nowhere else
+  Reason: A demo with nothing sent; the value stays behind the form
+  ────────────────────────────────────────
+  #: 4
+  Decision: Income illustration: amount × 10 years at the index's 10-year
+  average, in Kč, rounded, with a box above it: not advice, only historical
+  statistics
+  Reason: Concrete for a beginner; a deliberate exception to the C1 "no CZK"
+  rule, with the currency caveat as its condition
+  ────────────────────────────────────────
+  #: 5
+  Decision: Taps: index (S&P 500 / Nasdaq-100 / Svět) + amount (1 000 / 3 000 /
+  5
+   000 / 10 000 Kč); 10 years fixed; no acc/dist tap
+  Reason: Keeps the form to one field; 10 years is what the data covers
+  ────────────────────────────────────────
+  #: 6
+  Decision: Funds: iShares Core S&P 500 Acc, iShares NASDAQ 100, iShares Core
+  MSCI World Acc
+  Reason: The most popular or largest fund with the longest history; one issuer;
+
+  same index as the US fund
+  ────────────────────────────────────────
+  #: 7
+  Decision: "Svět" = MSCI World; VT → All-World is off the page
+  Reason: FTSE publishes no 10-year return; only same-index pairs remain
+  ────────────────────────────────────────
+  #: 8
+  Decision: Comparison in the e-mail: all 3 indexes, the chosen one highlighted;
+
+  Nasdaq US share "neuvádí", "68 % technologie"
+  Reason: The comparison is the e-mail's value; gaps are shown, not filled
+  ────────────────────────────────────────
+  #: 9
+  Decision: Sources in the e-mail: numbered footnotes + a "Zdroje" list
+  Reason: Every number traceable, still readable on a phone
+  ────────────────────────────────────────
+  #: 10
+  Decision: Form only after the match card; the hero CTA scrolls to the taps
+  Reason: Value before the ask
+  ────────────────────────────────────────
+  #: 11
+  Decision: Match card: fund + ISIN (no ticker), TER vs the US fund, top 5 bars
+  +
+  number of companies, 10-year % a year, T212 · XTB, fees row for the amount
+  Reason: The brief's anchors; S&P weights ×100 from S&P's feed recorded as a
+  unit change
+  ────────────────────────────────────────
+  #: 12
+  Decision: Headline: "ETF z NYSE si tu většinou nekoupíte. Stejný index v
+  evropském fondu ano."; CTA "Najít evropský fond ↓"; never "dvojče"
+  Reason: Continues the ad's promise within the safe wording; all three pairs
+  track the same index
+  ────────────────────────────────────────
+  #: 13
+  Decision: Pairs list: QQQ row tagged "(Nasdaq)"; the others are NYSE Arca (SEC
+
+  EDGAR)
+  Reason: The headline stays true for the list
+  ────────────────────────────────────────
+  #: 14
+  Decision: Ads: one variable, the hook. A: problem ("Chcete ETF z NYSE? …"), B:
+
+  answer ("S&P 500 i Nasdaq-100 koupíte i v Evropě…"); static Meta 4:5;
+  utm_content=ad-a/ad-b
+  Reason: A clean A/B read
+  ────────────────────────────────────────
+  #: 15
+  Decision: Events: the 12 from Q13; primary metric form_submitted / page_viewed
+
+  per variant; e-mail never logged
+  Reason: Each event answers a decision (analytics skill); no personal data in
+  logs
+  ────────────────────────────────────────
+  #: 16
+  Decision: README "later": console.log only, a real tool replaces track(),
+  cookie consent before analytics
+  Reason: As agreed
+  ────────────────────────────────────────
+  #: 17
+  Decision: FAQ: not banned (KID) · US company shares not affected (no stock
+  named) · why the EU fund is sometimes dearer · what an ISIN is
+  Reason: Answers the doubts; taxes and Acc/Dist stay in the e-mail
+  ────────────────────────────────────────
+  #: 18
+  Decision: Data controller: "Martin G (demo projekt)", contact to be filled in
+  C5
+  Reason: The brief needs a named controller; no invented company
+
+  Is this the shared understanding? If so, I'll write both files and add the
+  NYSE/Nasdaq rows to pairs.md.
+
+✻ Worked for 23s · done 1:38 PM
+
+❯ OK                                                                            
+
+⏺ Bash(sed -n 1,42p docs/research/pairs.md; sed -n 141,152p
+      docs/research/pairs.md; sed -n 286,297p docs/research/pairs.md; git log
+      --format='%B' -1 | head -20)
+  ⎿  # Fund pairs: US ETF → EU-buyable (UCITS) candidates
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +94 lines (ctrl+o to expand)
+
+⏺ Adding the listing rows to pairs.md.
+
+⏺ Bash(python3 - <<'EOF'
+      p='docs/research/pairs.md'…)
+  ⎿  42:| VOO listing exchange | NYSE Arca | https://www.sec.gov/Archives/e
+     dgar/data/
+     43:| SPY listing exchange | NYSE Arca | https://www.sec.gov/Archives/e
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated docs/research/pairs.md (+5 -0)
+      39  | IVV expense ratio | 0.03% | same | same | "Expense Ratio: Fee
+          s as stated in the prospectus 0.03%" |
+      40  | IVV issuer | iShares (BlackRock) | same | same | "iShares Cor
+          e S&P 500 ETF \| IVV" |
+      41  | IVV inception | 2000-05-15 | same | same | "Fund Inception Ma
+          y 15, 2000" |
+      42 +| VOO listing exchange | NYSE Arca | https://www.sec.gov/Archiv
+         +es/edgar/data/36405/000003640526000183/f44783d1.htm | Vanguard 
+         +S&P 500 ETF Summary Prospectus (Form 497K), April 28, 2026, acc
+         +essed 2026-10-15 | "The Fund's ETF Shares are listed for tradin
+         +g on NYSE Arca" |                                              
+      43 +| SPY listing exchange | NYSE Arca | https://www.sec.gov/Archiv
+         +es/edgar/data/884394/000119312526022316/d77353d485bpos.htm | St
+         +ate Street SPDR S&P 500 ETF Trust Prospectus (Form 485BPOS), Ja
+         +nuary 26, 2026, accessed 2026-10-15 | "NYSE Arca, Inc. under th
+         +e symbol" |                                                    
+      44 +| IVV listing exchange | NYSE Arca | https://www.sec.gov/Archiv
+         +es/edgar/data/1100663/000119312526327930/d113852d497k.htm | iSh
+         +ares Core S&P 500 ETF Summary Prospectus (Form 497K), July 31, 
+         +2026, accessed 2026-10-15 | "iShares Core S&P 500 ETF IVV \| NY
+         +SE Arca" |                                                     
+      45  
+      46  ### EU candidates
+      47  
+     ...
+      152  | expense ratio | 0.18% | same | same | "Invesco QQQ’s total e
+           xpense ratio is 0.18%." |
+      153  | issuer / sponsor | Invesco Capital Management LLC | same | s
+           ame | "is Invesco Capital Management LLC (Invesco)." |
+      154  | inception | March 10, 1999 | same | same | "Invesco QQQ ETF 
+           inception date of March 10, 1999" |
+      155 +| listing exchange | Nasdaq (The Nasdaq Stock Market LLC) | ht
+          +tps://www.sec.gov/Archives/edgar/data/1067839/0001104659251232
+          +73/tm2529177d1_485bpos.htm | Invesco QQQ Trust, Series 1 Prosp
+          +ectus (Form 485BPOS), December 22, 2025, accessed 2026-10-15 |
+          + "Shares of the Trust are listed on The Nasdaq Stock Market LL
+          +C" |                                                          
+      156  
+      157  ### EU candidates (same index)
+      158  
+     ...
+      298  | expense ratio | 0.24% | same | same | "Expense Ratio: Fees a
+           s stated in the prospectus 0.24%" |
+      299  | issuer | iShares (BlackRock) | same | same | "iShares MSCI W
+           orld ETF \| URTH" |
+      300  | inception | Jan 10, 2012 | same | same | "Fund Inception Jan
+            10, 2012" |
+      301 +| listing exchange | NYSE Arca | https://www.sec.gov/Archives/
+          +edgar/data/930667/000119312525336654/d72128d497k.htm | iShares
+          + MSCI World ETF Summary Prospectus (Form 497K), December 30, 2
+          +025, accessed 2026-10-15 | "Stock Exchange: NYSE Arca" |      
+      302  
+      303  ### EU candidates (same index)
+      304  
+
+⏺ Write(docs/decisions.md)  ⎿  Wrote 220 lines to docs/decisions.md
+       1 # Decisions
+       2 
+       3 Each decision with its reason. Numbers named here come from
+          Czech
+       5 text in quotes is page or e-mail wording; terms are in
+       6 [glossary.md](glossary.md).
+       7 
+       9 
+      10 Agreed in the C2 planning session. Builds on the C1 research sco
+         pe in
+     … +300 lines (ctrl+o to expand)
+
+⏺ Write(docs/glossary.md)
+  ⎿  Wrote 44 lines to docs/glossary.md
+       1 # Glossary
+       2 
+         se.
+       4 Decisions behind the wording are in [decisions.md](decisions.md)
+         .
+       6 ## Terms
+       7 
+       8 | Term | Plain explanation | Czech wording |
+      10 | ETF | A fund traded on an exchange like a share; one purchase 
+         buys a small piece of many companies. | ETF, fond |
+     … +68 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      p='docs/glossary.md'…)
+  ⎿   docs/TODO.md           |  4 ++--
+      docs/brief.md          | 10 +++++-----
+      docs/research/pairs.md |  5 +++++
+     … +11 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+2 -2)
+      11  
+      12  ## C2 Decisions
+      13  
+      14 -- [ ] Using `docs/research/` (start with its README), suggest t
+         -he key elements of the page, then run `/implementation-plan` on
+         - them together with the "Decide first" list in `docs/brief.md`,
+         - starting from its "The idea" section.                         
+      15 -- [ ] Write docs/decisions.md and docs/glossary.md. They are th
+         -e input for the HTML mockups in C3.                            
+      14 +- [x] Using `docs/research/` (start with its README), suggest t
+         +he key elements of the page, then run `/implementation-plan` on
+         + them together with the "Decide first" list in `docs/brief.md`,
+         + starting from its "The idea" section.                         
+      15 +- [x] Write docs/decisions.md and docs/glossary.md. They are th
+         +e input for the HTML mockups in C3.                            
+      16  
+      17  ## C3 Design Prep
+      18  
+  ⎿  Updated docs/brief.md (+5 -5)
+      42  
+      43  ## Decide first (planning session, reasons in `docs/decisions.m
+          d`)
+      44  
+      45 -- [ ] The target group.                                        
+      46 -- [ ] What the visitor gets for the contact, and at which momen
+         -t the page                                                     
+      45 +- [x] The target group.                                        
+      46 +- [x] What the visitor gets for the contact, and at which momen
+         +t the page                                                     
+      47        asks for it.
+      48 -- [ ] Two versions of the ad.                                  
+      49 -- [ ] The funnel events and what each one logs.                
+      50 -- [ ] What the e-mail preview after submit shows.              
+      48 +- [x] Two versions of the ad.                                  
+      49 +- [x] The funnel events and what each one logs.                
+      50 +- [x] What the e-mail preview after submit shows.              
+      51  
+      52  ## The page is done when
+      53  
+  ⎿  Updated docs/glossary.md (+3 -3)
+       9  |---|---|---|
+      10  | ETF | A fund traded on an exchange like a share; one purchase
+           buys a small piece of many companies. | ETF, fond |
+      11  | Index | A list of companies with rules for how much of each t
+          o hold; the fund copies it. | index |
+      12 -| S&P 500 | About 500 large US companies. | S&P 500 |          
+      13 -| Nasdaq-100 | About 100 large companies listed on Nasdaq, most
+         -ly technology. | Nasdaq-100 |                                  
+      14 -| MSCI World | Large and mid-sized companies in developed count
+         -ries; about three-quarters US. | Svět (MSCI World) |           
+      12 +| S&P 500 | 503 US companies (index factsheet, 30 Sep 2026). | 
+         +S&P 500 |                                                      
+      13 +| Nasdaq-100 | 100 companies listed on Nasdaq, 68 % technology 
+         +(index factsheet, 30 Sep 2026). | Nasdaq-100 |                 
+      14 +| MSCI World | 1 249 companies from several countries, 72.94 % 
+         +of it US (index factsheet, 30 Sep 2026). Which countries count 
+         +is not in the research yet; check before the page describes it.
+         + | Svět (MSCI World) |                                         
+      15  | NYSE | The New York Stock Exchange. The US funds on the page 
+          trade on NYSE Arca, its ETF market; QQQ trades on Nasdaq. | NYS
+          E; the QQQ row says "(Nasdaq)" |
+      16  | US ETF | A fund registered in the US, e.g. VOO, SPY, IVV, QQQ
+          , URTH. | ETF z NYSE, americké ETF |
+      17  | EU fund (UCITS ETF) | A fund registered in the EU (here Irela
+          nd) that EU brokers may sell to retail investors. "UCITS" is no
+          t used on the page. | evropský fond |
+
+⏺ Bash(python3 - <<'EOF'
+      p='docs/glossary.md'…)
+  ⎿   M docs/TODO.md
+      M docs/brief.md
+      M docs/research/pairs.md
+     … +2 lines (ctrl+o to expand)
+  ⎿  Updated docs/glossary.md (+2 -2)
+      12  | S&P 500 | 503 US companies (index factsheet, 30 Sep 2026). | 
+          S&P 500 |
+      13  | Nasdaq-100 | 100 companies listed on Nasdaq, 68 % technology 
+          (index factsheet, 30 Sep 2026). | Nasdaq-100 |
+      14  | MSCI World | 1 249 companies from several countries, 72.94 % 
+          of it US (index factsheet, 30 Sep 2026). Which countries count 
+          is not in the research yet; check before the page describes it.
+           | Svět (MSCI World) |
+      15 -| NYSE | The New York Stock Exchange. The US funds on the page 
+         -trade on NYSE Arca, its ETF market; QQQ trades on Nasdaq. | NYS
+         -E; the QQQ row says "(Nasdaq)" |                               
+      15 +| NYSE | The New York Stock Exchange. VOO, SPY, IVV and URTH ar
+         +e listed on NYSE Arca, QQQ on Nasdaq (SEC prospectuses, see res
+         +earch/pairs.md). | NYSE; the QQQ row says "(Nasdaq)" |         
+      16  | US ETF | A fund registered in the US, e.g. VOO, SPY, IVV, QQQ
+          , URTH. | ETF z NYSE, americké ETF |
+      17  | EU fund (UCITS ETF) | A fund registered in the EU (here Irela
+          nd) that EU brokers may sell to retail investors. "UCITS" is no
+          t used on the page. | evropský fond |
+      18  | KID | The key information document EU rules require before a 
+          fund is sold to a retail investor. US issuers do not publish on
+          e. | dokument KID (klíčové informace) |
+     ...
+      30  | Income illustration | The monthly amount grown for 10 years a
+          t the index's 10-year average; a historical statistic, not a fo
+          recast. | Kolik by z toho mohlo být |
+      31  | Time test | A sale is tax-free if the fund was held more than
+           3 years. | držíte déle než 3 roky |
+      32  | 100 000 Kč limit | A sale is tax-free if total sale proceeds 
+          in the year are at most 100 000 Kč. | prodáte za max. 100 000 K
+          č za rok |
+      33 -| Tax on gains | Otherwise the gain is taxed at 15 %, or 23 % a
+         -bove the yearly threshold. | daň z zisku 15 % (23 %) |         
+      33 +| Tax on gains | Otherwise the gain is taxed at 15 %, or 23 % a
+         +bove the yearly threshold. | daň ze zisku 15 % (23 %) |        
+      34  | Data controller | Who is responsible for the e-mail address u
+          nder GDPR. | správce údajů |
+      35  
+      36  ## Words to avoid
+
+⏺ Both C2 files are done and CLAUDE.md's Map needs no update, so I'll run
+  /implementation-end now. I've added decisions.md and glossary.md, updated
+  pairs.md with exchange data from SEC EDGAR, and checked off the completed
+  boxes in TODO.md and brief.md.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(ls package.json 2>&1; ls ai-log; git diff docs/brief.md docs/TODO.md |
+      head -40)
+  ⎿  ls: package.json: No such file or directory
+     001-data-research.txt
+     diff --git a/docs/TODO.md b/docs/TODO.md
+     … +35 lines (ctrl+o to expand)
+
+⏺ Checks: skipped. There is no package.json yet, because the setup happens in
+  C4.
+
+  TODO: both C2 boxes are ticked. I also ticked the five "Decide first" boxes in
+  docs/brief.md.
+
+  Export: please run /export to save this session as ai-log/002-decisions.txt,
+  so it goes into the same commit.
+
+  AI mistakes caught this session, for you to write into ai-log/mistakes.md:
+  - My headline and CTA used "dvojče" and named VOO directly. You asked for a
+    general NYSE headline and no "twin".
+  - I first used "z NYSE" without checking which funds are listed there. QQQ
+    turned out to be on Nasdaq, not the NYSE (checked against SEC EDGAR).
+  - My FAQ answer named Coca-Cola, a specific stock that is irrelevant to the
+    page. You removed it.
+  - My first e-mail sketch included steps to a first purchase and the worst
+    year. You cut both.
+  - The returns in that sketch mixed gross and net return types without saying
+    so. I flagged it myself afterwards.
+  - My first glossary draft described MSCI World and NYSE Arca from memory:
+    "developed countries", "about three-quarters US", "its ETF market". I
+    replaced those with sourced figures before committing.
+
+  Commit message
+
+  add C2 decisions: audience, offer, page, ads, funnel events
+
+  - docs/decisions.md: 20 decisions with reasons from the C2 planning
+    session (target group, e-mail offer and modal preview, funds, page
+    order, match card, headline, ads A/B, track() events)
+  - docs/glossary.md: terms with plain explanations and Czech wording,
+    plus words to avoid ("dvojče", "zakázané", "úrok")
+  - research/pairs.md: US listing exchange for VOO, SPY, IVV, URTH
+    (NYSE Arca) and QQQ (Nasdaq) from SEC EDGAR, quotes re-checked
+  - tick C2 in TODO and the "Decide first" list in the brief
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: docs/decisions.md, docs/glossary.md, docs/research/pairs.md,
+  docs/TODO.md, docs/brief.md, ai-log/002-decisions.txt
+
+  Do you approve this message? Once the export is saved, I'll commit and push.
+
+✻ Crunched for 1m 54s · done 1:40 PM

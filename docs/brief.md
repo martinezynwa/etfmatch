@@ -42,12 +42,12 @@ audience; it must not look like a default AI output.
 
 ## Decide first (planning session, reasons in `docs/decisions.md`)
 
-- [ ] The target group.
-- [ ] What the visitor gets for the contact, and at which moment the page
+- [x] The target group.
+- [x] What the visitor gets for the contact, and at which moment the page
       asks for it.
-- [ ] Two versions of the ad.
-- [ ] The funnel events and what each one logs.
-- [ ] What the e-mail preview after submit shows.
+- [x] Two versions of the ad.
+- [x] The funnel events and what each one logs.
+- [x] What the e-mail preview after submit shows.
 
 ## The page is done when
 

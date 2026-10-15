@@ -39,6 +39,9 @@ Collected 2026-10-15 from issuer websites, factsheets and KIDs only. justETF was
 | IVV expense ratio | 0.03% | same | same | "Expense Ratio: Fees as stated in the prospectus 0.03%" |
 | IVV issuer | iShares (BlackRock) | same | same | "iShares Core S&P 500 ETF \| IVV" |
 | IVV inception | 2000-05-15 | same | same | "Fund Inception May 15, 2000" |
+| VOO listing exchange | NYSE Arca | https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm | Vanguard S&P 500 ETF Summary Prospectus (Form 497K), April 28, 2026, accessed 2026-10-15 | "The Fund's ETF Shares are listed for trading on NYSE Arca" |
+| SPY listing exchange | NYSE Arca | https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353d485bpos.htm | State Street SPDR S&P 500 ETF Trust Prospectus (Form 485BPOS), January 26, 2026, accessed 2026-10-15 | "NYSE Arca, Inc. under the symbol" |
+| IVV listing exchange | NYSE Arca | https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d113852d497k.htm | iShares Core S&P 500 ETF Summary Prospectus (Form 497K), July 31, 2026, accessed 2026-10-15 | "iShares Core S&P 500 ETF IVV \| NYSE Arca" |
 
 ### EU candidates
 
@@ -149,6 +152,7 @@ Source:
 | expense ratio | 0.18% | same | same | "Invesco QQQ’s total expense ratio is 0.18%." |
 | issuer / sponsor | Invesco Capital Management LLC | same | same | "is Invesco Capital Management LLC (Invesco)." |
 | inception | March 10, 1999 | same | same | "Invesco QQQ ETF inception date of March 10, 1999" |
+| listing exchange | Nasdaq (The Nasdaq Stock Market LLC) | https://www.sec.gov/Archives/edgar/data/1067839/000110465925123273/tm2529177d1_485bpos.htm | Invesco QQQ Trust, Series 1 Prospectus (Form 485BPOS), December 22, 2025, accessed 2026-10-15 | "Shares of the Trust are listed on The Nasdaq Stock Market LLC" |
 
 ### EU candidates (same index)
 
@@ -294,6 +298,7 @@ Sources:
 | expense ratio | 0.24% | same | same | "Expense Ratio: Fees as stated in the prospectus 0.24%" |
 | issuer | iShares (BlackRock) | same | same | "iShares MSCI World ETF \| URTH" |
 | inception | Jan 10, 2012 | same | same | "Fund Inception Jan 10, 2012" |
+| listing exchange | NYSE Arca | https://www.sec.gov/Archives/edgar/data/930667/000119312525336654/d72128d497k.htm | iShares MSCI World ETF Summary Prospectus (Form 497K), December 30, 2025, accessed 2026-10-15 | "Stock Exchange: NYSE Arca" |
 
 ### EU candidates (same index)
 
