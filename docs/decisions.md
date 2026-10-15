@@ -477,10 +477,13 @@ Agreed in the C6 review of the match card at 375 px.
 
 ## C12 Deploy (2026-10-15)
 
-48. **Vercel with default settings, at https://clientelo-task.vercel.app/.**
+48. **Vercel with default settings, at https://etfmatch.vercel.app/.**
     No environment variables, Web Analytics or Speed Insights; production
     stays public under standard deployment protection. pnpm moves from
     11.13.0 to 11.28.2, the latest v11. *Reason:* the page is static and
     reads no secrets; a Vercel analytics tool would contradict "`track()`
     only logs to the console" (decision 20). npm marks 11.13.0 as "a
     broken version", and Vercel refuses to install it.
+    The first domain, `clientelo-task.vercel.app`, was replaced by
+    `etfmatch.vercel.app`. *Reason:* the user's choice; the link carries
+    the product name, not the task's.

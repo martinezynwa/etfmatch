@@ -5,7 +5,7 @@ tracks the same index as the US ETF they know. Brief:
 [docs/brief.md](docs/brief.md). Decisions with reasons:
 [docs/decisions.md](docs/decisions.md) ("D12" = decision 12).
 
-Live: https://clientelo-task.vercel.app/
+Live: https://etfmatch.vercel.app/
 
 ## Why this order
 

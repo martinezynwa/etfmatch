@@ -31,8 +31,8 @@ const sourceGroups: [string, Source[]][] = [
 ];
 
 // The page's last block: the disclaimer (decision 17), the sources behind
-// an accordion, the data controller (decision 26) and the privacy page
-// (decision 40).
+// an accordion, the data controller (decision 26), the privacy page
+// (decision 40) and the demo note.
 export function Footer() {
   return (
     <footer className="pt-4.5 pb-10 text-xs leading-normal text-muted">
@@ -44,9 +44,10 @@ export function Footer() {
         <summary className="text-sm font-bold">{copy.sourcesHead}</summary>
         <SourceGroups groups={sourceGroups} />
       </details>
-      <p>
+      <p className="mb-2.5">
         {copy.controller} <PrivacyLink>{copy.privacy}</PrivacyLink>
       </p>
+      <p>{copy.demoNote}</p>
     </footer>
   );
 }

@@ -135,6 +135,8 @@ export const cs = {
     },
     controller,
     privacy: "Ochrana osobních údajů",
+    demoNote:
+      "Ukázková stránka vytvořená jako zadání úkolu. Nejde o skutečnou nabídku ani službu: nic se neprodává, nic nedoporučuje a e-maily se nesbírají.",
   },
   // The privacy page, /ochrana-udaju (decision 40). Says what the demo
   // does today; what a live mailing would add is left to fill in.

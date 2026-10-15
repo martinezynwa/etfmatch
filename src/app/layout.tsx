@@ -17,7 +17,7 @@ const { title, description, ogTitle, ogAlt } = cs.meta;
 const ogImage = { url: "/og.png", width: 1200, height: 630, alt: ogAlt };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://clientelo-task.vercel.app"),
+  metadataBase: new URL("https://etfmatch.vercel.app"),
   title: { default: title, template: `%s · ${title}` },
   description,
   openGraph: {

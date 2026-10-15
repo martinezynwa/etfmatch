@@ -72,7 +72,7 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C12 Deploy
 
-- [x] Import the GitHub repo in Vercel and deploy. Live at https://clientelo-task.vercel.app/; pnpm pinned to 11.28.2, since Vercel rejects 11.13.0 as a broken release (decision 48).
+- [x] Import the GitHub repo in Vercel and deploy. Live at https://etfmatch.vercel.app/; pnpm pinned to 11.28.2, since Vercel rejects 11.13.0 as a broken release (decision 48).
 - [x] Replace the [http://localhost:3000](http://localhost:3000) placeholder with the live URL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags. The link is not in the ad image, so no PNG re-export.
 
 
