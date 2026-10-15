@@ -1,0 +1,1278 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start pls swap C11 with C12 and perfrom it(Readme)            
+
+⏺ Bash(grep -n "^## " docs/TODO.md && sed -n "$(grep -n '^## C11' docs/TODO.md |
+      cut -d: -f1),\$p" docs/TODO.md)
+  ⎿  7:## C1 Research
+     12:## C2 Decisions
+     17:## C3 Design Prep
+     … +25 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 1,6p docs/TODO.md; echo ----; cat README.md; echo ----; cat
+      docs/brief.md; echo ----; ls ai-log docs docs/research; git diff --stat)
+  ⎿  # TODO
+
+     The commit plan. One section per commit, in order. Idea and design com
+     … +174 lines (ctrl+o to expand)
+
+  Searched for 2 patterns, read 1 file (ctrl+o to expand)
+
+⏺ I swapped nothing yet. Right now I'm looking for a sourced basis for the
+  expected-conversion figure before I plan the README.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Here's my plan: reorder TODO.md's C11/C12 sections with a new decision entry,
+  restructure README.md to lead with the brief's six required topics (building
+  the conversion estimate from a real benchmark with labeled assumptions, and
+  linking existing decisions for AI mistakes), and flag at the end that session
+  012's uncommitted UI changes should likely be their own commit before this
+  one.
+
+⏺ Web Search("Unbounce Conversion Benchmark Report finance landing page median
+            conversion rate")
+  ⎿  Did 1 search in 6s
+
+⏺ Fetch(https://unbounce.com/industry/finance/)
+  ⎿  Received 349.4KB (200 OK)
+
+⏺ Fetch(https://unbounce.com/industry/finance-and-insurance/)
+  ⎿  Received 371.7KB (200 OK)
+
+⏺ Fetch(https://unbounce.com/?p=135737)
+  ⎿  Received 373.1KB (200 OK)
+
+⏺ Unbounce's 2024 finance page has usable medians: financial services 8.3 %,
+  investing 3.9 %. I'm checking the exact quotes on the canonical page now.
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/a0ecc017-527d-47b2-926d-fcf4a9ceabf5/scratchpad && curl -sL -A
+      "Mozilla/5.0" https:/…)
+  ⎿    382044 ub.html
+     8.3% :: .2%, investing slumps at just 3.9% The conversion rate in the
+     insurance industry is absolutely crushing it at 18.2%, converting 119%
+     … +147 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/a0ecc017-527d-47b2-926d-fcf4a9ceabf5/scratchpad && grep -oE
+      "CBR-20[0-9]{2}[^\"' ]{0…)
+  ⎿  ugrep: error: error at position 1370
+     ][\x80-\xbf][\x80-\xbf]){0,80}
+      exceeds complexity limits___/
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(cd /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-ta
+      sk/a0ecc017-527d-47b2-926d-fcf4a9ceabf5/scratchpad && python3 -I -c "
+      import re…)
+  ⎿  ['CBR-2024-OPEN-GRAPH-GENERIC', 'CBR-2024-financial-CTA', 'CBR-2024-fi
+     nancial-graph-4', 'CBR-2024-financial-hero-graphic', 'CBR-2024-financi
+     al-icon-01-1x', 'CBR-2024-financial-icon-02-1x', 'CBR-2024-financial-i
+     … +6 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(grep -rn "metadataBase\|localhost" src ads --include=*.ts --include=*.tsx
+      --include=*.html | head; git log --oneline | wc -l; python3 -I -c "
+      from math import s…)
+  ⎿  (eval):1: no matches found: --include=*.ts
+     15
+     0.04 0.05 6745
+     … +2 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 14,22p src/app/layout.tsx; grep -rn "C11\|C12"
+      --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=ai-log . |
+      grep -v "^./docs/decisions.md")
+  ⎿  const { title, description, ogTitle, ogAlt } = cs.meta;
+
+     // Decision 40. localhost is the placeholder base until the deploy
+     … +16 lines (ctrl+o to expand)
+
+⏺ I have the benchmark and the sample sizes. Next I'm swapping the TODO sections
+  and writing the README.
+
+⏺ Bash(python3 -I - <<'EOF'
+      p='docs/TODO.md'; t=open(p).read()…)
+  ⎿  cat: illegal option -- A
+     usage: cat [-belnstuv] [file ...]
+  ⎿  Updated docs/TODO.md (+5 -5)
+      66  - [x] Mobile performance and accessibility check on a productio
+          n build at [http://localhost:3000](http://localhost:3000) (`pnp
+          m build && pnpm start`), with fixes. Run on port 3001, since a 
+          dev server held 3000 (decision 41).
+      67  - [x] Ad links in `ads/` keep the [http://localhost:3000](http:
+          //localhost:3000) placeholder (decision 36); re-export the PNGs
+           if the ads change. Ads unchanged, no re-export.
+      68  
+      69 -## C11 Deploy                                                  
+      69 +## C11 README                                                  
+      70  
+      71 -- [ ] Import the GitHub repo in Vercel and deploy.             
+      72 -- [ ] Replace the [http://localhost:3000](http://localhost:3000
+         -) placeholder with the live URL: README, ad links in `ads/`, `m
+         -etadataBase` for the Open Graph tags.                          
+      71 +- [ ] Why the sections are in this order, expected conversion, 
+         +three A/B hypotheses, how the AI was used, where the task was o
+         +pen, demo limits and what is unfinished.                       
+      72  
+      74 -## C12 README                                                  
+      73 +## C12 Deploy                                                  
+      74  
+      76 -- [ ] Why the sections are in this order, expected conversion, 
+         -three A/B hypotheses, how the AI was used, where the task was o
+         -pen, demo limits and what is unfinished.                       
+      75 +- [ ] Import the GitHub repo in Vercel and deploy.             
+      76 +- [ ] Replace the [http://localhost:3000](http://localhost:3000
+         +) placeholder with the live URL: README, ad links in `ads/`, `m
+         +etadataBase` for the Open Graph tags.                          
+      77  
+      78  
+      79  
+  ⎿  Updated src/app/layout.tsx (+1 -1)
+      14  const { title, description, ogTitle, ogAlt } = cs.meta;
+      15  
+      16  // Decision 40. localhost is the placeholder base until the dep
+          loy
+      17 -// (decision 36); C11 sets the live URL here.                  
+      17 +// (decisions 36, 47); C12 sets the live URL here.             
+      18  const ogImage = { url: "/og.png", width: 1200, height: 630, alt
+          : ogAlt };
+      19  
+      20  export const metadata: Metadata = {
+
+⏺ Bash(sed -n 60,90p docs/TODO.md; git diff src/app/layout.tsx | tail -5)
+  ⎿  - [x] Tests: variant from `utm_content`, event props.
+
+     ## C10 Launch readiness
+     … +22 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)  ⎿  Updated docs/decisions.md (+11 -0)
+      463      rejected by the user. With the brokers gone, the amount ch
+           anges
+      464      nothing on the card, only the ask's checklist line and the
+            e-mail;
+      465      the user accepted that.
+      466 +                                                              
+      467 +## C11 README (2026-10-15)                                    
+      468 +                                                              
+      469 +47. **README before deploy: C11 is the README, C12 the deploy.
+          +** Changes                                                    
+      470 +    decision 36 ("C11 deploys"). The localhost placeholder sta
+          +ys until                                                      
+      471 +    C12, which also puts the live URL into the README. The REA
+          +DME's                                                         
+      472 +    expected conversion is anchored on one published benchmark
+          +, quoted                                                      
+      473 +    with its URL and date in the README; the funnel step rates
+          + are                                                          
+      474 +    labelled as assumptions, since there is no traffic yet. *R
+          +eason:* the                                                   
+      475 +    user's choice; the README is written from what is built, a
+          +nd the                                                        
+      476 +    deploy then only swaps URLs.                              
+
+⏺ Write(README.md)
+  ⎿  Added 195 lines, removed 7 lines
+        3  A one-page lead magnet for Czech retail investors: which Europ
+           ean fund
+        4  tracks the same index as the US ETF they know, and where to bu
+           y it. The
+        5  brief is in [docs/brief.md](docs/brief.md), decisions and thei
+           r reasons in
+        6 -[docs/decisions.md](docs/decisions.md).                       
+        6 +[docs/decisions.md](docs/decisions.md) (numbered; "D12" below 
+          +means                                                         
+        7 +decision 12).                                                 
+        8  
+        8 -Live: not deployed yet (C11). Until then the placeholder URL i
+          -s                                                             
+        9 +Live: not deployed yet (C12). Until then the placeholder URL i
+          +s                                                             
+       10  http://localhost:3000.
+       11  
+       12 +## How "compare NYSE ETFs" was read                           
+       13 +                                                              
+       14 +An EU retail investor usually cannot buy a US-listed ETF: it h
+          +as no KID                                                     
+       15 +under the EU's PRIIPs rules, so most EU brokers do not sell it
+       16 +([docs/research/us-etf-rule.md](docs/research/us-etf-rule.md))
+          +. The page                                                    
+       17 +therefore compares by **index**: for VOO, SPY, IVV (S&P 500), 
+          +QQQ                                                           
+       18 +(Nasdaq-100) and URTH (MSCI World) it shows the European (UCIT
+          +S) fund that                                                  
+       19 +names the same benchmark, what is inside it, and its 10-year i
+          +ndex return.                                                  
+       20 +VT is left out, because no European fund tracks its index and 
+          +FTSE publishes                                                
+       21 +no 10-year return (D7).                                       
+       22 +                                                              
+       23 +## Why the sections are in this order                         
+       24 +                                                              
+       25 +1. **First screen: "cannot buy → can buy".** It continues the 
+          +promise of                                                    
+       26 +   both ads (D11, D25): the headline says the NYSE fund is mos
+          +tly not for                                                   
+       27 +   sale here, and the US → EU pairs list answers it at once. T
+          +he red CTA                                                    
+       28 +   scrolls to the taps, not to the form (D10), and ends at 576
+          + px on a                                                      
+       29 +   375 × 667 screen (D46).                                    
+       30 +2. **Taps: index and amount.** Two taps make the answer the vi
+          +sitor's own                                                   
+       31 +   choice without a form field (D5). They feed the match card,
+          + the ask's                                                    
+       32 +   checklist and the e-mail.                                  
+       33 +3. **Match card: the answer, free.** The chosen EU fund, its 1
+          +0-year                                                        
+       34 +   return with the warning beside it, the top 5 companies (D37
+          +, D46). The                                                   
+       35 +   value is visible before anything is asked. The card was cut
+          + from 995                                                     
+       36 +   to 640 px so it does not stand between the taps and the for
+          +m (D46).                                                      
+       37 +4. **The ask: once, after the value.** A dark block names what
+          + the e-mail                                                   
+       38 +   holds, with the ISIN first: the most concrete thing that is
+          + not on the                                                   
+       39 +   page (D30). One field, consent, a red submit (D15). After s
+          +ubmit a modal                                                 
+       40 +   shows the exact e-mail (D3).                               
+       41 +5. **FAQ under the form.** It answers the doubts that stop a s
+          +ubmit ("is it                                                 
+       42 +   banned?", "why is the EU fund dearer?") without giving away
+          + the e-mail's                                                 
+       43 +   content: taxes and acc/dist stay gated (D16).              
+       44 +6. **Disclaimer and sources last,** with the warnings repeated
+          + next to                                                      
+       45 +   every return figure, not only at the bottom (D17). Sources 
+          +sit in                                                        
+       46 +   closed accordions next to their blocks (D32).              
+       47 +                                                              
+       48 +## Expected conversion                                        
+       49 +                                                              
+       50 +**About 4 % of page views leave an e-mail (range 3–6 %).** Thi
+          +s is an                                                       
+       51 +estimate; there is no traffic yet.                            
+       52 +                                                              
+       53 +The basis is Unbounce's 2024 Conversion Benchmark Report, fina
+          +nce page                                                      
+       54 +([unbounce.com](https://unbounce.com/conversion-benchmark-repo
+          +rt/finance-insurance-conversion-rate/),                       
+       55 +published 29 Aug 2024, updated 25 Feb 2026, read 15 Oct 2026):
+       56 +                                                              
+       57 +| Figure | Quote |                                            
+       58 +|---|---|                                                     
+       59 +| Investing 3.9 % | "investing is struggling to keep up, with 
+          +a conversion rate of just 3.9%—well below the financial servic
+          +es median." |                                                 
+       60 +| Financial services 8.3 % | "the overall financial services m
+          +edian conversion rate of 8.3%" |                              
+       61 +| Paid social 9.3 % | "Paid social is also excelling, with a m
+          +edian rate of 9.3% that soars above the all-industries median 
+          +of 5.2%" |                                                    
+       62 +| Mobile beats desktop | "financial services is opposing that 
+          +trend with desktop visitors converting 22% less than mobile." 
+          +|                                                             
+       63 +                                                              
+       64 +"Investing" is the closest category, so it is the anchor. The 
+          +page should                                                   
+       65 +land a little above it: one field, the answer free before the 
+          +ask, and                                                      
+       66 +traffic that is mobile and paid social, the two sources that b
+          +eat the                                                       
+       67 +finance median. It stays well below 8.3 %: the traffic is cold
+          +, the                                                         
+       68 +visitors are beginners, and some will leave satisfied with the
+          + free                                                         
+       69 +answer. Not verified: how a Czech audience compares to Unbounc
+          +e's                                                           
+       70 +dataset, and what "conversion" counts on their pages (any goal
+          +, not                                                         
+       71 +only e-mail).                                                 
+       72 +                                                              
+       73 +How the 4 % breaks down, per 100 page views. The step rates ar
+          +e                                                             
+       74 +**assumptions**; the C9 events measure each one, so they get r
+          +eplaced                                                       
+       75 +by real numbers after the first week of ads:                  
+       76 +                                                              
+       77 +| Step | Event | Assumed |                                    
+       78 +|---|---|---|                                                 
+       79 +| Arrive from the ad | `page_viewed` | 100 |                  
+       80 +| Reach the match card | `match_viewed` | 55 |                
+       81 +| Reach the ask | `form_viewed` | 30 |                        
+       82 +| Start typing | `form_started` | 8 |                         
+       83 +| Submit | `form_submitted` | 4 |                             
+       84 +                                                              
+       85 +## A/B hypotheses, ranked by impact                           
+       86 +                                                              
+       87 +The primary metric is always `form_submitted / page_viewed` pe
+          +r variant                                                     
+       88 +(D19). At a 4 % baseline, a two-sided test at 5 % significance
+          + and 80 %                                                     
+       89 +power needs about **1 900 page views per variant to see 4 → 6 
+          +%** and                                                       
+       90 +about **6 700 to see 4 → 5 %**.                               
+       91 +                                                              
+       92 +1. **The ad hook: problem (A) vs answer (B).** Built: the two 
+          +ads in                                                        
+       93 +   `ads/` differ only in the hook (D18, D27), and every event 
+          +carries                                                       
+       94 +   `variant` from `utm_content`. *Hypothesis:* B's visitors su
+          +bmit more                                                     
+       95 +   per page view than A's, because B promises the answer the f
+          +irst screen                                                   
+       96 +   gives, while A's tension may win clicks that bounce. *Why f
+          +irst:* it                                                     
+       97 +   changes who arrives, so it moves every later step, and it c
+          +osts nothing                                                  
+       98 +   to run.                                                    
+       99 +2. **What the ask leads with: the ISIN vs the tax rule.** Toda
+          +y the                                                         
+      100 +   checklist opens with "the EU fund and its ISIN" (D30). The 
+          +variant                                                       
+      101 +   opens with the Czech tax line (after 3 years no tax on the 
+          +gain).                                                        
+      102 +   *Hypothesis:* the tax lead raises `form_started / form_view
+          +ed`, because                                                  
+      103 +   a beginner fears taxes more than they know what an ISIN is.
+          + One line in                                                  
+      104 +   `src/copy/cs.ts`. *Why second:* it acts on the 30 % who rea
+          +ch the ask.                                                   
+      105 +3. **A second e-mail field right after the taps.** Today the f
+          +orm appears                                                   
+      106 +   once, after the match card (D10). The variant adds the same
+          + field under                                                  
+      107 +   the taps. *Hypothesis:* more submits per page view, because
+          + 45 % never                                                   
+      108 +   reach the card (assumed above); the risk is asking before t
+          +he value is                                                   
+      109 +   seen, so `match_viewed` is the guardrail. *Why third:* it g
+          +oes against                                                   
+      110 +   the page's main rule (value before the ask), so it is the t
+          +est most                                                      
+      111 +   likely to lose, and it needs a component change.           
+      112 +                                                              
+      113 +## How the AI was used                                        
+      114 +                                                              
+      115 +Built with Claude Code, one session per step, each exported to
+      116 +[ai-log/](ai-log/) (001–012).                                 
+      117 +                                                              
+      118 +- **Instructions.** [CLAUDE.md](CLAUDE.md) holds only rules an
+          +d a map                                                       
+      119 +  (100-line budget); reasons go to `docs/decisions.md`. Projec
+          +t skills set                                                  
+      120 +  the loop: `implementation-plan` grills the user one question
+          + at a time                                                    
+      121 +  before a step, `implementation-start` writes a five-line pla
+          +n and works                                                   
+      122 +  through one TODO section, `implementation-end` runs the chec
+          +ks and                                                        
+      123 +  commits after approval. Third-party skills (CRO, copywriting
+          +, analytics,                                                  
+      124 +  accessibility and others) are pinned in `skills-lock.json`. 
+      125 +- **Data.** Primary sources only (issuers, index providers, br
+          +okers,                                                        
+      126 +  EUR-Lex, the Czech tax law). Each number is a `Fact` with UR
+          +L, date and                                                   
+      127 +  the quote it came from; "not verified" is an allowed answer.
+      128 +- **How output was checked.**                                 
+      129 +  - `src/data/data.test.ts` fails if a quote is not found word
+          + for word                                                     
+      130 +    in `docs/research/`, and keeps two page claims true ("the 
+          +same top 3",                                                  
+      131 +    the FAQ fee answer).                                      
+      132 +  - A second session re-read all 58 sourced values against the
+          + live                                                         
+      133 +    documents (D42).                                          
+      134 +  - `pnpm check`, `pnpm test` and `pnpm build` before every co
+          +mmit.                                                         
+      135 +  - Mobile Lighthouse on the production build (D41).          
+      136 +  - The user reviewed each step at 375 px against the mockup. 
+      137 +- **Mistakes caught.** The user's list is in                  
+      138 +  [ai-log/mistakes.md](ai-log/mistakes.md). The ones on record
+          + in the                                                       
+      139 +  decisions:                                                  
+      140 +  - 503 S&P 500 constituents shown as "firem".                
+      141 +  - The SPY factsheet date was a quarter old.                 
+      142 +  - The 23 % tax rate described as applying to income over a l
+          +imit                                                          
+      143 +    instead of the tax base.                                  
+      144 +  - "The same companies on top" where only the top three match
+          +.                                                             
+      145 +  - The e-mail did not say the return is the index's, before f
+          +ees (D42).                                                    
+      146 +  - 29 hard-coded font sizes despite the token rule (D44).    
+      147 +  - Red used for focus and selection, so it read as an error (
+          +D43).                                                         
+      148 +                                                              
+      149 +## Where the task was open, and what was decided              
+      150 +                                                              
+      151 +- **"Compare NYSE ETFs"** for people who cannot buy them: comp
+          +are by index                                                  
+      152 +  and point to the EU fund (above). QQQ is on Nasdaq, not NYSE
+          +, so its row                                                  
+      153 +  is tagged and the ads name only VOO, SPY, IVV (D12, D27).   
+      154 +- **What the e-mail is worth giving an address for:** a plan b
+          +uilt from the                                                 
+      155 +  visitor's taps (fund and ISIN, the three indexes compared, f
+          +ees at their                                                  
+      156 +  amount, Czech taxes, acc vs dist). No step-by-step purchase 
+          +guide (D2).                                                   
+      157 +- **"Historical returns" for a beginner:** a Kč amount over 10
+          + years at the                                                 
+      158 +  index's 10-year average, with a warning box above it. This i
+          +s a                                                           
+      159 +  deliberate exception to "no currency maths", allowed only wi
+          +th the USD                                                    
+      160 +  caveat (D4).                                                
+      161 +- **The brief's acc/dist tap** became an amount tap: all three
+          + funds are                                                    
+      162 +  accumulating, and a beginner cannot judge the choice yet (D1
+          +3).                                                           
+      163 +- **Which EU fund:** one per index, all iShares and accumulati
+          +ng, chosen by                                                 
+      164 +  popularity and history, with the cheaper Xtrackers World as 
+          +the                                                           
+      165 +  accepted trade-off (D6). Revolut is not named: no fund is ve
+          +rified as                                                     
+      166 +  available there (D14).                                      
+      167 +- **"After submit, show what the e-mail contains":** a modal w
+          +ith the                                                       
+      168 +  exact e-mail, reopenable; nothing is stored or sent (D3).   
+      169 +- **"≥ 50 % in view"** for a card twice the screen's height: h
+          +alf the                                                       
+      170 +  block or half the screen, whichever is smaller (D38).       
+      171 +- **The named data controller** is still open (below).        
+      172 +                                                              
+      173 +## Demo limits and what is unfinished                         
+      174 +                                                              
+      175 +Most important first.                                         
+      176 +                                                              
+      177 +1. **Not deployed.** The README, the ad links in `ads/` and `m
+          +etadataBase`                                                  
+      178 +   still point to http://localhost:3000; C12 swaps them for th
+          +e live URL.                                                   
+      179 +2. **No named data controller.** The brief asks for one; the p
+          +age says                                                      
+      180 +   "provozovatel ETF Match (demo, jméno a kontakt doplníme pře
+          +d                                                             
+      181 +   spuštěním)" by the user's choice, and `/ochrana-udaju` expl
+          +ains the                                                      
+      182 +   demo (D26, D40). Ads cannot run until a real name and conta
+          +ct are in.                                                    
+      183 +3. **Nothing is sent or stored.** The e-mail exists only as th
+          +e modal. A                                                    
+      184 +   real launch needs a mailing tool, the e-mail template and a
+          + double                                                       
+      185 +   opt-in.                                                    
+      186 +4. **`track()` only logs to the console.** A real tool (e.g. G
+          +A4) replaces                                                  
+      187 +   its body, and needs a cookie-consent step before it collect
+          +s anything                                                    
+      188 +   (D20).                                                     
+      189 +5. **The data is a snapshot** read on 15 Oct 2026. Factsheets 
+          +change                                                        
+      190 +   monthly or quarterly; nothing refreshes them, and the dates
+          + on the                                                       
+      191 +   page show their age.                                       
+      192 +6. **The conversion estimate and the funnel rates are assumpti
+          +ons** until                                                   
+      193 +   the ads run.                                               
+      194 +7. **The ads are static images only** (Meta feed, 4:5); not up
+          +loaded to                                                     
+      195 +   Meta, and their links are the placeholder.                 
+      196 +                                                              
+      197  ## Run
+      198  
+      199  Needs Node 20+ and pnpm 11.
+     ...
+      233    Components never hard-code a figure. `src/data/data.test.ts`
+            checks that
+      234    every quote appears word for word in `docs/research/`.
+      235  - **Copy in one file.** Every Czech string is in `src/copy/cs.
+           ts`; no
+       50 -  i18n library, since the page has one language (decision 34).
+      236 +  i18n library, since the page has one language (D34).        
+      237  - **Routes compose, components build.** `src/app/page.tsx` onl
+           y renders
+       52 -  `<Home />` (decision 35).                                   
+       53 -- **Tokens only.** The Tailwind palette and radii are cleared 
+          -in                                                            
+       54 -  `globals.css`, so only the mockup's colours exist and every 
+          -corner is                                                     
+       55 -  square.                                                     
+      238 +  `<Home />` (D35).                                           
+      239 +- **Tokens only.** The Tailwind palette, radii and type sizes 
+          +are cleared                                                   
+      240 +  in `globals.css`, so only the design's colours and sizes exi
+          +st and every                                                  
+      241 +  corner is square.                                           
+      242 +- **Red means act or beware.** Red is only on CTAs and disclai
+          +mers;                                                         
+      243 +  selection, emphasis and focus use the blue accent (D43).    
+      244  - **Static page.** No searchParams, cookies or headers in page
+            code; UTM
+      245    parameters are read in the browser.
+      246  - **Mobile first,** 375 px wide. Page copy is Czech; code, com
+           ments,
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ The README is drafted, and I'm checking its claims against the code and
+  research. Two wording fixes next, then the checks.
+
+⏺ Bash(grep -rln "asOf\|accessed" src/components/ ; sed -i '' 's/opens with the
+      Czech tax line (after 3 years no tax on the gain)/opens with the Czech tax
+      line (held m…)
+  ⎿  src/components/EmailPreview.tsx
+     src/components/SourceLink.tsx
+     101:   opens with the Czech tax line (held more than 3 years, no tax o
+     … +2 lines (ctrl+o to expand)
+  ⎿  Updated README.md (+2 -2)
+       98     to run.
+       99  2. **What the ask leads with: the ISIN vs the tax rule.** Toda
+           y the
+      100     checklist opens with "the EU fund and its ISIN" (D30). The 
+           variant
+      101 -   opens with the Czech tax line (after 3 years no tax on the 
+          -gain).                                                        
+      101 +   opens with the Czech tax line (held more than 3 years, no t
+          +ax on the sale).                                              
+      102     *Hypothesis:* the tax lead raises `form_started / form_view
+           ed`, because
+      103     a beginner fears taxes more than they know what an ISIN is.
+            One line in
+      104     `src/copy/cs.ts`. *Why second:* it acts on the 30 % who rea
+           ch the ask.
+     ...
+      133      documents (D42).
+      134    - `pnpm check`, `pnpm test` and `pnpm build` before every co
+           mmit.
+      135    - Mobile Lighthouse on the production build (D41).
+      136 -  - The user reviewed each step at 375 px against the mockup. 
+      136 +  - The user reviewed the UI at 375 px against the mockup.    
+      137  - **Mistakes caught.** The user's list is in
+      138    [ai-log/mistakes.md](ai-log/mistakes.md). The ones on record
+            in the
+      139    decisions:
+
+⏺ Bash(sed -i '' 's/^- \[ \] Why the sections are in this order, expected
+      conversion, three A\/B hypotheses, how the AI was used, where the task was
+      open, demo limits…)
+  ⎿  69:## C11 README
+     70-
+     71-- [x] Why the sections are in this order, expected conversion, thre
+     … +12 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+1 -1)
+      68  
+      69  ## C11 README
+      70  
+      71 -- [ ] Why the sections are in this order, expected conversion, 
+         -three A/B hypotheses, how the AI was used, where the task was o
+         -pen, demo limits and what is unfinished.                       
+      71 +- [x] Why the sections are in this order, expected conversion, 
+         +three A/B hypotheses, how the AI was used, where the task was o
+         +pen, demo limits and what is unfinished. Conversion anchored on
+         + Unbounce's 2024 investing median; deploy moved to C12 (decisio
+         +n 47).                                                         
+      72  
+      73  ## C12 Deploy
+      74  
+
+⏺ I've reordered the TODO and README sections, updated decisions.md and the
+  layout comment to reflect C12, and confirmed pnpm check/pnpm test pass (213
+  tests). Two things need your attention: ai-log/mistakes.md is linked but
+  doesn't exist (you're meant to write it), and the session-012 UI changes
+  remain uncommitted — I'll run /implementation-end next for checks and commit
+  prep.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm build 2>&1 | tail -12; git status --short; git log -3
+      --format="%s%n%b---")
+  ⎿  ✓ Generating static pages using 6 workers (5/5) in 317ms
+       Finalizing page optimization ...
+     … +75 lines (ctrl+o to expand)
+
+⏺ pnpm check, pnpm test and pnpm build all pass, and every route is still static
+  (○). The C11 box is ticked.
+
+  Correction: I was wrong about the session-012 changes. They were already
+  committed in refine UI after review…. My warning came from the git status
+  snapshot taken when this session started. Only this section's four files are
+  left to commit, so nothing needs splitting.
+
+  Before committing: export this session with /export ai-log/013-readme.txt so
+  it goes in the same commit.
+
+  For ai-log/mistakes.md (you write it): no mistake was caught by you this
+  session. Two of mine:
+  - I warned about uncommitted work that had already been committed, because I
+    trusted the snapshot from the session start.
+  - The page summary tool reworded Unbounce's figures (it called an average a
+    median, and said figures were missing that are on the page). I took the
+    README quotes from the raw page with curl, not from the summary.
+
+  Commit message:
+
+  add C11 README: section order, conversion, A/B tests, AI use, limits
+
+  - README first covers the brief's topics: how "compare NYSE ETFs" was
+    read, why the sections are in this order, expected conversion, three
+    A/B hypotheses ranked by impact, how the AI was used and its mistakes,
+    where the task was open, demo limits most important first
+  - expected conversion ~4 % (3-6 %), anchored on Unbounce's 2024
+    investing median (3.9 %), quoted with URL and dates; funnel step rates
+    labelled as assumptions until the C9 events measure them
+  - sample sizes per variant at a 4 % baseline: ~1 900 for 4 -> 6 %,
+    ~6 700 for 4 -> 5 %
+  - TODO: C11 is the README, C12 the deploy (decision 47, changes 36);
+    layout.tsx comment points to C12
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: README.md, docs/TODO.md, docs/decisions.md,
+  src/app/layout.tsx, ai-log/013-readme.txt
+
+  Once the export is saved, approve the message (or edit it) and I'll commit and
+  push.
+
+✻ Sautéed for 4m 32s · done 5:21 PM
+
+❯ The README is too long, can you be shorter please while keeping the key       
+  points that were required to answer?                                          
+
+⏺ Write(README.md)
+  ⎿  Added 84 lines, removed 211 lines
+        1  # ETF Match
+        2  
+        3  A one-page lead magnet for Czech retail investors: which Europ
+           ean fund
+        4 -tracks the same index as the US ETF they know, and where to bu
+          -y it. The                                                     
+        5 -brief is in [docs/brief.md](docs/brief.md), decisions and thei
+          -r reasons in                                                  
+        6 -[docs/decisions.md](docs/decisions.md) (numbered; "D12" below 
+          -means                                                         
+        7 -decision 12).                                                 
+        4 +tracks the same index as the US ETF they know. Brief:         
+        5 +[docs/brief.md](docs/brief.md). Decisions with reasons:       
+        6 +[docs/decisions.md](docs/decisions.md) ("D12" = decision 12). 
+        7  
+        9 -Live: not deployed yet (C12). Until then the placeholder URL i
+          -s                                                             
+       10 -http://localhost:3000.                                        
+        8 +Live: not deployed yet (C12). Placeholder URL: http://localhos
+          +t:3000.                                                       
+        9  
+       12 -## How "compare NYSE ETFs" was read                           
+       10 +## Why this order                                             
+       11  
+       14 -An EU retail investor usually cannot buy a US-listed ETF: it h
+          -as no KID                                                     
+       15 -under the EU's PRIIPs rules, so most EU brokers do not sell it
+       16 -([docs/research/us-etf-rule.md](docs/research/us-etf-rule.md))
+          -. The page                                                    
+       17 -therefore compares by **index**: for VOO, SPY, IVV (S&P 500), 
+          -QQQ                                                           
+       18 -(Nasdaq-100) and URTH (MSCI World) it shows the European (UCIT
+          -S) fund that                                                  
+       19 -names the same benchmark, what is inside it, and its 10-year i
+          -ndex return.                                                  
+       20 -VT is left out, because no European fund tracks its index and 
+          -FTSE publishes                                                
+       21 -no 10-year return (D7).                                       
+       12 +An EU retail investor usually cannot buy a US-listed ETF (no K
+          +ID under                                                      
+       13 +PRIIPs), so the page compares by **index** and points to the E
+          +U fund.                                                       
+       14  
+       23 -## Why the sections are in this order                         
+       15 +1. **First screen**: "cannot buy → can buy" continues both ads
+          +' promise;                                                    
+       16 +   the CTA scrolls to the taps, not the form (D10, D11).      
+       17 +2. **Taps** (index, amount): personal without a form field (D5
+          +).                                                            
+       18 +3. **Match card**: the answer for free, before anything is ask
+          +ed (D46).                                                     
+       19 +4. **The ask**, once, after the value: one field, consent; the
+          + ISIN is                                                      
+       20 +   the first thing promised, the most concrete item kept for t
+          +he e-mail (D30).                                              
+       21 +5. **FAQ** answers the doubts that block a submit (D16).      
+       22 +6. **Disclaimer and sources**; warnings also sit next to every
+          + return (D17).                                                
+       23  
+       25 -1. **First screen: "cannot buy → can buy".** It continues the 
+          -promise of                                                    
+       26 -   both ads (D11, D25): the headline says the NYSE fund is mos
+          -tly not for                                                   
+       27 -   sale here, and the US → EU pairs list answers it at once. T
+          -he red CTA                                                    
+       28 -   scrolls to the taps, not to the form (D10), and ends at 576
+          - px on a                                                      
+       29 -   375 × 667 screen (D46).                                    
+       30 -2. **Taps: index and amount.** Two taps make the answer the vi
+          -sitor's own                                                   
+       31 -   choice without a form field (D5). They feed the match card,
+          - the ask's                                                    
+       32 -   checklist and the e-mail.                                  
+       33 -3. **Match card: the answer, free.** The chosen EU fund, its 1
+          -0-year                                                        
+       34 -   return with the warning beside it, the top 5 companies (D37
+          -, D46). The                                                   
+       35 -   value is visible before anything is asked. The card was cut
+          - from 995                                                     
+       36 -   to 640 px so it does not stand between the taps and the for
+          -m (D46).                                                      
+       37 -4. **The ask: once, after the value.** A dark block names what
+          - the e-mail                                                   
+       38 -   holds, with the ISIN first: the most concrete thing that is
+          - not on the                                                   
+       39 -   page (D30). One field, consent, a red submit (D15). After s
+          -ubmit a modal                                                 
+       40 -   shows the exact e-mail (D3).                               
+       41 -5. **FAQ under the form.** It answers the doubts that stop a s
+          -ubmit ("is it                                                 
+       42 -   banned?", "why is the EU fund dearer?") without giving away
+          - the e-mail's                                                 
+       43 -   content: taxes and acc/dist stay gated (D16).              
+       44 -6. **Disclaimer and sources last,** with the warnings repeated
+          - next to                                                      
+       45 -   every return figure, not only at the bottom (D17). Sources 
+          -sit in                                                        
+       46 -   closed accordions next to their blocks (D32).              
+       47 -                                                              
+       24  ## Expected conversion
+       25  
+       50 -**About 4 % of page views leave an e-mail (range 3–6 %).** Thi
+          -s is an                                                       
+       51 -estimate; there is no traffic yet.                            
+       26 +**About 4 % of page views (3–6 %)**, an estimate with no traff
+          +ic yet.                                                       
+       27 +Anchor: Unbounce's 2024 Conversion Benchmark Report, finance p
+          +age                                                           
+       28 +([link](https://unbounce.com/conversion-benchmark-report/finan
+          +ce-insurance-conversion-rate/),                               
+       29 +updated 25 Feb 2026, read 15 Oct 2026): "investing is struggli
+          +ng to keep                                                    
+       30 +up, with a conversion rate of just 3.9%". Financial services o
+          +verall is                                                     
+       31 +8.3 %. The page should beat 3.9 %: one field, a free answer be
+          +fore the                                                      
+       32 +ask, mobile paid-social traffic (above the finance median on t
+          +he same                                                       
+       33 +page). Cold beginners keep it well below 8.3 %. Assumed funnel
+          + per 100                                                      
+       34 +views, to be replaced by the C9 events: 55 `match_viewed` → 30
+       35 +`form_viewed` → 8 `form_started` → 4 `form_submitted`.        
+       36  
+       53 -The basis is Unbounce's 2024 Conversion Benchmark Report, fina
+          -nce page                                                      
+       54 -([unbounce.com](https://unbounce.com/conversion-benchmark-repo
+          -rt/finance-insurance-conversion-rate/),                       
+       55 -published 29 Aug 2024, updated 25 Feb 2026, read 15 Oct 2026):
+       37 +## A/B hypotheses, by impact                                  
+       38  
+       57 -| Figure | Quote |                                            
+       58 -|---|---|                                                     
+       59 -| Investing 3.9 % | "investing is struggling to keep up, with 
+          -a conversion rate of just 3.9%—well below the financial servic
+          -es median." |                                                 
+       60 -| Financial services 8.3 % | "the overall financial services m
+          -edian conversion rate of 8.3%" |                              
+       61 -| Paid social 9.3 % | "Paid social is also excelling, with a m
+          -edian rate of 9.3% that soars above the all-industries median 
+          -of 5.2%" |                                                    
+       62 -| Mobile beats desktop | "financial services is opposing that 
+          -trend with desktop visitors converting 22% less than mobile." 
+          -|                                                             
+       39 +Metric: `form_submitted / page_viewed` per variant. At 4 %, de
+          +tecting                                                       
+       40 +4 → 6 % needs ~1 900 views per variant (5 % significance, 80 %
+          + power).                                                      
+       41  
+       64 -"Investing" is the closest category, so it is the anchor. The 
+          -page should                                                   
+       65 -land a little above it: one field, the answer free before the 
+          -ask, and                                                      
+       66 -traffic that is mobile and paid social, the two sources that b
+          -eat the                                                       
+       67 -finance median. It stays well below 8.3 %: the traffic is cold
+          -, the                                                         
+       68 -visitors are beginners, and some will leave satisfied with the
+          - free                                                         
+       69 -answer. Not verified: how a Czech audience compares to Unbounc
+          -e's                                                           
+       70 -dataset, and what "conversion" counts on their pages (any goal
+          -, not                                                         
+       71 -only e-mail).                                                 
+       42 +1. **Ad hook, problem (A) vs answer (B).** Built (`ads/`, `utm
+          +_content`).                                                   
+       43 +   B wins, because it promises exactly what the first screen g
+          +ives. It                                                      
+       44 +   changes who arrives, so it moves every step.               
+       45 +2. **The ask leads with the tax rule instead of the ISIN.** Ra
+          +ises                                                          
+       46 +   `form_started / form_viewed`: beginners fear taxes more tha
+          +n they know                                                   
+       47 +   what an ISIN is. One line in `cs.ts`.                      
+       48 +3. **A second e-mail field under the taps.** More submits from
+          + the ~45 %                                                    
+       49 +   who never reach the card; `match_viewed` is the guardrail. 
+          +Last: it                                                      
+       50 +   breaks "value before the ask".                             
+       51  
+       73 -How the 4 % breaks down, per 100 page views. The step rates ar
+          -e                                                             
+       74 -**assumptions**; the C9 events measure each one, so they get r
+          -eplaced                                                       
+       75 -by real numbers after the first week of ads:                  
+       76 -                                                              
+       77 -| Step | Event | Assumed |                                    
+       78 -|---|---|---|                                                 
+       79 -| Arrive from the ad | `page_viewed` | 100 |                  
+       80 -| Reach the match card | `match_viewed` | 55 |                
+       81 -| Reach the ask | `form_viewed` | 30 |                        
+       82 -| Start typing | `form_started` | 8 |                         
+       83 -| Submit | `form_submitted` | 4 |                             
+       84 -                                                              
+       85 -## A/B hypotheses, ranked by impact                           
+       86 -                                                              
+       87 -The primary metric is always `form_submitted / page_viewed` pe
+          -r variant                                                     
+       88 -(D19). At a 4 % baseline, a two-sided test at 5 % significance
+          - and 80 %                                                     
+       89 -power needs about **1 900 page views per variant to see 4 → 6 
+          -%** and                                                       
+       90 -about **6 700 to see 4 → 5 %**.                               
+       91 -                                                              
+       92 -1. **The ad hook: problem (A) vs answer (B).** Built: the two 
+          -ads in                                                        
+       93 -   `ads/` differ only in the hook (D18, D27), and every event 
+          -carries                                                       
+       94 -   `variant` from `utm_content`. *Hypothesis:* B's visitors su
+          -bmit more                                                     
+       95 -   per page view than A's, because B promises the answer the f
+          -irst screen                                                   
+       96 -   gives, while A's tension may win clicks that bounce. *Why f
+          -irst:* it                                                     
+       97 -   changes who arrives, so it moves every later step, and it c
+          -osts nothing                                                  
+       98 -   to run.                                                    
+       99 -2. **What the ask leads with: the ISIN vs the tax rule.** Toda
+          -y the                                                         
+      100 -   checklist opens with "the EU fund and its ISIN" (D30). The 
+          -variant                                                       
+      101 -   opens with the Czech tax line (held more than 3 years, no t
+          -ax on the sale).                                              
+      102 -   *Hypothesis:* the tax lead raises `form_started / form_view
+          -ed`, because                                                  
+      103 -   a beginner fears taxes more than they know what an ISIN is.
+          - One line in                                                  
+      104 -   `src/copy/cs.ts`. *Why second:* it acts on the 30 % who rea
+          -ch the ask.                                                   
+      105 -3. **A second e-mail field right after the taps.** Today the f
+          -orm appears                                                   
+      106 -   once, after the match card (D10). The variant adds the same
+          - field under                                                  
+      107 -   the taps. *Hypothesis:* more submits per page view, because
+          - 45 % never                                                   
+      108 -   reach the card (assumed above); the risk is asking before t
+          -he value is                                                   
+      109 -   seen, so `match_viewed` is the guardrail. *Why third:* it g
+          -oes against                                                   
+      110 -   the page's main rule (value before the ask), so it is the t
+          -est most                                                      
+      111 -   likely to lose, and it needs a component change.           
+      112 -                                                              
+       52  ## How the AI was used
+       53  
+      115 -Built with Claude Code, one session per step, each exported to
+      116 -[ai-log/](ai-log/) (001–012).                                 
+       54 +Claude Code, one session per step, exported to [ai-log/](ai-lo
+          +g/).                                                          
+       55  
+      118 -- **Instructions.** [CLAUDE.md](CLAUDE.md) holds only rules an
+          -d a map                                                       
+      119 -  (100-line budget); reasons go to `docs/decisions.md`. Projec
+          -t skills set                                                  
+      120 -  the loop: `implementation-plan` grills the user one question
+          - at a time                                                    
+      121 -  before a step, `implementation-start` writes a five-line pla
+          -n and works                                                   
+      122 -  through one TODO section, `implementation-end` runs the chec
+          -ks and                                                        
+      123 -  commits after approval. Third-party skills (CRO, copywriting
+          -, analytics,                                                  
+      124 -  accessibility and others) are pinned in `skills-lock.json`. 
+      125 -- **Data.** Primary sources only (issuers, index providers, br
+          -okers,                                                        
+      126 -  EUR-Lex, the Czech tax law). Each number is a `Fact` with UR
+          -L, date and                                                   
+      127 -  the quote it came from; "not verified" is an allowed answer.
+      128 -- **How output was checked.**                                 
+      129 -  - `src/data/data.test.ts` fails if a quote is not found word
+          - for word                                                     
+      130 -    in `docs/research/`, and keeps two page claims true ("the 
+          -same top 3",                                                  
+      131 -    the FAQ fee answer).                                      
+      132 -  - A second session re-read all 58 sourced values against the
+          - live                                                         
+      133 -    documents (D42).                                          
+      134 -  - `pnpm check`, `pnpm test` and `pnpm build` before every co
+          -mmit.                                                         
+      135 -  - Mobile Lighthouse on the production build (D41).          
+      136 -  - The user reviewed the UI at 375 px against the mockup.    
+      137 -- **Mistakes caught.** The user's list is in                  
+      138 -  [ai-log/mistakes.md](ai-log/mistakes.md). The ones on record
+          - in the                                                       
+      139 -  decisions:                                                  
+      140 -  - 503 S&P 500 constituents shown as "firem".                
+      141 -  - The SPY factsheet date was a quarter old.                 
+      142 -  - The 23 % tax rate described as applying to income over a l
+          -imit                                                          
+      143 -    instead of the tax base.                                  
+      144 -  - "The same companies on top" where only the top three match
+          -.                                                             
+      145 -  - The e-mail did not say the return is the index's, before f
+          -ees (D42).                                                    
+      146 -  - 29 hard-coded font sizes despite the token rule (D44).    
+      147 -  - Red used for focus and selection, so it read as an error (
+          -D43).                                                         
+       56 +- **Instructions**: [CLAUDE.md](CLAUDE.md) holds rules only; p
+          +roject                                                        
+       57 +  skills plan (one question at a time), implement one TODO sec
+          +tion, and                                                     
+       58 +  commit after approval.                                      
+       59 +- **Checks**: every number is a `Fact` (URL, date, quote) from
+          + a primary                                                    
+       60 +  source; `data.test.ts` fails if a quote is not word for word
+          + in                                                           
+       61 +  `docs/research/`. A second session re-read all 58 values (D4
+          +2).                                                           
+       62 +  `pnpm check`, `test` and `build` run before each commit, Lig
+          +hthouse                                                       
+       63 +  runs on the production build (D41), and the user reviewed th
+          +e UI at 375 px.                                               
+       64 +- **Mistakes** ([ai-log/mistakes.md](ai-log/mistakes.md)): con
+          +stituents                                                     
+       65 +  shown as "firem", a quarter-old SPY date, the 23 % tax rule 
+          +on income                                                     
+       66 +  instead of the tax base (D42); hard-coded font sizes (D44); 
+          +red on                                                        
+       67 +  focus and selection (D43).                                  
+       68  
+      149 -## Where the task was open, and what was decided              
+       69 +## Where the task was open                                    
+       70  
+      151 -- **"Compare NYSE ETFs"** for people who cannot buy them: comp
+          -are by index                                                  
+      152 -  and point to the EU fund (above). QQQ is on Nasdaq, not NYSE
+          -, so its row                                                  
+      153 -  is tagged and the ads name only VOO, SPY, IVV (D12, D27).   
+      154 -- **What the e-mail is worth giving an address for:** a plan b
+          -uilt from the                                                 
+      155 -  visitor's taps (fund and ISIN, the three indexes compared, f
+          -ees at their                                                  
+      156 -  amount, Czech taxes, acc vs dist). No step-by-step purchase 
+          -guide (D2).                                                   
+      157 -- **"Historical returns" for a beginner:** a Kč amount over 10
+          - years at the                                                 
+      158 -  index's 10-year average, with a warning box above it. This i
+          -s a                                                           
+      159 -  deliberate exception to "no currency maths", allowed only wi
+          -th the USD                                                    
+      160 -  caveat (D4).                                                
+      161 -- **The brief's acc/dist tap** became an amount tap: all three
+          - funds are                                                    
+      162 -  accumulating, and a beginner cannot judge the choice yet (D1
+          -3).                                                           
+      163 -- **Which EU fund:** one per index, all iShares and accumulati
+          -ng, chosen by                                                 
+      164 -  popularity and history, with the cheaper Xtrackers World as 
+          -the                                                           
+      165 -  accepted trade-off (D6). Revolut is not named: no fund is ve
+          -rified as                                                     
+      166 -  available there (D14).                                      
+      167 -- **"After submit, show what the e-mail contains":** a modal w
+          -ith the                                                       
+      168 -  exact e-mail, reopenable; nothing is stored or sent (D3).   
+      169 -- **"≥ 50 % in view"** for a card twice the screen's height: h
+          -alf the                                                       
+      170 -  block or half the screen, whichever is smaller (D38).       
+      171 -- **The named data controller** is still open (below).        
+       71 +- **"Compare NYSE ETFs"**: compared by index; QQQ is on Nasdaq
+          +, so it is                                                    
+       72 +  tagged and left out of the ads (D12, D27).                  
+       73 +- **The e-mail's value**: a plan from the visitor's taps; no p
+          +urchase                                                       
+       74 +  guide (D2).                                                 
+       75 +- **Returns for a beginner**: Kč over 10 years at the index av
+          +erage,                                                        
+       76 +  with a warning and the USD caveat (D4).                     
+       77 +- **Acc/dist tap** became an amount tap; all funds are Acc (D1
+          +3).                                                           
+       78 +- **Fund choice**: one iShares Acc fund per index (D6); Revolu
+          +t not named,                                                  
+       79 +  as availability is unverified (D14).                        
+       80 +- **After submit**: a modal shows the exact e-mail (D3).      
+       81  
+      173 -## Demo limits and what is unfinished                         
+       82 +## Demo limits and unfinished                                 
+       83  
+      175 -Most important first.                                         
+       84 +1. **Not deployed**: README, ad links and `metadataBase` point
+          + to                                                           
+       85 +   localhost until C12.                                       
+       86 +2. **No named data controller** yet, by choice; `/ochrana-udaj
+          +u`                                                            
+       87 +   explains the demo (D40). Needed before ads run.            
+       88 +3. **Nothing is sent or stored**; a mailing tool and double op
+          +t-in are                                                      
+       89 +   missing.                                                   
+       90 +4. **`track()` only logs to the console**; a real tool needs c
+          +ookie                                                         
+       91 +   consent (D20).                                             
+       92 +5. **Data snapshot** from 15 Oct 2026, with no refresh.       
+       93 +6. **Ads** are static images, not uploaded to Meta.           
+       94  
+      177 -1. **Not deployed.** The README, the ad links in `ads/` and `m
+          -etadataBase`                                                  
+      178 -   still point to http://localhost:3000; C12 swaps them for th
+          -e live URL.                                                   
+      179 -2. **No named data controller.** The brief asks for one; the p
+          -age says                                                      
+      180 -   "provozovatel ETF Match (demo, jméno a kontakt doplníme pře
+          -d                                                             
+      181 -   spuštěním)" by the user's choice, and `/ochrana-udaju` expl
+          -ains the                                                      
+      182 -   demo (D26, D40). Ads cannot run until a real name and conta
+          -ct are in.                                                    
+      183 -3. **Nothing is sent or stored.** The e-mail exists only as th
+          -e modal. A                                                    
+      184 -   real launch needs a mailing tool, the e-mail template and a
+          - double                                                       
+      185 -   opt-in.                                                    
+      186 -4. **`track()` only logs to the console.** A real tool (e.g. G
+          -A4) replaces                                                  
+      187 -   its body, and needs a cookie-consent step before it collect
+          -s anything                                                    
+      188 -   (D20).                                                     
+      189 -5. **The data is a snapshot** read on 15 Oct 2026. Factsheets 
+          -change                                                        
+      190 -   monthly or quarterly; nothing refreshes them, and the dates
+          - on the                                                       
+      191 -   page show their age.                                       
+      192 -6. **The conversion estimate and the funnel rates are assumpti
+          -ons** until                                                   
+      193 -   the ads run.                                               
+      194 -7. **The ads are static images only** (Meta feed, 4:5); not up
+          -loaded to                                                     
+      195 -   Meta, and their links are the placeholder.                 
+      196 -                                                              
+       95  ## Run
+       96  
+       97  Needs Node 20+ and pnpm 11.
+     ...
+       99  ```bash
+      100  pnpm install
+      101  pnpm dev        # http://localhost:3000
+      204 -pnpm check      # next typegen + tsc, then Biome lint and form
+          -at check                                                      
+      102 +pnpm check      # typegen + tsc, Biome                        
+      103  pnpm test       # Vitest
+      206 -pnpm build      # production build; the page must stay static 
+          -(○ /)                                                         
+      104 +pnpm build      # must stay static (○ /)                      
+      105  ```
+      106  
+      107  ## Structure
+      108  
+      109  ```
+      212 -src/                                                          
+      213 -  app/           routes only: they import and render component
+          -s                                                             
+      214 -                 (globals.css holds the design tokens, @theme)
+      215 -  components/    the UI                                       
+      216 -  copy/cs.ts     all Czech page copy                          
+      217 -  fonts/         Archivo cut to Czech (subset.sh), with its OF
+          -L licence                                                     
+      218 -  data/          every sourced number: value, source URL, date
+          -, quote                                                       
+      219 -  lib/           Czech number formatting, the taps' options, t
+          -he income                                                     
+      220 -                 illustration, the e-mail check, track() (no f
+          -igures)                                                       
+      221 -docs/                                                         
+      222 -  research/      the sourced research behind src/data/        
+      223 -  mockups/       the agreed static mockup (page-a.html) and th
+          -e rejected one                                                
+      224 -public/          og.png, the share card (from ads/og.html)    
+      225 -ads/             the two Meta ads, HTML and exported PNGs     
+      226 -ai-log/          one exported AI session per step, plus mistak
+          -es.md                                                         
+      110 +src/app/         routes only; globals.css holds the @theme tok
+          +ens                                                           
+      111 +src/components/  the UI                                       
+      112 +src/copy/cs.ts   all Czech copy                               
+      113 +src/data/        every sourced number: value, URL, date, quote
+      114 +src/lib/         formatting, taps, income illustration, e-mail
+          + check, track()                                               
+      115 +src/fonts/       Archivo Czech subset, OFL licence            
+      116 +docs/            brief, decisions, research, mockups, TODO    
+      117 +ads/             the two Meta ads; og.html → public/og.png    
+      118 +ai-log/          one export per session, mistakes.md          
+      119  ```
+      120  
+      229 -## Rules                                                      
+      230 -                                                              
+      231 -- **Numbers come from `src/data/` only.** Each one is a `Fact`
+          -: value,                                                      
+      232 -  source (URL, as-of date, access date) and the quote it was r
+          -ead from.                                                     
+      233 -  Components never hard-code a figure. `src/data/data.test.ts`
+          - checks that                                                  
+      234 -  every quote appears word for word in `docs/research/`.      
+      235 -- **Copy in one file.** Every Czech string is in `src/copy/cs.
+          -ts`; no                                                       
+      236 -  i18n library, since the page has one language (D34).        
+      237 -- **Routes compose, components build.** `src/app/page.tsx` onl
+          -y renders                                                     
+      238 -  `<Home />` (D35).                                           
+      239 -- **Tokens only.** The Tailwind palette, radii and type sizes 
+          -are cleared                                                   
+      240 -  in `globals.css`, so only the design's colours and sizes exi
+          -st and every                                                  
+      241 -  corner is square.                                           
+      242 -- **Red means act or beware.** Red is only on CTAs and disclai
+          -mers;                                                         
+      243 -  selection, emphasis and focus use the blue accent (D43).    
+      244 -- **Static page.** No searchParams, cookies or headers in page
+          - code; UTM                                                    
+      245 -  parameters are read in the browser.                         
+      246 -- **Mobile first,** 375 px wide. Page copy is Czech; code, com
+          -ments,                                                        
+      247 -  commits and docs are English.                               
+      248 -- Before a commit: `pnpm check`, `pnpm test` and `pnpm build` 
+          -pass.                                                         
+      121 +The working rules are in [CLAUDE.md](CLAUDE.md).              
+
+⏺ Bash(wc -l README.md && git show HEAD:README.md | wc -l && pnpm check 2>&1 |
+      tail -1)
+  ⎿       121 README.md
+     60
+     Checked 40 files in 11ms. No fixes applied.
+
+⏺ The README is now 121 lines, down from about 260. It still covers every point
+  the brief asks for:
+
+  - Section order: the reason for each of the six sections, one line each.
+  - Expected conversion: about 4 %, with the Unbounce quote and link as its
+    basis and the assumed funnel steps in one line.
+  - A/B hypotheses: three, ranked by impact, each with a reason and its metric.
+  - How the AI was used: how it was instructed, how its output was checked, and
+    the mistakes on record.
+  - Where the task was open: six decisions, one line each.
+  - Demo limits: six items, most important first.
+
+  To get there I cut the separate "how compare NYSE ETFs was read" section (it's
+  now two sentences under "Why this order"). I also dropped the Unbounce quote
+  table, the 4 → 5 % sample size and the "why ranked here" notes. The Rules list
+  is replaced by a link to CLAUDE.md, and Structure is down to one line per
+  folder. pnpm check passes.
+
+  The commit message changed in one bullet, the sample size:
+
+  add C11 README: section order, conversion, A/B tests, AI use, limits
+
+  - README covers the brief's topics: why the sections are in this
+    order, expected conversion, three A/B hypotheses ranked by impact,
+    how the AI was used and its mistakes, where the task was open, demo
+    limits most important first
+  - expected conversion ~4 % (3-6 %), anchored on Unbounce's 2024
+    investing median (3.9 %), quoted with URL and date; funnel step rates
+    labelled as assumptions until the C9 events measure them
+  - sample size at a 4 % baseline: ~1 900 views per variant for 4 -> 6 %
+  - TODO: C11 is the README, C12 the deploy (decision 47, changes 36);
+    layout.tsx comment points to C12
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: README.md, docs/TODO.md, docs/decisions.md,
+  src/app/layout.tsx, ai-log/013-readme.txt
+
+  Before I commit, export this session with /export ai-log/013-readme.txt. Then
+  approve the message and I'll commit and push.
+
+✻ Cogitated for 34s · done 5:23 PM
+
+❯ /implementation-end                                                           
+
+⏺ Bash(pnpm check 2>&1 | tail -1 && pnpm test 2>&1 | grep -E "Tests|failed" &&
+      pnpm build 2>&1 | grep -E "○|error|Error" ; git status --short; ls ai-log
+      | tail -3; ls…)
+  ⎿  Error: Exit code 1
+     Checked 40 files in 12ms. No fixes applied.
+           Tests  213 passed (213)
+     ┌ ○ /
+     ├ ○ /_not-found
+     ├ ○ /icon.svg
+     └ ○ /ochrana-udaju
+     ○  (Static)  prerendered as static content
+      M README.md
+      M docs/TODO.md
+     … +6 lines (ctrl+o to expand)
+
+⏺ Nothing is committed yet: I'm waiting on two things from you.
+
+  1. The session export. ai-log/013-readme.txt doesn't exist yet. Run /export 
+     ai-log/013-readme.txt so it goes in this commit.
+  2. Approval of the commit message. Reply "approve", or send your edited text.
+
+  pnpm check, pnpm test (213 passed) and pnpm build all pass, and every route is
+  still static (○). The only changes are the four files below, and the C11 box
+  is ticked. The shell's error exit came from my check that ai-log/mistakes.md
+  exists; it doesn't yet.
+
+  For ai-log/mistakes.md (you write it, and the README already links it): you
+  didn't catch any mistakes this session. The two I noted:
+  - I warned you about uncommitted session-012 work that was already committed.
+  - The page summary tool reworded Unbounce's figures, so I took the README
+    quote from the raw page.
+
+  add C11 README: section order, conversion, A/B tests, AI use, limits
+
+  - README covers the brief's topics: why the sections are in this
+    order, expected conversion, three A/B hypotheses ranked by impact,
+    how the AI was used and its mistakes, where the task was open, demo
+    limits most important first
+  - expected conversion ~4 % (3-6 %), anchored on Unbounce's 2024
+    investing median (3.9 %), quoted with URL and date; funnel step rates
+    labelled as assumptions until the C9 events measure them
+  - sample size at a 4 % baseline: ~1 900 views per variant for 4 -> 6 %
+  - TODO: C11 is the README, C12 the deploy (decision 47, changes 36);
+    layout.tsx comment points to C12
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: README.md, docs/TODO.md, docs/decisions.md,
+  src/app/layout.tsx, ai-log/013-readme.txt
+
+✻ Churned for 16s · done 5:25 PM

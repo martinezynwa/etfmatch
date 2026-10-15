@@ -463,3 +463,14 @@ Agreed in the C6 review of the match card at 375 px.
     rejected by the user. With the brokers gone, the amount changes
     nothing on the card, only the ask's checklist line and the e-mail;
     the user accepted that.
+
+## C11 README (2026-10-15)
+
+47. **README before deploy: C11 is the README, C12 the deploy.** Changes
+    decision 36 ("C11 deploys"). The localhost placeholder stays until
+    C12, which also puts the live URL into the README. The README's
+    expected conversion is anchored on one published benchmark, quoted
+    with its URL and date in the README; the funnel step rates are
+    labelled as assumptions, since there is no traffic yet. *Reason:* the
+    user's choice; the README is written from what is built, and the
+    deploy then only swaps URLs.

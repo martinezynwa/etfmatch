@@ -14,7 +14,7 @@ const archivo = localFont({
 const { title, description, ogTitle, ogAlt } = cs.meta;
 
 // Decision 40. localhost is the placeholder base until the deploy
-// (decision 36); C11 sets the live URL here.
+// (decisions 36, 47); C12 sets the live URL here.
 const ogImage = { url: "/og.png", width: 1200, height: 630, alt: ogAlt };
 
 export const metadata: Metadata = {

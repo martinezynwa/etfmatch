@@ -66,14 +66,14 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 - [x] Mobile performance and accessibility check on a production build at [http://localhost:3000](http://localhost:3000) (`pnpm build && pnpm start`), with fixes. Run on port 3001, since a dev server held 3000 (decision 41).
 - [x] Ad links in `ads/` keep the [http://localhost:3000](http://localhost:3000) placeholder (decision 36); re-export the PNGs if the ads change. Ads unchanged, no re-export.
 
-## C11 Deploy
+## C11 README
+
+- [x] Why the sections are in this order, expected conversion, three A/B hypotheses, how the AI was used, where the task was open, demo limits and what is unfinished. Conversion anchored on Unbounce's 2024 investing median; deploy moved to C12 (decision 47).
+
+## C12 Deploy
 
 - [ ] Import the GitHub repo in Vercel and deploy.
 - [ ] Replace the [http://localhost:3000](http://localhost:3000) placeholder with the live URL: README, ad links in `ads/`, `metadataBase` for the Open Graph tags.
-
-## C12 README
-
-- [ ] Why the sections are in this order, expected conversion, three A/B hypotheses, how the AI was used, where the task was open, demo limits and what is unfinished.
 
 
 
