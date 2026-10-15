@@ -74,7 +74,7 @@ export const sources = {
   spyFactsheet: {
     title: "SPDR S&P 500 ETF Trust (SPY), fact sheet",
     url: "https://www.ssga.com/us/en/intermediary/library-content/products/factsheets/etfs/us/factsheet-us-en-spy.pdf",
-    asOf: "2026-06-30",
+    asOf: "2026-09-30",
     accessed,
   },
   spyProspectus: {

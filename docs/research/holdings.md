@@ -45,7 +45,7 @@ The factsheet's text layer gives the top-10 names, but not their weights. Page 4
 
 | field | value | source URL | doc title, as-of, accessed | quote |
 |---|---|---|---|---|
-| Number of constituents | 503 | SP-FS | S&P 500® factsheet, Sep 30, 2026, accessed 2026-10-15 | `NUMBER OF CONSTITUENTS 503` |
+| Number of constituents | 503 | SP-FS | S&P 500® factsheet, Sep 30, 2026, accessed 2026-10-15 | `NUMBER OF CONSTITUENTS 503` (the same factsheet's description says `The index includes 500 leading companies`: 503 counts share lines) |
 | Top-10 share | 39.1 % | SP-FS | same | `WEIGHT TOP 10 CONSTITUENTS [%] 39.1` |
 | Top-10 share (unrounded) | 39.06 % | SP-JSON | S&P DJI data feed, Sep 30, 2026 | `"topNConstituentWeight":39.06` |
 | Largest constituent weight | 8.4 % | SP-FS | same as SP-FS | `WEIGHT LARGEST CONSTITUENT [%] 8.4` |
@@ -84,7 +84,7 @@ The factsheet's text layer gives the top-10 names, but not their weights. Page 4
 | field | value | source URL | doc title, as-of, accessed | quote |
 |---|---|---|---|---|
 | Number of securities | 101 | NDX-FS | NASDAQ-100 factsheet, 09/30/2026, accessed 2026-10-15 | `Securities:` … `101` (in the QUICK FACTS box; the text layer places the label and the value on separate lines) |
-| Description (companies) | 100 companies | NDX-FS | same | `includes 100 of the largest domestic and international non-financial companies` |
+| Description (companies) | 100 companies | NDX-FS | same | `includes 100 of the largest domestic and international non-financial companies` (the page counts the 101 securities instead, see decision 42) |
 | Top-10 share | not stated | NDX-FS | same | — |
 | Country split | not stated | NDX-FS | same | — |
 | Industry: Technology | 68.01 % (47 securities) | NDX-FS | same | `Technology 68.01% 47` |

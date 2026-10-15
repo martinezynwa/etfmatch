@@ -180,7 +180,7 @@ function Email({ index, amount }: { index: MarketIndex; amount: number }) {
         {copy.income.noteTypes(
           all.map((i) => `${i.label} ${i.returnType}`).join("; "),
         )}{" "}
-        {copy.income.noteCurrency}
+        {copy.income.noteBasis} {copy.income.noteCurrency}
       </Note>
 
       <H3>{copy.inside.head}</H3>
@@ -189,8 +189,8 @@ function Email({ index, amount }: { index: MarketIndex; amount: number }) {
           copy.inside.companies,
           (i) => (
             <>
-              {copy.inside.companiesValue(formatNumber(i.companies.value))}
-              {cite(i.companies)}
+              {copy.inside.companiesValue(formatNumber(i.constituents.value))}
+              {cite(i.constituents)}
             </>
           ),
         ],

@@ -59,6 +59,16 @@ describe("src/data", () => {
     for (const part of f.quote.split(" … ")) expect(research).toContain(part);
   });
 
+  // The e-mail's inside note (cs.ts) says all three indexes lead with the
+  // same three companies.
+  it("keeps the 'same top 3' note true", () => {
+    const top3 = (i: indexes.MarketIndex) =>
+      i.top5.slice(0, 3).map((c) => c.name);
+    const { sp500, ndx, world } = indexes.indexes;
+    expect(top3(ndx)).toEqual(top3(sp500));
+    expect(top3(world)).toEqual(top3(sp500));
+  });
+
   // The FAQ's fee answer (decision 16) says the EU Nasdaq-100 fund costs
   // more than its US fund and the EU World fund less.
   it("keeps the FAQ fee answer true", () => {

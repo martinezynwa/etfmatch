@@ -52,7 +52,7 @@ export const cs = {
       "Minulé výnosy nezaručují budoucí. Nejde o investiční doporučení, jen o historickou statistiku indexu.",
     topHead: "Největší firmy uvnitř",
     companiesBefore: "Celkem",
-    companiesAfter: "firem v indexu.",
+    companiesAfter: "akcií v indexu.",
     fundHead: (usFunds: string) => `Evropský fond místo ${usFunds}`,
     terLabel: "Poplatek fondu (TER) ročně",
     usTerLabel: "Americký fond pro srovnání",
@@ -65,7 +65,7 @@ export const cs = {
     sourcesHead: "Zdroje dat",
     sourceGroups: {
       return: "Výnos",
-      companies: "Firmy",
+      companies: "Složení",
       fund: "Fond a poplatek",
       brokers: "Brokeři",
     },
@@ -198,18 +198,20 @@ export const cs = {
       noteBadYear: (year: number, index: string, change: string) =>
         `Skutečné roky byly vyšší i nižší, třeba v roce ${year} index ${index} klesl o ${change} (bez dividend).`,
       noteTypes: (types: string) => `Výnosy jsou v USD: ${types}.`,
+      noteBasis:
+        "Je to výnos indexu, ne fondu: poplatek fondu a poplatky brokera se neodečítají. Základ výnosů se mezi indexy liší, proto je nelze přesně porovnat.",
       noteCurrency: "Kurz koruny k dolaru výsledek mění.",
     },
     inside: {
       head: "2. Co je uvnitř",
-      companies: "Počet firem",
-      companiesValue: (n: string) => `${n} firem`,
+      companies: "Počet akcií",
+      companiesValue: (n: string) => `${n} akcií`,
       usShare: "Podíl USA",
       notPublished: "neuvádí",
       tech: (share: string) => `${share} technologie`,
       top3: "Největší 3",
       note: (world: string, usShare: string) =>
-        `Všechny tři indexy vedou stejné firmy. I fond „${world}“ má ${usShare} peněz v USA.`,
+        `Všechny tři indexy mají v čele stejné tři firmy. I fond „${world}“ má ${usShare} peněz v USA.`,
     },
     fees: {
       head: (amount: string) => `3. Poplatky pro ${amount} měsíčně`,
@@ -230,7 +232,7 @@ export const cs = {
       salesLimit: (limit: string) =>
         `Prodáte za max. ${limit} za rok (počítá se celá částka prodeje, ne zisk): bez daně`,
       rates: (base: string, high: string, from: string, year: number) =>
-        `Jinak platíte daň ze zisku ${base}. Sazba ${high} platí až pro příjmy nad ${from} za rok (${year})`,
+        `Jinak platíte daň ze zisku ${base}. Sazba ${high} platí jen pro tu část ročního základu daně, která přesáhne ${from} (${year})`,
       note: "Přepočet měny a párování nákupů s prodeji probírejte s daňovým poradcem.",
     },
     accDist: {

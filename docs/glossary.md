@@ -9,7 +9,9 @@ Decisions behind the wording are in [decisions.md](decisions.md).
 |---|---|---|
 | ETF | A fund traded on an exchange like a share; one purchase buys a small piece of many companies. | ETF, fond |
 | Index | A list of companies with rules for how much of each to hold; the fund copies it. | index |
-| S&P 500 | 503 US companies (index factsheet, 30 Sep 2026). | S&P 500 |
+| S&P 500 | 500 leading US companies, counted as 503 constituents because some have two share classes (index factsheet, 30 Sep 2026). | S&P 500 |
+| Constituent | One security in an index; a company with two share classes counts twice. The page counts these, not companies. | akcie v indexu |
+| Tax base (základ daně) | What the income tax rate is applied to; the 23 % rate applies only to the part above the 36× average-wage limit. | část ročního základu daně |
 | Nasdaq-100 | 100 companies listed on Nasdaq, 68 % technology (index factsheet, 30 Sep 2026). | Nasdaq-100 |
 | MSCI World | 1 249 companies from several countries, 72.94 % of it US (index factsheet, 30 Sep 2026). Which countries count is not in the research yet; check before the page describes it. | Svět (MSCI World) |
 | NYSE | The New York Stock Exchange. VOO, SPY, IVV and URTH are listed on NYSE Arca, QQQ on Nasdaq (SEC prospectuses, see research/pairs.md). | NYSE; the QQQ row says "(Nasdaq)" |

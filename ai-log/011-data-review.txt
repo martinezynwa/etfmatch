@@ -1,0 +1,504 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Sonnet 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /model                                                                        
+  ⎿  Set model to Sonnet 5.5 and saved as your default for new sessions
+
+❯ Could you quickly scan the app, specifically the facts rendered and review    
+  each? I just want to verify that all text on the page is valid, confirmed     
+    and verified, we have some resources already, however I need second session 
+  to run and verify this as it is crucial to serve facts only.                  
+
+⏺ I'll start with the data files, the Czech copy, and the research docs.
+
+  Read 2 files, listed 1 directory (ctrl+o to expand)
+
+⏺ The data layer is clear. Next I'll check which numbers are computed or
+  hard-coded outside src/data/, and how the research docs describe verification.
+
+⏺ Bash(cat src/lib/income.ts src/lib/plan.ts src/lib/format.ts && sed -n 1,80p
+      docs/research/README.md && cat src/data/data.test.ts | head -80 && ls
+      node_modules/.bin…)
+  ⎿  Error: Exit code 1
+     // The e-mail's income illustration (decision 4): a monthly amount put in
+     // for a number of years, growing every year at the index's 10-year
+     // average. An illustration, not a backtest: no month-by-month history
+     // was collected.
+
+     export type Income = {
+       /** What the purchases would be worth at the end, Kč. */
+       total: number;
+       /** What was put in, Kč. */
+     … +241 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ The current test only verifies quotes exist in the research docs, not that
+  they match the live sources—so I'll verify each quote directly against its
+  source, starting by dumping all facts to JSON and checking what PDF tooling is
+  available. · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && node -v && ls
+      node_modules | grep…)
+  ⎿  v26.4.0
+     ModuleNotFoundError: No module named 'pypdf'
+     ModuleNotFoundError: No module named 'fitz'
+     … +3 lines (ctrl+o to expand)
+
+⏺ No PDF tooling is installed. I'll set up a throwaway venv with pypdf in the
+  scratchpad and extract the facts using Node's built-in TypeScript stripping.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && mkdir -p $S/data &&
+      cp src/data/{t…)
+  ⎿  58 facts 29 sources
+     6.20.1
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ 58 facts across 29 sources. Now I'll download each source into its own
+  directory.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && mkdir -p $S/dl && cd
+      $S && node -e…)
+  ⎿  spyProspectus 403 4816 text/html
+     qqqProspectus 403 4816 text/html
+     ivvProspectus 403 4816 text/html
+     … +26 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Four source groups were blocked: SEC (403), S&P DJI (403), Trading 212 (403 or
+  a challenge page) and EUR-Lex (202). I'll check the ones I did get first,
+  then retry the blocked ones.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && cat > $S/check.py
+      <<'EOF'
+      import j…)
+  ⎿  EOF marker seems truncated
+     EXACT | fsGeneral | d.taxes.rateHighFromCzk | 1 762 812 Kč (36 x 48 96
+     7)
+     … +83 lines (ctrl+o to expand)
+
+⏺ 37 of 58 quotes matched exactly. I'll now dig into the six misses and 15
+  blocked sources, starting with the Nasdaq-100 total-return factsheet and the
+  MSCI 12.81 column headers. · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && cat > $S/pdftxt.py
+      <<'EOF'
+      import…)
+  ⎿  === XNDX
+     2:1-YEAR PERFORMANCE QUICK FACTS
+     9:Total Return:
+     … +61 lines (ctrl+o to expand)
+
+⏺ I've confirmed MSCI World's 10-year net return of 12.81% as of 30 Sep 2026,
+  but the Nasdaq-100 figure of 24.08% isn't showing up in my extraction due to
+  jumbled column order. I'll switch to layout mode to verify it. · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && $S/venv/bin/python -I
+      -c "
+      from py…)
+  ⎿  Rotated text discovered. Output will be incomplete.
+     6
+                                                                   Nasdaq-1
+     … +223 lines (ctrl+o to expand)
+
+⏺ Confirmed the 21.16% Nasdaq-100 10-year figure—the earlier mismatch was just
+  scrambled column extraction. Now retrying the SEC source with a proper
+  User-Agent header, as required. · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && cd $S && for k in
+      vooProspectus sp…)
+  ⎿  vooProspectus 200 112794
+     spyProspectus 200 1211960
+     ivvProspectus 200 101246
+     … +2 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 3m 20s)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad && $S/venv/bin/python -I
+      $S/check.py…)
+  ⎿  EXACT | ivvProspectus | d.indexes.sp500.usFunds.2.exchange | iShares C
+     ore S&P 500 ETF IVV | NYSE Arca
+     EXACT | qqqProspectus | d.indexes.ndx.usFunds.0.exchange | Shares of t
+     … +21 lines (ctrl+o to expand)
+
+⏺ 42 of 58 citations are now verified, with the five SEC exchange quotes just
+  confirmed. I'll load Chrome to check S&P DJI, Trading 212, and EUR-Lex (which
+  need a real browser), while reviewing copy claims outside src/data/, like the
+  KID rule. · summary
+
+⏺ Bash(cat docs/research/us-etf-rule.md | sed -n 1,127p; cat
+      src/components/Footer.tsx | head -90)
+  ⎿  # Can a Czech retail investor buy US-listed ETFs?
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +422 lines (ctrl+o to expand)
+
+⏺ I've verified 42 of 58 sourced facts so far; the remaining ones are on sites
+  that block scripted downloads, so I'm opening those directly in Chrome now. 
+  · summary
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ The page rendered in Chrome's JSON viewer, so I'll fetch the raw response
+  in-page instead.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ The raw feed contains all six S&P quotes. But it holds six different
+  tenYearReturn values, so I need to confirm that 15.3325 belongs to the S&P 500
+  total-return block at month-end 30 Sep 2026.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Confirmed: 15.33 is the S&P 500 (TR), month-end 30 Sep 2026, a gross total
+  return. Now I'll check the as-of date on the holdings weights, then open the
+  S&P factsheet PDF and the Trading 212 pages.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The weights match the feed. One caveat: the constituents block carries no
+  explicit as-of date, only fetchedDate. Now I'll check the Trading 212 terms
+  page.
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Trading 212's 0% commission and 0.15% FX fee are confirmed. Next is the
+  instrument list, to check that the three funds appear with the quoted ISINs.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The instrument page threw a client-side error. I'll retry once, using the
+  English version of the URL.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The English page loads, but the instrument list is dynamic, so I'll try its
+  search box.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ I've confirmed all three funds are available on Trading 212 via Xetra, with
+  tickers and ISINs verified. Next I'll check the S&P 500 factsheet PDF to
+  confirm the 2022 price return, 503 constituents, and 100% US allocation. 
+  · summary
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The factsheet link with force_download=true likely triggered a PDF download
+  instead of displaying it, which I shouldn't have done without asking. I'll
+  check what happened. · summary
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(date; S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-cliente
+      lo-task/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; mkdir -p
+      $S/dl/spFactsheetBrow…)
+  ⎿  Thu Oct 15 16:31:32 CEST 2026
+     3:Currency: USD; Return Type: Price Return
+     4:AS OF  SEPTEMBER 30, 2026
+     … +8 lines (ctrl+o to expand)
+
+⏺ I've saved fs-sp-500.pdf to Downloads and will note that in my summary. Now
+  I'm reading through it to confirm the 2022 return maps to −19.44%, since the
+  extracted text scrambles that row. · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; $S/venv/bin/python -I
+      -c "
+      from pypd…)
+  ⎿  0 S&P 500®
+     0 Currency: USD; Return Type: Price Return
+     0 The S&P 500® is widely regarded as the best single gauge of large-ca
+     … +46 lines (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; $S/venv/bin/python -I
+      -c "
+      from pypd…)
+  ⎿  Calendar Year Performance
+     2025           2024           2023           2022          2021
+         2020           2019           2018           2017          2016
+     … +3 lines (ctrl+o to expand)
+
+⏺ Confirmed the S&P factsheet shows a −19.44% price return for 2022 across 503
+  US constituents. Now I'll check the EUR-Lex PRIIPs Regulation text and the
+  already-downloaded XTB help page to verify the KID claim. · summary
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; $S/venv/bin/python -I -
+      <<EOF
+      import…)
+  ⎿  lack of KIDs -> ruments to our broker. Restrictions on adding new fina
+     ncial instruments to a proposal. We are unable to offer ETFs from the
+     United States (due to the lack of KIDs documentation), which complies
+     … +7 lines (ctrl+o to expand)
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Confirmed Articles 5 and 13 and recital 7 on EUR-Lex; closing the tab now.
+  Next I'll double-check the page's "as of" dates, MSCI top-5 ordering, and the
+  context around the 1,762,812 Kč threshold. · summary
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; cd $S; cat > ctx.py
+      <<'EOF'
+      import r…)
+  ⎿  Error: Exit code 1
+     Rotated text discovered. Output will be incomplete.
+     [fsGeneral] ...né pro rok 2026 a o zvýšení důchodů v roce 2026, činí: Výše 
+     všeobecného vyměřovacího základu za rok 2024 46 278 Kč Přepočítací 
+     koeficient 1,0581 Průměrná mzda 48 967 Kč (46 278 x 1,0581) 36násobek 
+     průměrné mzdy (limit pro část základu daně, z něhož se počítá daň) 1 762 
+     812 Kč (36 x 48 967) 3násobek průměrné mzdy (limit pro část základu daně, z
+     něhož se počítá záloha na daň) 146 901 Kč (3 x 48 967) Postup výpočtu 
+     měsíční zálohy na daň z příjmů ze závislé činnosti: základ pro výpočet 
+     zálohy >100 Kč nejprve zaokrouhlit na celé stokoruny nahoru, 
+     [vooFactsheet] ...Vanguard S&P 500 ETF | VOO As of June 30, 2026 Investment
+     approach Investment focus • Se
+     [vooFactsheet] ...urns for the purpose of measuring relative performance. 
+     3. As of 4 p.m., Eastern time, when the regular trading session of t
+     [spyFactsheet] ...tate Street SPDR S&P 500 SPY Fact Sheet Equity ETF Trust 
+     As of 09/30/2026 ★★★★ TM Morningstar Rating 09/30/2026 Key
+     [spyFactsheet] ...tio (%) 0.0945 30 Day SEC Yield (%) 0.96 Total Return (as
+     of 09/30/2026) 35 Per cent 30 25 20 15 10 5 0 QTD YT
+     [qqqPage] ... large-cap growth funds for 15-year total return by Lipper, as
+     of June 30, 2026 2nd-most traded Named the
+     [qqqPage] ...aded ETF in the U.S., based on average daily volume traded, as
+     of June 30, 2026 1 5-star Morningstar rating 
+     [xtbAccounts] ...nou tabulku poplatků Tabulka poplatků a provizí platná od 
+     20.10.2026 Tabulka poplatků a provizí platná od 30.09.2026 Podívejte se 
+     … +4 lines (ctrl+o to expand)
+
+⏺ Found two discrepancies: the SPY factsheet date (09/30/2026) doesn't match
+  sources.ts (2026-06-30), and XTB's new fee table takes effect 20 Oct 2026.
+  I'll check that new fee table for changes and verify the MSCI top-5 ordering. 
+  · summary
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; cd $S; grep -o
+      'https\?://[^" ]*tabu…)
+  ⎿  https://www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi20102026.pdf
+     https://www.xtb.com/cz/soubory/tabulkapoplatkuaprovizi30092026.pdf
+     /cz/soubory/tabulkapoplatkuaprovizi20102026.pdf
+     … +3 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; cd $S; mkdir -p
+      dl/xtbFeesNew && cur…)
+  ⎿  200 537451
+     === xtbFees
+       0%, minimálně 0 EUR.{0,60 => 0%, minimálně 0 EUR 0.2%, minimálně 10
+     … +11 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+⏺ The new XTB table valid from 20 Oct 2026 has the same 0% commission and 0.5%
+  FX fee, so nothing changes there. Last, the MSCI top-10 ordering.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/116a32cd-ebf2-45a7-a2c4-de44656db2ff/scratchpad; $S/venv/bin/python -I
+      -c "
+      from pypd…)
+  ⎿  1 TOP 10 CONSTITUENTS
+     1 Wt. (%)
+     1 NVIDIA 5,250.46 5.81 Info Tech
+     … +5 lines (ctrl+o to expand)
+
+⏺ I checked all 58 sourced facts against the live documents today, and every
+  value and quote matches. I found five wording and labelling issues around
+  those facts, listed below. I haven't edited anything in the repo.
+
+  How I checked
+  - Exact matches: 42 quotes matched exactly in the downloaded documents:
+    iShares, factsheets, SEC prospectuses, XTB, zakonyprolidi and Finanční
+    správa.
+  - Nasdaq-100 10-year return: 21.16% is the "cumulative annualized" column of
+    the XNDX total-return table.
+  - Checked in a browser: The S&P DJI feed, the S&P factsheet PDF, Trading 212
+    and EUR-Lex block scripted downloads, so I read them in Chrome.
+  - Source-by-source results: S&P 15.33% is the "S&P 500 (TR)" block at 30
+    Sep 2026. The top-5 weights match, and 2022 is −19.44% in the factsheet's
+    2022 column. Trading 212 shows 0% commission, a 0.15% FX fee, and all three
+    funds on Xetra. EUR-Lex has Articles 5 and 13 and recital 7 as quoted.
+  - XTB fee table: XTB has a new fee table valid from 20 Oct 2026. It has the
+    same 0% commission and 0.5% FX fee, so nothing changes.
+
+  Issues, most important first
+  1. "503 firem" for the S&P 500. The S&P factsheet itself says "The index
+     includes 500 leading companies"; 503 counts constituents (securities). The
+     page prints "503 firem", while the Nasdaq-100 gets the careful treatment
+     (100, not 101). MSCI World's "1 249 firem" has the same problem, since MSCI
+     counts constituents. Either say "akcií" or use 500 with its own quote.
+  2. The three 10-year returns aren't like for like. S&P 15.33% and Nasdaq
+     21.16% are gross total return. MSCI World 12.81% is net of withholding tax.
+     The email puts them side by side and runs a 10-year projection on them.
+     The S&P and World labels say what is included, but the Nasdaq label
+     ("včetně dividend") doesn't say gross, and no label says the figure is
+     before the fund's TER and FX fee.
+  3. Tax wording. The email says the 23 % rate applies "pro příjmy nad 1 762 812
+     Kč". The law and Finanční správa say it applies to the part of the základ 
+     daně (tax base) above that limit. Income and tax base are different things.
+  4. Wrong date for SPY. sources.ts says the SPY factsheet is as of 2026-06-30,
+     but the document says 09/30/2026. The 0.0945 value is correct.
+  5. The KID claim is the weakest-sourced sentence. "Většina brokerů je proto …
+     neprodá" is hedged, but the sources only partly back it.
+     - The Regulation never mentions US funds.
+     - The XTB sentence is only on the international English help page. Your own
+       research notes that the Czech version lacks it.
+     - Saxo says "mainly" for US instruments.
+     - Fio banka, a Czech broker, says its clients can still buy US ETFs.
+     - The page is defensible, but I'd add Saxo as a source and keep "většinou".
+
+  Smaller points
+  - "Všechny tři indexy vedou stejné firmy" holds for the top 3. The Nasdaq top
+    5 has Micron and AMD, so "stejné tři firmy" is more accurate.
+  - The S&P constituent weights come from a feed block with no explicit as-of
+    date, only a fetch date. The 30 Sep date on that source is inferred.
+  - "Vyplacené dividendy se daní" has no source in src/data/.
+
+  What I didn't check
+  - I didn't view the rendered page or recompute the income and fee arithmetic.
+    I only read the code.
+  - I didn't verify the legal text on the privacy page.
+  - Trading 212's Czech instrument page crashed in my browser, so I confirmed
+    availability on the English page.
+
+  Side effect: my Chrome navigation to the S&P factsheet link saved
+  fs-sp-500.pdf to ~/Downloads. I should have asked first. It's safe to delete,
+  and I can remove it if you want. Everything else I created is in the session
+  scratchpad.
+
+  Want me to fix items 1–4 in src/data/ and cs.ts, with the matching
+  docs/research/ and docs/decisions.md entries?
+
+✻ Cooked for 5m 9s · done 4:33 PM
+
+❯ Please mark the issues worth fixing, if any, proceed immediately, if you need 
+  any decision from me, ask                                                     
+
+⏺ Items 1–4 are worth fixing, plus the "stejné firmy" wording. I'm skipping the
+  KID-sourcing point. The hedge is already in the copy, and adding Saxo would
+  mean a new source I'd have to quote and verify. First I'll see where each of
+  these lives in the code, tests and docs.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Correcting myself: the research docs do have an explicit as-of date
+  (effectiveDate 30 Sep 2026), and the SPY factsheet has since been updated from
+  06/30/2026 to 09/30/2026. Now I'll locate where the count and related wording
+  are rendered. · summary
+
+⏺ Bash(grep -rn "companies\|firem\|stejné" src/components src/copy src/lib |
+      head -20; sed -n 38,60p docs/decisions.md; grep -n "^[0-9]*\. \*\*\|^##
+      \|^### " docs/deci…)
+  ⎿  src/components/MatchCard.tsx:51:      copy.sourceGroups.companies,
+     src/components/MatchCard.tsx:52:      uniqueSources(...index.top5.map(
+     (c) => c.weight), index.companies),
+     … +76 lines (ctrl+o to expand)
+
+⏺ Nothing in the code or tests depends on the Nasdaq count of 100. Before
+  editing the return-type labels, I'll look at how the email renders them.
+
+⏺ Bash(sed -n 128,235p src/components/EmailPreview.tsx; sed -n 268,300p
+      src/components/EmailPreview.tsx; grep -n "returnType\|returnSub\|warning"
+      src/components/MatchC…)
+  ⎿        </h2>
+           <P>
+             {copy.intro(index.longLabel, amountKc)}{" "}
+     … +152 lines (ctrl+o to expand)
+
+⏺ I'll fix the remaining issues: switch "firem" to "akcií" with correct
+  constituent counts, add the missing note on index return bases and fees,
+  rephrase the 23% threshold as "část základu daně," correct the SPY date, and
+  update "stejné firmy" to "stejné tři firmy" with a guarding test. · summary
+
+⏺ Bash(python3 - <<'EOF'
+      import re…)
+  ⎿  src/data/indexes.ts:46:  /** Share of the index in US companies, %; nu
+     ll where not published. */
+     src/data/indexes.ts:177:  // 100 companies, 101 securities (Alphabet h
+     as two share classes): the
+
+⏺ Code and copy are edited. Now the tests and docs. I'll add a test that keeps
+  the "same top 3" claim true, then update the research notes, the glossary and
+  decisions.md.
+
+⏺ Bash(head -12 docs/glossary.md; grep -n -i "constituent\|TER\b"
+      docs/glossary.md | head -5; sed -n 84,88p docs/research/holdings.md; sed
+      -n 34p docs/research/pairs.m…)
+  ⎿  # Glossary
+
+     Term · plain explanation · the wording the page and the e-mail use.
+     … +22 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      def sub(path, pairs):…)
+  ⎿      184     │ - ········{copy.income.noteCurrency}
+             183 │ + ········{copy.income.noteBasis}·{copy.income.noteCurre
+     ncy}
+     … +23 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Tests pass (212/212). pnpm check only flags a formatting nit in my
+  EmailPreview.tsx edit, so I'll let Biome apply it and re-run.
+
+⏺ Bash(pnpm exec biome check --write src 2>&1 | tail -3; pnpm check 2>&1 | tail
+      -8; pnpm test 2>&1 | grep -E "Tests|passed|failed"; git status --short)
+  ⎿  Checked 36 files in 17ms. Fixed 1 file.
+     $ pnpm typecheck && pnpm lint
+     $ next typegen && tsc --noEmit
+     … +16 lines (ctrl+o to expand)
+
+⏺ I fixed items 1–4 and the "stejné firmy" wording, and pnpm check and pnpm test
+  both pass (212 tests). The changes are uncommitted. I haven't looked at the
+  rendered page, only the code, tests and typecheck.
+
+  - Constituents (1): the page now counts constituents, labelled "akcií v
+    indexu" and "Počet akcií". The counts are 503 for the S&P 500, 101 for the
+    Nasdaq-100 (was 100) and 1 249 for MSCI World. Each count now comes straight
+    from its provider. I renamed the field to constituents, and the Nasdaq
+    quote now comes from the factsheet's own "Securities … 101" line.
+  - Return basis (2): the email's income note now has a line saying these are
+    index returns, not fund returns. It adds that the fund fee (TER) and broker
+    fees are not deducted, and that the return bases differ between the three
+    indexes.
+  - Tax wording (3): the 23 % rate now "platí jen pro tu část ročního základu
+    daně, která přesáhne 1 762 812 Kč (2026)". The law and Finanční správa say
+    základ daně, not příjmy.
+  - SPY date (4): the factsheet is now dated 30 Sep 2026 in sources.ts. The
+    0.0945 value is the same.
+  - Top 3: it now reads "stejné tři firmy v čele", and a new test fails if the
+    three indexes ever stop sharing the same top 3.
+
+  Docs: decision 42 in docs/decisions.md records all of this. I also updated the
+  glossary (the S&P 500 line, plus constituent and základ daně), holdings.md
+  and pairs.md.
+
+  Not changed: the KID sentence stays hedged ("většina brokerů"), and I noted
+  why in decision 42. Adding Saxo as a source would need a new quoted and
+  verified source, so it's your call.
+
+  Still open: the stray ~/Downloads/fs-sp-500.pdf from my browser navigation. I
+  haven't touched it, so say if you want it deleted.
+
+  I haven't committed. /implementation-end is the project's usual way to close
+  this out, or I can commit directly.
+
+✻ Brewed for 1m 30s · done 4:35 PM

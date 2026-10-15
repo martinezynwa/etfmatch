@@ -398,3 +398,24 @@ Agreed in the C6 review of the match card at 375 px.
     headline is the LCP element and waited on the font; the brief asks
     for "fast on a mobile connection". The remaining hints (unused and
     legacy JS, 7 KiB render-blocking CSS) are Next.js's own chunks.
+
+## Fact check (2026-10-15)
+
+42. **Second-session fact check; five wording fixes.** All 58 sourced
+    values were re-read against the live documents (the quotes, the
+    return-type columns, the as-of dates); every value held. What changed
+    is the wording around them. (a) The page counts **constituents**, not
+    "firem": S&P 500 503 (its factsheet says "500 leading companies"),
+    Nasdaq-100 101 (was 100 companies), MSCI World 1 249; the label is
+    "akcií v indexu". *Reason:* the three counts now mean the same thing,
+    each straight from its provider, instead of 503 securities shown as
+    companies. (b) The e-mail's note says the return is the index's, not
+    the fund's (no TER or broker fees taken off), and that the bases
+    differ between the three. (c) The 23 % rate "platí jen pro tu část
+    ročního základu daně, která přesáhne 1 762 812 Kč", not "pro příjmy
+    nad": the law and Finanční správa say *základ daně*. (d) The SPY
+    factsheet is dated 30 Sep 2026 (was 30 Jun). (e) "Stejné tři firmy v
+    čele", not "stejné firmy"; a test keeps it true. Not changed: the KID
+    sentence stays hedged ("většina brokerů"); its sources are the
+    Regulation and XTB's international help page, and Fio banka says its
+    clients can still buy US ETFs.

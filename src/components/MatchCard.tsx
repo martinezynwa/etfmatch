@@ -49,7 +49,7 @@ export function MatchCard({
     [copy.sourceGroups.return, uniqueSources(index.return10y)],
     [
       copy.sourceGroups.companies,
-      uniqueSources(...index.top5.map((c) => c.weight), index.companies),
+      uniqueSources(...index.top5.map((c) => c.weight), index.constituents),
     ],
     [copy.sourceGroups.fund, uniqueSources(index.euFund.ter, usFund.ter)],
     [
@@ -125,7 +125,7 @@ export function MatchCard({
         </ul>
         <Note>
           {copy.companiesBefore}{" "}
-          <CountUp value={index.companies.value} format={whole} />{" "}
+          <CountUp value={index.constituents.value} format={whole} />{" "}
           {copy.companiesAfter}
         </Note>
       </Block>
