@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 // The tap motion of decision 24: numbers count to their new value, changed
 // text fades up. Nothing runs on first render or under reduced motion.
 
-const reducedMotion = () =>
+export const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const easeOut = (t: number) => 1 - (1 - t) ** 3;

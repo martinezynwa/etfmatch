@@ -8,3 +8,7 @@ export type Amount = (typeof amounts)[number];
 
 export const defaultAmount: Amount = 5000;
 export const defaultIndex: IndexId = "sp500";
+
+/** The fixed period of the income illustration: the sourced averages
+ * cover 10 years (decision 5). */
+export const years = 10;

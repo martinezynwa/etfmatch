@@ -39,7 +39,7 @@ Decisions and their reasons live in `docs/decisions.md`, never here.
 
 - `README.md` how to run, structure, live URL
 - `AGENTS.md` written by `next dev`: read `node_modules/next/dist/docs/` before Next.js code
-- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` sourced facts (`types.ts`, one file per topic, `data.test.ts`); `src/lib/` formatting and the taps' options, with tests
+- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts` Czech copy; `src/data/` sourced facts (`types.ts`, one file per topic, `data.test.ts`); `src/lib/` formatting, the taps' options, the income illustration and the e-mail check, with tests
 - `docs/brief.md` the idea, decisions to make, done-when checklists
 - `docs/TODO.md` the commit plan, one section per commit
 - `docs/decisions.md` decisions with reasons

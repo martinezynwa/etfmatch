@@ -3,17 +3,22 @@ import { Header } from "./Header";
 import { Planner } from "./Planner";
 
 const tapsId = "taps";
-// The ask block arrives in C7; the match card already links to it.
 const askId = "ask";
 
+// Each section sets its own column (the `page-wrap` utility), so the dark ask
+// block can run the full width.
 export function Home() {
   return (
-    <div className="mx-auto max-w-page px-gutter">
-      <Header />
+    <>
+      <div className="page-wrap">
+        <Header />
+      </div>
       <main>
-        <FirstScreen tapsId={tapsId} />
+        <div className="page-wrap">
+          <FirstScreen tapsId={tapsId} />
+        </div>
         <Planner tapsId={tapsId} askId={askId} />
       </main>
-    </div>
+    </>
   );
 }

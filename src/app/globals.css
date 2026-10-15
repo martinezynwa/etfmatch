@@ -39,6 +39,14 @@
   }
 }
 
+/* The page column: 480 px wide, centred, with the side gutter. Each
+   section wraps itself, so the dark ask block can run full width. */
+@utility page-wrap {
+  margin-inline: auto;
+  max-width: var(--container-page);
+  padding-inline: var(--spacing-gutter);
+}
+
 /* Archivo's width axis: wdth-100 is normal, headings use 110 to 125. */
 @utility wdth-* {
   font-variation-settings: "wdth" --value(integer);

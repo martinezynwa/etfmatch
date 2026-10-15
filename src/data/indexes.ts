@@ -278,9 +278,17 @@ const world: MarketIndex = {
 
 export const indexes: Record<IndexId, MarketIndex> = { sp500, ndx, world };
 
-/** S&P 500 price return in 2022, the bad year the e-mail names (decision 4). */
-export const sp500Return2022 = fact(
-  -19.44,
-  s.spFactsheet,
-  "16.39% 23.31% 24.23% -19.44% 26.89% 16.26% 28.88% -6.24% 19.42% 9.54%",
-);
+/** The bad year the e-mail names (decision 4): the S&P 500 price return
+ * in the fourth column of the factsheet's calendar-year row. */
+export const sp500BadYear = {
+  year: fact(
+    2022,
+    s.spFactsheet,
+    "2025 2024 2023 2022 2021 2020 2019 2018 2017 2016",
+  ),
+  priceReturn: fact(
+    -19.44,
+    s.spFactsheet,
+    "16.39% 23.31% 24.23% -19.44% 26.89% 16.26% 28.88% -6.24% 19.42% 9.54%",
+  ),
+};

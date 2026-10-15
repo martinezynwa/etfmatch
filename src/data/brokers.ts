@@ -11,8 +11,10 @@ export type BrokerId = "t212" | "xtb";
 export type Broker = {
   id: BrokerId;
   name: string;
-  /** Commission on an ETF buy, %; XTB's 0 % holds up to €100,000 a month. */
+  /** Commission on an ETF buy, %. */
   commission: Fact<number>;
+  /** Monthly volume, EUR, up to which the commission holds (XTB only). */
+  commissionUpToEur?: Fact<number>;
   /** Currency-conversion fee per purchase, % of the amount. */
   fxFee: Fact<number>;
   /** Whether each chosen EU fund is listed. */
@@ -51,6 +53,11 @@ const xtb: Broker = {
     s.xtbFees,
     "0%, minimálně 0 EUR 0.2%, minimálně 10 EUR 0,5%",
   ),
+  commissionUpToEur: fact(
+    100_000,
+    s.xtbAccounts,
+    "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 10 EUR).",
+  ),
   fxFee: fact(
     0.5,
     s.xtbFees,
@@ -74,10 +81,3 @@ const xtb: Broker = {
 };
 
 export const brokers: Record<BrokerId, Broker> = { t212, xtb };
-
-/** XTB's free-commission limit per month, EUR. */
-export const xtbFreeMonthlyEur = fact(
-  100_000,
-  s.xtbAccounts,
-  "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 10 EUR).",
-);

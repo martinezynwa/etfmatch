@@ -5,6 +5,9 @@ import { fact } from "./types";
 // 1 Aug – 31 Dec 2026. Rows: docs/research/taxes.md.
 
 export const taxes = {
+  /** The tax year the values below hold for: the law version in force and
+   * the Finanční správa section for 2026 (taxes.md, "23 % threshold"). */
+  year: 2026,
   /** § 4 odst. 1 písm. u): a sale is tax-free after more than this many years. */
   timeTestYears: fact(
     3,
@@ -29,10 +32,6 @@ export const taxes = {
     s.zdp,
     "b) 23 % pro část základu daně přesahující 36násobek průměrné mzdy.",
   ),
-  /** Where the higher rate starts in 2026, Kč a year. */
-  rateHighFrom2026Czk: fact(
-    1_762_812,
-    s.fsGeneral,
-    "1 762 812 Kč (36 x 48 967)",
-  ),
+  /** Where the higher rate starts in `year`, Kč a year. */
+  rateHighFromCzk: fact(1_762_812, s.fsGeneral, "1 762 812 Kč (36 x 48 967)"),
 };

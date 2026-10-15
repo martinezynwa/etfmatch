@@ -3,16 +3,10 @@ import { cs } from "@/copy/cs";
 import { brokers } from "@/data/brokers";
 import type { MarketIndex } from "@/data/indexes";
 import type { Fact, Source } from "@/data/types";
-import {
-  feePerPurchase,
-  formatDate,
-  formatNumber,
-  kc,
-  kcFee,
-  pct,
-} from "@/lib/format";
+import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@/lib/format";
 import { CtaLink } from "./CtaLink";
 import { CountUp, Swap } from "./motion";
+import { SourceLink } from "./SourceLink";
 
 const copy = cs.match;
 const titleId = "match-title";
@@ -24,9 +18,6 @@ const crowns = (n: number) => kc(n);
 const uniqueSources = (...facts: Fact<unknown>[]) => [
   ...new Set(facts.map((f) => f.source)),
 ];
-
-const sourceDate = (s: Source) =>
-  s.asOf ? formatDate(s.asOf) : copy.accessed(formatDate(s.accessed));
 
 // The answer to the taps, in the order of decision 37. Rendered inside
 // the Planner client component; no ISIN here (it is in the e-mail).
@@ -189,14 +180,7 @@ export function MatchCard({
               {list.map((s, i) => (
                 <span key={s.url}>
                   {i > 0 && "; "}
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener"
-                    className="underline"
-                  >
-                    {s.title}, {sourceDate(s)}
-                  </a>
+                  <SourceLink source={s} />
                 </span>
               ))}
             </li>

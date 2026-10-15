@@ -44,9 +44,9 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C7 The ask and the e-mail
 
-- [ ] Dark ask block: headline with the chosen index, checklist (ISIN first), one e-mail field, consent text, red submit, error messages.
-- [ ] Income illustration function (monthly amount, 10 years, yearly average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 mil. Kč (decision 4).
-- [ ] E-mail modal built from `src/data/`: five sections, numbered sources; opens on submit, closes and reopens. Nothing stored or sent.
+- [x] Dark ask block: headline with the chosen index, checklist (ISIN first), one e-mail field, consent text, red submit, error messages.
+- [x] Income illustration function (monthly amount, 10 years, yearly average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 mil. Kč (decision 4).
+- [x] E-mail modal built from `src/data/`: five sections, numbered sources; opens on submit, closes and reopens. Nothing stored or sent.
 
 ## C8 FAQ, disclaimer, sources
 

@@ -1,0 +1,1404 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C7                                                      
+
+  Searched for 1 pattern, read 1 file, listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(sed -n 200,420p docs/decisions.md)
+  ⎿      | `isin_copied` | copy button | `index` | Do they intend to buy? |
+         | `form_viewed` | ask block ≥ 50 % in view, once | `index`, `amoun
+     t` | Do they reach the ask? |
+     … +154 lines (ctrl+o to expand)
+
+  Read 3 files (ctrl+o to expand)
+
+⏺ Reading the C7 inputs (mockup, decisions); next the data, copy and MatchCard
+  files, then the plan.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Bash(cat src/data/sources.ts src/components/MatchCard.tsx
+      src/components/motion.tsx src/components/CtaLink.tsx src/app/globals.css
+      src/data/data.test.ts && sed -n 1,…)
+  ⎿  import type { Source } from "./types";
+
+     // The documents behind src/data/. Rows, quotes and how each one was
+     … +743 lines (ctrl+o to expand)
+
+⏺ Here's my plan for C7: build income.ts and approxKc/emailError formatters,
+  then create Ask.tsx and EmailPreview.tsx with sourced figures, wire them into
+  Planner/Home with proper layout, move all Czech text into cs.ask/cs.email, and
+  apply the noted assumptions (six-line checklist, no consent checkbox,
+  specific error states, sourced percentage) while deferring events to C9.
+
+⏺ Bash(sed -n 30,100p src/lib/format.test.ts && cat
+      src/components/FirstScreen.tsx | head -30 && cat src/app/layout.tsx)
+  ⎿  describe("pct", () => {
+       it.each([
+         [15.33, "15,33 %"],
+     … +118 lines (ctrl+o to expand)
+
+⏺ Writing the lib pieces first: the income function, approxKc and the e-mail
+  check, with their tests.
+
+⏺ Write(src/lib/income.ts)
+  ⎿  Wrote 28 lines to src/lib/income.ts
+       1 // The e-mail's income illustration (decision 4): a monthly amou
+         nt put in
+         ear
+       3 // average. An illustration, not a backtest: no month-by-month h
+         istory
+       5 
+       6 export type Income = {
+       7   /** What the purchases would be worth at the end, Kč. */
+       9   /** What was put in, Kč. */
+      10   paidIn: number;
+     … +23 lines (ctrl+o to expand)
+
+⏺ Write(src/lib/income.test.ts)
+  ⎿  Wrote 45 lines to src/lib/income.test.ts
+       1 import { describe, expect, it } from "vitest";
+       2 import { indexes } from "../data/indexes";
+       3 import { approxKc } from "./format";
+       4 import { income } from "./income";
+       5 import { amounts, years } from "./plan";
+       7 const plain = (s: string) => s.replaceAll(" ", " ");
+       8 
+       9 describe("income", () => {
+      10   it("5 000 Kč a month at 15.33 % for 10 years is cca 1,32 mil. 
+         Kč", () => {
+     … +38 lines (ctrl+o to expand)
+
+⏺ Update(src/lib/format.ts)
+  ⎿  Added 10 lines
+      18  export const kc = (n: number, decimals = 0) =>
+      19    `${formatNumber(n, decimals)}${nbsp}Kč`;
+      20  
+      21 +/** A rounded amount for the income illustration: 1 322 800 → "
+         +cca 1,32                                                       
+      22 + * mil. Kč", 229 600 → "cca 230 000 Kč". */                    
+      23 +export function approxKc(n: number) {                          
+      24 +  const text =                                                 
+      25 +    Math.abs(n) >= 1_000_000                                   
+      26 +      ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`
+      27 +      : kc(Math.round(n / 1000) * 1000);                       
+      28 +  return `cca${nbsp}${text}`;                                  
+      29 +}                                                              
+      30 +                                                               
+      31  /** A fee in Kč: whole crowns stay whole, otherwise two decimal
+          s. The
+      32   * target decides, so a count from 7,50 to 15 keeps its width. 
+          */
+      33  export const kcFee = (n: number, target = n) =>
+
+⏺ Bash(cat > src/lib/plan.ts <<'EOF'
+      import type { IndexId } from "../data/indexes";…)
+  ⎿  import { describe, expect, it } from "vitest";
+     import { brokers } from "../data/brokers";
+     import {
+     … +23 lines (ctrl+o to expand)
+  ⎿  Created src/lib/email.test.ts (+27 -0)
+       1 +import { describe, expect, it } from "vitest";                 
+       2 +import { emailError } from "./email";                          
+       3 +                                                               
+       4 +describe("emailError", () => {                                 
+       5 +  it.each(["", "   "])("%j is empty", (v) => {                 
+       6 +    expect(emailError(v)).toBe("empty");                       
+       7 +  });                                                          
+       8 +                                                               
+       9 +  it.each([                                                    
+      10 +    "jan",                                                     
+      11 +    "jan@",                                                    
+      12 +    "jan@seznam",                                              
+      13 +    "jan@seznam.c",                                            
+      14 +    "jan novak@seznam.cz",                                     
+      15 +    "@seznam.cz",                                              
+      16 +  ])("%s is invalid", (v) => {                                 
+      17 +    expect(emailError(v)).toBe("invalid");                     
+      18 +  });                                                          
+      19 +                                                               
+      20 +  it.each([                                                    
+      21 +    "jan@seznam.cz",                                           
+      22 +    " jan.novak+etf@email.cz ",                                
+      23 +    "j@sub.domain.com",                                        
+      24 +  ])("%s is valid", (v) => {                                   
+      25 +    expect(emailError(v)).toBeNull();                          
+      26 +  });                                                          
+      27 +});                                                            
+  ⎿  Created src/lib/email.ts (+11 -0)
+       1 +// The one form field. Stricter than the browser's type="email"
+         +, which                                                        
+       2 +// lets "jan@seznam" through; nothing is sent, so this is the o
+         +nly check.                                                     
+       3 +                                                               
+       4 +export type EmailError = "empty" | "invalid";                  
+       5 +                                                               
+       6 +export function emailError(value: string): EmailError | null { 
+       7 +  const email = value.trim();                                  
+       8 +  if (!email) return "empty";                                  
+       9 +  if (!/^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/.test(email)) return "in
+         +valid";                                                        
+      10 +  return null;                                                 
+      11 +}                                                              
+  ⎿  Updated src/lib/format.test.ts (+11 -0)
+      1  import { describe, expect, it } from "vitest";
+      2  import { brokers } from "../data/brokers";
+      3  import {
+      4 +  approxKc,                                                     
+      5    feePerPurchase,
+      6    formatDate,
+      7    formatNumber,
+     ...
+       99      expect(plain(formatDate("2026-01-05"))).toBe("5. 1. 2026")
+           ;
+      100    });
+      101  });
+      102 +                                                              
+      103 +describe("approxKc", () => {                                  
+      104 +  it.each([                                                   
+      105 +    [1_322_800, "cca 1,32 mil. Kč"],                          
+      106 +    [1_000_000, "cca 1,00 mil. Kč"],                          
+      107 +    [999_400, "cca 999 000 Kč"],                              
+      108 +    [229_600, "cca 230 000 Kč"],                              
+      109 +    [722_800, "cca 723 000 Kč"],                              
+      110 +  ])("%d → %s", (n, out) => expect(plain(approxKc(n))).toBe(ou
+          +t));                                                          
+      111 +});                                                           
+  ⎿  Updated src/lib/plan.ts (+4 -0)
+       8  
+       9  export const defaultAmount: Amount = 5000;
+      10  export const defaultIndex: IndexId = "sp500";
+      11 +                                                               
+      12 +/** The fixed period of the income illustration: the sourced av
+         +erages                                                         
+      13 + * cover 10 years (decision 5). */                             
+      14 +export const years = 10;                                       
+
+⏺ Bash(pnpm vitest run src/lib/income.test.ts 2>&1 | grep -E
+      "Expected|Received"; grep -n "plain =" src/lib/*.test.ts | cat -A | head)
+  ⎿  Expected: "cca 1,32 mil. Kč"
+     Received: "cca 1,32 mil. Kč"
+     cat: illegal option -- A
+     usage: cat [-belnstuv] [file ...]
+
+⏺ The test file got a plain space where it needs a non-breaking one. Using the
+  escape instead:
+
+⏺ Bash(sed -i '' 's/^const plain = .*$/const plain = (s: string) =>
+      s.replaceAll("\\u00a0", " ");/' src/lib/income.test.ts && grep -n "plain
+      =" src/lib/income.test.ts…)
+  ⎿  7:const plain = (s: string) => s.replaceAll("\u00a0", " ");
+           Tests  49 passed (49)
+        Start at  15:34:33
+        Duration  118ms (transform 50%, import 31%, tests 11%, worker 8%)
+  ⎿  Updated src/lib/income.test.ts (+1 -1)
+       4  import { income } from "./income";
+       5  import { amounts, years } from "./plan";
+       6  
+       7 -const plain = (s: string) => s.replaceAll(" ", " ");           
+       7 +const plain = (s: string) => s.replaceAll("\u00a0", " ");      
+       8  
+       9  describe("income", () => {
+      10    it("5 000 Kč a month at 15.33 % for 10 years is cca 1,32 mil.
+           Kč", () => {
+
+⏺ Now the copy, for both the ask and the e-mail.
+
+⏺ Update(src/copy/cs.ts)
+  ⎿  Added 95 lines
+       58      /** A source without its own date: when it was read. */
+       59      accessed: (date: string) => `staženo ${date}`,
+       60    },
+       61 +  // Decisions 15, 26, 30. The checklist names the ISIN first,
+          + then the                                                     
+       62 +  // five sections of the e-mail.                             
+       63 +  ask: {                                                      
+       64 +    headline: "Pošleme vám celý plán k",                      
+       65 +    lead: "Jeden e-mail, sestavený podle toho, co jste vybrali
+          +.",                                                           
+       66 +    checklist: {                                              
+       67 +      isin: "Evropský fond a jeho ISIN, podle kterého ho najde
+          +te u brokera",                                                
+       68 +      income: (amount: string, years: number) =>              
+       69 +        `Kolik by z ${amount} měsíčně mohlo být za ${years} le
+          +t, u všech tří indexů`,                                       
+       70 +      inside: (labels: string[]) =>                           
+       71 +        `Co je uvnitř: ${labels.slice(0, -1).join(", ")} a ${l
+          +abels.at(-1)} vedle sebe`,                                    
+       72 +      fees: (brokers: string[]) =>                            
+       73 +        `Poplatky u ${brokers.join(" a ")} pro vaši částku`,  
+       74 +      taxes: (years: number, limit: string, rate: string) =>  
+       75 +        `Daně v Česku stručně: ${years} roky, ${limit}, ${rate
+          +}`,                                                           
+       76 +      accDist: "Akumulační, nebo distribuční fond",           
+       77 +    },                                                        
+       78 +    emailLabel: "Váš e-mail",                                 
+       79 +    emailPlaceholder: "jmeno@email.cz",                       
+       80 +    errors: {                                                 
+       81 +      empty: "Vyplňte e-mail, na který plán pošleme.",        
+       82 +      invalid: "E-mail má chybný tvar, zkontrolujte ho.",     
+       83 +    },                                                        
+       84 +    consent:                                                  
+       85 +      "Odesláním souhlasíte, že váš e-mail použijeme jen k zas
+          +lání plánu. Správce údajů: provozovatel ETF Match (demo, jméno
+          + a kontakt doplníme před spuštěním). Souhlas můžete kdykoli od
+          +volat.",                                                      
+       86 +    submit: "Poslat plán",                                    
+       87 +    doneHead: "Hotovo, takhle plán vypadá.",                  
+       88 +    doneText: "Demo: nic jsme neuložili ani neodeslali.",     
+       89 +    reopen: "Zobrazit e-mail znovu",                          
+       90 +  },                                                          
+       91 +  // The e-mail shown in the modal (decisions 2, 3, 4, 8, 9). 
+       92 +  email: {                                                    
+       93 +    modalTitle: "Takhle vypadá váš e-mail",                   
+       94 +    close: "Zavřít",                                          
+       95 +    subject: (index: string, amount: string) =>               
+       96 +      `Předmět: Váš ETF plán: ${index}, ${amount} měsíčně`,   
+       97 +    title: "Váš ETF plán",                                    
+       98 +    intro: (index: string, amount: string) =>                 
+       99 +      `Vybrali jste ${index} a ${amount} měsíčně. Evropský fon
+          +d, který sleduje stejný index:`,                              
+      100 +    isin: "ISIN",                                             
+      101 +    income: {                                                 
+      102 +      head: "1. Kolik by z toho mohlo být",                   
+      103 +      warning:                                                
+      104 +        "Nejde o investiční doporučení. Je to jen historická s
+          +tatistika indexu, ne předpověď. Minulé výnosy nezaručují budou
+          +cí a investice může ztratit hodnotu.",                        
+      105 +      total: (years: number) => `Za ${years} let`,            
+      106 +      paidIn: "Vložíte",                                      
+      107 +      gain: "Zisk",                                           
+      108 +      average: "Průměrně ročně",                              
+      109 +      noteAssumption: (years: number, until: string) =>       
+      110 +        `Počítáme, jako by index rostl každý rok stejně, svým 
+          +průměrem za posledních ${years} let (do ${until}).`,          
+      111 +      noteBadYear: (year: number, index: string, change: strin
+          +g) =>                                                         
+      112 +        `Skutečné roky byly vyšší i nižší, třeba v roce ${year
+          +} index ${index} klesl o ${change} (bez dividend).`,          
+      113 +      noteTypes: (types: string) => `Výnosy jsou v USD: ${type
+          +s}.`,                                                         
+      114 +      noteCurrency: "Kurz koruny k dolaru výsledek mění.",    
+      115 +    },                                                        
+      116 +    inside: {                                                 
+      117 +      head: "2. Co je uvnitř",                                
+      118 +      companies: "Počet firem",                               
+      119 +      companiesValue: (n: string) => `${n} firem`,            
+      120 +      usShare: "Podíl USA",                                   
+      121 +      notPublished: "neuvádí",                                
+      122 +      tech: (share: string) => `${share} technologie`,        
+      123 +      top3: "Největší 3",                                     
+      124 +      note: (world: string, usShare: string) =>               
+      125 +        `Všechny tři indexy vedou stejné firmy. I fond „${worl
+          +d}“ má ${usShare} peněz v USA.`,                              
+      126 +    },                                                        
+      127 +    fees: {                                                   
+      128 +      head: (amount: string) => `3. Poplatky pro ${amount} měs
+          +íčně`,                                                        
+      129 +      ter: (ter: string) => `Poplatek fondu (TER): ${ter} ročn
+          +ě`,                                                           
+      130 +      terAfter:                                               
+      131 +        ", strhává se z hodnoty fondu, nic neplatíte zvlášť.",
+      132 +      noCommission: "nákup bez provize",                      
+      133 +      commissionUpTo: (commission: string, limit: string) =>  
+      134 +        `provize ${commission} do ${limit} měsíčně`,          
+      135 +      fx: (fee: string) => `směna měny ${fee}`,               
+      136 +      perPurchase: (perPurchase: string, perYear: string) =>  
+      137 +        ` = ${perPurchase} za nákup, ${perYear} za rok.`,     
+      138 +      note: "Platí, pokud máte účet v Kč a fond kupujete v jin
+          +é měně.",                                                     
+      139 +    },                                                        
+      140 +    taxes: {                                                  
+      141 +      head: "4. Daně v Česku stručně",                        
+      142 +      timeTest: (years: number) =>                            
+      143 +        `Držíte déle než ${years} roky: zisk z prodeje je bez 
+          +daně`,                                                        
+      144 +      salesLimit: (limit: string) =>                          
+      145 +        `Prodáte za max. ${limit} za rok (počítá se celá částk
+          +a prodeje, ne zisk): bez daně`,                               
+      146 +      rates: (base: string, high: string, from: string, year: 
+          +number) =>                                                    
+      147 +        `Jinak platíte daň ze zisku ${base}. Sazba ${high} pla
+          +tí až pro příjmy nad ${from} za rok (${year})`,               
+      148 +      note: "Přepočet měny a párování nákupů s prodeji probíre
+          +jte s daňovým poradcem.",                                     
+      149 +    },                                                        
+      150 +    accDist: {                                                
+      151 +      head: "5. Akumulační, nebo distribuční",                
+      152 +      text: "Akumulační fond dividendy nevyplácí, sám je znovu
+          + investuje. Distribuční fond je vyplácí a vyplacené dividendy 
+          +se daní. Fond výše je akumulační.",                           
+      153 +    },                                                        
+      154 +    sourcesHead: "Zdroje",                                    
+      155 +  },                                                          
+      156  };
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+⏺ Those three facts aren't used anywhere yet. I'll reshape them so the years
+  they carry (2022, 2026) and XTB's limit are data, not copy:
+
+⏺ Bash(python3 - <<'EOF'
+      import re,io…)
+  ⎿      ),
+         ndx: fact(true, s.xtbNdx, "iShares NASDAQ 100 UCITS ETF (Acc EUR)"
+     ),
+     … +28 lines (ctrl+o to expand)
+  ⎿  Updated src/data/brokers.ts (+8 -7)
+      11  export type Broker = {
+      12    id: BrokerId;
+      13    name: string;
+      14 -  /** Commission on an ETF buy, %; XTB's 0 % holds up to €100,0
+         -00 a month. */                                                 
+      14 +  /** Commission on an ETF buy, %. */                          
+      15    commission: Fact<number>;
+      16 +  /** Monthly volume, EUR, up to which the commission holds (XT
+         +B only). */                                                    
+      17 +  commissionUpToEur?: Fact<number>;                            
+      18    /** Currency-conversion fee per purchase, % of the amount. */
+      19    fxFee: Fact<number>;
+      20    /** Whether each chosen EU fund is listed. */
+     ...
+      53      s.xtbFees,
+      54      "0%, minimálně 0 EUR 0.2%, minimálně 10 EUR 0,5%",
+      55    ),
+      56 +  commissionUpToEur: fact(                                     
+      57 +    100_000,                                                   
+      58 +    s.xtbAccounts,                                             
+      59 +    "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 10
+         + EUR).",                                                       
+      60 +  ),                                                           
+      61    fxFee: fact(
+      62      0.5,
+      63      s.xtbFees,
+     ...
+      82  
+      83  export const brokers: Record<BrokerId, Broker> = { t212, xtb };
+      84  
+      78 -/** XTB's free-commission limit per month, EUR. */             
+      79 -export const xtbFreeMonthlyEur = fact(                         
+      80 -  100_000,                                                     
+      81 -  s.xtbAccounts,                                               
+      82 -  "Při měsíčním obj. do 100 000 EUR (pak popl. 0,2 %, min. 10 E
+         -UR).",                                                         
+      83 -);                                                             
+  ⎿  Updated src/data/indexes.ts (+10 -6)
+      278  
+      279  export const indexes: Record<IndexId, MarketIndex> = { sp500, 
+           ndx, world };
+      280  
+      281 -/** S&P 500 price return in 2022, the bad year the e-mail name
+          -s (decision 4). */                                            
+      282 -export const sp500Return2022 = fact(                          
+      283 -  -19.44,                                                     
+      284 -  s.spFactsheet,                                              
+      285 -  "16.39% 23.31% 24.23% -19.44% 26.89% 16.26% 28.88% -6.24% 19
+          -.42% 9.54%",                                                  
+      286 -);                                                            
+      281 +/** The bad year the e-mail names (decision 4): S&P 500 price 
+          +return. The                                                   
+      282 + * year is the column of the factsheet's calendar-year row the
+          + value sits in. */                                            
+      283 +export const sp500BadYear = {                                 
+      284 +  year: 2022,                                                 
+      285 +  priceReturn: fact(                                          
+      286 +    -19.44,                                                   
+      287 +    s.spFactsheet,                                            
+      288 +    "16.39% 23.31% 24.23% -19.44% 26.89% 16.26% 28.88% -6.24% 
+          +19.42% 9.54%",                                                
+      289 +  ),                                                          
+      290 +};                                                            
+  ⎿  Updated src/data/taxes.ts (+4 -2)
+       5  // 1 Aug – 31 Dec 2026. Rows: docs/research/taxes.md.
+       6  
+       7  export const taxes = {
+       8 +  /** The tax year the values below hold for. */               
+       9 +  year: 2026,                                                  
+      10    /** § 4 odst. 1 písm. u): a sale is tax-free after more than 
+          this many years. */
+      11    timeTestYears: fact(
+      12      3,
+     ...
+      31      s.zdp,
+      32      "b) 23 % pro část základu daně přesahující 36násobek průměr
+          né mzdy.",
+      33    ),
+      32 -  /** Where the higher rate starts in 2026, Kč a year. */      
+      33 -  rateHighFrom2026Czk: fact(                                   
+      34 +  /** Where the higher rate starts in `year`, Kč a year. */    
+      35 +  rateHighFromCzk: fact(                                       
+      36      1_762_812,
+      37      s.fsGeneral,
+      38      "1 762 812 Kč (36 x 48 967)",
+
+⏺ The research has a quote for the 2022 column header, so the year can be a
+  fact. Checking whether the 2026 tax year has one too:
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+⏺ The 2022 header has a quote, so it becomes a fact. The 2026 tax year is a
+  section heading in the research, not a quote, so it stays a plain value with a
+  comment that points to that row.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/data/indexes.ts'; s=open(p).read()…)
+  ⎿        Tests  194 passed (194)
+        Start at  15:36:13
+        Duration  138ms (transform 57%, import 24%, tests 13%, worker 6%)
+  ⎿  Updated src/data/indexes.ts (+7 -3)
+      278  
+      279  export const indexes: Record<IndexId, MarketIndex> = { sp500, 
+           ndx, world };
+      280  
+      281 -/** The bad year the e-mail names (decision 4): S&P 500 price 
+          -return. The                                                   
+      282 - * year is the column of the factsheet's calendar-year row the
+          - value sits in. */                                            
+      281 +/** The bad year the e-mail names (decision 4): the S&P 500 pr
+          +ice return                                                    
+      282 + * in the fourth column of the factsheet's calendar-year row. 
+          +*/                                                            
+      283  export const sp500BadYear = {
+      284 -  year: 2022,                                                 
+      284 +  year: fact(                                                 
+      285 +    2022,                                                     
+      286 +    s.spFactsheet,                                            
+      287 +    "2025 2024 2023 2022 2021 2020 2019 2018 2017 2016",      
+      288 +  ),                                                          
+      289    priceReturn: fact(
+      290      -19.44,
+      291      s.spFactsheet,
+  ⎿  Updated src/data/taxes.ts (+2 -1)
+       5  // 1 Aug – 31 Dec 2026. Rows: docs/research/taxes.md.
+       6  
+       7  export const taxes = {
+       8 -  /** The tax year the values below hold for. */               
+       8 +  /** The tax year the values below hold for: the law version i
+         +n force and                                                    
+       9 +   * the Finanční správa section for 2026 (taxes.md, "23 % thre
+         +shold"). */                                                    
+      10    year: 2026,
+      11    /** § 4 odst. 1 písm. u): a sale is tax-free after more than 
+          this many years. */
+      12    timeTestYears: fact(
+  ⎿  Updated src/lib/format.test.ts (+10 -0)
+       2  import { brokers } from "../data/brokers";
+       3  import {
+       4    approxKc,
+       5 +  eur,                                                         
+       6    feePerPurchase,
+       7    formatDate,
+       8    formatNumber,
+       9    kc,
+      10    kcFee,
+      11    pct,
+      12 +  pctWhole,                                                    
+      13  } from "./format";
+      14  import { amounts } from "./plan";
+      15  
+     ...
+      111      [722_800, "cca 723 000 Kč"],
+      112    ])("%d → %s", (n, out) => expect(plain(approxKc(n))).toBe(ou
+           t));
+      113  });
+      114 +                                                              
+      115 +describe("pctWhole and eur", () => {                          
+      116 +  it("round to whole units", () => {                          
+      117 +    expect(plain(pctWhole(68.01))).toBe("68 %");              
+      118 +    expect(plain(pctWhole(15))).toBe("15 %");                 
+      119 +    expect(plain(eur(100_000))).toBe("100 000 €");            
+      120 +  });                                                         
+      121 +});                                                           
+  ⎿  Updated src/lib/format.ts (+6 -0)
+      42    const [y, m, d] = iso.split("-").map(Number);
+      43    return [`${d}.`, `${m}.`, y].join(nbsp);
+      44  }
+      45 +                                                               
+      46 +/** 68.01 → "68 %": a share where decimals would add noise. */ 
+      47 +export const pctWhole = (n: number) => `${formatNumber(n)}${nbs
+         +p}%`;                                                          
+      48 +                                                               
+      49 +/** 100000 → "100 000 €". */                                   
+      50 +export const eur = (n: number) => `${formatNumber(n)}${nbsp}€`;
+⏺ Data and tests are green. Now the components: a wrap utility, a shared
+  SourceLink, then Ask and EmailPreview.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/app/globals.css'; s=open(p).read()…)
+  ⎿  5:import type { Fact, Source } from "@/data/types";
+     9:import { SourceLink } from "./SourceLink";
+     42:  const sourceGroups: [string, Source[]][] = [
+     183:                  <SourceLink source={s} />
+  ⎿  Updated src/app/globals.css (+8 -0)
+      39    }
+      40  }
+      41  
+      42 +/* The page column: 480 px wide, centred, with the side gutter.
+         + Each                                                          
+      43 +   section wraps itself, so the dark ask block can run full wid
+         +th. */                                                         
+      44 +@utility wrap {                                                
+      45 +  margin-inline: auto;                                         
+      46 +  max-width: var(--container-page);                            
+      47 +  padding-inline: var(--spacing-gutter);                       
+      48 +}                                                              
+      49 +                                                               
+      50  /* Archivo's width axis: wdth-100 is normal, headings use 110 t
+          o 125. */
+      51  @utility wdth-* {
+      52    font-variation-settings: "wdth" --value(integer);
+  ⎿  Updated src/components/MatchCard.tsx (+3 -19)
+       3  import { brokers } from "@/data/brokers";
+       4  import type { MarketIndex } from "@/data/indexes";
+       5  import type { Fact, Source } from "@/data/types";
+       6 -import {                                                       
+       7 -  feePerPurchase,                                              
+       8 -  formatDate,                                                  
+       9 -  formatNumber,                                                
+      10 -  kc,                                                          
+      11 -  kcFee,                                                       
+      12 -  pct,                                                         
+      13 -} from "@/lib/format";                                         
+       6 +import { feePerPurchase, formatNumber, kc, kcFee, pct } from "@
+         +/lib/format";                                                  
+       7  import { CtaLink } from "./CtaLink";
+       8  import { CountUp, Swap } from "./motion";
+       9 +import { SourceLink } from "./SourceLink";                     
+      10  
+      11  const copy = cs.match;
+      12  const titleId = "match-title";
+     ...
+      19    ...new Set(facts.map((f) => f.source)),
+      20  ];
+      21  
+      28 -const sourceDate = (s: Source) =>                              
+      29 -  s.asOf ? formatDate(s.asOf) : copy.accessed(formatDate(s.acce
+         -ssed));                                                        
+      30 -                                                               
+      22  // The answer to the taps, in the order of decision 37. Rendere
+          d inside
+      23  // the Planner client component; no ISIN here (it is in the e-m
+          ail).
+      24  export function MatchCard({
+     ...
+      180                {list.map((s, i) => (
+      181                  <span key={s.url}>
+      182                    {i > 0 && "; "}
+      192 -                  <a                                          
+      193 -                    href={s.url}                              
+      194 -                    target="_blank"                           
+      195 -                    rel="noopener"                            
+      196 -                    className="underline"                     
+      197 -                  >                                           
+      198 -                    {s.title}, {sourceDate(s)}                
+      199 -                  </a>                                        
+      183 +                  <SourceLink source={s} />                   
+      184                  </span>
+     … 2 more lines (ctrl+o to expand)
+  ⎿  Created src/components/SourceLink.tsx (+16 -0)
+       1 +import { cs } from "@/copy/cs";                                
+       2 +import type { Source } from "@/data/types";                    
+       3 +import { formatDate } from "@/lib/format";                     
+       4 +                                                               
+       5 +// A source as the "Zdroje" lists print it: title and date, lin
+         +ked. A                                                         
+       6 +// document without its own date shows when it was read.       
+       7 +export function SourceLink({ source }: { source: Source }) {   
+       8 +  const date = source.asOf                                     
+       9 +    ? formatDate(source.asOf)                                  
+      10 +    : cs.match.accessed(formatDate(source.accessed));          
+      11 +  return (                                                     
+      12 +    <a href={source.url} target="_blank" rel="noopener" classNa
+         +me="underline">                                                
+      13 +      {source.title}, {date}                                   
+      14 +    </a>                                                       
+      15 +  );                                                           
+      16 +}                                                              
+  ⎿  Updated src/components/motion.tsx (+1 -1)
+       5  // The tap motion of decision 24: numbers count to their new va
+          lue, changed
+       6  // text fades up. Nothing runs on first render or under reduced
+           motion.
+       7  
+       8 -const reducedMotion = () =>                                    
+       8 +export const reducedMotion = () =>                             
+       9    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ;
+      10  
+      11  const easeOut = (t: number) => 1 - (1 - t) ** 3;
+
+⏺ Write(src/components/Ask.tsx)
+  ⎿  Wrote 161 lines to src/components/Ask.tsx
+       1 "use client";
+       2 
+       3 import { type FormEvent, useEffect, useRef, useState } from "rea
+         ct";
+       4 import { cs } from "@/copy/cs";
+       6 import { indexes, type MarketIndex } from "@/data/indexes";
+       7 import { taxes } from "@/data/taxes";
+       8 import { type EmailError, emailError } from "@/lib/email";
+       9 import { kc, pctWhole } from "@/lib/format";
+      10 import { years } from "@/lib/plan";
+     … +166 lines (ctrl+o to expand)
+
+⏺ CtaLink only renders an anchor. I'll add a submit sibling that shares its
+  class:
+
+⏺ Bash(cat > src/components/CtaLink.tsx <<'EOF'
+      import type { ReactNode } from "react";…)
+  ⎿  11:import { CtaSubmit } from "./CtaLink";
+     136:            <CtaSubmit>{copy.submit}</CtaSubmit>
+  ⎿  Updated src/components/Ask.tsx (+2 -2)
+       8  import { type EmailError, emailError } from "@/lib/email";
+       9  import { kc, pctWhole } from "@/lib/format";
+      10  import { years } from "@/lib/plan";
+      11 -import { CtaLink } from "./CtaLink";                           
+      11 +import { CtaSubmit } from "./CtaLink";                         
+      12  import { Swap } from "./motion";
+      13  
+      14  const copy = cs.ask;
+     ...
+      133              <p className="mt-3 mb-4 text-[12.5px] leading-[1.4
+           5] text-on-dark-faint">
+      134                {copy.consent}
+      135              </p>
+      136 -            <CtaLink as="submit">{copy.submit}</CtaLink>      
+      136 +            <CtaSubmit>{copy.submit}</CtaSubmit>              
+      137            </form>
+      138          )}
+      139        </div>
+  ⎿  Updated src/components/CtaLink.tsx (+13 -4)
+      1  import type { ReactNode } from "react";
+      2  
+      3 +const ctaClass =                                                
+      4 +  "flex min-h-13 w-full items-center justify-center bg-red text-
+        +[17px] leading-none font-extrabold text-white no-underline trans
+        +ition-[background-color,transform] duration-150 wdth-110 hover:b
+        +g-red-dark active:translate-y-px";                              
+      5 +                                                                
+      6  // The red full-width button that scrolls to a section on the pa
+         ge.
+      7  export function CtaLink({
+      8    href,
+     ...
+      12    children: ReactNode;
+      13  }) {
+      14    return (
+      12 -    <a                                                         
+      13 -      href={href}                                              
+      14 -      className="flex min-h-13 w-full items-center justify-cent
+         -er bg-red text-[17px] leading-none font-extrabold text-white no
+         --underline transition-[background-color,transform] duration-150
+         - wdth-110 hover:bg-red-dark active:translate-y-px"             
+      15 -    >                                                          
+      15 +    <a href={href} className={ctaClass}>                       
+      16        {children}
+      17      </a>
+      18    );
+      19  }
+      20 +                                                               
+      21 +/** The same red button, submitting a form. */                 
+      22 +export function CtaSubmit({ children }: { children: ReactNode }
+         +) {                                                            
+      23 +  return (                                                     
+      24 +    <button type="submit" className={`${ctaClass} cursor-pointe
+         +r`}>                                                           
+      25 +      {children}                                               
+      26 +    </button>                                                  
+      27 +  );                                                           
+      28 +}                                                              
+
+⏺ Now the e-mail modal:
+
+⏺ Write(src/components/EmailPreview.tsx)
+  ⎿  Wrote 380 lines to src/components/EmailPreview.tsx
+       1 "use client";
+       2 
+       3 import { type ReactNode, useEffect, useRef } from "react";
+       4 import { cs } from "@/copy/cs";
+       5 import { brokers } from "@/data/brokers";
+       6 import {
+       7   type IndexId,
+       8   indexes,
+       9   type MarketIndex,
+      10   sp500BadYear,
+     … +396 lines (ctrl+o to expand)
+
+⏺ I realized Table as a component would delay cell rendering until after Email
+  returns, breaking citation numbering—so I'll convert it to a plain function
+  that executes immediately. I'll also keep the body mounted during the modal's
+  fade-out and only mount the modal after first submit to keep the e-mail out of
+  server HTML.
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/EmailPreview.tsx'; s=open(p).read()…)
+  ⎿  138:      {comparison(index.id, [
+     183:      {comparison(index.id, [
+     319:function comparison(chosen: IndexId, rows: Row[]) {
+  ⎿  Updated src/components/EmailPreview.tsx (+13 -14)
+      31  const titleId = "email-title";
+      32  const all = Object.values(indexes);
+      33  
+      34 -// The modal with the exact e-mail (decision 3). It opens on a 
+         -valid                                                          
+      35 -// submit and from the reopen button, fades up and back down (d
+         -ecision                                                        
+      36 -// 24). Escape closes it through the same fade.                
+      34 +// The modal with the exact e-mail (decision 3). Mounted on the
+         + first                                                         
+      35 +// valid submit, so the e-mail is not in the page before it. Op
+         +ens again                                                      
+      36 +// from the reopen button, fades up and back down (decision 24)
+         +; Escape                                                       
+      37 +// closes it through the same fade.                            
+      38  export function EmailPreview({
+      39    open,
+      40    onDismiss,
+     ...
+       94            ×
+       95          </button>
+       96        </div>
+       96 -      {open && <Email index={index} amount={amount} />}       
+       97 +      <Email index={index} amount={amount} />                 
+       98      </dialog>
+       99    );
+      100  }
+     ...
+      135        <p className="mb-2 border-l-3 border-red bg-warn px-2.5 
+           py-2 text-[13px]">
+      136          {copy.income.warning}
+      137        </p>
+      137 -      <Table chosen={index.id}>                               
+      138 -        {[                                                    
+      138 +      {comparison(index.id, [                                 
+      139            [
+      140              copy.income.total(years),
+      141              (i) => (
+     ...
+      161                </>
+      162              ),
+      163            ],
+      164 -        ]}                                                    
+      165 -      </Table>                                                
+      164 +      ])}                                                     
+      165        <Note>
+      166          {copy.income.noteAssumption(
+      167            years,
+     ...
+      180        </Note>
+     … 35 more lines (ctrl+o to expand)
+
+⏺ Now wiring Planner and Home:
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/Planner.tsx'; s=open(p).read()…)
+  ⎿  $ pnpm typecheck && pnpm lint
+     $ next typegen && tsc --noEmit
+     Generating route types...
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated src/components/EmailPreview.tsx (+70 -68)
+      136          {copy.income.warning}
+      137        </p>
+      138        {comparison(index.id, [
+      139 -          [                                                   
+      140 -            copy.income.total(years),                         
+      141 -            (i) => (                                          
+      142 -              <strong>                                        
+      143 -                {approxKc(income(amount, i.return10y.value, ye
+          -ars).total)}                                                  
+      144 -              </strong>                                       
+      145 -            ),                                                
+      146 -          ],                                                  
+      147 -          [                                                   
+      148 -            copy.income.paidIn,                               
+      149 -            (i) => kc(income(amount, i.return10y.value, years)
+          -.paidIn),                                                     
+      150 -          ],                                                  
+      151 -          [                                                   
+      152 -            copy.income.gain,                                 
+      153 -            (i) => approxKc(income(amount, i.return10y.value, 
+          -years).gain),                                                 
+      154 -          ],                                                  
+      155 -          [                                                   
+      156 -            copy.income.average,                              
+      157 -            (i) => (                                          
+      158 -              <>                                              
+      159 -                {pct(i.return10y.value)}                      
+      160 -                {cite(i.return10y)}                           
+      161 -              </>                                             
+      162 -            ),                                                
+      163 -          ],                                                  
+      139 +        [                                                     
+      140 +          copy.income.total(years),                           
+      141 +          (i) => (                                            
+      142 +            <strong>                                          
+      143 +              {approxKc(income(amount, i.return10y.value, year
+          +s).total)}                                                    
+      144 +            </strong>                                         
+      145 +          ),                                                  
+      146 +        ],                                                    
+      147 +        [                                                     
+      148 +          copy.income.paidIn,                                 
+      149 +          (i) => kc(income(amount, i.return10y.value, years).p
+          +aidIn),                                                       
+      150 +        ],                                                    
+     … 114 more lines (ctrl+o to expand)
+  ⎿  Updated src/components/Home.tsx (+10 -5)
+       3  import { Planner } from "./Planner";
+       4  
+       5  const tapsId = "taps";
+       6 -// The ask block arrives in C7; the match card already links to
+         - it.                                                           
+       6  const askId = "ask";
+       7  
+       8 +// Each section sets its own column (the `wrap` utility), so th
+         +e dark ask                                                     
+       9 +// block can run the full width.                               
+      10  export function Home() {
+      11    return (
+      11 -    <div className="mx-auto max-w-page px-gutter">             
+      12 -      <Header />                                               
+      12 +    <>                                                         
+      13 +      <div className="wrap">                                   
+      14 +        <Header />                                             
+      15 +      </div>                                                   
+      16        <main>
+      14 -        <FirstScreen tapsId={tapsId} />                        
+      17 +        <div className="wrap">                                 
+      18 +          <FirstScreen tapsId={tapsId} />                      
+      19 +        </div>                                                 
+      20          <Planner tapsId={tapsId} askId={askId} />
+      21        </main>
+      17 -    </div>                                                     
+      22 +    </>                                                        
+      23    );
+      24  }
+  ⎿  Updated src/components/Planner.tsx (+54 -35)
+       5  import { type IndexId, indexes } from "@/data/indexes";
+       6  import { kc } from "@/lib/format";
+       7  import { type Amount, amounts, defaultAmount, defaultIndex } fr
+          om "@/lib/plan";
+       8 +import { Ask } from "./Ask";                                   
+       9 +import { EmailPreview } from "./EmailPreview";                 
+      10  import { MatchCard } from "./MatchCard";
+      11  
+      12  const copy = cs.taps;
+     ...
+      14  type Plan = { index: IndexId; amount: Amount };
+      15  
+      16  // The one piece of state on the page: the visitor's index and 
+          amount.
+      15 -// The match card (and in C7 the ask) render from it.          
+      17 +// The match card, the ask and the e-mail render from it.      
+      18  export function Planner({ tapsId, askId }: { tapsId: string; as
+          kId: string }) {
+      19    const [plan, setPlan] = useState<Plan>({
+      20      index: defaultIndex,
+      21      amount: defaultAmount,
+      22    });
+      23 +  // The e-mail modal: null until the first valid submit.      
+      24 +  const [mailOpen, setMailOpen] = useState<boolean | null>(null
+         +);                                                             
+      25 +  const index = indexes[plan.index];                           
+      26  
+      27    return (
+      28      <>
+      24 -      <section                                                 
+      25 -        id={tapsId}                                            
+      26 -        className="scroll-mt-3 pt-2 pb-4.5"                    
+      27 -        aria-label={copy.label}                                
+      28 -      >                                                        
+      29 -        <Question>{copy.indexQuestion}</Question>              
+      30 -        <div className="mb-5 flex flex-wrap gap-2">            
+      31 -          {Object.values(indexes).map((index) => (             
+      32 -            <Chip                                              
+      33 -              key={index.id}                                   
+      34 -              pressed={plan.index === index.id}                
+      35 -              onClick={() => setPlan({ ...plan, index: index.id
+         - })}                                                           
+      36 -            >                                                  
+      37 -              {index.label}                                    
+      38 -            </Chip>                                            
+      39 -          ))}                                                  
+     … 72 more lines (ctrl+o to expand)
+  ⎿  Updated src/copy/cs.ts (+1 -2)
+      127      fees: {
+      128        head: (amount: string) => `3. Poplatky pro ${amount} měs
+           íčně`,
+      129        ter: (ter: string) => `Poplatek fondu (TER): ${ter} ročn
+           ě`,
+      130 -      terAfter:                                               
+      131 -        ", strhává se z hodnoty fondu, nic neplatíte zvlášť.",
+      130 +      terAfter: ", strhává se z hodnoty fondu, nic neplatíte z
+          +vlášť.",                                                      
+      131        noCommission: "nákup bez provize",
+      132        commissionUpTo: (commission: string, limit: string) =>
+      133          `provize ${commission} do ${limit} měsíčně`,
+  ⎿  Updated src/data/brokers.ts (+0 -1)
+      81  };
+      82  
+      83  export const brokers: Record<BrokerId, Broker> = { t212, xtb };
+      84 -                                                               
+  ⎿  … 1 more file changed
+
+⏺ Checks pass. Running the tests, then a look at 375 px in the browser:
+
+⏺ Bash(pnpm test 2>&1 | tail -4; (lsof -i :3000 | head -2) || true)
+  ⎿        Tests  194 passed (194)
+        Start at  15:37:52
+        Duration  135ms (transform 49%, import 28%, tests 15%, worker 7%)
+     … +5 lines (ctrl+o to expand)
+
+⏺ Bash(lsof -iTCP:3000 -sTCP:LISTEN | head -3; curl -s -o /dev/null -w
+      "%{http_code}\n" http://localhost:3000)
+  ⎿  COMMAND   PID         USER   FD   TYPE             DEVICE SIZE/OFF NOD
+     E NAME
+     node    86304 martingnebus   13u  IPv6 0xb20cf62af9f146aa      0t0  TC
+     … +2 lines (ctrl+o to expand)
+
+⏺ The user's dev server is already running. Checking it in the browser:
+
+  Called claude-in-chrome 4 times (ctrl+o to expand)
+
+⏺ Two problems: the window stayed wide, and the wrap column isn't applied (no
+  max width, no gutter). Checking the computed style:
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ No .wrap rule is generated at all. Tailwind 4 already has its own wrap-*
+  utilities (overflow-wrap), and that probably swallows my static wrap. Renaming
+  it to page-wrap:
+
+⏺ Bash(sed -i '' 's/@utility wrap {/@utility page-wrap {/; s/(the `wrap`
+      utility)/(the `page-wrap` utility)/' src/app/globals.css
+      src/components/Home.tsx && sed -i ''…)
+  ⎿  src/components/Ask.tsx:74:      <div className="page-wrap">
+     src/components/Home.tsx:8:// Each section sets its own column (the `pa
+     ge-wrap` utility), so the dark ask
+     … +6 lines (ctrl+o to expand)
+  ⎿  Updated src/app/globals.css (+1 -1)
+      41  
+      42  /* The page column: 480 px wide, centred, with the side gutter.
+           Each
+      43     section wraps itself, so the dark ask block can run full wid
+          th. */
+      44 -@utility wrap {                                                
+      44 +@utility page-wrap {                                           
+      45    margin-inline: auto;
+      46    max-width: var(--container-page);
+      47    padding-inline: var(--spacing-gutter);
+  ⎿  Updated src/components/Ask.tsx (+1 -1)
+      71        className="bg-ink pt-8 pb-9 text-white"
+      72        aria-labelledby={titleId}
+      73      >
+      74 -      <div className="wrap">                                   
+      74 +      <div className="page-wrap">                              
+      75          <h2
+      76            id={titleId}
+      77            className="text-[26px] leading-[1.1] font-[850] track
+          ing-[-0.01em] wdth-118"
+  ⎿  Updated src/components/Home.tsx (+3 -3)
+       5  const tapsId = "taps";
+       6  const askId = "ask";
+       7  
+       8 -// Each section sets its own column (the `wrap` utility), so th
+         -e dark ask                                                     
+       8 +// Each section sets its own column (the `page-wrap` utility), 
+         +so the dark ask                                                
+       9  // block can run the full width.
+      10  export function Home() {
+      11    return (
+      12      <>
+      13 -      <div className="wrap">                                   
+      13 +      <div className="page-wrap">                              
+      14          <Header />
+      15        </div>
+      16        <main>
+      17 -        <div className="wrap">                                 
+      17 +        <div className="page-wrap">                            
+      18            <FirstScreen tapsId={tapsId} />
+      19          </div>
+      20          <Planner tapsId={tapsId} askId={askId} />
+  ⎿  Updated src/components/Planner.tsx (+1 -1)
+      26  
+      27    return (
+      28      <>
+      29 -      <div className="wrap">                                   
+      29 +      <div className="page-wrap">                              
+      30          <section
+      31            id={tapsId}
+      32            className="scroll-mt-3 pt-2 pb-4.5"
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Still not applied. Checking whether the running dev server serves this
+  checkout at all:
+
+⏺ Bash(lsof -p 86304 | grep cwd; cd
+      /Users/martingnebus/Martin/GIT-MG/clientelo-task && curl -s
+      http://localhost:3000 | grep -o 'id="ask"[^>]*>' | head -2; curl -s htt…)
+  ⎿  node    86304 martingnebus  cwd       DIR               1,13      768
+                48810018 /Users/martingnebus/Martin/GIT-MG/clientelo-task
+     id="ask" class="bg-ink pt-8 pb-9 text-white" aria-labelledby="ask-titl
+     … +3 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%
+      5D__0pyu6pgxzs16s._.css" | grep -n -A4 "page-wrap\|max-w-page" | head -20)
+  ⎿  717:  .max-w-page {
+     718-    max-width: var(--container-page);
+     719-  }
+     … +2 lines (ctrl+o to expand)
+
+⏺ Bash(U="http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0p
+      yu6pgxzs16s._.css"; curl -s "$U" | grep -c "text-on-dark-error\|backdrop";
+      curl -s "$U"…)
+  ⎿  6
+     1412:  .wdth-100 {
+     1413:    font-variation-settings: "wdth" 100;
+     … +27 lines (ctrl+o to expand)
+
+⏺ Bash(for u in $(curl -s http://localhost:3000 | grep -o
+      '/_next/static/[^"]*\.css' | sort -u); do echo $u; curl -s
+      "http://localhost:3000$u" | grep -A4 "\.page-wrap\…)  ⎿  /_next/static/chunks/%5Broot-of-the-server%5D__0pyu6pgxzs16s._.css
+       .wrap {
+         max-width: var(--container-page);
+     … +3 lines (ctrl+o to expand)
+
+⏺ The served CSS is stale and still shows the old .wrap rule, so that wasn't the
+  actual issue—I'll keep the page-wrap naming since it's clearer alongside
+  Tailwind's wrap-*. Waiting for the rebuild now.
+
+⏺ Bash(for i in 1 2 3 4 5 6; do u=$(curl -s http://localhost:3000 | grep -o
+      '/_next/static/[^"]*\.css' | head -1); if curl -s
+      "http://localhost:3000$u" | grep -q "\.pa…)
+  ⎿  (No output)
+
+⏺ Bash(touch src/app/globals.css src/components/*.tsx && python3 -c "import
+      time;time.sleep(4)"; u=$(curl -s http://localhost:3000 | grep -o
+      '/_next/static/[^"]*\.css'…)
+  ⎿    .wrap {
+         max-width: var(--container-page);
+         padding-inline: var(--spacing-gutter);
+         margin-inline: auto;
+
+⏺ The user's dev server isn't picking up the CSS edits. Rather than restart it,
+  I'm checking with a production build on port 3100.
+
+⏺ Bash(ls .next; pnpm build 2>&1 | tail -15)
+  ⎿  app-path-routes-manifest.json
+     build
+     BUILD_ID
+     … +34 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ The build has the rule, so the code is right and only the dev server is stale.
+  Serving the build on port 3100:
+
+⏺ Bash(pnpm next start -p 3100)
+  ⎿  Running in the background (↓ to manage)
+
+  Called claude-in-chrome 3 times (ctrl+o to expand)
+
+⏺ The window won't go below its full width (innerWidth stays at 1920). To get a
+  375 px view I'll load the page in a 375 px iframe:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ At this width the 480 px column (448 px of content) is close enough to judge
+  the layout. Scrolling to the ask:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ I'll fix the stray single-letter preposition "k" at a line end by joining it
+  with a non-breaking space, per Czech typesetting conventions. Next, I'll test
+  the error cases.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The empty error shows. Trying an invalid address, then a valid one:
+
+  Called claude-in-chrome 7 times (ctrl+o to expand)
+
+⏺ The modal shows correct income and source figures ("cca 1,32 mil. Kč"), though
+  "100,00 %" looks off for the S&P 500 — I'll format whole values as "100 %"
+  instead. Now checking the rest of the e-mail.
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ Found that superscripts bleed through the sticky title bar while scrolling
+  since sup is positioned above it. I'll apply three fixes: give the bar a
+  z-index, print the share value whole, and add a non-breaking space before "k".
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/EmailPreview.tsx'; s=open(p).read()…)
+  ⎿  Traceback (most recent call last):
+       File "<stdin>", line 5, in <module>
+     AssertionError
+     … +6 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Biome had reformatted the file, so my string didn't match. Looking at the
+  current lines:
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/components/EmailPreview.tsx'; s=open(p).read()…)
+  ⎿  $ biome check
+     Checked 31 files in 9ms. No fixes applied.
+     ✓ Compiled successfully in 321ms
+     2
+  ⎿  Updated src/components/Ask.tsx (+2 -1)
+      76            id={titleId}
+      77            className="text-[26px] leading-[1.1] font-[850] track
+          ing-[-0.01em] wdth-118"
+      78          >
+      79 -          {copy.headline} <Swap>{index.longLabel}</Swap>       
+      79 +          {/* Non-breaking: "k" must not end a line. */}       
+      80 +          {copy.headline}&nbsp;<Swap>{index.longLabel}</Swap>  
+      81          </h2>
+      82          <p className="mt-2 mb-4.5 text-[15px] text-on-dark-mute
+          d">
+      83            {copy.lead}
+  ⎿  Updated src/components/EmailPreview.tsx (+4 -2)
+      30  const copy = cs.email;
+      31  const titleId = "email-title";
+      32  const all = Object.values(indexes);
+      33 +// "100 %", not "100,00 %"; other shares keep their decimals.  
+      34 +const share = (n: number) => (Number.isInteger(n) ? pctWhole(n)
+         + : pct(n));                                                    
+      35  
+      36  // The modal with the exact e-mail (decision 3). Mounted on the
+           first
+      37  // valid submit, so the e-mail is not in the page before it. Op
+          ens again
+     ...
+      83        onClose={onDismiss}
+      84        className="m-auto max-h-[calc(100%-32px)] w-[min(100%-16p
+          x,560px)] overflow-y-auto bg-card text-ink backdrop:bg-ink/55"
+      85      >
+      84 -      <div className="sticky top-0 flex items-center justify-be
+         -tween border-b border-line bg-card py-3 pr-3 pl-4.5">          
+      86 +      <div className="sticky top-0 z-10 flex items-center justi
+         +fy-between border-b border-line bg-card py-3 pr-3 pl-4.5">     
+      87          <p id={titleId} className="text-sm font-extrabold">
+      88            {copy.modalTitle}
+      89          </p>
+     ...
+      200              <>
+      201                {i.usShare ? (
+      202                  <>
+      201 -                  {pct(i.usShare.value)}                      
+      203 +                  {share(i.usShare.value)}                    
+      204                    {cite(i.usShare)}
+      205                  </>
+      206                ) : (
+  ⎿  (timeout 5m)
+
+⏺ Restarting the preview server on the new build, then testing close, reopen and
+  an index change while the modal is open:
+
+⏺ Bash(kill $(lsof -tiTCP:3100 -sTCP:LISTEN) 2>/dev/null; echo done)
+  ⎿  done
+
+⏺ Background command "Serve the production build on port 3100" failed with exit
+code 143
+
+⏺ Bash(pnpm next start -p 3100)
+  ⎿  Running in the background (↓ to manage)
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+
+⏺ The X and Escape didn't close the dialog in this scripted run. Animation
+  onfinish may not fire when the tab counts as hidden, so I'm checking that and
+  clicking X for real:
+
+  Called claude-in-chrome 2 times (ctrl+o to expand)
+⏺ The tab was hidden while the script ran, so its animations sat at time 0.
+  Since the screenshot made it visible, the modal looks closed. Confirming the
+  state now:
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Confirmed: the modal closed once the animation could run, and the focus went
+  back to "Zobrazit e-mail znovu". All C7 behaviour works. Stopping the preview
+  server and updating the TODO and Map:
+
+⏺ Bash(kill $(lsof -tiTCP:3100 -sTCP:LISTEN) 2>/dev/null; grep -n
+      "lib\|components" README.md CLAUDE.md)
+  ⎿  CLAUDE.md:29:- Page copy lives in `src/copy/cs.ts`; components hold no
+      Czech strings.
+     CLAUDE.md:30:- Route files in `src/app/` only import and render compon
+     … +15 lines (ctrl+o to expand)
+
+⏺ Background command "Serve the new production build on port 3100" failed with
+exit code 143
+
+⏺ Bash(sed -i '' "s/\`src\/lib\/\` formatting and the taps' options, with
+      tests/\`src\/lib\/\` formatting, the taps' options, the income
+      illustration and the e-mail ch…)
+  ⎿  ```
+     src/
+       app/           routes only: they import and render components
+     … +40 lines (ctrl+o to expand)
+  ⎿  Updated CLAUDE.md (+1 -1)
+      39  
+      40  - `README.md` how to run, structure, live URL
+      41  - `AGENTS.md` written by `next dev`: read `node_modules/next/di
+          st/docs/` before Next.js code
+      42 -- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         - Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         -r topic, `data.test.ts`); `src/lib/` formatting and the taps' o
+         -ptions, with tests                                             
+      42 +- `src/app/` routes; `src/components/` the UI; `src/copy/cs.ts`
+         + Czech copy; `src/data/` sourced facts (`types.ts`, one file pe
+         +r topic, `data.test.ts`); `src/lib/` formatting, the taps' opti
+         +ons, the income illustration and the e-mail check, with tests  
+      43  - `docs/brief.md` the idea, decisions to make, done-when checkl
+          ists
+      44  - `docs/TODO.md` the commit plan, one section per commit
+      45  - `docs/decisions.md` decisions with reasons
+  ⎿  Updated README.md (+2 -1)
+      29    components/    the UI
+      30    copy/cs.ts     all Czech page copy
+      31    data/          every sourced number: value, source URL, date,
+           quote
+      32 -  lib/           Czech number formatting, the taps' options (no
+         - figures)                                                      
+      32 +  lib/           Czech number formatting, the taps' options, th
+         +e income                                                       
+      33 +                 illustration, the e-mail check (no figures)   
+      34  docs/
+      35    research/      the sourced research behind src/data/
+      36    mockups/       the agreed static mockup (page-a.html) and the
+           rejected one
+  ⎿  Updated docs/TODO.md (+3 -3)
+      44  
+      45  ## C7 The ask and the e-mail
+      46  
+      47 -- [ ] Dark ask block: headline with the chosen index, checklist
+         - (ISIN first), one e-mail field, consent text, red submit, erro
+         -r messages.                                                    
+      48 -- [ ] Income illustration function (monthly amount, 10 years, y
+         -early average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 m
+         -il. Kč (decision 4).                                           
+      49 -- [ ] E-mail modal built from `src/data/`: five sections, numbe
+         -red sources; opens on submit, closes and reopens. Nothing store
+         -d or sent.                                                     
+      47 +- [x] Dark ask block: headline with the chosen index, checklist
+         + (ISIN first), one e-mail field, consent text, red submit, erro
+         +r messages.                                                    
+      48 +- [x] Income illustration function (monthly amount, 10 years, y
+         +early average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 m
+         +il. Kč (decision 4).                                           
+      49 +- [x] E-mail modal built from `src/data/`: five sections, numbe
+         +red sources; opens on submit, closes and reopens. Nothing store
+         +d or sent.                                                     
+      50  
+      51  ## C8 FAQ, disclaimer, sources
+      52  
+
+  Called claude-in-chrome (ctrl+o to expand)
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -1 && pnpm test 2>&1 | grep -E "Tests " && pnpm
+      build 2>&1 | grep -E "Compiled|rror|○ /$" ; git diff --stat; ls ai-log;
+      git log -3 --form…)
+  ⎿  Checked 31 files in 9ms. No fixes applied.
+           Tests  194 passed (194)
+     ✓ Compiled successfully in 257ms
+     … +54 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ I've built C7. Check, test (194 passed) and build are all green, and all three
+  C7 boxes in docs/TODO.md are ticked.
+
+  In the browser, an empty address and jan@seznam each show their error. A valid
+  address opens the e-mail with "cca 1,32 mil. Kč" and numbered sources. The
+  modal closes, the focus goes back to "Zobrazit e-mail znovu", and it reopens
+  with the newly chosen index. The address appears nowhere in the page.
+
+  Things you should know:
+  - Your dev server on :3000 stopped picking up edits. It still served the old
+    CSS after I touched the files. A production build has the new styles, so I
+    checked everything on a temporary build on port 3100 and then stopped that
+    server. Restart pnpm dev before you look.
+  - I changed some sourced data that nothing used yet:
+    - XTB's 100 000 € limit moved onto the broker as commissionUpToEur.
+    - The S&P 500's bad year 2022 is now a sourced fact, taken from the
+      factsheet's year header.
+    - taxes.year (2026) is a plain value with a comment, because the research
+      names that year only in a section heading, not in a quote.
+  - The e-mail check is stricter than the browser's. It rejects jan@seznam,
+    which type="email" would accept.
+  - Departures from the mockup:
+    - "skoro tři čtvrtiny" became the sourced "72,94 %".
+    - The S&P 500's US share shows as "100 %", not "100,00 %".
+    - "k" before the index name can't end a line.
+    - The page sections now each set their own 480 px column (page-wrap in
+      globals.css), so the dark ask block runs full width.
+  - The close animation waits while the tab is hidden. When I scripted the test
+    in a background tab, the dialog stayed open until the tab became visible.
+    Real users won't notice, but it's worth knowing for C9's tests.
+  - No consent checkbox. The consent text alone does the job ("Odesláním
+    souhlasíte…"), as in the mockup.
+
+  Before the commit: please /export this session to ai-log/007-ask-email.txt.
+
+  Mistakes from this session for ai-log/mistakes.md:
+  - I first wrote the comparison table as a React component. Its cells would
+    have rendered after the source list was built, which would have broken the
+    numbering; I caught it before running it.
+  - A test helper had a plain space where it needed a non-breaking one, so a
+    test failed.
+  - I chased a styling bug that was really the stale dev server.
+  - The browser window wouldn't resize to 375 px; my first workaround, a data:
+    URL with a 375 px iframe, was refused.
+  - Two scripted edits failed because Biome had reformatted the files in
+    between.
+
+  Proposed commit message:
+
+  add C7 ask and e-mail: dark ask block, income, e-mail modal
+
+  - Ask: dark full-width block, headline with the chosen index, checklist
+    with the ISIN first, one e-mail field, consent text, red submit,
+    "empty" and "invalid" errors (decisions 15, 26, 30)
+  - EmailPreview: <dialog> mounted on the first valid submit; five
+    sections built from src/data/, the three indexes side by side, sources
+    numbered in order of first citation; fades up and down, Escape too;
+    closes and reopens, nothing stored or sent (decisions 2, 3, 4, 8, 9)
+  - src/lib/: income illustration (monthly amount, 10 years, yearly
+    average), approxKc ("cca 1,32 mil. Kč"), pctWhole, eur, e-mail check
+  - data: XTB's 100 000 € limit on the broker, the 2022 bad year as a
+    fact, tax year 2026 for the 23 % threshold
+  - page-wrap utility: each section sets its own column, so the ask runs
+    full width; SourceLink shared by the match card and the e-mail
+  - tests: income (5 000 Kč at 15.33 % gives cca 1,32 mil. Kč), approxKc,
+    e-mail check
+  - README and CLAUDE.md map list the new src/lib/ files
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage:
+  - CLAUDE.md, README.md, docs/TODO.md
+  - src/app/globals.css
+  - src/components/: Ask.tsx, EmailPreview.tsx, SourceLink.tsx, CtaLink.tsx,
+    Home.tsx, MatchCard.tsx, Planner.tsx, motion.tsx
+  - src/copy/cs.ts
+  - src/data/: brokers.ts, indexes.ts, taxes.ts
+  - src/lib/: email.ts, email.test.ts, income.ts, income.test.ts, format.ts,
+    format.test.ts, plan.ts
+  - ai-log/007-ask-email.txt, once you've exported it
+
+  Approve the message, or edit it, and I'll commit and push.
+
+✻ Cogitated for 9m 6s · done 3:41 PM

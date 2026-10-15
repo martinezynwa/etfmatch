@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { brokers } from "../data/brokers";
 import {
+  approxKc,
+  eur,
   feePerPurchase,
   formatDate,
   formatNumber,
   kc,
   kcFee,
   pct,
+  pctWhole,
 } from "./format";
 import { amounts } from "./plan";
 
@@ -96,5 +99,23 @@ describe("formatDate", () => {
   it("prints a Czech date without leading zeros", () => {
     expect(plain(formatDate("2026-09-30"))).toBe("30. 9. 2026");
     expect(plain(formatDate("2026-01-05"))).toBe("5. 1. 2026");
+  });
+});
+
+describe("approxKc", () => {
+  it.each([
+    [1_322_800, "cca 1,32 mil. Kč"],
+    [1_000_000, "cca 1,00 mil. Kč"],
+    [999_400, "cca 999 000 Kč"],
+    [229_600, "cca 230 000 Kč"],
+    [722_800, "cca 723 000 Kč"],
+  ])("%d → %s", (n, out) => expect(plain(approxKc(n))).toBe(out));
+});
+
+describe("pctWhole and eur", () => {
+  it("round to whole units", () => {
+    expect(plain(pctWhole(68.01))).toBe("68 %");
+    expect(plain(pctWhole(15))).toBe("15 %");
+    expect(plain(eur(100_000))).toBe("100 000 €");
   });
 });

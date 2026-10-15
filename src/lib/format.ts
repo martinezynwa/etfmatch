@@ -18,6 +18,16 @@ export const pct = (n: number) => `${formatNumber(n, 2)}${nbsp}%`;
 export const kc = (n: number, decimals = 0) =>
   `${formatNumber(n, decimals)}${nbsp}Kč`;
 
+/** A rounded amount for the income illustration: 1 322 800 → "cca 1,32
+ * mil. Kč", 229 600 → "cca 230 000 Kč". */
+export function approxKc(n: number) {
+  const text =
+    Math.abs(n) >= 1_000_000
+      ? `${formatNumber(n / 1_000_000, 2)}${nbsp}mil.${nbsp}Kč`
+      : kc(Math.round(n / 1000) * 1000);
+  return `cca${nbsp}${text}`;
+}
+
 /** A fee in Kč: whole crowns stay whole, otherwise two decimals. The
  * target decides, so a count from 7,50 to 15 keeps its width. */
 export const kcFee = (n: number, target = n) =>
@@ -32,3 +42,9 @@ export function formatDate(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   return [`${d}.`, `${m}.`, y].join(nbsp);
 }
+
+/** 68.01 → "68 %": a share where decimals would add noise. */
+export const pctWhole = (n: number) => `${formatNumber(n)}${nbsp}%`;
+
+/** 100000 → "100 000 €". */
+export const eur = (n: number) => `${formatNumber(n)}${nbsp}€`;
