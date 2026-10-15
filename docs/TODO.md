@@ -1,8 +1,8 @@
 # TODO
 
 The commit plan. One section per commit, in order. Idea and design come
-first, the app is set up once they are agreed. C5 and later are an outline;
-C3 turns them into concrete sections.
+first, the app is set up once they are agreed. C5 and later were planned
+in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C1 Research
 
@@ -16,7 +16,7 @@ C3 turns them into concrete sections.
 
 ## C3 Design Prep
 
-- [ ] Based on decision in C2, create two variants of both ads and webpages as static HTML. Ads go to `ads/`, page mockups to `docs/mockups/`. Upon agreeing, structure the next tasks that will scaffold the development of the subsequent components one by one (C5 and further), replacing the outline below.
+- [x] Based on decision in C2, create two variants of both ads and webpages as static HTML. Ads go to `ads/`, page mockups to `docs/mockups/`. Upon agreeing, structure the next tasks that will scaffold the development of the subsequent components one by one (C5 and further), replacing the outline below.
 
 ## C4 Setup
 
@@ -29,11 +29,44 @@ C3 turns them into concrete sections.
 - [ ] Deploy the empty shell to Vercel from GitHub, so every later commit has a live URL. Note the URL in the README.
 - [ ] README: how to run, project structure rules.
 
-## Outline for C5 and further (refined in C3)
+## C5 First screen
 
-- Page sections, in the order decided, rendering data from `src/data/`.
-- The interactive element(s), each one leading to the form.
-- The form: on submit, show a preview of what the e-mail would contain (demo; nothing stored or sent).
-- Measurement: a `track(event, props)` function that only console-logs, called at every step from arrival to submit, with ad A/B attribution.
-- Launch readiness: privacy policy, consent, disclaimer, Open Graph, mobile performance check.
-- README: section order, expected conversion, three A/B hypotheses, AI process, interpretation, what is missing.
+- [ ] Header with the ETF Match wordmark.
+- [ ] Headline, the KID line and the US → EU pairs list, rendered from `src/data/`, with the load sequence (decision 24).
+- [ ] Red CTA scrolls to the taps.
+- [ ] Fits 375 × 667: check with a screenshot.
+
+## C6 Taps and match card
+
+- [ ] Index and amount chips (one client component, one state).
+- [ ] Match card in the order of decision 30: 10-year return with its warning, top 5 bars and company count, EU fund and TER vs the US fund, brokers and fees row, "Chci vědět víc" button to the form, sources in an accordion. No ISIN on the page. All values from `src/data/`.
+- [ ] Motion on change (decision 24): numbers count, text fades, bars slide; nothing under reduced motion.
+- [ ] Tests: percent and Kč formatting, fee per purchase.
+
+## C7 The ask and the e-mail
+
+- [ ] Dark ask block: headline with the chosen index, checklist (ISIN first), one e-mail field, consent text, red submit, error messages.
+- [ ] Income illustration function (monthly amount, 10 years, yearly average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 mil. Kč (decision 4).
+- [ ] E-mail modal built from `src/data/`: five sections, numbered sources; opens on submit, closes and reopens. Nothing stored or sent.
+
+## C8 FAQ, disclaimer, sources
+
+- [ ] Four FAQ accordions (decision 16) that open smoothly.
+- [ ] Footer: disclaimer, sources in an accordion, data controller line.
+
+## C9 Measurement
+
+- [ ] `track(event, props)` that only console-logs; variant, UTM and device read in the browser.
+- [ ] The events of decision 19 as changed by decision 31 wired; the e-mail address is never logged.
+- [ ] Tests: variant from `utm_content`, event props.
+
+## C10 Launch readiness
+
+- [ ] Named data controller and a privacy policy page (decision 26 leaves the name open).
+- [ ] Open Graph tags and image.
+- [ ] Mobile performance and accessibility check on the Vercel URL, with fixes.
+- [ ] Ad links in `ads/` use the live domain; re-export the PNGs if the ads change.
+
+## C11 README
+
+- [ ] Why the sections are in this order, expected conversion, three A/B hypotheses, how the AI was used, where the task was open, demo limits and what is unfinished.

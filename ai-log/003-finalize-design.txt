@@ -1,0 +1,2166 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /model                                                                        
+  ⎿  Set model to Opus 5.5 and saved as your default for new sessions
+
+❯ /implementation-start C3                                                      
+
+  Searched for 1 pattern, read 1 file, listed 2 directories (ctrl+o to expand)
+
+⏺ Bash(sed -n 74,75p docs/research/holdings.md; sed -n 82,100p
+      docs/research/holdings.md; grep -n -i -E "0\.15|0\.5
+      %|0,5|0\.5%|měn|conversion|fx" docs/research/broker…)
+  ⎿  | #4 Micron | 5.04 % | NDX-FS | same | `MU MICRON TECHNOLOGY 5.04%` |
+     | #5 AMD | 4.19 % | NDX-FS | same | `AMD ADV MICRO DEVICES 4.19%` |
+     ### Structure
+     … +118 lines (ctrl+o to expand)
+
+⏺ For C3 I'll build the ad creatives (ad-a.html, ad-b.html) and two full page
+  mockups (page-a.html, page-b.html) with real research numbers and interactive
+  elements, sharing the same content/order from C2 but differing in visual
+  style—A follows the brief's look, B is bolder. Once you pick a variant, I'll
+  turn the C5+ outline in docs/TODO.md into concrete sections.
+
+⏺ Skill(frontend-design)
+  ⎿  Successfully loaded skill
+
+⏺ Writing the design plan for the two page variants and two ads now, then
+  checking the numbers I'll use against docs/research/.
+
+⏺ Bash(sed -n 1,23p docs/research/holdings.md; grep -n -E "^\| (SP-|NDX|MW-)"
+      docs/research/*.md | head; grep -n -i -E "10 ?y|10-year|10 years"
+      docs/research/returns.m…)
+  ⎿  # What is inside: index holdings and structure
+
+     Collected and re-checked against the live sources on 2026-10-15. Overv
+     … +208 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(sed -n 20,30p docs/research/pairs.md; grep -n -E "TER|Ongoing|ongoing"
+      docs/research/pairs.md | head -30; grep -n -i "urth"
+      docs/research/pairs.md | head)
+  ⎿  ## 1. S&P 500 (US: VOO, SPY, IVV)
+
+     ### US side
+     … +26 lines (ctrl+o to expand)
+
+⏺ Bash(grep -n -E "^\| (P1|P2|P4|I1|S1) \|" docs/research/pairs.md; sed -n
+      297,298p docs/research/pairs.md; grep -n -E "^\| (P[0-9]d?|T212|X[0-9]?) "
+      docs/research/*.m…)
+  ⎿  | index | MSCI World Index (Net) | same | same | "Benchmark Index MSCI
+      World Index (Net)" |
+     | expense ratio | 0.24% | same | same | "Expense Ratio: Fees as stated
+     … +8 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Bash(grep -n -E "^- P(2|4) =" docs/research/pairs.md; grep -n -E "Nasdaq|NYSE
+      Arca" docs/research/pairs.md | grep -i -E "listed|exchange|arca" | head
+      -6; python3 -c…)
+  ⎿  162:- P2 = https://www.ishares.com/uk/individual/en/products/253741/is
+     hares-nasdaq-100-ucits-etf?switchLocale=y&siteEntryPassthrough=true. P
+     roduct page "iShares NASDAQ 100 UCITS ETF \| CNDX \| iShares", as of 1
+     … +42 lines (ctrl+o to expand)
+
+⏺ Numbers check out against the decisions (5 000 Kč → cca 1,32 mil. Kč). Writing
+  the two ads and two page mockups next.
+
+⏺ Bash(sed -n 44,62p docs/research/holdings.md; sed -n 207,214p
+      docs/research/holdings.md; grep -n -E "Number of (constituents|companies)"
+      docs/research/holdings.md)
+  ⎿  ### Structure
+
+     | field | value | source URL | doc title, as-of, accessed | quote |
+     … +50 lines (ctrl+o to expand)
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+⏺ Data is pulled. Writing the shared mockup script first (data, taps, modal, the
+  e-mail preview, a console-only track()), then the two page skins and the ads.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Write(docs/mockups/shared.js)
+  ⎿  Wrote 271 lines to docs/mockups/shared.js
+      1 // Shared behaviour for the C3 page mockups (page-a.html, page-b.
+      2 // Throwaway design prep: the numbers are copied from docs/resear
+        ch/ with
+      4 
+      6   spFeed: { title: "S&P DJI, data indexu S&P 500", date: "30. 9. 
+        2026", url: "https://www.spglobal.com/spdji/en/indices/equity/sp-
+      7   spFs: { title: "S&P 500 factsheet", date: "30. 9. 2026", url: "
+        https://www.spglobal.com/spdji/en/idsenhancedfactsheet/file.pdf?c
+        6af-8d1a-0cd5db894797&languageId=1&indexId=340" },
+        l: "https://indexes.na
+     … +354 lines (ctrl+o to expand)
+
+⏺ Update(docs/mockups/shared.js)
+  ⎿  Added 1 line, removed 1 line
+      151        ${row("Průměrně ročně", (i, k) => `${pct(i.ret10)}${n(IN
+           DEXES[k].src.ret)}`)}
+      152      </tbody>
+      153    </table>
+      154 -  <p class="mail-note">Počítáme, jako by index rostl každý rok
+          - stejně, svým průměrem za posledních 10 let (do 30. 9. 2026). 
+          -Skutečné roky byly vyšší i nižší, třeba v roce 2022 index S&P 
+          -500 klesl o víc než 19 %. Výnosy jsou v USD: S&P 500 celkový v
+          -ýnos před daní z dividend, Nasdaq-100 celkový výnos, MSCI Worl
+          -d celkový výnos po srážkové dani. Kurz koruny k dolaru výslede
+          -k mění.</p>                                                   
+      154 +  <p class="mail-note">Počítáme, jako by index rostl každý rok
+          + stejně, svým průměrem za posledních 10 let (do 30. 9. 2026). 
+          +Skutečné roky byly vyšší i nižší, třeba v roce 2022 index S&P 
+          +500 klesl o 19,44 % (bez dividend)${n("spFs")}. Výnosy jsou v 
+          +USD: S&P 500 celkový výnos před daní z dividend, Nasdaq-100 ce
+          +lkový výnos, MSCI World celkový výnos po srážkové dani. Kurz k
+          +oruny k dolaru výsledek mění.</p>                             
+      155  
+      156    <h3>2. Co je uvnitř</h3>
+      157    <table class="mail-table">
+
+⏺ Write(docs/mockups/page-a.html)
+  ⎿  Wrote 299 lines to docs/mockups/page-a.html
+       1 <!doctype html>
+       2 <html lang="cs">
+       4 <meta charset="utf-8">
+       5 <meta name="viewport" content="width=device-width, initial-scale
+         =1">
+       7 <link rel="preconnect" href="https://fonts.googleapis.com">
+       8 <link rel="preconnect" href="https://fonts.gstatic.com" crossori
+         gin>
+         h,wght@62..125,400..900&display=swap" rel="stylesheet">
+      10 <style>
+     … +417 lines (ctrl+o to expand)
+
+⏺ Write(docs/mockups/page-b.html)
+  ⎿  Wrote 282 lines to docs/mockups/page-b.html
+       1 <!doctype html>
+       2 <html lang="cs">
+       4 <meta charset="utf-8">
+       5 <meta name="viewport" content="width=device-width, initial-scale
+         =1">
+       7 <link rel="preconnect" href="https://fonts.googleapis.com">
+       8 <link rel="preconnect" href="https://fonts.gstatic.com" crossori
+         gin>
+         rotesk:wght@400..900&display=swap" rel="stylesheet">
+      10 <style>
+     … +417 lines (ctrl+o to expand)
+
+⏺ Now the two ads, in one shared template so the hook is the only variable.
+
+⏺ Bash(mkdir -p /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads && cat >
+      /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads/ad.css <<'EOF'
+      /* Shared template fo…)
+  ⎿  Created ads/ad.css (+32 -0)
+       1 +/* Shared template for both ads: a static Meta feed image, 4:5.
+       2 +   Laid out at 432 x 540 CSS px; export at device scale 2.5 = 1
+         +080 x 1350.                                                    
+       3 +   Same template for A and B so the hook is the only variable (
+         +decision 18). */                                               
+       4 +:root {                                                        
+       5 +  --bg: #e6e3de;                                               
+       6 +  --card: #ffffff;                                             
+       7 +  --ink: #000000;                                              
+       8 +  --muted: #5c5853;                                            
+       9 +  --line: #d4d0ca;                                             
+      10 +  --red: #d7000f;                                              
+      11 +}                                                              
+      12 +* { box-sizing: border-box; }                                  
+      13 +body {                                                         
+      14 +  margin: 0; padding: 24px 16px 48px; background: #f6f5f3; colo
+         +r: var(--ink);                                                 
+      15 +  font: 400 15px/1.5 "Archivo", system-ui, sans-serif;         
+      16 +  display: grid; justify-items: center; gap: 20px;             
+      17 +}                                                              
+      18 +.ad {                                                          
+      19 +  position: relative; width: 432px; max-width: 100%; aspect-rat
+         +io: 4 / 5; overflow: hidden;                                   
+      20 +  background: var(--bg); padding: 28px 28px 24px; display: flex
+         +; flex-direction: column;                                      
+      21 +  font-variation-settings: "wdth" 100;                         
+      22 +}                                                              
+      23 +.logo { font-weight: 900; font-size: 18px; font-variation-setti
+         +ngs: "wdth" 125; letter-spacing: -0.02em; }                    
+      24 +.logo span { color: var(--red); }                              
+      25 +.visual { flex: 1; display: flex; flex-direction: column; justi
+         +fy-content: center; }                                          
+      26 +.hook { font-size: 31px; line-height: 1.06; font-weight: 850; f
+         +ont-variation-settings: "wdth" 118; letter-spacing: -0.015em; m
+         +argin: 0 0 18px; }                                             
+      27 +.cta { align-self: flex-start; background: var(--red); color: #
+         +fff; border-radius: 999px; padding: 13px 22px; font-weight: 800
+         +; font-size: 17px; font-variation-settings: "wdth" 110; }      
+      28 +.spec { width: 432px; max-width: 100%; background: #fff; border
+         +: 1px solid var(--line); border-radius: 12px; padding: 14px 16p
+         +x; font-size: 14px; }                                          
+      29 +.spec h2 { font-size: 15px; margin: 0 0 8px; }                 
+      30 +.spec dl { margin: 0; display: grid; grid-template-columns: 110
+         +px 1fr; gap: 6px 10px; }                                       
+      31 +.spec dt { color: var(--muted); }                              
+      32 +.spec dd { margin: 0; overflow-wrap: anywhere; }               
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads && cat >
+      ad-a.html <<'EOF'
+      <!doctype html>…)  ⎿  ad-a.html
+     ad-b.html
+     ad.css
+  ⎿  Created ads/ad-a.html (+44 -0)
+       1 +<!doctype html>                                                
+       2 +<html lang="cs">                                               
+       3 +<head>                                                         
+       4 +<meta charset="utf-8">                                         
+       5 +<meta name="viewport" content="width=device-width, initial-scal
+         +e=1">                                                          
+       6 +<title>ETF Match: ad A</title>                                 
+       7 +<link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+         +th,wght@62..125,400..900&display=swap" rel="stylesheet">       
+       8 +<link rel="stylesheet" href="ad.css">                          
+       9 +<style>                                                        
+      10 +  /* Ad A, the problem hook: the tickers they know, struck out.
+         + */                                                            
+      11 +  .tickers { margin: 0 0 22px; }                               
+      12 +  .tickers s { display: block; font-weight: 900; font-variation
+         +-settings: "wdth" 125; letter-spacing: -0.04em; line-height: 0.
+         +92;                                                            
+      13 +    text-decoration-color: var(--red); text-decoration-thicknes
+         +s: 9px; }                                                      
+      14 +  .t1 { font-size: 118px; }                                    
+      15 +  .t2 { font-size: 64px; color: #3a3835; }                     
+      16 +  .t3 { font-size: 40px; color: var(--muted); }                
+      17 +</style>                                                       
+      18 +</head>                                                        
+      19 +<body>                                                         
+      20 +  <div class="ad" role="img" aria-label="Reklama A: přeškrtnuté
+         + VOO, SPY, IVV a QQQ, text Chcete ETF z NYSE? V Česku ho většin
+         +ou nekoupíte.">                                                
+      21 +    <div class="logo">ETF Match<span>.</span></div>            
+      22 +    <div class="visual">                                       
+      23 +      <div class="tickers" aria-hidden="true">                 
+      24 +        <s class="t1">VOO</s>                                  
+      25 +        <s class="t2">SPY IVV</s>                              
+      26 +        <s class="t3">QQQ</s>                                  
+      27 +      </div>                                                   
+      28 +      <p class="hook">Chcete ETF z NYSE? V Česku ho většinou ne
+         +koupíte.</p>                                                   
+      29 +    </div>                                                     
+      30 +    <span class="cta">Co místo toho</span>                     
+      31 +  </div>                                                       
+      32 +                                                               
+      33 +  <section class="spec">                                       
+      34 +    <h2>Ad A: problém (Meta feed, 4:5)</h2>                    
+      35 +    <dl>                                                       
+      36 +      <dt>Primární text</dt><dd>VOO, SPY nebo QQQ znáte z videí
+         + z USA. Většina brokerů v EU vám je ale neprodá. Ukážeme vám ev
+         +ropský fond se stejným indexem a kde ho koupíte.</dd>          
+      37 +      <dt>Titulek</dt><dd>Co místo toho</dd>                   
+      38 +      <dt>Tlačítko</dt><dd>Zjistit víc</dd>                    
+      39 +      <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+         +=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+         +;utm_content=ad-a</dd>                                         
+      40 +      <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+         +ěřítku 2,5)</dd>                                               
+     … 4 more lines (ctrl+o to expand)
+  ⎿  Created ads/ad-b.html (+44 -0)
+       1 +<!doctype html>                                                
+       2 +<html lang="cs">                                               
+       3 +<head>                                                         
+       4 +<meta charset="utf-8">                                         
+       5 +<meta name="viewport" content="width=device-width, initial-scal
+         +e=1">                                                          
+       6 +<title>ETF Match: ad B</title>                                 
+       7 +<link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+         +th,wght@62..125,400..900&display=swap" rel="stylesheet">       
+       8 +<link rel="stylesheet" href="ad.css">                          
+       9 +<style>                                                        
+      10 +  /* Ad B, the answer hook: the index they know, with the EU fu
+         +nd under it. */                                                
+      11 +  .rows { list-style: none; margin: 0 0 22px; padding: 0; }    
+      12 +  .rows li { padding: 12px 0 13px; border-top: 2px solid var(--
+         +ink); }                                                        
+      13 +  .rows li:last-child { border-bottom: 2px solid var(--ink); } 
+      14 +  .idx { display: block; font-weight: 900; font-variation-setti
+         +ngs: "wdth" 125; letter-spacing: -0.035em; line-height: 0.95; f
+         +ont-size: 58px; }                                              
+      15 +  .eu { display: flex; align-items: center; gap: 8px; margin-to
+         +p: 6px; font-weight: 700; font-size: 16px; }                   
+      16 +  .eu::before { content: ""; flex: none; width: 20px; height: 2
+         +0px; border-radius: 50%; background: var(--red) url("data:image
+         +/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0
+         + 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='whi
+         +te' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='
+         +round'/%3E%3C/svg%3E") center/20px no-repeat; }                
+      17 +  .hook { font-size: 27px; }                                   
+      18 +</style>                                                       
+      19 +</head>                                                        
+      20 +<body>                                                         
+      21 +  <div class="ad" role="img" aria-label="Reklama B: S&P 500 a N
+         +asdaq-100 s evropským fondem, text S&P 500 i Nasdaq-100 koupíte
+         + i v Evropě. Ukážeme vám, který fond a kde.">                  
+      22 +    <div class="logo">ETF Match<span>.</span></div>            
+      23 +    <div class="visual">                                       
+      24 +      <ul class="rows" aria-hidden="true">                     
+      25 +        <li><span class="idx">S&amp;P 500</span><span class="eu
+         +">evropský fond, stejný index</span></li>                      
+      26 +        <li><span class="idx">Nasdaq-100</span><span class="eu"
+         +>evropský fond, stejný index</span></li>                       
+      27 +      </ul>                                                    
+      28 +      <p class="hook">S&amp;P 500 i Nasdaq-100 koupíte i v Evro
+         +pě. Ukážeme vám, který fond a kde.</p>                         
+      29 +    </div>                                                     
+      30 +    <span class="cta">Najít fond</span>                        
+      31 +  </div>                                                       
+      32 +                                                               
+      33 +  <section class="spec">                                       
+      34 +    <h2>Ad B: odpověď (Meta feed, 4:5)</h2>                    
+      35 +    <dl>                                                       
+      36 +      <dt>Primární text</dt><dd>Na S&amp;P 500 i Nasdaq-100 exi
+         +stuje evropský fond, který v Česku koupíte. Vyberte index a uká
+         +žeme vám ISIN fondu a brokery, kde ho najdete.</dd>            
+      37 +      <dt>Titulek</dt><dd>Najít fond</dd>                      
+      38 +      <dt>Tlačítko</dt><dd>Zjistit víc</dd>                    
+      39 +      <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+         +=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+         +;utm_content=ad-b</dd>                                         
+      40 +      <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+         +ěřítku 2,5)</dd>                                               
+     … 4 more lines (ctrl+o to expand)
+
+⏺ Files are written. Taking screenshots at 375 px to check the first screen fits
+  and the layout holds.
+
+⏺ Bash(ls "/Applications/Google Chrome.app/Contents/MacOS/" 2>/dev/null; which
+      npx node python3; python3 -c "import playwright" 2>&1 | head -1)
+  ⎿  Google Chrome
+     /opt/homebrew/bin/npx
+     /opt/homebrew/bin/node
+     … +2 lines (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad;
+      R=/Users/martingnebus/Martin/GIT-MG/…)
+  ⎿  ad-a.png
+     ad-b.png
+     first-a.png
+     … +3 lines (ctrl+o to expand)
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ The headless window can't go below ~500 px, so the layout overflowed. I'll
+  render inside a 375 px iframe instead. Also fixing the strike-through leaking
+  onto the small labels.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task && python3 - <<'EOF'
+      import re…)
+  ⎿  docs/mockups/page-a.html:2
+     docs/mockups/page-b.html:1
+     ok
+  ⎿  Updated docs/mockups/page-a.html (+6 -6)
+      49    .pairs { list-style: none; margin: 0 0 16px; padding: 4px 16p
+          x; background: var(--card); border-radius: var(--r-card); }
+      50    .pair { display: grid; grid-template-columns: 1fr auto 1.25fr
+          ; align-items: center; gap: 10px; padding: 11px 0; }
+      51    .pair + .pair { border-top: 1px solid var(--line); }
+      52 -  .pair-us { font-weight: 800; font-size: 17px; line-height: 1.
+         -15; font-variation-settings: "wdth" 112;                       
+      53 -    text-decoration: line-through; text-decoration-color: var(-
+         --red); text-decoration-thickness: 3px; }                       
+      54 -  .pair-us small { display: block; text-decoration: none; font-
+         -weight: 500; font-size: 12px; color: var(--muted); font-variati
+         -on-settings: "wdth" 100; margin-top: 2px; }                    
+      52 +  .pair-us { font-weight: 800; font-size: 17px; line-height: 1.
+         +15; font-variation-settings: "wdth" 112; }                     
+      53 +  .pair-us s { text-decoration-color: var(--red); text-decorati
+         +on-thickness: 3px; }                                           
+      54 +  .pair-us small { display: block; font-weight: 500; font-size:
+         + 12px; color: var(--muted); font-variation-settings: "wdth" 100
+         +; margin-top: 2px; }                                           
+      55    .pair-arrow { color: var(--red); font-weight: 900; }
+      56    .pair-eu { font-weight: 700; font-size: 14px; line-height: 1.
+          2; }
+      57    .pair-eu small { display: block; font-weight: 400; font-size:
+           12px; color: var(--muted); margin-top: 2px; }
+     ...
+      171      <p class="why">Americké fondy nemají dokument KID, který E
+           U vyžaduje. Většina brokerů je proto drobným investorům neprod
+           á.</p>
+      172      <ul class="pairs">
+      173        <li class="pair">
+      174 -        <span class="pair-us">VOO SPY IVV<small>S&P 500</small
+          -></span>                                                      
+      174 +        <span class="pair-us"><s>VOO SPY IVV</s><small>S&P 500
+          +</small></span>                                               
+      175          <span class="pair-arrow" aria-label="místo nich">→</sp
+           an>
+      176          <span class="pair-eu">iShares Core S&P 500<small>stejn
+           ý index</small></span>
+      177        </li>
+      178        <li class="pair">
+      179 -        <span class="pair-us">QQQ<small>Nasdaq-100 (Nasdaq)</s
+          -mall></span>                                                  
+      179 +        <span class="pair-us"><s>QQQ</s><small>Nasdaq-100 (Nas
+          +daq)</small></span>                                           
+      180          <span class="pair-arrow" aria-label="místo něj">→</spa
+           n>
+      181          <span class="pair-eu">iShares NASDAQ 100<small>stejný 
+           index</small></span>
+      182        </li>
+      183        <li class="pair">
+      184 -        <span class="pair-us">URTH<small>Svět (MSCI World)</sm
+          -all></span>                                                   
+      184 +        <span class="pair-us"><s>URTH</s><small>Svět (MSCI Wor
+          +ld)</small></span>                                            
+      185          <span class="pair-arrow" aria-label="místo něj">→</spa
+           n>
+      186          <span class="pair-eu">iShares Core MSCI World<small>st
+           ejný index</small></span>
+      187        </li>
+  ⎿  Updated docs/mockups/page-b.html (+6 -6)
+      42    .pairs { list-style: none; margin: 0 0 14px; padding: 0; bord
+          er-top: 3px solid var(--line); }
+      43    .pair { width: 100%; display: grid; grid-template-columns: 1f
+          r auto; align-items: center; gap: 8px;
+      44      padding: 8px 0 9px; border: 0; border-bottom: 1px solid var
+          (--line); background: none; color: inherit; text-align: left; f
+          ont: inherit; cursor: pointer; }
+      45 -  .pair-us { display: block; font-size: 38px; line-height: 1; f
+         -ont-weight: 900; letter-spacing: -0.035em;                     
+      46 -    text-decoration: line-through; text-decoration-color: var(-
+         --red); text-decoration-thickness: 5px; }                       
+      47 -  .pair-us .ex { font-size: 13px; font-weight: 600; letter-spac
+         -ing: 0; text-decoration: none; vertical-align: 14px; margin-lef
+         -t: 4px; color: var(--muted); }                                 
+      45 +  .pair-us { display: block; font-size: 38px; line-height: 1; f
+         +ont-weight: 900; letter-spacing: -0.035em; }                   
+      46 +  .pair-us s { text-decoration-color: var(--red); text-decorati
+         +on-thickness: 5px; }                                           
+      47 +  .pair-us .ex { font-size: 13px; font-weight: 600; letter-spac
+         +ing: 0; vertical-align: 14px; margin-left: 4px; color: var(--mu
+         +ted); }                                                        
+      48    .pair-eu { display: block; font-size: 14px; font-weight: 700;
+           margin-top: 3px; }
+      49    .pair-eu span { font-weight: 400; color: var(--muted); }
+      50    .pair-go { width: 36px; height: 36px; border-radius: 50%; bor
+          der: 2px solid var(--ink); display: grid; place-items: center; 
+          font-weight: 800; }
+     ...
+      161      <p class="why">Americké fondy nemají dokument KID, který E
+           U vyžaduje, a většina brokerů je proto neprodá. Klepněte na te
+           n, který znáte.</p>
+      162      <ul class="pairs">
+      163        <li><button class="pair" data-index="sp500" data-scroll=
+           "#taps">
+      164 -        <span><span class="pair-us">VOO SPY IVV</span><span cl
+          -ass="pair-eu">iShares Core S&P 500 <span>stejný index</span></
+          -span></span>                                                  
+      164 +        <span><span class="pair-us"><s>VOO SPY IVV</s></span><
+          +span class="pair-eu">iShares Core S&P 500 <span>stejný index</
+          +span></span></span>                                           
+      165          <span class="pair-go" aria-hidden="true">↓</span></but
+           ton></li>
+      166        <li><button class="pair" data-index="ndx" data-scroll="#
+           taps">
+      167 -        <span><span class="pair-us">QQQ<span class="ex">Nasdaq
+          -</span></span><span class="pair-eu">iShares NASDAQ 100 <span>s
+          -tejný index</span></span></span>                              
+      167 +        <span><span class="pair-us"><s>QQQ</s><span class="ex"
+          +>Nasdaq</span></span><span class="pair-eu">iShares NASDAQ 100 
+          +<span>stejný index</span></span></span>                       
+      168          <span class="pair-go" aria-hidden="true">↓</span></but
+           ton></li>
+      169        <li><button class="pair" data-index="world" data-scroll=
+           "#taps">
+      170 -        <span><span class="pair-us">URTH</span><span class="pa
+          -ir-eu">iShares Core MSCI World <span>stejný index</span></span
+          -></span>                                                      
+      170 +        <span><span class="pair-us"><s>URTH</s></span><span cl
+          +ass="pair-eu">iShares Core MSCI World <span>stejný index</span
+          +></span></span>                                               
+      171          <span class="pair-go" aria-hidden="true">↓</span></but
+           ton></li>
+      172      </ul>
+      173      <a class="cta" href="#taps" data-action="cta">Najít evrops
+           ký fond ↓</a>
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; C="/Applications/Google
+      Chrome.app/C…)
+  ⎿  ok
+       pixelWidth: 500
+       pixelHeight: 4200
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; cd $S
+      for p in a b; do for i in 0 1…)
+  ⎿  part-a-0.png
+     part-a-1.png
+     part-a-2.png
+     … +5 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; python3 -I -c "
+      from PIL import Imag…)
+  ⎿  ok
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ First screens both fit in 375 × 667 with the CTA visible. Checking the rest of
+  each page now.
+
+  Read 4 files (ctrl+o to expand)
+
+⏺ Fixing what the screenshots showed: the checklist rows break around the inline
+  amount, "15 %" wraps, VOO SPY IVV wraps in A, and B's "Místo … kupte" reads
+  like advice, so "kupte" goes.
+
+⏺ Bash(python3 - <<'EOF'
+      import re…)
+  ⎿  docs/mockups/page-a.html:111:  .checklist li { position: relative; pad
+     ding-left: 32px; font-size: 15px; line-height: 1.35; }
+     docs/mockups/page-a.html:112:  .checklist li::before { content: ""; po
+     … +11 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/page-a.html (+12 -12)
+      47    h1 .second { display: block; margin-top: 6px; }
+      48    .why { margin: 12px 0 16px; font-size: 15px; line-height: 1.4
+          5; color: var(--muted); }
+      49    .pairs { list-style: none; margin: 0 0 16px; padding: 4px 16p
+          x; background: var(--card); border-radius: var(--r-card); }
+      50 -  .pair { display: grid; grid-template-columns: 1fr auto 1.25fr
+         -; align-items: center; gap: 10px; padding: 11px 0; }           
+      50 +  .pair { display: grid; grid-template-columns: auto auto 1fr; 
+         +align-items: center; gap: 10px; padding: 11px 0; }             
+      51    .pair + .pair { border-top: 1px solid var(--line); }
+      52    .pair-us { font-weight: 800; font-size: 17px; line-height: 1.
+          15; font-variation-settings: "wdth" 112; }
+      53 -  .pair-us s { text-decoration-color: var(--red); text-decorati
+         -on-thickness: 3px; }                                           
+      53 +  .pair-us s { white-space: nowrap; text-decoration-color: var(
+         +--red); text-decoration-thickness: 3px; }                      
+      54    .pair-us small { display: block; font-weight: 500; font-size:
+           12px; color: var(--muted); font-variation-settings: "wdth" 100
+          ; margin-top: 2px; }
+      55    .pair-arrow { color: var(--red); font-weight: 900; }
+      56    .pair-eu { font-weight: 700; font-size: 14px; line-height: 1.
+          2; }
+     ...
+      108    .ask h2 { font-size: 26px; line-height: 1.1; font-weight: 85
+           0; }
+      109    .ask-lead { color: #c9c6c1; margin: 8px 0 18px; font-size: 1
+           5px; }
+      110    .checklist { list-style: none; margin: 0 0 22px; padding: 0;
+            display: grid; gap: 10px; }
+      111 -  .checklist li { display: grid; grid-template-columns: 22px 1
+          -fr; gap: 10px; font-size: 15px; line-height: 1.35; }          
+      112 -  .checklist li::before { content: ""; width: 20px; height: 20
+          -px; margin-top: 1px; border-radius: 50%; background: var(--red
+          -) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000
+          -/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill
+          -='none' stroke='white' stroke-width='2.4' stroke-linecap='roun
+          -d' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repe
+          -at; }                                                         
+      111 +  .checklist li { position: relative; padding-left: 32px; font
+          +-size: 15px; line-height: 1.35; }                             
+      112 +  .checklist li::before { content: ""; position: absolute; lef
+          +t: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; b
+          +ackground: var(--red) url("data:image/svg+xml,%3Csvg xmlns='ht
+          +tp://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.
+          +5 10.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.4' 
+          +stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+          + center/20px no-repeat; }                                     
+      113    label.field { display: block; font-weight: 700; font-size: 1
+           4px; margin-bottom: 6px; }
+      114    input[type=email] {
+      115      width: 100%; min-height: 52px; padding: 0 16px; border-rad
+           ius: 12px; border: 2px solid #fff; background: #fff;
+     ...
+      198      </div>
+      199      <h2 class="q">Kolik chcete investovat měsíčně?</h2>
+      200      <div class="chips">
+      201 -      <button class="chip" data-amount="1000">1 000 Kč</button
+          ->                                                             
+      202 -      <button class="chip" data-amount="3000">3 000 Kč</button
+          ->                                                             
+      203 -      <button class="chip" data-amount="5000">5 000 Kč</button
+          ->                                                             
+      204 -      <button class="chip" data-amount="10000">10 000 Kč</butt
+          -on>                                                           
+      201 +      <button class="chip" data-amount="1000">1&nbsp;000&nbsp;
+          +Kč</button>                                                   
+      202 +      <button class="chip" data-amount="3000">3&nbsp;000&nbsp;
+          +Kč</button>                                                   
+      203 +      <button class="chip" data-amount="5000">5&nbsp;000&nbsp;
+          +Kč</button>                                                   
+      204 +      <button class="chip" data-amount="10000">10&nbsp;000&nbs
+          +p;Kč</button>                                                 
+      205      </div>
+      206    </section>
+      207  
+     ...
+      209      <p class="instead">Místo <s data-bind="us"></s></p>
+      210      <h2 class="fund" data-bind="fund"></h2>
+      211      <div class="isin">
+      212 -      <span class="isin-code"><small>ISIN, podle něj fond najd
+          -ete u brokera</small><span data-bind="isin"></span></span>    
+     … 28 more lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/page-b.html (+11 -11)
+      105    .ask h2 span { color: #fff; border-bottom: 4px solid var(--r
+           ed); }
+      106    .ask-lead { color: #c4c0ba; margin: 10px 0 18px; font-size: 
+           15px; }
+      107    .checklist { list-style: none; margin: 0 0 22px; padding: 0;
+            border-top: 1px solid #3d3b38; }
+      108 -  .checklist li { display: grid; grid-template-columns: 26px 1
+          -fr; padding: 10px 0; border-bottom: 1px solid #3d3b38; font-si
+          -ze: 15px; line-height: 1.35; }                                
+      109 -  .checklist li::before { content: "✓"; color: var(--red); fon
+          -t-weight: 900; font-size: 17px; }                             
+      108 +  .checklist li { position: relative; padding: 10px 0 10px 26p
+          +x; border-bottom: 1px solid #3d3b38; font-size: 15px; line-hei
+          +ght: 1.35; }                                                  
+      109 +  .checklist li::before { content: "✓"; position: absolute; le
+          +ft: 0; top: 9px; color: var(--red); font-weight: 900; font-siz
+          +e: 17px; }                                                    
+      110    label.field { display: block; font-weight: 700; font-size: 1
+           4px; margin-bottom: 6px; }
+      111    input[type=email] { width: 100%; min-height: 54px; padding: 
+           0 14px; border-radius: 8px; border: 2px solid #fff; background
+           : #fff; font: 500 17px/1 "Schibsted Grotesk", sans-serif; colo
+           r: var(--ink); }
+      112    .error { color: #ff8a8f; font-size: 14px; margin: 8px 0 0; }
+     ...
+      176    <section class="taps" id="taps" aria-labelledby="taps-h">
+      177      <h2 class="q" id="taps-h">Kolik chcete investovat měsíčně?
+           </h2>
+      178      <div class="seg" role="group" aria-labelledby="taps-h">
+      179 -      <button data-amount="1000">1 000 Kč</button>            
+      180 -      <button data-amount="3000">3 000 Kč</button>            
+      181 -      <button data-amount="5000">5 000 Kč</button>            
+      182 -      <button data-amount="10000">10 000 Kč</button>          
+      179 +      <button data-amount="1000">1&nbsp;000&nbsp;Kč</button>  
+      180 +      <button data-amount="3000">3&nbsp;000&nbsp;Kč</button>  
+      181 +      <button data-amount="5000">5&nbsp;000&nbsp;Kč</button>  
+      182 +      <button data-amount="10000">10&nbsp;000&nbsp;Kč</button>
+      183      </div>
+      184      <p class="hint">Podle částky spočítáme poplatky u brokera.
+           </p>
+      185    </section>
+     ...
+      192      <button data-index="world">Svět</button>
+      193    </div>
+      194    <div class="wrap">
+      195 -    <p class="instead">Místo <s data-bind="us"></s> kupte</p> 
+      195 +    <p class="instead">Místo <s data-bind="us"></s></p>       
+      196      <h2 class="fund" data-bind="fund"></h2>
+      197      <div class="isin">
+      198 -      <span class="isin-code"><small>ISIN, podle něj fond najd
+          -ete u brokera</small><span data-bind="isin"></span></span>    
+      198 +      <span class="isin-code"><small>ISIN pro vyhledání u brok
+          +era</small><span data-bind="isin"></span></span>              
+      199        <button class="copy" data-action="copy-isin">Kopírovat</
+           button>
+      200      </div>
+      201  
+     ...
+      220          <tr><th scope="row">Trading 212</th><td data-bind="fee
+           T212"></td></tr>
+      221          <tr><th scope="row">XTB</th><td data-bind="feeXtb"></t
+           d></tr>
+      222        </table>
+      223 -      <p class="note">Za nákup za <span data-bind="amount"></s
+          -pan>, pokud máte účet v Kč. Provize za nákup ETF je u obou 0 K
+          -č.</p>                                                        
+     … 20 more lines (ctrl+o to expand)
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; C="/Applications/Google
+      Chrome.app/C…)
+  ⎿  (No output)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ The e-mail modal renders correctly with the chosen column highlighted. Tidying
+  number wrapping in the e-mail text and rewording the 23 % tax line.
+
+⏺ Bash(cp docs/mockups/shared.js
+      /private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-task/3
+      28bf675-1c82-4cfe-821a-396175e41482/scratchpad/shared.bak &&…)
+  ⎿  >   if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace(".",
+      ",")} mil. Kč`;
+     >   return `cca\u00a0${kc(Math.round(n / 1000) * 1000)}`;
+     … +14 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/shared.js (+7 -7)
+      79  const kc = (n) => `${Math.round(n).toLocaleString("cs-CZ")} Kč`
+          ;
+      80  const kcFee = (n) => `${n.toLocaleString("cs-CZ", { minimumFrac
+          tionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })} Kč`;
+      81  function approx(n) {
+      82 -  if (n >= 1e6) return `cca ${(n / 1e6).toFixed(2).replace(".",
+         - ",")} mil. Kč`;                                               
+      83 -  return `cca ${kc(Math.round(n / 1000) * 1000)}`;             
+      82 +  if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace
+         +(".", ",")} mil. Kč`;                                          
+      83 +  return `cca\u00a0${kc(Math.round(n / 1000) * 1000)}`;        
+      84  }
+      85  // Monthly amount for 120 months, the yearly average turned int
+          o a monthly rate.
+      86  function grow(monthly, yearlyPct) {
+     ...
+      151        ${row("Průměrně ročně", (i, k) => `${pct(i.ret10)}${n(IN
+           DEXES[k].src.ret)}`)}
+      152      </tbody>
+      153    </table>
+      154 -  <p class="mail-note">Počítáme, jako by index rostl každý rok
+          - stejně, svým průměrem za posledních 10 let (do 30. 9. 2026). 
+          -Skutečné roky byly vyšší i nižší, třeba v roce 2022 index S&P 
+          -500 klesl o 19,44 % (bez dividend)${n("spFs")}. Výnosy jsou v 
+          -USD: S&P 500 celkový výnos před daní z dividend, Nasdaq-100 ce
+          -lkový výnos, MSCI World celkový výnos po srážkové dani. Kurz k
+          -oruny k dolaru výsledek mění.</p>                             
+      154 +  <p class="mail-note">Počítáme, jako by index rostl každý rok
+          + stejně, svým průměrem za posledních 10 let (do 30. 9. 2026). 
+          +Skutečné roky byly vyšší i nižší, třeba v roce 2022 index S&P 
+          +500 klesl o 19,44\u00a0% (bez dividend)${n("spFs")}. Výnosy js
+          +ou v USD: S&P 500 celkový výnos před daní z dividend, Nasdaq-1
+          +00 celkový výnos, MSCI World celkový výnos po srážkové dani. K
+          +urz koruny k dolaru výsledek mění.</p>                        
+      155  
+      156    <h3>2. Co je uvnitř</h3>
+      157    <table class="mail-table">
+     ...
+      167    <h3>3. Poplatky pro ${kc(state.amount)} měsíčně</h3>
+      168    <ul>
+      169      <li>Poplatek fondu (TER): ${pct(x.ter)} ročně${n(x.src.fun
+           d)}, strhává se z hodnoty fondu, nic neplatíte zvlášť.</li>
+      170 -    <li>Trading 212: nákup bez provize, směna měny 0,15 %${n("
+          -t212")} = ${kcFee(fee(0.15))} za nákup, ${kcFee(fee(0.15) * 12
+          -)} za rok.</li>                                               
+      171 -    <li>XTB: provize 0 % do 100 000 € měsíčně, směna měny 0,5 
+          -%${n("xtbFees")} = ${kcFee(fee(0.5))} za nákup, ${kcFee(fee(0.
+          -5) * 12)} za rok.</li>                                        
+      170 +    <li>Trading 212: nákup bez provize, směna měny 0,15\u00a0%
+          +${n("t212")} = ${kcFee(fee(0.15))} za nákup, ${kcFee(fee(0.15)
+          + * 12)} za rok.</li>                                          
+      171 +    <li>XTB: provize 0\u00a0% do 100\u00a0000\u00a0€ měsíčně, 
+          +směna měny 0,5\u00a0%${n("xtbFees")} = ${kcFee(fee(0.5))} za n
+          +ákup, ${kcFee(fee(0.5) * 12)} za rok.</li>                    
+      172    </ul>
+      173    <p class="mail-note">Platí, pokud máte účet v Kč a fond kupu
+           jete v jiné měně.</p>
+      174  
+      175    <h3>4. Daně v Česku stručně</h3>
+      176    <ul>
+      177      <li>Držíte déle než 3 roky: zisk z prodeje je bez daně${n(
+           "zdp")}.</li>
+      178 -    <li>Prodáte za max. 100 000 Kč za rok (počítá se celá část
+          -ka prodeje, ne zisk): bez daně${n("zdp")}.</li>               
+      179 -    <li>Jinak platíte daň ze zisku 15 %, nad 1 762 812 Kč za r
+          -ok 2026 23 %${n("fsRate")}.</li>                              
+      178 +    <li>Prodáte za max. 100\u00a0000\u00a0Kč za rok (počítá se
+          + celá částka prodeje, ne zisk): bez daně${n("zdp")}.</li>     
+      179 +    <li>Jinak platíte daň ze zisku 15\u00a0%. Sazba 23\u00a0% 
+          +platí až pro příjmy nad 1\u00a0762 812\u00a0Kč za rok (2026)${
+          +n("fsRate")}.</li>                                            
+      180    </ul>
+      181    <p class="mail-note">Přepočet měny a párování nákupů s prode
+           ji probírejte s daňovým poradcem.</p>
+      182  
+
+⏺ Bash(sed -i '' -e 's/1\\u00a0762 812/1\\u00a0762\\u00a0812/' -e 's/ mil\.
+      Kč`/\\u00a0mil.\\u00a0Kč`/' docs/mockups/shared.js && grep -n -E
+      "762|mil\." docs/mockups/s…)
+  ⎿  82:  if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace("."
+     , ",")} mil. Kč`;
+     179:    <li>Jinak platíte daň ze zisku 15\u00a0%. Sazba 23\u00a0% plat
+     … +3 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/shared.js (+1 -1)
+      176    <ul>
+      177      <li>Držíte déle než 3 roky: zisk z prodeje je bez daně${n(
+           "zdp")}.</li>
+      178      <li>Prodáte za max. 100\u00a0000\u00a0Kč za rok (počítá se
+            celá částka prodeje, ne zisk): bez daně${n("zdp")}.</li>
+      179 -    <li>Jinak platíte daň ze zisku 15\u00a0%. Sazba 23\u00a0% 
+          -platí až pro příjmy nad 1\u00a0762 812\u00a0Kč za rok (2026)${
+          -n("fsRate")}.</li>                                            
+      179 +    <li>Jinak platíte daň ze zisku 15\u00a0%. Sazba 23\u00a0% 
+          +platí až pro příjmy nad 1\u00a0762\u00a0812\u00a0Kč za rok (20
+          +26)${n("fsRate")}.</li>                                       
+      180    </ul>
+      181    <p class="mail-note">Přepočet měny a párování nákupů s prode
+           ji probírejte s daňovým poradcem.</p>
+      182  
+
+⏺ Bash(python3 - <<'EOF'
+      p='docs/mockups/shared.js'; s=open(p).read()…)
+  ⎿  '  if (n >= 1e6) return `cca\\u00a0${(n / 1e6).toFixed(2).replace(".",
+      ",")} mil.\xa0Kč`;'
+       if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace(".", "
+     … +2 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/shared.js (+1 -1)
+      79  const kc = (n) => `${Math.round(n).toLocaleString("cs-CZ")} Kč`
+          ;
+      80  const kcFee = (n) => `${n.toLocaleString("cs-CZ", { minimumFrac
+          tionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })} Kč`;
+      81  function approx(n) {
+      82 -  if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace
+         -(".", ",")} mil. Kč`;                                          
+      82 +  if (n >= 1e6) return `cca\u00a0${(n / 1e6).toFixed(2).replace
+         +(".", ",")}\u00a0mil.\u00a0Kč`;                                
+      83    return `cca\u00a0${kc(Math.round(n / 1000) * 1000)}`;
+      84  }
+      85  // Monthly amount for 120 months, the yearly average turned int
+          o a monthly rate.
+
+⏺ Now the ads.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; C="/Applications/Google
+      Chrome.app/C…)
+  ⎿  (No output)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Ad B overflows: "Nasdaq-100" wraps and pushes the CTA off the frame. Shrinking
+  it, and naming the actual EU fund under each index so the line isn't
+  repeated.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads && python3 -
+      <<'EOF'
+      p='ad-b.html'; s=open(p).read()…)
+  ⎿  Updated ads/ad-b.html (+6 -6)
+       8  <link rel="stylesheet" href="ad.css">
+       9  <style>
+      10    /* Ad B, the answer hook: the index they know, with the EU fu
+          nd under it. */
+      11 -  .rows { list-style: none; margin: 0 0 22px; padding: 0; }    
+      11 +  .rows { list-style: none; margin: 14px 0 20px; padding: 0; } 
+      12    .rows li { padding: 12px 0 13px; border-top: 2px solid var(--
+          ink); }
+      13    .rows li:last-child { border-bottom: 2px solid var(--ink); }
+      14 -  .idx { display: block; font-weight: 900; font-variation-setti
+         -ngs: "wdth" 125; letter-spacing: -0.035em; line-height: 0.95; f
+         -ont-size: 58px; }                                              
+      14 +  .idx { display: block; font-weight: 900; font-variation-setti
+         +ngs: "wdth" 112; letter-spacing: -0.035em; line-height: 0.95; f
+         +ont-size: 50px; white-space: nowrap; }                         
+      15    .eu { display: flex; align-items: center; gap: 8px; margin-to
+          p: 6px; font-weight: 700; font-size: 16px; }
+      16    .eu::before { content: ""; flex: none; width: 20px; height: 2
+          0px; border-radius: 50%; background: var(--red) url("data:image
+          /svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0
+           20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='whi
+          te' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='
+          round'/%3E%3C/svg%3E") center/20px no-repeat; }
+      17 -  .hook { font-size: 27px; }                                   
+      17 +  .hook { font-size: 26px; }                                   
+      18  </style>
+      19  </head>
+      20  <body>
+      21 -  <div class="ad" role="img" aria-label="Reklama B: S&P 500 a N
+         -asdaq-100 s evropským fondem, text S&P 500 i Nasdaq-100 koupíte
+         - i v Evropě. Ukážeme vám, který fond a kde.">                  
+      21 +  <div class="ad" role="img" aria-label="Reklama B: S&P 500 a N
+         +asdaq-100 s evropskými fondy iShares, text S&P 500 i Nasdaq-100
+         + koupíte i v Evropě. Ukážeme vám, který fond a kde.">          
+      22      <div class="logo">ETF Match<span>.</span></div>
+      23      <div class="visual">
+      24        <ul class="rows" aria-hidden="true">
+      25 -        <li><span class="idx">S&amp;P 500</span><span class="eu
+         -">evropský fond, stejný index</span></li>                      
+      26 -        <li><span class="idx">Nasdaq-100</span><span class="eu"
+         ->evropský fond, stejný index</span></li>                       
+      25 +        <li><span class="idx">S&amp;P 500</span><span class="eu
+         +">iShares Core S&amp;P 500</span></li>                         
+      26 +        <li><span class="idx">Nasdaq-100</span><span class="eu"
+         +>iShares NASDAQ 100</span></li>                                
+      27        </ul>
+      28        <p class="hook">S&amp;P 500 i Nasdaq-100 koupíte i v Evro
+          pě. Ukážeme vám, který fond a kde.</p>
+      29      </div>
+  Read 2 files (ctrl+o to expand)
+
+⏺ Two last fixes in A: the arrows don't line up across rows, and the amount
+  chips wrap to two lines.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task && python3 - <<'EOF'
+      p='docs/mockups/page-a.html'; s=open(p).read()…)
+  ⎿  202:    <div class="chips amounts">
+  ⎿  Updated docs/mockups/page-a.html (+4 -2)
+      47    h1 .second { display: block; margin-top: 6px; }
+      48    .why { margin: 12px 0 16px; font-size: 15px; line-height: 1.4
+          5; color: var(--muted); }
+      49    .pairs { list-style: none; margin: 0 0 16px; padding: 4px 16p
+          x; background: var(--card); border-radius: var(--r-card); }
+      50 -  .pair { display: grid; grid-template-columns: auto auto 1fr; 
+         -align-items: center; gap: 10px; padding: 11px 0; }             
+      50 +  .pair { display: grid; grid-template-columns: 128px auto 1fr;
+         + align-items: center; gap: 10px; padding: 11px 0; }            
+      51    .pair + .pair { border-top: 1px solid var(--line); }
+      52    .pair-us { font-weight: 800; font-size: 17px; line-height: 1.
+          15; font-variation-settings: "wdth" 112; }
+      53    .pair-us s { white-space: nowrap; text-decoration-color: var(
+          --red); text-decoration-thickness: 3px; }
+     ...
+      70      min-height: 44px; padding: 0 16px; border-radius: var(--r-c
+          ontrol); border: 1.5px solid var(--ink);
+      71      background: transparent; color: var(--ink); font: 600 15px/
+          1 "Archivo", sans-serif; cursor: pointer;
+      72    }
+      73 +  .chips.amounts { display: grid; grid-template-columns: repeat
+         +(4, 1fr); gap: 6px; }                                          
+      74 +  .chips.amounts .chip { padding: 0 4px; font-size: 14px; }    
+      75    .chip[aria-pressed="true"] { background: var(--ink); color: #
+          fff; }
+      76  
+      77    /* match card */
+     ...
+      199        <button class="chip" data-index="world">Svět</button>
+      200      </div>
+      201      <h2 class="q">Kolik chcete investovat měsíčně?</h2>
+      200 -    <div class="chips">                                       
+      202 +    <div class="chips amounts">                               
+      203        <button class="chip" data-amount="1000">1&nbsp;000&nbsp;
+           Kč</button>
+      204        <button class="chip" data-amount="3000">3&nbsp;000&nbsp;
+           Kč</button>
+      205        <button class="chip" data-amount="5000">5&nbsp;000&nbsp;
+           Kč</button>
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Both pages and both ads render cleanly at 375 px. Adding the new folders to
+  the CLAUDE.md map.
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 2 lines
+      37  - `docs/decisions.md` decisions with reasons
+      38  - `docs/glossary.md` term · plain explanation · Czech page word
+          ing
+      39  - `docs/research/` sourced data from C1, one file per topic; st
+          art at its README
+      40 +- `docs/mockups/` static page mockups from C3; `shared.js` hold
+         +s their data and behaviour                                     
+      41 +- `ads/` the two Meta ads (A problem hook, B answer hook) on on
+         +e template, `ad.css`                                           
+      42  - `.claude/skills/implementation-start` and `implementation-end
+          ` open and close a TODO section
+      43  - `.claude/skills/implementation-plan` grilling for planning st
+          eps, one question at a time
+      44  - `.claude/skills/` third-party skills, pinned in `skills-lock.
+          json`: lead-magnets, copywriting, cro, ad-creative, analytics, 
+          ab-testing, frontend-design, performance, core-web-vitals, acce
+          ssibility
+
+⏺ I've built both ads and two page mockups. They're ready for you to compare.
+  The C3 box stays unticked until you pick a variant and I've rewritten C5+ in
+  docs/TODO.md.
+
+  To view: ! open docs/mockups/page-a.html docs/mockups/page-b.html 
+  ads/ad-a.html ads/ad-b.html. For the 375 px view, use the browser's device
+  mode. Everything on the pages can be clicked through: the taps, ISIN copy,
+  submitting the form (which opens the e-mail modal), and the FAQ. The browser
+  console shows each track() event.
+
+  Pages. Both have the same content, order and numbers. All numbers come from
+  docs/research/, with a source link under each block. Both first screens fit
+  within 375 × 667.
+  - A (the brief's look): warm grey background, white cards, Archivo Expanded
+    headings. The US tickers are struck through in red next to their EU fund.
+    Index and amount are separate chip rows above the match card.
+  - B (a bolder take): white background, no cards, heavy black lines, Schibsted
+    Grotesk. The first screen has large struck-through tickers, and each pair 
+    row is itself the index choice: tapping it picks the index and scrolls down.
+    The match card has index tabs on top, and fees are shown as a small table.
+    This is a real change to the flow, not just to the look.
+
+  Ads. Both use one template in A's look, so the hook is the only thing that
+  differs. A is the problem: VOO / SPY IVV / QQQ struck out. B is the answer:
+  S&P 500 and Nasdaq-100 with their iShares fund names. Under each ad is the
+  Meta text for the post (main text, headline, button, UTM link).
+
+  Changes from C2 wording you should know about:
+  - I added the missing comma to ad B: "Ukážeme vám, který fond a kde."
+  - I dropped "kupte" from "Místo VOO… kupte" because it read like advice.
+  - The match card shows the full fund name, including "UCITS", even though the
+    glossary keeps that word off the page. It's the name the visitor searches
+    for in the broker's app.
+  - XTB lists the Nasdaq and MSCI World funds by name only, without the ISIN, so
+    the source note says so.
+
+  Proposed C5+ sections:
+  - C5 First screen: header, headline, US → EU pairs from src/data/
+  - C6 Taps and match card: index/amount state, ISIN copy, top-5 bars, fees row,
+    source notes
+  - C7 The ask and e-mail modal: the form and its checks, consent, done state,
+    and the e-mail built from src/data/, with the 10-year calculation tested
+  - C8 FAQ, footer disclaimer, page sources
+  - C9 Measurement: track(), the UTM variant, all 12 events, tests
+  - C10 Launch readiness: privacy policy, Open Graph, mobile performance and
+    accessibility pass, ads exported to 1080 × 1350 PNG
+  - C11 README
+
+  Which page variant should C4 take its design tokens from: A, B, or a mix (for
+  example A's look with B's tappable pair rows)? And do the C5+ sections work
+  for you?
+
+✻ Sautéed for 9m 50s · done 1:54 PM
+
+※ recap: We're on C3 of ETF Match: two ads and two page mockups are built and checked at 375 px. Next, pick page A, B or a mix, and confirm the proposed C5+ sections so I can rewrite TODO.md. (disable recaps in /config)
+
+❯ Mockup                                                                        
+  - A is my preference                                                          
+  - remove the strikethrough                                                    
+  - make sure in the header part that both ETF sides have identical font size   
+  - make things not-rounded                                                     
+  - for future UX patterns, add some animations, smooth transitions and         
+  animation on value changes                                                    
+  - the title should be one sentence                                            
+  - remove my name                                                              
+                                                                                
+  Ads                                                                           
+  - no strikethrough                                                            
+  - both ads should mention the NYSE mainly, so in variant A just invert the    
+  labels                                                                        
+  - in variant B mention something like "American ETFs have their similar ones  
+  - both should have same pattern, big header, sub and the button should be     
+  full width padded horizontally                                                
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Updating A, the shared script (animations), the ads, and recording these as C3
+  decisions. First the shared script's render code.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'PYEOF'
+      p='docs/mockups/shared.js'; s=open(p).read()…)
+  ⎿  ok
+     304:    error.hidden = false;
+  ⎿  Updated docs/mockups/shared.js (+87 -22)
+       90  const srcLink = (key) => `<a href="${SRC[key].url}" target="_b
+           lank" rel="noopener">${SRC[key].title}, ${SRC[key].date}</a>`;
+       91  
+       92  // ---------- page rendering ----------
+       93 -function bind(name, html) {                                   
+       94 -  for (const el of document.querySelectorAll(`[data-bind="${na
+          -me}"]`)) el.innerHTML = html;                                 
+       93 +// Motion pattern (C3): text that changes fades in, numbers co
+          +unt to their                                                  
+       94 +// new value, bars slide (CSS). Nothing moves with prefers-red
+          +uced-motion.                                                  
+       95 +const reduce = matchMedia("(prefers-reduced-motion: reduce)").
+          +matches;                                                      
+       96 +const ease = (t) => 1 - (1 - t) ** 3;                         
+       97 +                                                              
+       98 +function swapIn(el) {                                         
+       99 +  if (reduce) return;                                         
+      100 +  el.animate([{ opacity: 0, transform: "translateY(6px)" }, { 
+          +opacity: 1, transform: "none" }], { duration: 260, easing: "ea
+          +se-out" });                                                   
+      101 +}                                                             
+      102 +                                                              
+      103 +function bind(name, html, { animate = true } = {}) {          
+      104 +  for (const el of document.querySelectorAll(`[data-bind="${na
+          +me}"]`)) {                                                    
+      105 +    if (el.innerHTML === html) continue;                      
+      106 +    const first = !el.dataset.ready;                          
+      107 +    el.innerHTML = html;                                      
+      108 +    el.dataset.ready = "1";                                   
+      109 +    if (animate && !first) swapIn(el);                        
+      110 +  }                                                           
+      111 +}                                                             
+      112 +                                                              
+      113 +function tween(el, to, fmt) {                                 
+      114 +  const from = el._v ?? to;                                   
+      115 +  el._v = to;                                                 
+      116 +  cancelAnimationFrame(el._raf);                              
+      117 +  if (reduce || from === to) return void (el.textContent = fmt
+          +(to));                                                        
+      118 +  const t0 = performance.now();                               
+      119 +  const step = (now) => {                                     
+      120 +    const t = Math.min(1, (now - t0) / 450);                  
+      121 +    el.textContent = fmt(from + (to - from) * ease(t));       
+      122 +    if (t < 1) el._raf = requestAnimationFrame(step);         
+      123 +  };                                                          
+      124 +  el._raf = requestAnimationFrame(step);                      
+      125 +}                                                             
+      126 +                                                              
+      127 +function bindNum(name, value, fmt) {                          
+     … 106 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -i '' 's/^    error.hidden = false;$/    error.hidden = false;\n
+      swapIn(error);/' docs/mockups/shared.js && sed -n 300,308p
+      docs/mockups/shared.js && nod…)
+  ⎿        empty: "Vyplňte e-mail, na který plán pošleme.",
+           invalid: "E-mail má chybný tvar, zkontrolujte ho.",
+           no_consent: "Bez souhlasu plán poslat nemůžeme.",
+     … +7 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/shared.js (+1 -0)
+      302        no_consent: "Bez souhlasu plán poslat nemůžeme.",
+      303      }[errorType];
+      304      error.hidden = false;
+      305 +    swapIn(error);                                            
+      306      track("form_error", { error_type: errorType });
+      307      return;
+      308    }
+
+⏺ Now rewriting page A with the changes: one-sentence headline, no
+  strike-through, equal type size on both sides of the pairs, square corners,
+  motion, and the name removed.
+
+⏺ Bash(python3 - <<'PYEOF'
+      p='docs/mockups/page-a.html'; s=open(p).read()…)
+  ⎿  23:    --radius: 0;
+     docs/mockups/page-b.html:244:      <p class="consent">Odesláním souhla
+     síte, že váš e-mail použijeme jen k zaslání plánu. Správce údajů: Mart
+     … +4 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/page-a.html (+79 -57)
+       8  <link rel="preconnect" href="https://fonts.gstatic.com" crossor
+          igin>
+       9  <link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+          th,wght@62..125,400..900&display=swap" rel="stylesheet">
+      10  <style>
+      11 -  /* Variant A: the brief's direction. Warm grey ground, white 
+         -cards,                                                         
+      12 -     black type, one red. The memorable thing: US tickers struc
+         -k out in red. */                                               
+      11 +  /* Variant A, chosen in C3: warm grey ground, white cards, bl
+         +ack type,                                                      
+      12 +     one red, square corners everywhere. Motion: one load seque
+         +nce on the                                                     
+      13 +     pairs, then motion only in answer to a tap (numbers count,
+         + text fades,                                                   
+      14 +     bars slide, accordions and the modal open smoothly). */   
+      15    :root {
+      16      --bg: #e6e3de;
+      17      --card: #ffffff;
+     ...
+      20      --line: #d4d0ca;
+      21      --red: #d7000f;
+      22      --red-dark: #a8000c;
+      21 -    --r-card: 14px;                                            
+      22 -    --r-control: 999px;                                        
+      23 +    --radius: 0;                                               
+      24 +    --ease-out: cubic-bezier(.2, .8, .2, 1);                   
+      25      --gutter: 16px;
+      26    }
+      27    * { box-sizing: border-box; }
+      26 -  html { -webkit-text-size-adjust: 100%; }                     
+      28 +  html { -webkit-text-size-adjust: 100%; scroll-behavior: smoot
+         +h; interpolate-size: allow-keywords; }                         
+      29    body {
+      30      margin: 0;
+      31      background: var(--bg);
+     ...
+       45  
+       46    /* first screen */
+       47    .hero { padding: 6px 0 28px; }
+       46 -  h1 { font-size: 27px; line-height: 1.08; font-weight: 850; }
+       47 -  h1 .second { display: block; margin-top: 6px; }             
+       48 +  h1 { font-size: 28px; line-height: 1.08; font-weight: 850; }
+       49    .why { margin: 12px 0 16px; font-size: 15px; line-height: 1.
+           45; color: var(--muted); }
+       49 -  .pairs { list-style: none; margin: 0 0 16px; padding: 4px 16
+          -px; background: var(--card); border-radius: var(--r-card); }  
+       50 -  .pair { display: grid; grid-template-columns: 128px auto 1fr
+          -; align-items: center; gap: 10px; padding: 11px 0; }          
+       50 +  .pairs { margin: 0 0 16px; padding: 10px 16px 4px; backgroun
+          +d: var(--card); border-radius: var(--radius); }               
+       51 +  .pairs-head, .pair { display: grid; grid-template-columns: 1
+          +12px 20px 1fr; column-gap: 8px; }                             
+       52 +  .pairs-head { font-size: 12px; color: var(--muted); padding-
+          +bottom: 6px; border-bottom: 2px solid var(--ink); }           
+       53 +  .pairs-head span:last-child { grid-column: 3; }             
+     … 215 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -i '' -e 's/Správce údajů: Martin G (demo projekt), kontakt
+      doplníme\./Správce údajů: provozovatel ETF Match (demo, jméno a kontakt
+      doplníme před spuštěním)…)
+  ⎿  no name left
+  ⎿  Updated docs/mockups/page-b.html (+2 -2)
+      241        <label class="field" for="email">Váš e-mail</label>
+      242        <input id="email" type="email" name="email" autocomplete
+           ="email" inputmode="email" placeholder="jmeno@email.cz" requir
+           ed>
+      243        <p class="error" data-form-error hidden role="alert"></p
+           >
+      244 -      <p class="consent">Odesláním souhlasíte, že váš e-mail p
+          -oužijeme jen k zaslání plánu. Správce údajů: Martin G (demo pr
+          -ojekt), kontakt doplníme. Souhlas můžete kdykoli odvolat.</p> 
+      244 +      <p class="consent">Odesláním souhlasíte, že váš e-mail p
+          +oužijeme jen k zaslání plánu. Správce údajů: provozovatel ETF 
+          +Match (demo, jméno a kontakt doplníme před spuštěním). Souhlas
+          + můžete kdykoli odvolat.</p>                                  
+      245        <button class="cta" type="submit">Poslat plán</button>
+      246      </form>
+      247      <div class="done" data-form-done hidden>
+     ...
+      268    <footer>
+      269      <p><strong>Nejde o investiční doporučení.</strong> Stránka
+            ukazuje historická data indexů, ne předpověď. Minulé výnosy n
+           ezaručují budoucí a investice může ztratit hodnotu. Broker je 
+           uveden jen jako místo, kde fond najdete, ne jako doporučení.</
+           p>
+      270      <p>Proč americké ETF většinou nekoupíte: <a href="https://
+           eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R1
+           286">nařízení EU 1286/2014</a>; <a href="https://www.xtb.com/i
+           nt/help-center/stocks-and-etfs/adding-a-new-instrument-to-the-
+           offer">XTB, nápověda, 3. 2. 2026</a>. Burzy amerických fondů: 
+           prospekty na SEC EDGAR (VOO, SPY, IVV a URTH na NYSE Arca, QQQ
+            na Nasdaqu).</p>
+      271 -    <p>Správce údajů: Martin G (demo projekt).</p>            
+      271 +    <p>Správce údajů: provozovatel ETF Match (demo, jméno a ko
+          +ntakt doplníme před spuštěním).</p>                           
+      272    </footer>
+      273  </div>
+      274  
+
+⏺ Ads next: both on one pattern (big header, sub, full-width button), no
+  strike-through, NYSE in both headers.
+
+⏺ Bash(cd /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads && cat > ad.css
+      <<'EOF'
+      /* Shared template for both ads: a static Meta feed image, 4:5.…)
+  ⎿  Updated ads/ad-a.html (+5 -18)
+       6  <title>ETF Match: ad A</title>
+       7  <link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+          th,wght@62..125,400..900&display=swap" rel="stylesheet">
+       8  <link rel="stylesheet" href="ad.css">
+       9 -<style>                                                        
+      10 -  /* Ad A, the problem hook: the tickers they know, struck out.
+         - */                                                            
+      11 -  .tickers { margin: 0 0 22px; }                               
+      12 -  .tickers s { display: block; font-weight: 900; font-variation
+         --settings: "wdth" 125; letter-spacing: -0.04em; line-height: 0.
+         -92;                                                            
+      13 -    text-decoration-color: var(--red); text-decoration-thicknes
+         -s: 9px; }                                                      
+      14 -  .t1 { font-size: 118px; }                                    
+      15 -  .t2 { font-size: 64px; color: #3a3835; }                     
+      16 -  .t3 { font-size: 40px; color: var(--muted); }                
+      17 -</style>                                                       
+       9  </head>
+      10  <body>
+      20 -  <div class="ad" role="img" aria-label="Reklama A: přeškrtnuté
+         - VOO, SPY, IVV a QQQ, text Chcete ETF z NYSE? V Česku ho většin
+         -ou nekoupíte.">                                                
+      11 +  <div class="ad" role="img" aria-label="Reklama A: Chcete ETF 
+         +z NYSE? V Česku ho většinou nekoupíte. Tlačítko Co místo toho."
+         +>                                                              
+      12      <div class="logo">ETF Match<span>.</span></div>
+      22 -    <div class="visual">                                       
+      23 -      <div class="tickers" aria-hidden="true">                 
+      24 -        <s class="t1">VOO</s>                                  
+      25 -        <s class="t2">SPY IVV</s>                              
+      26 -        <s class="t3">QQQ</s>                                  
+      27 -      </div>                                                   
+      28 -      <p class="hook">Chcete ETF z NYSE? V Česku ho většinou ne
+         -koupíte.</p>                                                   
+      13 +    <div class="copy">                                         
+      14 +      <p class="header">Chcete ETF z&nbsp;NYSE? V&nbsp;Česku ho
+         + většinou nekoupíte.</p>                                       
+      15 +      <p class="sub">VOO, SPY ani IVV vám většina brokerů v&nbs
+         +p;EU neprodá. Ukážeme vám evropský fond se stejným indexem.</p>
+      16      </div>
+      17      <span class="cta">Co místo toho</span>
+      18    </div>
+     ...
+      20    <section class="spec">
+      21      <h2>Ad A: problém (Meta feed, 4:5)</h2>
+      22      <dl>
+      36 -      <dt>Primární text</dt><dd>VOO, SPY nebo QQQ znáte z videí
+         - z USA. Většina brokerů v EU vám je ale neprodá. Ukážeme vám ev
+         -ropský fond se stejným indexem a kde ho koupíte.</dd>          
+      23 +      <dt>Primární text</dt><dd>VOO, SPY nebo IVV znáte z videí
+         + z USA. Většina brokerů v EU vám je ale neprodá. Ukážeme vám ev
+         +ropský fond se stejným indexem a kde ho koupíte.</dd>          
+      24        <dt>Titulek</dt><dd>Co místo toho</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26        <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+          =meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+          ;utm_content=ad-a</dd>
+  ⎿  Updated ads/ad-b.html (+5 -18)
+       6  <title>ETF Match: ad B</title>
+       7  <link href="https://fonts.googleapis.com/css2?family=Archivo:wd
+          th,wght@62..125,400..900&display=swap" rel="stylesheet">
+       8  <link rel="stylesheet" href="ad.css">
+       9 -<style>                                                        
+      10 -  /* Ad B, the answer hook: the index they know, with the EU fu
+         -nd under it. */                                                
+      11 -  .rows { list-style: none; margin: 14px 0 20px; padding: 0; } 
+      12 -  .rows li { padding: 12px 0 13px; border-top: 2px solid var(--
+         -ink); }                                                        
+      13 -  .rows li:last-child { border-bottom: 2px solid var(--ink); } 
+      14 -  .idx { display: block; font-weight: 900; font-variation-setti
+         -ngs: "wdth" 112; letter-spacing: -0.035em; line-height: 0.95; f
+         -ont-size: 50px; white-space: nowrap; }                         
+      15 -  .eu { display: flex; align-items: center; gap: 8px; margin-to
+         -p: 6px; font-weight: 700; font-size: 16px; }                   
+      16 -  .eu::before { content: ""; flex: none; width: 20px; height: 2
+         -0px; border-radius: 50%; background: var(--red) url("data:image
+         -/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0
+         - 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='whi
+         -te' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='
+         -round'/%3E%3C/svg%3E") center/20px no-repeat; }                
+      17 -  .hook { font-size: 26px; }                                   
+      18 -</style>                                                       
+       9  </head>
+      10  <body>
+      21 -  <div class="ad" role="img" aria-label="Reklama B: S&P 500 a N
+         -asdaq-100 s evropskými fondy iShares, text S&P 500 i Nasdaq-100
+         - koupíte i v Evropě. Ukážeme vám, který fond a kde.">          
+      11 +  <div class="ad" role="img" aria-label="Reklama B: ETF z NYSE 
+         +mají evropské protějšky. Tlačítko Najít fond.">                
+      12      <div class="logo">ETF Match<span>.</span></div>
+      23 -    <div class="visual">                                       
+      24 -      <ul class="rows" aria-hidden="true">                     
+      25 -        <li><span class="idx">S&amp;P 500</span><span class="eu
+         -">iShares Core S&amp;P 500</span></li>                         
+      26 -        <li><span class="idx">Nasdaq-100</span><span class="eu"
+         ->iShares NASDAQ 100</span></li>                                
+      27 -      </ul>                                                    
+      28 -      <p class="hook">S&amp;P 500 i Nasdaq-100 koupíte i v Evro
+         -pě. Ukážeme vám, který fond a kde.</p>                         
+      13 +    <div class="copy">                                         
+      14 +      <p class="header">ETF z&nbsp;NYSE mají evropské protějšky
+         +.</p>                                                          
+      15 +      <p class="sub">S&amp;P 500 i Nasdaq-100 koupíte i v&nbsp;
+         +Evropě, ve fondu se stejným indexem. Ukážeme vám, který fond a 
+         +kde.</p>                                                       
+      16      </div>
+      17      <span class="cta">Najít fond</span>
+      18    </div>
+     ...
+      20    <section class="spec">
+      21      <h2>Ad B: odpověď (Meta feed, 4:5)</h2>
+      22      <dl>
+      36 -      <dt>Primární text</dt><dd>Na S&amp;P 500 i Nasdaq-100 exi
+         -stuje evropský fond, který v Česku koupíte. Vyberte index a uká
+         -žeme vám ISIN fondu a brokery, kde ho najdete.</dd>            
+      23 +      <dt>Primární text</dt><dd>Na VOO nebo SPY existuje evrops
+         +ký fond se stejným indexem, který v Česku koupíte. Vyberte inde
+         +x a ukážeme vám ISIN fondu a brokery, kde ho najdete.</dd>     
+      24        <dt>Titulek</dt><dd>Najít fond</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26        <dt>Odkaz</dt><dd>https://&lt;doména z C4&gt;/?utm_source
+          =meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp
+          ;utm_content=ad-b</dd>
+  ⎿  Updated ads/ad.css (+15 -9)
+      1  /* Shared template for both ads: a static Meta feed image, 4:5.
+      2     Laid out at 432 x 540 CSS px; export at device scale 2.5 = 10
+         80 x 1350.
+      3 -   Same template for A and B so the hook is the only variable (d
+        -ecision 18). */                                                 
+      3 +   One pattern for A and B (logo, big header, sub, full-width bu
+        +tton), so                                                       
+      4 +   the hook is the only variable (decision 18). Square corners, 
+        +as on the page. */                                              
+      5  :root {
+      6    --bg: #e6e3de;
+      6 -  --card: #ffffff;                                              
+      7    --ink: #000000;
+      8    --muted: #5c5853;
+      9    --line: #d4d0ca;
+     ...
+      16    display: grid; justify-items: center; gap: 20px;
+      17  }
+      18  .ad {
+      19 -  position: relative; width: 432px; max-width: 100%; aspect-rat
+         -io: 4 / 5; overflow: hidden;                                   
+      20 -  background: var(--bg); padding: 28px 28px 24px; display: flex
+         -; flex-direction: column;                                      
+      21 -  font-variation-settings: "wdth" 100;                         
+      19 +  width: 432px; max-width: 100%; aspect-ratio: 4 / 5; overflow:
+         + hidden;                                                       
+      20 +  background: var(--bg); padding: 28px 28px 28px; display: flex
+         +; flex-direction: column;                                      
+      21  }
+      22  .logo { font-weight: 900; font-size: 18px; font-variation-setti
+          ngs: "wdth" 125; letter-spacing: -0.02em; }
+      23  .logo span { color: var(--red); }
+      25 -.visual { flex: 1; display: flex; flex-direction: column; justi
+         -fy-content: center; }                                          
+      26 -.hook { font-size: 31px; line-height: 1.06; font-weight: 850; f
+         -ont-variation-settings: "wdth" 118; letter-spacing: -0.015em; m
+         -argin: 0 0 18px; }                                             
+      27 -.cta { align-self: flex-start; background: var(--red); color: #
+         -fff; border-radius: 999px; padding: 13px 22px; font-weight: 800
+         -; font-size: 17px; font-variation-settings: "wdth" 110; }      
+      28 -.spec { width: 432px; max-width: 100%; background: #fff; border
+         -: 1px solid var(--line); border-radius: 12px; padding: 14px 16p
+         -x; font-size: 14px; }                                          
+      24 +.copy { flex: 1; display: flex; flex-direction: column; justify
+         +-content: center; }                                            
+      25 +.header {                                                      
+      26 +  margin: 0; font-size: 44px; line-height: 1; font-weight: 900;
+      27 +  font-variation-settings: "wdth" 115; letter-spacing: -0.025em
+         +;                                                              
+      28 +}                                                              
+      29 +.sub { margin: 18px 0 0; padding-top: 14px; border-top: 3px sol
+         +id var(--ink); font-size: 18px; line-height: 1.35; font-weight:
+         + 500; }                                                        
+      30 +.cta {                                                         
+      31 +  display: block; width: 100%; padding: 17px 24px; background: 
+         +var(--red); color: #fff; text-align: center;                   
+      32 +  font-weight: 800; font-size: 19px; font-variation-settings: "
+         +wdth" 110;                                                     
+      33 +}                                                              
+      34 +.spec { width: 432px; max-width: 100%; background: #fff; border
+         +: 1px solid var(--line); padding: 14px 16px; font-size: 14px; }
+      35  .spec h2 { font-size: 15px; margin: 0 0 8px; }
+      36  .spec dl { margin: 0; display: grid; grid-template-columns: 110
+          px 1fr; gap: 6px 10px; }
+      37  .spec dt { color: var(--muted); }
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Ads match. Checking page A at 375 px.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; C="/Applications/Google
+      Chrome.app/C…)
+  ⎿  (No output)
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ The after-tap capture caught animations mid-flight (faded text, grey chips).
+  I'll check whether they actually finish or stall.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; C="/Applications/Google
+      Chrome.app/C…)
+  ⎿  <html><head></head><body><iframe id="f" src="file:///Users/martingnebu
+     s/Martin/GIT-MG/clientelo-task/docs/mockups/page-a.html" style="width:
+     375px;height:900px"></iframe><pre id="out">t0: running=20 fundOpacity=
+     … +6 lines (ctrl+o to expand)
+
+⏺ Headless virtual time doesn't run animation frames, so that test can't tell.
+  I'll drive the system Chrome with puppeteer-core from the scratchpad, in real
+  time.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; mkdir -p $S/pp && cd
+      $S/pp && npm in…)
+  ⎿  mid ter: 0,20 % end: {"ter":"0,30 %","fee":"50 Kč","opacity":"1","runn
+     ing":0}
+     details height mid/end: 164.15625 177
+     … +4 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to 
+     /Users/martingnebus/Martin/GIT-MG/clientelo-task
+  ⎿  (timeout 3m)
+
+⏺ Everything animates and finishes: TER counts 0,07 → 0,30, the fund name fades
+  in, the accordion expands, the modal fades in and closes. Quick look at the
+  match card after the taps.
+  Read 1 file (ctrl+o to expand)
+
+⏺ All checks pass. Now recording the C3 decisions and turning the C5+ outline
+  into concrete sections.
+
+⏺ Bash(cat >> docs/decisions.md <<'EOF'…)
+  ⎿  # TODO
+
+     The commit plan. One section per commit, in order. Idea and design com
+     … +12 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+43 -10)
+      1  # TODO
+      2  
+      3  The commit plan. One section per commit, in order. Idea and desi
+         gn come
+      4 -first, the app is set up once they are agreed. C5 and later are 
+        -an outline;                                                     
+      5 -C3 turns them into concrete sections.                           
+      4 +first, the app is set up once they are agreed. C5 and later were
+        + planned                                                        
+      5 +in C3 from the agreed mockup (`docs/mockups/page-a.html`).      
+      6  
+      7  ## C1 Research
+      8  
+     ...
+      16  
+      17  ## C3 Design Prep
+      18  
+      19 -- [ ] Based on decision in C2, create two variants of both ads 
+         -and webpages as static HTML. Ads go to `ads/`, page mockups to 
+         -`docs/mockups/`. Upon agreeing, structure the next tasks that w
+         -ill scaffold the development of the subsequent components one b
+         -y one (C5 and further), replacing the outline below.           
+      19 +- [x] Based on decision in C2, create two variants of both ads 
+         +and webpages as static HTML. Ads go to `ads/`, page mockups to 
+         +`docs/mockups/`. Upon agreeing, structure the next tasks that w
+         +ill scaffold the development of the subsequent components one b
+         +y one (C5 and further), replacing the outline below.           
+      20  
+      21  ## C4 Setup
+      22  
+     ...
+      29  - [ ] Deploy the empty shell to Vercel from GitHub, so every la
+          ter commit has a live URL. Note the URL in the README.
+      30  - [ ] README: how to run, project structure rules.
+      31  
+      32 -## Outline for C5 and further (refined in C3)                  
+      32 +## C5 First screen                                             
+      33  
+      34 -- Page sections, in the order decided, rendering data from `src
+         -/data/`.                                                       
+      35 -- The interactive element(s), each one leading to the form.    
+      36 -- The form: on submit, show a preview of what the e-mail would 
+         -contain (demo; nothing stored or sent).                        
+      37 -- Measurement: a `track(event, props)` function that only conso
+         -le-logs, called at every step from arrival to submit, with ad A
+         -/B attribution.                                                
+      38 -- Launch readiness: privacy policy, consent, disclaimer, Open G
+         -raph, mobile performance check.                                
+      39 -- README: section order, expected conversion, three A/B hypothe
+         -ses, AI process, interpretation, what is missing.              
+      34 +- [ ] Header with the ETF Match wordmark.                      
+      35 +- [ ] Headline, the KID line and the US → EU pairs list, render
+         +ed from `src/data/`, with the load sequence (decision 24).     
+      36 +- [ ] Red CTA scrolls to the taps.                             
+      37 +- [ ] Fits 375 × 667: check with a screenshot.                 
+      38 +                                                               
+      39 +## C6 Taps and match card                                      
+      40 +                                                               
+      41 +- [ ] Index and amount chips (one client component, one state).
+      42 +- [ ] Match card as in decision 14: fund name, ISIN with copy, 
+         +TER vs the US fund, top 5 bars and company count, 10-year retur
+         +n with its warning, brokers, fees row, source notes. All values
+         + from `src/data/`.                                             
+      43 +- [ ] Motion on change (decision 24): numbers count, text fades
+         +, bars slide; nothing under reduced motion.                    
+     … 29 more lines (ctrl+o to expand)
+  ⎿  Updated docs/decisions.md (+56 -0)
+      218      inside of `track()`; analytics needs a cookie-consent step
+            before it
+      219      goes live. *Reason:* the demo only logs; EU consent rules 
+           apply as
+      220      soon as a real tool collects data.
+      221 +                                                              
+      222 +## C3 Design (2026-10-15)                                     
+      223 +                                                              
+      224 +Agreed in the C3 review of the static mockups (`docs/mockups/`
+          +, `ads/`).                                                    
+      225 +Where a point changes a C2 decision, it says which one.       
+      226 +                                                              
+      227 +21. **Page variant A.** Warm grey ground, white cards, black t
+          +ype, one red,                                                 
+      228 +    Archivo (variable width) for everything. Tokens for C4: ba
+          +ckground                                                      
+      229 +    `#e6e3de`, card `#ffffff`, ink `#000000`, muted `#5c5853`,
+          + line                                                         
+      230 +    `#d4d0ca`, red `#d7000f`, red on hover `#a8000c`. Variant 
+          +B (no cards,                                                  
+      231 +    each pair row is the index tap) stays in `docs/mockups/` a
+          +s the option                                                  
+      232 +    not taken. *Reason:* the user's choice; it is the brief's 
+          +direction.                                                    
+      233 +                                                              
+      234 +22. **No strike-through anywhere** (page and ads). In the pair
+          +s list the                                                    
+      235 +    US and EU names have the same size; the US side is grey an
+          +d the                                                         
+      236 +    columns are headed "Z NYSE, většinou nekoupíte" and "V Evr
+          +opě, stejný                                                   
+      237 +    index". *Reason:* agreed in review; the pair is a match, n
+          +ot a                                                          
+      238 +    correction, and the column heads carry the "cannot / can b
+          +uy" meaning.                                                  
+      239 +                                                              
+      240 +23. **Square corners on everything** (`--radius: 0`): cards, c
+          +hips,                                                         
+      241 +    buttons, inputs, modal, check marks. *Reason:* agreed in r
+          +eview.                                                        
+      242 +                                                              
+      243 +24. **Motion pattern.** One load sequence: the pair rows rise 
+          +in, one                                                       
+      244 +    after another. After that, motion only answers a tap: numb
+          +ers count to                                                  
+      245 +    their new value (450 ms), changed text fades up (260 ms), 
+          +bars slide                                                    
+      246 +    (500 ms), accordions expand, the modal fades up and back d
+          +own. All of                                                   
+      247 +    it is off under `prefers-reduced-motion`. *Reason:* agreed
+          + in review;                                                   
+      248 +    motion shows what a tap changed, and nothing moves on its 
+          +own after                                                     
+      249 +    the first screen.                                         
+      250 +                                                              
+      251 +25. **Headline is one sentence:** "ETF z NYSE si tu většinou n
+          +ekoupíte,                                                     
+      252 +    stejný index v evropském fondu ano." Replaces the two-sent
+          +ence wording                                                  
+      253 +    in decision 11.                                           
+      254 +                                                              
+      255 +26. **No personal name on the page.** The consent text and foo
+          +ter say                                                       
+      256 +    "Správce údajů: provozovatel ETF Match (demo, jméno a kont
+          +akt doplníme                                                  
+      257 +    před spuštěním)". Replaces the controller in decision 15. 
+          +*Open:* the                                                   
+     … 19 more lines (ctrl+o to expand)
+  ⎿  Updated docs/glossary.md (+1 -1)
+      14  | MSCI World | 1 249 companies from several countries, 72.94 % 
+          of it US (index factsheet, 30 Sep 2026). Which countries count 
+          is not in the research yet; check before the page describes it.
+           | Svět (MSCI World) |
+      15  | NYSE | The New York Stock Exchange. VOO, SPY, IVV and URTH ar
+          e listed on NYSE Arca, QQQ on Nasdaq (SEC prospectuses, see res
+          earch/pairs.md). | NYSE; the QQQ row says "(Nasdaq)" |
+      16  | US ETF | A fund registered in the US, e.g. VOO, SPY, IVV, QQQ
+          , URTH. | ETF z NYSE, americké ETF |
+      17 -| EU fund (UCITS ETF) | A fund registered in the EU (here Irela
+         -nd) that EU brokers may sell to retail investors. "UCITS" is no
+         -t used on the page. | evropský fond |                          
+      17 +| EU fund (UCITS ETF) | A fund registered in the EU (here Irela
+         +nd) that EU brokers may sell to retail investors. "UCITS" is no
+         +t used in explanatory copy; it appears only inside a fund's ful
+         +l name. | evropský fond; in ad B "evropský protějšek" |        
+      18  | KID | The key information document EU rules require before a 
+          fund is sold to a retail investor. US issuers do not publish on
+          e. | dokument KID (klíčové informace) |
+      19  | Same index | The EU fund copies the same index as the US fund
+           it replaces. | stejný index |
+      20  | ISIN | A 12-character code that identifies one fund everywher
+          e; the way to find it in a broker's app. | ISIN |
+
+⏺ All changes are in. Closing the section with /implementation-end.
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(ls package.json 2>&1; git status --short; git diff --stat; git log
+      --format='%s%n%b' -3 | head -30; ls ai-log)
+  ⎿  ls: package.json: No such file or directory
+      M CLAUDE.md
+      M docs/TODO.md
+     … +38 lines (ctrl+o to expand)
+
+⏺ I've built the mockups and ads with your changes and checked them in Chrome at
+  375 px. The C3 box is ticked, and C5–C11 are now concrete sections in
+  docs/TODO.md. There's no package.json yet, so pnpm check, pnpm test and pnpm 
+  build were skipped.
+
+  Page A
+  - The headline is now one sentence: "ETF z NYSE si tu většinou nekoupíte,
+    stejný index v evropském fondu ano."
+  - No strike-through anywhere. In the pairs list both sides are 16 px. The US
+    side is grey, and two column heads carry the meaning instead: "Z NYSE,
+    většinou nekoupíte" and "V Evropě, stejný index".
+  - All corners are square.
+  - Motion: on load the pair rows rise in one after another. After that, things
+    move only when tapped:
+    - numbers count to their new value;
+    - changed text fades in and the bars slide;
+    - the FAQ opens smoothly and the e-mail modal fades in and out.
+
+    All of it is off when the phone is set to reduce motion. In a real browser
+    every animation finished and all the tracking events fired.
+  - Your name is gone from both pages. The controller line now says
+    "provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním)".
+    The brief still asks for a named data controller, so filling it in is a task
+    in C10.
+
+  Ads
+  - Both use the same pattern: big header, sub, full-width button. No
+    strike-through, and both headers say NYSE.
+  - A: "Chcete ETF z NYSE? V Česku ho většinou nekoupíte." The sub names VOO,
+    SPY and IVV. I left QQQ out because it trades on Nasdaq, not NYSE.
+  - B: "ETF z NYSE mají evropské protějšky." I used "protějšky" for your
+    "similar ones". The sub keeps "stejný index", because "similar" alone would
+    undersell that the EU fund tracks the same index.
+
+  Docs: decisions 21–28 are added to docs/decisions.md, including the colour
+  tokens for C4. One glossary row is updated for "evropský protějšek" and the
+  full fund names that include "UCITS ETF".
+
+  Before committing: please /export this session to ai-log/003-design-prep.txt.
+
+  For ai-log/mistakes.md (yours to write), the mistakes caught this session:
+  1. The C2 controller wording put your personal name on the page. You caught
+     it.
+  2. Decision 18's ad B wording was missing the comma in "Ukážeme vám, který
+     fond".
+  3. My first screenshots overflowed because headless Chrome won't go below
+     about 500 px wide. I switched to a 375 px frame.
+  4. The strike-through spilled onto the small index labels under the tickers.
+  5. The checklist layout broke around the inline amount, and "15 %" wrapped
+     onto two lines.
+  6. In ad B, "Nasdaq-100" wrapped and pushed the button out of the frame.
+  7. The arrows in A's pairs list didn't line up between rows, and the amount
+     chips wrapped to two lines.
+
+  Commit message:
+  add C3 design prep: page mockups, two ads, C5+ plan
+
+  - docs/mockups/: page variants A (chosen) and B as static HTML with
+    sourced numbers, clickable taps, ISIN copy, e-mail modal, FAQ and a
+    console-only track(); shared.js holds data, behaviour and motion
+  - ads/: ad A (problem) and ad B (answer) on one template: big header
+    with NYSE, sub, full-width button; Meta copy and UTM links per ad
+  - A refined in review: one-sentence headline, no strike-through,
+    equal type in the pairs list, square corners, motion on tap only
+  - docs/decisions.md: C3 decisions 21-28 (variant, tokens, motion,
+    headline, data controller left open, ad wording, fund names)
+  - docs/TODO.md: C3 ticked, outline replaced by sections C5-C11
+  - glossary and CLAUDE.md map updated; ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: CLAUDE.md, docs/TODO.md, docs/decisions.md, docs/glossary.md,
+  docs/mockups/page-a.html, docs/mockups/page-b.html, docs/mockups/shared.js,
+  ads/ad.css, ads/ad-a.html, ads/ad-b.html, ai-log/003-design-prep.txt
+
+  Do you approve the message and the C5–C11 sections? Once the export file
+  exists, I'll commit and push.
+
+✻ Sautéed for 4m 44s · done 2:36 PM
+
+※ recap: I'm closing C3: page A and both ads are revised as you asked, and C5–C11 are planned in the TODO. Next, export this session to ai-log/003-design-prep.txt and approve the commit message, then I'll commit and push. (disable recaps in /config)
+
+❯ - Ads are approved, pls generate them into png as well                        
+  - Mockup feedback:                                                            
+    --[Image #1] header should be one word only, so NYSE vs Europe, labels      
+  below not above                                                               
+    --in the calculator put the historical % as first element int the order so  
+  we can see it changing, then show the companies within it, ISIN is not        
+  neccessary to show, only in email, also keep the companies in the email,      
+  instead, add another button something like "I want to know more" which leads  
+  to the form where we fill in the email                                        
+    --hide the sources behind some accordion                                    
+  ⎿  [Image #1]
+
+⏺ Exporting the ads first, then reworking the pairs list and the match card.
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; cat >
+      $S/pp/export-ads.mjs <<'EOF'
+      i…)
+  ⎿  /Users/martingnebus/Martin/GIT-MG/clientelo-task/ads/ad-a.png
+       pixelWidth: 1080
+       pixelHeight: 1350
+     … +3 lines (ctrl+o to expand)
+  ⎿  2 files changed (binary, mode only or too large to show)
+
+⏺ Bash(grep -n -E "pairs|pair-|class=\"match\"|</article>|footer|instead|isin|kv
+      |block|src\"" docs/mockups/page-a.html | sed -n 1,80p)
+  ⎿  13:     pairs, then motion only in answer to a tap (numbers count, tex
+     t fades,
+     50:  .pairs { margin: 0 0 16px; padding: 10px 16px 4px; background: va
+     … +61 lines (ctrl+o to expand)
+
+⏺ Ads are exported at 1080 × 1350 (ads/ad-a.png, ads/ad-b.png). Now the pairs
+  list and the match card.
+
+⏺ Bash(python3 - <<'PYEOF'
+      p='docs/mockups/page-a.html'; s=open(p).read()…)
+  ⎿      <div class="pairs">
+           <div class="pairs-head" aria-hidden="true"><span>NYSE</span><spa
+     n>Evropa</span></div>
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated docs/mockups/page-a.html (+32 -34)
+      49    .why { margin: 12px 0 16px; font-size: 15px; line-height: 1.4
+          5; color: var(--muted); }
+      50    .pairs { margin: 0 0 16px; padding: 10px 16px 4px; background
+          : var(--card); border-radius: var(--radius); }
+      51    .pairs-head, .pair { display: grid; grid-template-columns: 11
+          2px 20px 1fr; column-gap: 8px; }
+      52 -  .pairs-head { font-size: 12px; color: var(--muted); padding-b
+         -ottom: 6px; border-bottom: 2px solid var(--ink); }             
+      52 +  .pairs-head { font-size: 13px; font-weight: 800; padding-bott
+         +om: 6px; border-bottom: 2px solid var(--ink); }                
+      53    .pairs-head span:last-child { grid-column: 3; }
+      54    .pairs ul { list-style: none; margin: 0; padding: 0; }
+      55 -  .pair { align-items: baseline; padding: 9px 0 11px; animation
+         -: rise .45s var(--ease-out) both; animation-delay: calc(var(--i
+         -) * 80ms + 150ms); }                                           
+      55 +  .pair { align-items: baseline; padding: 11px 0 9px; animation
+         +: rise .45s var(--ease-out) both; animation-delay: calc(var(--i
+         +) * 80ms + 150ms); }                                           
+      56    .pair + .pair { border-top: 1px solid var(--line); }
+      57 -  .pair-idx { grid-column: 1 / -1; font-size: 12px; color: var(
+         ---muted); margin-bottom: 1px; }                                
+      57 +  .pair-idx { grid-column: 1 / -1; font-size: 12px; color: var(
+         +--muted); margin-top: 2px; }                                   
+      58    .pair-us, .pair-eu { font-size: 16px; line-height: 1.2; font-
+          weight: 750; }
+      59    .pair-us { color: var(--muted); }
+      60    .pair-arrow { color: var(--red); font-weight: 900; font-size:
+           16px; }
+     ...
+      84  
+      85    /* match card */
+      86    .match { background: var(--card); border-radius: var(--radius
+          ); padding: 20px 16px 16px; margin-bottom: 28px; }
+      87 -  .instead { font-size: 14px; color: var(--muted); margin: 0 0 
+         -4px; }                                                         
+      88 -  .instead b { color: var(--ink); }                            
+      89 -  .fund { font-size: 22px; line-height: 1.12; font-weight: 850;
+         - }                                                             
+      90 -  .isin { display: flex; align-items: center; gap: 10px; margin
+         --top: 12px; padding: 8px 8px 8px 14px; border-radius: var(--rad
+         -ius); background: var(--bg); }                                 
+      91 -  .isin-code { font-weight: 700; font-size: 17px; letter-spacin
+         -g: 0.06em; font-variant-numeric: tabular-nums; flex: 1; }      
+      92 -  .isin-code small { display: block; font-size: 11px; letter-sp
+         -acing: 0; font-weight: 500; color: var(--muted); }             
+      93 -  .copy { min-height: 40px; padding: 0 14px; border-radius: var
+         -(--radius); border: 0; background: var(--ink); color: #fff; fon
+         -t: 700 14px/1 "Archivo", sans-serif; cursor: pointer; transitio
+         -n: background-color .18s; }                                    
+      94 -  .copy:hover { background: #333; }                            
+      87    .block { padding: 16px 0 0; margin-top: 16px; border-top: 1px
+           solid var(--line); }
+      88    .block h3 { font-size: 15px; font-weight: 800; margin-bottom:
+           8px; }
+      89    .kv { display: flex; justify-content: space-between; align-it
+          ems: baseline; gap: 12px; font-size: 15px; }
+     ...
+       96    .bar:first-child .bar-fill { background: var(--red); }
+       97    .bar-value { text-align: right; font-weight: 700; font-varia
+           nt-numeric: tabular-nums; }
+       98    .count { font-size: 14px; color: var(--muted); margin: 8px 0
+            0; }
+       99 +  .ret-block h3 { font-size: 15px; font-weight: 800; margin-bo
+          +ttom: 6px; }                                                  
+      100 +  .fund { font-size: 18px; line-height: 1.15; font-weight: 850
+          +; margin: 0 0 10px; }                                         
+      101 +  .more { margin-top: 20px; }                                 
+      102 +  details.sources { background: transparent; margin: 16px 0 0;
+          + border-top: 1px solid var(--line); }                         
+      103 +  details.sources summary { padding: 12px 32px 4px 0; font-siz
+          +e: 13px; font-weight: 700; color: var(--muted); }             
+      104 +  details.sources summary::after { right: 0; top: 6px; font-si
+          +ze: 20px; }                                                   
+      105 +  .src-list { list-style: none; margin: 0; padding: 4px 0 0; d
+          +isplay: grid; gap: 6px; font-size: 12px; line-height: 1.4; col
+          +or: var(--muted); }                                           
+      106 +  .src-list b { color: var(--ink); font-weight: 600; }        
+     … 112 more lines (ctrl+o to expand)
+
+⏺ Bash(sed -n '/<ul>/,/<\/ul>/p' docs/mockups/page-a.html | head -20; grep -n
+      "footer\b\|details class=\"sources\"" docs/mockups/page-a.html)
+  ⎿        <ul>
+             <li class="pair" style="--i:0">
+               <span class="pair-us">VOO, SPY, IVV</span>
+     … +26 lines (ctrl+o to expand)
+
+⏺ Now the shared script: the combined sources list, the new button's tracking,
+  and keeping source accordions out of faq_opened.
+
+⏺ Bash(python3 - <<'PYEOF'
+      p='docs/mockups/shared.js'; s=open(p).read()…)
+  ⎿  ok
+  ⎿  Updated docs/mockups/shared.js (+9 -1)
+      174    bind("srcTop", `Zdroj: ${srcLink(x.src.top)}${x.src.count !=
+           = x.src.top ? `; ${srcLink(x.src.count)}` : ""}`, { animate: f
+           alse });
+      175    bind("srcRet", `Zdroj: ${srcLink(x.src.ret)}`, { animate: fa
+           lse });
+      176    bind("srcFees", `Zdroj: ${srcLink("t212")}; ${srcLink("xtbFe
+           es")}; dostupnost: ${srcLink("t212List")}, XTB podle názvu fon
+           du`, { animate: false });
+      177 +  bind("srcAll", `<ul class="src-list">                       
+      178 +    <li><b>Výnos:</b> ${srcLink(x.src.ret)}</li>              
+      179 +    <li><b>Firmy:</b> ${srcLink(x.src.top)}${x.src.count !== x
+          +.src.top ? `; ${srcLink(x.src.count)}` : ""}</li>             
+      180 +    <li><b>Fond a poplatek:</b> ${srcLink(x.src.fund)}; ${srcL
+          +ink(x.src.us)}</li>                                           
+      181 +    <li><b>Brokeři:</b> ${srcLink("t212")}; ${srcLink("xtbFees
+          +")}; dostupnost: ${srcLink("t212List")}, XTB podle názvu fondu
+          +</li>                                                         
+      182 +  </ul>`, { animate: false });                                
+      183    bind("email", emailHtml(), { animate: false });
+      184    for (const b of document.querySelectorAll("[data-index]")) b
+           .setAttribute("aria-pressed", b.dataset.index === state.index)
+           ;
+      185    for (const b of document.querySelectorAll("[data-amount]")) 
+           b.setAttribute("aria-pressed", Number(b.dataset.amount) === st
+           ate.amount);
+     ...
+      263      track("amount_selected", { amount: state.amount });
+      264    } else if (t.dataset.action === "cta") {
+      265      track("cta_clicked", { location: "first_screen" });
+      266 +  } else if (t.dataset.action === "more") {                   
+      267 +    track("cta_clicked", { location: "match_card" });         
+      268    } else if (t.dataset.action === "copy-isin") {
+      269      try { await navigator.clipboard.writeText(INDEXES[state.in
+           dex].isin); } catch {}
+      270      const label = t.textContent;
+     ...
+      323    openEmail();
+      324  });
+      325  
+      318 -for (const d of document.querySelectorAll("details")) {       
+      326 +for (const d of document.querySelectorAll("details[data-q]")) 
+          +{                                                             
+      327    d.addEventListener("toggle", () => d.open && track("faq_open
+           ed", { question: d.dataset.q }));
+      328  }
+      329  
+
+⏺ Bash(S=/private/tmp/claude-501/-Users-martingnebus-Martin-GIT-MG-clientelo-tas
+      k/328bf675-1c82-4cfe-821a-396175e41482/scratchpad; cat > $S/pp/check2.mjs
+      <<'EOF'
+      impor…)
+  ⎿  [track] page_viewed JSHandle@object
+     [track] index_selected JSHandle@object
+     [track] match_viewed JSHandle@object
+     … +2 lines (ctrl+o to expand)
+  ⎿  (timeout 2m)
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ Both layouts work well—fits the 375×667 screen, % leads the card, sources are
+  collapsed. I'll fix the wrapping so "S&P 500" and "NASDAQ 100" stay together,
+  then update the decisions and TODO.
+
+⏺ Bash(sed -i '' -e 's|<span class="pair-eu">iShares Core S&P 500</span>|<span
+      class="pair-eu">iShares Core S\&amp;P\&nbsp;500</span>|' -e 's|<span
+      class="pair-eu">iSh…)
+  ⎿  195:          <span class="pair-eu">iShares Core S&amp;P&nbsp;500</spa
+     n>
+     201:          <span class="pair-eu">iShares NASDAQ&nbsp;100</span>
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated docs/TODO.md (+5 -5)
+      39  ## C6 Taps and match card
+      40  
+      41  - [ ] Index and amount chips (one client component, one state).
+      42 -- [ ] Match card as in decision 14: fund name, ISIN with copy, 
+         -TER vs the US fund, top 5 bars and company count, 10-year retur
+         -n with its warning, brokers, fees row, source notes. All values
+         - from `src/data/`.                                             
+      42 +- [ ] Match card in the order of decision 30: 10-year return wi
+         +th its warning, top 5 bars and company count, EU fund and TER v
+         +s the US fund, brokers and fees row, "Chci vědět víc" button to
+         + the form, sources in an accordion. No ISIN on the page. All va
+         +lues from `src/data/`.                                         
+      43  - [ ] Motion on change (decision 24): numbers count, text fades
+          , bars slide; nothing under reduced motion.
+      44  - [ ] Tests: percent and Kč formatting, fee per purchase.
+      45  
+      46  ## C7 The ask and the e-mail
+      47  
+      48 -- [ ] Dark ask block: headline with the chosen index, checklist
+         -, one e-mail field, consent text, red submit, error messages.  
+      48 +- [ ] Dark ask block: headline with the chosen index, checklist
+         + (ISIN first), one e-mail field, consent text, red submit, erro
+         +r messages.                                                    
+      49  - [ ] Income illustration function (monthly amount, 10 years, y
+          early average) with tests; 5 000 Kč at 15.33 % gives cca 1,32 m
+          il. Kč (decision 4).
+      50  - [ ] E-mail modal built from `src/data/`: five sections, numbe
+          red sources; opens on submit, closes and reopens. Nothing store
+          d or sent.
+      51  
+      52  ## C8 FAQ, disclaimer, sources
+      53  
+      54  - [ ] Four FAQ accordions (decision 16) that open smoothly.
+      55 -- [ ] Footer: disclaimer, page sources, data controller line.  
+      55 +- [ ] Footer: disclaimer, sources in an accordion, data control
+         +ler line.                                                      
+      56  
+      57  ## C9 Measurement
+      58  
+      59  - [ ] `track(event, props)` that only console-logs; variant, UT
+          M and device read in the browser.
+      60 -- [ ] The 12 events of decision 19 wired; the e-mail address is
+         - never logged.                                                 
+      60 +- [ ] The events of decision 19 as changed by decision 31 wired
+         +; the e-mail address is never logged.                          
+      61  - [ ] Tests: variant from `utm_content`, event props.
+      62  
+      63  ## C10 Launch readiness
+     ...
+      65  - [ ] Named data controller and a privacy policy page (decision
+           26 leaves the name open).
+      66  - [ ] Open Graph tags and image.
+      67  - [ ] Mobile performance and accessibility check on the Vercel 
+          URL, with fixes.
+      68 -- [ ] Export both ads to 1080 × 1350 PNG in `ads/`; ad links us
+         -e the live domain.                                             
+      68 +- [ ] Ad links in `ads/` use the live domain; re-export the PNG
+         +s if the ads change.                                           
+      69  
+      70  ## C11 README
+      71  
+  ⎿  Updated docs/decisions.md (+35 -0)
+      274      "iShares Core S&P 500 UCITS ETF (Acc)". *Reason:* it is th
+           e name the
+      275      visitor finds in the broker's app; explanatory copy still 
+           avoids
+      276      "UCITS" (glossary).
+      277 +                                                              
+      278 +29. **Pairs list: one-word column heads, labels below.** The h
+          +eads read                                                     
+      279 +    "NYSE" and "Evropa"; the index name sits under each row (e
+          +.g. "S&P                                                      
+      280 +    500", "Nasdaq-100 (QQQ je na burze Nasdaq)"). *Reason:* ag
+          +reed in                                                       
+      281 +    review; the names are what the visitor reads first.       
+      282 +                                                              
+      283 +30. **Match card order changed** (replaces the order in decisi
+          +on 14):                                                       
+      284 +    1. "[index] za 10 let průměrně": the 10-year % with its wa
+          +rning, first,                                                 
+      285 +       so a tap visibly changes the top of the card           
+      286 +    2. top 5 companies as bars, plus the number of companies  
+      287 +    3. "Evropský fond místo [US funds]": fund name, TER vs the
+          + US fund                                                      
+      288 +    4. where to buy and the fees row                          
+      289 +    5. a red "Chci vědět víc ↓" button that scrolls to the for
+          +m                                                             
+      290 +    6. "Zdroje dat", an accordion with all the card's sources 
+      291 +                                                              
+      292 +    **The ISIN is not on the page any more**; it is in the e-m
+          +ail, and the                                                  
+      293 +    ask's checklist names it first ("Evropský fond a jeho ISIN
+          +…"). The                                                      
+      294 +    companies stay in the e-mail too. *Reason:* agreed in revi
+          +ew; the ISIN                                                  
+      295 +    is the most concrete thing to give for the e-mail address,
+          + and every                                                    
+      296 +    interactive element should lead to the form.              
+      297 +                                                              
+      298 +31. **Events** (changes decision 19): `isin_copied` is dropped
+          + with the                                                     
+      299 +    copy button. The new button sends `cta_clicked` with `loca
+          +tion:                                                         
+      300 +    "match_card"` (the first-screen CTA sends `"first_screen"`
+          +). Source                                                     
+      301 +    accordions do not send `faq_opened`.                      
+      302 +                                                              
+      303 +32. **Sources behind accordions.** On the page every source si
+          +ts in a                                                       
+      304 +    closed "Zdroje dat" / "Zdroje" accordion next to its block
+          +; the                                                         
+      305 +    warnings stay visible. The e-mail keeps its numbered "Zdro
+          +je" list.                                                     
+      306 +    *Reason:* agreed in review; the rule "every number has its
+          + source"                                                      
+      307 +    still holds, one tap away.                                
+      308 +                                                              
+      309 +33. **Ads exported** as `ads/ad-a.png` and `ads/ad-b.png`, 108
+          +0 × 1350,                                                     
+      310 +    from the HTML at device scale 2.5. The links get the live 
+          +domain in                                                     
+      311 +    C10.                                                      
+  ⎿  Updated docs/mockups/page-a.html (+3 -3)
+      192          <li class="pair" style="--i:0">
+      193            <span class="pair-us">VOO, SPY, IVV</span>
+      194            <span class="pair-arrow" aria-label="místo nich">→</
+           span>
+      195 -          <span class="pair-eu">iShares Core S&P 500</span>   
+      195 +          <span class="pair-eu">iShares Core S&amp;P&nbsp;500<
+          +/span>                                                        
+      196            <span class="pair-idx">S&P 500</span>
+      197          </li>
+      198          <li class="pair" style="--i:1">
+      199            <span class="pair-us">QQQ</span>
+      200            <span class="pair-arrow" aria-label="místo něj">→</s
+           pan>
+      201 -          <span class="pair-eu">iShares NASDAQ 100</span>     
+      201 +          <span class="pair-eu">iShares NASDAQ&nbsp;100</span>
+      202            <span class="pair-idx">Nasdaq-100 (QQQ je na burze N
+           asdaq)</span>
+      203          </li>
+      204          <li class="pair" style="--i:2">
+      205            <span class="pair-us">URTH</span>
+      206            <span class="pair-arrow" aria-label="místo něj">→</s
+           pan>
+      207 -          <span class="pair-eu">iShares Core MSCI World</span>
+      207 +          <span class="pair-eu">iShares Core MSCI&nbsp;World</
+          +span>                                                         
+      208            <span class="pair-idx">Svět (MSCI World)</span>
+      209          </li>
+      210        </ul>
+
+⏺ Update(CLAUDE.md)
+  ⎿  Added 1 line, removed 1 line
+      38  - `docs/glossary.md` term · plain explanation · Czech page word
+          ing
+      39  - `docs/research/` sourced data from C1, one file per topic; st
+          art at its README
+      40  - `docs/mockups/` static page mockups from C3; `shared.js` hold
+          s their data and behaviour
+      41 -- `ads/` the two Meta ads (A problem hook, B answer hook) on on
+         -e template, `ad.css`                                           
+      41 +- `ads/` the two Meta ads (A problem hook, B answer hook): HTML
+         + on one template `ad.css`, exported PNGs                       
+      42  - `.claude/skills/implementation-start` and `implementation-end
+          ` open and close a TODO section
+      43  - `.claude/skills/implementation-plan` grilling for planning st
+          eps, one question at a time
+      44  - `.claude/skills/` third-party skills, pinned in `skills-lock.
+          json`: lead-magnets, copywriting, cro, ad-creative, analytics, 
+          ab-testing, frontend-design, performance, core-web-vitals, acce
+          ssibility
+
+⏺ I've made all the changes and checked them in Chrome at 375 px. The first
+  screen still fits in 375 × 667, and tapping the new button logs cta_clicked
+  and scrolls to the form.
+
+  Ads: exported as ads/ad-a.png and ads/ad-b.png, both 1080 × 1350.
+
+  Pairs list: the column heads are now just "NYSE" and "Evropa". The index name
+  sits under each row, and the fund names no longer break in the middle ("S&P
+  500" stays on one line).
+
+  Calculator card, new order:
+  1. "[index] za 10 let průměrně" with the big %. It counts to the new value on
+     each tap, and the warning stays right under it.
+  2. The top 5 companies as bars.
+  3. "Evropský fond místo [US funds]": the fund name and its fee next to the US
+     fund's fee.
+  4. Where to buy and the fees row.
+  5. A red "Chci vědět víc ↓" button that scrolls to the form.
+  6. "Zdroje dat", a closed accordion with all the card's sources. The footer
+     sources are in a "Zdroje" accordion too.
+
+  ISIN: it's gone from the page and stays in the e-mail, along with the
+  companies. I made it the first line of the checklist in the dark form block
+  ("Evropský fond a jeho ISIN…"), since it's now a reason to leave the e-mail.
+  The ISIN FAQ answer now says "Pošleme vám ho v plánu". The isin_copied event
+  is gone with the copy button.
+
+  Docs: decisions 29–33 are added. The match card section (C6), the form block
+  (C7), measurement (C9) and launch readiness (C10) in docs/TODO.md are updated
+  to match. The CLAUDE.md map mentions the PNGs.
+
+  Before committing: please /export this session to ai-log/003-design-prep.txt.
+
+  For ai-log/mistakes.md, the earlier list plus one: my first headless test of
+  the animations looked stalled, but that was the test setup, not the page.
+  Re-run in real time, everything finished.
+
+  Commit message:
+  add C3 design prep: page mockups, two ads, C5+ plan
+
+  - docs/mockups/: page variants A (chosen) and B as static HTML with
+    sourced numbers, taps, e-mail modal, FAQ and a console-only track();
+    shared.js holds data, behaviour and motion
+  - A refined in review: one-sentence headline, no strike-through,
+    NYSE / Evropa pairs, square corners, motion on tap only; match card
+    leads with the 10-year %, ISIN moved to the e-mail, "Chci vědět víc"
+    button to the form, sources behind accordions
+  - ads/: ad A (problem) and ad B (answer) on one template with NYSE in
+    both headers; Meta copy, UTM links, 1080x1350 PNG exports
+  - docs/decisions.md: C3 decisions 21-33; docs/TODO.md: C3 ticked,
+    outline replaced by sections C5-C11
+  - glossary and CLAUDE.md map updated; ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: CLAUDE.md, docs/TODO.md, docs/decisions.md, docs/glossary.md,
+  docs/mockups/page-a.html, docs/mockups/page-b.html, docs/mockups/shared.js,
+  ads/ad.css, ads/ad-a.html, ads/ad-b.html, ads/ad-a.png, ads/ad-b.png,
+  ai-log/003-design-prep.txt
+
+  Do you approve the message? Once the export file exists, I'll commit and push.
+
+✻ Crunched for 2m 6s · done 2:49 PM

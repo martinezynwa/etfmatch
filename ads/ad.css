@@ -1,0 +1,38 @@
+/* Shared template for both ads: a static Meta feed image, 4:5.
+   Laid out at 432 x 540 CSS px; export at device scale 2.5 = 1080 x 1350.
+   One pattern for A and B (logo, big header, sub, full-width button), so
+   the hook is the only variable (decision 18). Square corners, as on the page. */
+:root {
+  --bg: #e6e3de;
+  --ink: #000000;
+  --muted: #5c5853;
+  --line: #d4d0ca;
+  --red: #d7000f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 24px 16px 48px; background: #f6f5f3; color: var(--ink);
+  font: 400 15px/1.5 "Archivo", system-ui, sans-serif;
+  display: grid; justify-items: center; gap: 20px;
+}
+.ad {
+  width: 432px; max-width: 100%; aspect-ratio: 4 / 5; overflow: hidden;
+  background: var(--bg); padding: 28px 28px 28px; display: flex; flex-direction: column;
+}
+.logo { font-weight: 900; font-size: 18px; font-variation-settings: "wdth" 125; letter-spacing: -0.02em; }
+.logo span { color: var(--red); }
+.copy { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.header {
+  margin: 0; font-size: 44px; line-height: 1; font-weight: 900;
+  font-variation-settings: "wdth" 115; letter-spacing: -0.025em;
+}
+.sub { margin: 18px 0 0; padding-top: 14px; border-top: 3px solid var(--ink); font-size: 18px; line-height: 1.35; font-weight: 500; }
+.cta {
+  display: block; width: 100%; padding: 17px 24px; background: var(--red); color: #fff; text-align: center;
+  font-weight: 800; font-size: 19px; font-variation-settings: "wdth" 110;
+}
+.spec { width: 432px; max-width: 100%; background: #fff; border: 1px solid var(--line); padding: 14px 16px; font-size: 14px; }
+.spec h2 { font-size: 15px; margin: 0 0 8px; }
+.spec dl { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; }
+.spec dt { color: var(--muted); }
+.spec dd { margin: 0; overflow-wrap: anywhere; }

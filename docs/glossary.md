@@ -14,7 +14,7 @@ Decisions behind the wording are in [decisions.md](decisions.md).
 | MSCI World | 1 249 companies from several countries, 72.94 % of it US (index factsheet, 30 Sep 2026). Which countries count is not in the research yet; check before the page describes it. | Svět (MSCI World) |
 | NYSE | The New York Stock Exchange. VOO, SPY, IVV and URTH are listed on NYSE Arca, QQQ on Nasdaq (SEC prospectuses, see research/pairs.md). | NYSE; the QQQ row says "(Nasdaq)" |
 | US ETF | A fund registered in the US, e.g. VOO, SPY, IVV, QQQ, URTH. | ETF z NYSE, americké ETF |
-| EU fund (UCITS ETF) | A fund registered in the EU (here Ireland) that EU brokers may sell to retail investors. "UCITS" is not used on the page. | evropský fond |
+| EU fund (UCITS ETF) | A fund registered in the EU (here Ireland) that EU brokers may sell to retail investors. "UCITS" is not used in explanatory copy; it appears only inside a fund's full name. | evropský fond; in ad B "evropský protějšek" |
 | KID | The key information document EU rules require before a fund is sold to a retail investor. US issuers do not publish one. | dokument KID (klíčové informace) |
 | Same index | The EU fund copies the same index as the US fund it replaces. | stejný index |
 | ISIN | A 12-character code that identifies one fund everywhere; the way to find it in a broker's app. | ISIN |

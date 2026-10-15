@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ETF Match: mockup B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
+<style>
+  /* Variant B: no cards. Full-width bands separated by heavy black rules.
+     The memorable thing: the pair rows are huge struck-out tickers, and
+     each row is itself the index choice. */
+  :root {
+    --bg: #ffffff;
+    --band: #ebe8e3;
+    --ink: #000000;
+    --muted: #57534e;
+    --line: #000000;
+    --hair: #d3cfc9;
+    --red: #d7000f;
+    --red-dark: #a8000c;
+    --gutter: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 "Schibsted Grotesk", system-ui, sans-serif; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 var(--gutter); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.02em; }
+
+  .top { display: flex; align-items: center; height: 48px; border-bottom: 3px solid var(--line); }
+  .logo { font-weight: 900; font-size: 18px; letter-spacing: -0.03em; text-decoration: none; }
+  .logo b { display: inline-block; background: var(--red); color: #fff; padding: 0 5px; margin-left: 3px; border-radius: 3px; }
+
+  .hero { padding: 16px 0 24px; }
+  h1 { font-size: 26px; line-height: 1.08; font-weight: 800; }
+  h1 .second { color: var(--muted); }
+  .why { margin: 10px 0 14px; font-size: 14.5px; line-height: 1.45; color: var(--muted); }
+
+  .pairs { list-style: none; margin: 0 0 14px; padding: 0; border-top: 3px solid var(--line); }
+  .pair { width: 100%; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px;
+    padding: 8px 0 9px; border: 0; border-bottom: 1px solid var(--line); background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+  .pair-us { display: block; font-size: 38px; line-height: 1; font-weight: 900; letter-spacing: -0.035em; }
+  .pair-us s { text-decoration-color: var(--red); text-decoration-thickness: 5px; }
+  .pair-us .ex { font-size: 13px; font-weight: 600; letter-spacing: 0; vertical-align: 14px; margin-left: 4px; color: var(--muted); }
+  .pair-eu { display: block; font-size: 14px; font-weight: 700; margin-top: 3px; }
+  .pair-eu span { font-weight: 400; color: var(--muted); }
+  .pair-go { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; font-weight: 800; }
+  .pair:active .pair-go { background: var(--ink); color: #fff; }
+
+  .cta { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 54px; border: 0; border-radius: 8px;
+    background: var(--red); color: #fff; font: 800 17px/1 "Schibsted Grotesk", sans-serif; text-decoration: none; cursor: pointer; }
+  .cta:active { background: var(--red-dark); }
+
+  .taps { padding: 20px 0 22px; border-top: 3px solid var(--line); scroll-margin-top: 8px; }
+  .q { font-size: 19px; font-weight: 800; margin-bottom: 12px; }
+  .seg { display: grid; grid-template-columns: repeat(4, 1fr); border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
+  .seg button { min-height: 50px; border: 0; border-left: 2px solid var(--ink); background: #fff; color: var(--ink); font: 700 15px/1.1 "Schibsted Grotesk", sans-serif; cursor: pointer; }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+
+  .match { background: var(--band); padding-bottom: 22px; scroll-margin-top: 0; }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--bg); border-bottom: 3px solid var(--ink); }
+  .tabs button { min-height: 48px; border: 0; background: none; color: var(--muted); font: 700 15px/1 "Schibsted Grotesk", sans-serif; cursor: pointer; border-bottom: 5px solid transparent; margin-bottom: -3px; }
+  .tabs button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--red); }
+  .instead { font-size: 14px; margin: 18px 0 2px; color: var(--muted); }
+  .instead s { text-decoration-color: var(--red); text-decoration-thickness: 2px; font-weight: 800; color: var(--ink); }
+  .fund { font-size: 24px; line-height: 1.1; font-weight: 850; }
+  .isin { display: flex; align-items: stretch; margin-top: 12px; border: 2px solid var(--ink); border-radius: 8px; background: #fff; overflow: hidden; }
+  .isin-code { flex: 1; padding: 7px 12px; font-size: 18px; font-weight: 800; letter-spacing: 0.07em; font-variant-numeric: tabular-nums; }
+  .isin-code small { display: block; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+  .copy { border: 0; border-left: 2px solid var(--ink); padding: 0 14px; background: var(--ink); color: #fff; font: 700 14px/1 "Schibsted Grotesk", sans-serif; cursor: pointer; }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 16px; border-top: 2px solid var(--ink); }
+  .fact { padding: 12px 0 10px; }
+  .fact + .fact { padding-left: 14px; border-left: 1px solid var(--hair); }
+  .fact b { display: block; font-size: 30px; line-height: 1; font-weight: 900; letter-spacing: -0.03em; }
+  .fact span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+  .warn { font-size: 13px; line-height: 1.4; margin: 4px 0 0; padding: 8px 10px; background: #fff; border-left: 4px solid var(--red); }
+
+  .sect { margin-top: 18px; padding-top: 12px; border-top: 2px solid var(--ink); }
+  .sect h3 { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .bar { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; min-height: 34px; padding: 0 10px; background: #fff; font-size: 14.5px; font-weight: 600; }
+  .bar-name, .bar-value { position: relative; z-index: 1; }
+  .bar-value { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .bar-track { position: absolute; inset: 0; }
+  .bar-fill { display: block; height: 100%; width: var(--w); background: #cfcac3; transition: width .3s ease; }
+  .bar:first-child .bar-fill { background: #f3b9bc; }
+  .count { font-size: 14px; margin: 8px 0 0; }
+  .fees { width: 100%; border-collapse: collapse; font-size: 15px; background: #fff; }
+  .fees th, .fees td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--hair); }
+  .fees td:last-child { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .fees th { font-weight: 800; }
+  .note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .src { font-size: 11.5px; line-height: 1.4; color: var(--muted); margin: 8px 0 0; }
+  .src a { color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+
+  .ask { background: var(--ink); color: #fff; padding: 30px 0 34px; }
+  .ask h2 { font-size: 27px; line-height: 1.08; font-weight: 850; }
+  .ask h2 span { color: #fff; border-bottom: 4px solid var(--red); }
+  .ask-lead { color: #c4c0ba; margin: 10px 0 18px; font-size: 15px; }
+  .checklist { list-style: none; margin: 0 0 22px; padding: 0; border-top: 1px solid #3d3b38; }
+  .checklist li { position: relative; padding: 10px 0 10px 26px; border-bottom: 1px solid #3d3b38; font-size: 15px; line-height: 1.35; }
+  .checklist li::before { content: "✓"; position: absolute; left: 0; top: 9px; color: var(--red); font-weight: 900; font-size: 17px; }
+  label.field { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  input[type=email] { width: 100%; min-height: 54px; padding: 0 14px; border-radius: 8px; border: 2px solid #fff; background: #fff; font: 500 17px/1 "Schibsted Grotesk", sans-serif; color: var(--ink); }
+  .error { color: #ff8a8f; font-size: 14px; margin: 8px 0 0; }
+  .consent { font-size: 12.5px; line-height: 1.45; color: #aeaaa4; margin: 12px 0 16px; }
+  .done p { margin: 0 0 14px; color: #c4c0ba; }
+  .ghost { min-height: 48px; padding: 0 18px; border-radius: 8px; border: 2px solid #fff; background: transparent; color: #fff; font: 700 15px/1 "Schibsted Grotesk", sans-serif; cursor: pointer; }
+
+  .faq { padding: 26px 0 6px; }
+  .faq h2 { font-size: 20px; font-weight: 850; margin-bottom: 8px; }
+  details { border-top: 2px solid var(--ink); }
+  details:last-of-type { border-bottom: 2px solid var(--ink); }
+  summary { list-style: none; cursor: pointer; padding: 14px 40px 14px 0; font-weight: 700; font-size: 15.5px; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 4px; top: 9px; font-size: 24px; font-weight: 600; }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0; padding: 0 0 16px; font-size: 15px; color: #2b2926; }
+  footer { padding: 16px 0 40px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+  footer p { margin: 0 0 10px; }
+  footer strong { color: var(--ink); }
+
+  dialog { width: min(100% - 16px, 560px); max-height: calc(100% - 32px); padding: 0; border: 3px solid var(--ink); border-radius: 10px; background: #fff; color: var(--ink); }
+  dialog::backdrop { background: rgb(0 0 0 / .55); }
+  .modal-bar { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 10px 10px 16px; background: #fff; border-bottom: 2px solid var(--ink); }
+  .modal-bar p { margin: 0; font-weight: 800; font-size: 14px; }
+  .close { min-height: 40px; min-width: 40px; border-radius: 8px; border: 2px solid var(--ink); background: #fff; font-size: 20px; cursor: pointer; }
+  .mail { padding: 16px; font-size: 15px; }
+  .mail h2 { font-size: 23px; margin: 6px 0 8px; }
+  .mail h3 { font-size: 16px; margin: 22px 0 8px; padding-top: 8px; border-top: 2px solid var(--ink); }
+  .mail p, .mail ul { margin: 0 0 8px; }
+  .mail ul { padding-left: 18px; }
+  .mail li { margin-bottom: 4px; }
+  .mail-meta { font-size: 12.5px; color: var(--muted); }
+  .mail-warn { font-size: 13px; padding: 8px 10px; border-left: 4px solid var(--red); background: var(--band); }
+  .mail-note, .mail-small { font-size: 12.5px; color: var(--muted); }
+  .mail-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 6px; }
+  .mail-table th, .mail-table td { padding: 7px 4px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--hair); }
+  .mail-table thead th { font-weight: 800; border-bottom: 2px solid var(--ink); }
+  .mail-table tbody th { font-weight: 500; color: var(--muted); width: 26%; }
+  .mail-table .is-chosen { background: var(--band); }
+  .mail-table thead .is-chosen { box-shadow: inset 0 -4px 0 var(--red); }
+  .mail-sources { font-size: 12px; color: var(--muted); padding-left: 18px; }
+  sup { font-size: 10px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top"><a class="logo" href="#">ETF<b>Match</b></a></header>
+
+  <section class="hero" aria-labelledby="h1">
+    <h1 id="h1">ETF z NYSE si tu většinou nekoupíte. <span class="second">Stejný index v evropském fondu ano.</span></h1>
+    <p class="why">Americké fondy nemají dokument KID, který EU vyžaduje, a většina brokerů je proto neprodá. Klepněte na ten, který znáte.</p>
+    <ul class="pairs">
+      <li><button class="pair" data-index="sp500" data-scroll="#taps">
+        <span><span class="pair-us"><s>VOO SPY IVV</s></span><span class="pair-eu">iShares Core S&P 500 <span>stejný index</span></span></span>
+        <span class="pair-go" aria-hidden="true">↓</span></button></li>
+      <li><button class="pair" data-index="ndx" data-scroll="#taps">
+        <span><span class="pair-us"><s>QQQ</s><span class="ex">Nasdaq</span></span><span class="pair-eu">iShares NASDAQ 100 <span>stejný index</span></span></span>
+        <span class="pair-go" aria-hidden="true">↓</span></button></li>
+      <li><button class="pair" data-index="world" data-scroll="#taps">
+        <span><span class="pair-us"><s>URTH</s></span><span class="pair-eu">iShares Core MSCI World <span>stejný index</span></span></span>
+        <span class="pair-go" aria-hidden="true">↓</span></button></li>
+    </ul>
+    <a class="cta" href="#taps" data-action="cta">Najít evropský fond ↓</a>
+  </section>
+
+  <section class="taps" id="taps" aria-labelledby="taps-h">
+    <h2 class="q" id="taps-h">Kolik chcete investovat měsíčně?</h2>
+    <div class="seg" role="group" aria-labelledby="taps-h">
+      <button data-amount="1000">1&nbsp;000&nbsp;Kč</button>
+      <button data-amount="3000">3&nbsp;000&nbsp;Kč</button>
+      <button data-amount="5000">5&nbsp;000&nbsp;Kč</button>
+      <button data-amount="10000">10&nbsp;000&nbsp;Kč</button>
+    </div>
+    <p class="hint">Podle částky spočítáme poplatky u brokera.</p>
+  </section>
+</div>
+
+<article class="match" id="match" aria-label="Váš evropský fond">
+  <div class="tabs" role="group" aria-label="Index">
+    <button data-index="sp500">S&P 500</button>
+    <button data-index="ndx">Nasdaq-100</button>
+    <button data-index="world">Svět</button>
+  </div>
+  <div class="wrap">
+    <p class="instead">Místo <s data-bind="us"></s></p>
+    <h2 class="fund" data-bind="fund"></h2>
+    <div class="isin">
+      <span class="isin-code"><small>ISIN pro vyhledání u brokera</small><span data-bind="isin"></span></span>
+      <button class="copy" data-action="copy-isin">Kopírovat</button>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b data-bind="ret10"></b><span>ročně průměrně za 10 let, v USD</span></div>
+      <div class="fact"><b data-bind="ter"></b><span>poplatek fondu (TER) ročně, <span data-bind="usTer" style="display:inline;margin:0"></span></span></div>
+    </div>
+    <p class="warn">Minulé výnosy nezaručují budoucí. Nejde o investiční doporučení, jen o historickou statistiku indexu (<span data-bind="retType"></span>).</p>
+    <p class="src" data-bind="srcRet"></p>
+    <p class="src" data-bind="srcFund"></p>
+
+    <div class="sect">
+      <h3>Největší firmy uvnitř</h3>
+      <ul class="bars" data-bind="bars"></ul>
+      <p class="count">Celkem <span data-bind="companies"></span> v indexu.</p>
+      <p class="src" data-bind="srcTop"></p>
+    </div>
+
+    <div class="sect">
+      <h3>Kde koupit a co zaplatíte za směnu měny</h3>
+      <table class="fees">
+        <tr><th scope="row">Trading 212</th><td data-bind="feeT212"></td></tr>
+        <tr><th scope="row">XTB</th><td data-bind="feeXtb"></td></tr>
+      </table>
+      <p class="note">Za nákup za <span data-bind="amount"></span>, pokud máte účet v Kč. Provize za nákup ETF je u obou 0&nbsp;Kč.</p>
+      <p class="src" data-bind="srcFees"></p>
+    </div>
+  </div>
+</article>
+
+<section class="ask" id="ask" aria-labelledby="ask-h">
+  <div class="wrap">
+    <h2 id="ask-h">Pošleme vám celý plán k <span data-bind="indexLabel"></span></h2>
+    <p class="ask-lead">Jeden e-mail, sestavený podle toho, co jste vybrali.</p>
+    <ul class="checklist">
+      <li>Kolik by z <span data-bind="amount"></span> měsíčně mohlo být za 10 let, u všech tří indexů</li>
+      <li>Co je uvnitř: S&P 500, Nasdaq-100 a Svět vedle sebe</li>
+      <li>Poplatky u Trading 212 a XTB pro vaši částku</li>
+      <li>Daně v Česku stručně: 3 roky, 100&nbsp;000&nbsp;Kč, 15&nbsp;%</li>
+      <li>Akumulační, nebo distribuční fond</li>
+    </ul>
+    <form data-form novalidate>
+      <label class="field" for="email">Váš e-mail</label>
+      <input id="email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="jmeno@email.cz" required>
+      <p class="error" data-form-error hidden role="alert"></p>
+      <p class="consent">Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním). Souhlas můžete kdykoli odvolat.</p>
+      <button class="cta" type="submit">Poslat plán</button>
+    </form>
+    <div class="done" data-form-done hidden>
+      <h3 style="font-size:20px;margin-bottom:6px">Hotovo, takhle plán vypadá.</h3>
+      <p>Demo: nic jsme neuložili ani neodeslali.</p>
+      <button class="ghost" data-action="open-email">Zobrazit e-mail znovu</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Časté otázky</h2>
+    <details data-q="banned"><summary>Je nákup ETF z NYSE v Česku zakázaný?</summary>
+      <p>Není. Pravidla EU chtějí, aby fond pro drobné investory měl dokument KID (klíčové informace). Americké fondy ho nevydávají, a proto je většina brokerů v EU nenabízí.</p></details>
+    <details data-q="stocks"><summary>Můžu koupit akcie amerických firem?</summary>
+      <p>Ano. Pravidlo o dokumentu KID se týká fondů, ne akcií jednotlivých firem.</p></details>
+    <details data-q="ter"><summary>Proč je evropský fond někdy dražší?</summary>
+      <p>Poplatek si určuje každý fond sám. U Nasdaq-100 stojí evropský fond 0,30&nbsp;% ročně, QQQ 0,18&nbsp;%. U MSCI World je to naopak: evropský fond 0,20&nbsp;%, URTH 0,24&nbsp;%.</p></details>
+    <details data-q="isin"><summary>Co je ISIN a jak fond najdu u brokera?</summary>
+      <p>ISIN je 12místný kód jednoho konkrétního fondu. Zkopírujte ho a vložte do vyhledávání v aplikaci brokera. Ticker se liší podle burzy, ISIN je všude stejný.</p></details>
+  </section>
+
+  <footer>
+    <p><strong>Nejde o investiční doporučení.</strong> Stránka ukazuje historická data indexů, ne předpověď. Minulé výnosy nezaručují budoucí a investice může ztratit hodnotu. Broker je uveden jen jako místo, kde fond najdete, ne jako doporučení.</p>
+    <p>Proč americké ETF většinou nekoupíte: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R1286">nařízení EU 1286/2014</a>; <a href="https://www.xtb.com/int/help-center/stocks-and-etfs/adding-a-new-instrument-to-the-offer">XTB, nápověda, 3. 2. 2026</a>. Burzy amerických fondů: prospekty na SEC EDGAR (VOO, SPY, IVV a URTH na NYSE Arca, QQQ na Nasdaqu).</p>
+    <p>Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním).</p>
+  </footer>
+</div>
+
+<dialog data-modal aria-labelledby="modal-h">
+  <div class="modal-bar"><p id="modal-h">Takhle vypadá váš e-mail</p><button class="close" data-action="close-email" aria-label="Zavřít">×</button></div>
+  <div class="mail" data-bind="email"></div>
+</dialog>
+
+<script src="shared.js"></script>
+</body>
+</html>

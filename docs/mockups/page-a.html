@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ETF Match: mockup A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  /* Variant A, chosen in C3: warm grey ground, white cards, black type,
+     one red, square corners everywhere. Motion: one load sequence on the
+     pairs, then motion only in answer to a tap (numbers count, text fades,
+     bars slide, accordions and the modal open smoothly). */
+  :root {
+    --bg: #e6e3de;
+    --card: #ffffff;
+    --ink: #000000;
+    --muted: #5c5853;
+    --line: #d4d0ca;
+    --red: #d7000f;
+    --red-dark: #a8000c;
+    --radius: 0;
+    --ease-out: cubic-bezier(.2, .8, .2, 1);
+    --gutter: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; interpolate-size: allow-keywords; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16px/1.5 "Archivo", system-ui, sans-serif;
+    font-variation-settings: "wdth" 100;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 var(--gutter); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+  h1, h2, h3 { font-variation-settings: "wdth" 118; letter-spacing: -0.01em; margin: 0; }
+
+  /* header */
+  .top { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .logo { font-weight: 900; font-size: 19px; font-variation-settings: "wdth" 125; letter-spacing: -0.02em; text-decoration: none; }
+  .logo span { color: var(--red); }
+
+  /* first screen */
+  .hero { padding: 6px 0 28px; }
+  h1 { font-size: 28px; line-height: 1.08; font-weight: 850; }
+  .why { margin: 12px 0 16px; font-size: 15px; line-height: 1.45; color: var(--muted); }
+  .pairs { margin: 0 0 16px; padding: 10px 16px 4px; background: var(--card); border-radius: var(--radius); }
+  .pairs-head, .pair { display: grid; grid-template-columns: 112px 20px 1fr; column-gap: 8px; }
+  .pairs-head { font-size: 13px; font-weight: 800; padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+  .pairs-head span:last-child { grid-column: 3; }
+  .pairs ul { list-style: none; margin: 0; padding: 0; }
+  .pair { align-items: baseline; padding: 11px 0 9px; animation: rise .45s var(--ease-out) both; animation-delay: calc(var(--i) * 80ms + 150ms); }
+  .pair + .pair { border-top: 1px solid var(--line); }
+  .pair-idx { grid-column: 1 / -1; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pair-us, .pair-eu { font-size: 16px; line-height: 1.2; font-weight: 750; }
+  .pair-us { color: var(--muted); }
+  .pair-arrow { color: var(--red); font-weight: 900; font-size: 16px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .cta {
+    display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px;
+    border: 0; border-radius: var(--radius); background: var(--red); color: #fff;
+    font: 800 17px/1 "Archivo", sans-serif; font-variation-settings: "wdth" 110; text-decoration: none; cursor: pointer;
+    transition: background-color .15s, transform .1s;
+  }
+  .cta:hover { background: var(--red-dark); }
+  .cta:active { transform: translateY(1px); }
+
+  /* taps */
+  .taps { padding: 8px 0 18px; scroll-margin-top: 12px; }
+  .q { font-size: 18px; font-weight: 800; margin: 0 0 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip {
+    min-height: 44px; padding: 0 16px; border-radius: var(--radius); border: 1.5px solid var(--ink);
+    background: transparent; color: var(--ink); font: 600 15px/1 "Archivo", sans-serif; cursor: pointer;
+    transition: background-color .18s, color .18s, transform .1s;
+  }
+  .chip:active { transform: scale(.97); }
+  .chips.amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .chips.amounts .chip { padding: 0 4px; font-size: 14px; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+  /* match card */
+  .match { background: var(--card); border-radius: var(--radius); padding: 20px 16px 16px; margin-bottom: 28px; }
+  .block { padding: 16px 0 0; margin-top: 16px; border-top: 1px solid var(--line); }
+  .block h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+  .kv { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 15px; }
+  .kv strong { font-size: 20px; font-weight: 850; font-variation-settings: "wdth" 112; font-variant-numeric: tabular-nums; }
+  .kv span { color: var(--muted); font-size: 14px; }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .bar { display: grid; grid-template-columns: 92px 1fr 56px; align-items: center; gap: 8px; font-size: 14px; }
+  .bar-track { height: 12px; background: var(--bg); overflow: hidden; }
+  .bar-fill { display: block; height: 100%; width: var(--w, 0); background: var(--ink); transition: width .5s var(--ease-out); }
+  .bar:first-child .bar-fill { background: var(--red); }
+  .bar-value { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .count { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+  .ret-block h3 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .fund { font-size: 18px; line-height: 1.15; font-weight: 850; margin: 0 0 10px; }
+  .more { margin-top: 20px; }
+  details.sources { background: transparent; margin: 16px 0 0; border-top: 1px solid var(--line); }
+  details.sources summary { padding: 12px 32px 4px 0; font-size: 13px; font-weight: 700; color: var(--muted); }
+  details.sources summary::after { right: 0; top: 6px; font-size: 20px; }
+  .src-list { list-style: none; margin: 0; padding: 4px 0 0; display: grid; gap: 6px; font-size: 12px; line-height: 1.4; color: var(--muted); }
+  .src-list b { color: var(--ink); font-weight: 600; }
+  .src-list a, footer a { color: var(--muted); }
+  .ret { font-size: 30px; font-weight: 900; line-height: 1; font-variation-settings: "wdth" 120; font-variant-numeric: tabular-nums; }
+  .ret-sub { font-size: 14px; margin: 6px 0 0; color: var(--muted); }
+  .warn { font-size: 13px; line-height: 1.4; margin: 10px 0 0; padding: 8px 10px; border-left: 3px solid var(--red); background: #fbf4f4; }
+  .brokers { display: flex; gap: 8px; }
+  .broker { flex: 1; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: var(--radius); font-weight: 800; font-size: 16px; }
+  .broker small span { font-variant-numeric: tabular-nums; }
+  .broker small { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* the ask */
+  .ask { background: var(--ink); color: #fff; padding: 32px 0 36px; scroll-margin-top: 0; }
+  .ask h2 { font-size: 26px; line-height: 1.1; font-weight: 850; }
+  .ask-lead { color: #c9c6c1; margin: 8px 0 18px; font-size: 15px; }
+  .checklist { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 10px; }
+  .checklist li { position: relative; padding-left: 32px; font-size: 15px; line-height: 1.35; }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat; }
+  label.field { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  input[type=email] {
+    width: 100%; min-height: 52px; padding: 0 16px; border-radius: var(--radius); border: 2px solid #fff; background: #fff;
+    font: 500 17px/1 "Archivo", sans-serif; color: var(--ink);
+  }
+  .error { color: #ff8a8f; font-size: 14px; margin: 8px 0 0; }
+  .consent { font-size: 12.5px; line-height: 1.45; color: #b5b1ab; margin: 12px 0 16px; }
+  .done { padding: 4px 0; }
+  .done p { margin: 0 0 14px; color: #c9c6c1; }
+  .ghost { min-height: 48px; padding: 0 18px; border-radius: var(--radius); border: 1.5px solid #fff; background: transparent; color: #fff; font: 700 15px/1 "Archivo", sans-serif; cursor: pointer; }
+
+  /* FAQ, footer */
+  .faq { padding: 28px 0 8px; }
+  .faq h2 { font-size: 20px; font-weight: 850; margin-bottom: 10px; }
+  details { background: var(--card); border-radius: var(--radius); margin-bottom: 8px; }
+  details::details-content { block-size: 0; overflow: hidden; transition: block-size .28s var(--ease-out), content-visibility .28s allow-discrete; }
+  details[open]::details-content { block-size: auto; }
+  summary { list-style: none; cursor: pointer; padding: 14px 44px 14px 16px; font-weight: 700; font-size: 15px; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 16px; top: 10px; font-size: 22px; font-weight: 500; transition: transform .25s var(--ease-out); }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { margin: 0; padding: 0 16px 14px; font-size: 15px; color: #2b2926; }
+  footer { padding: 18px 0 40px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+  footer p { margin: 0 0 10px; }
+  footer strong { color: var(--ink); }
+
+  /* e-mail modal */
+  dialog { width: min(100% - 16px, 560px); max-height: calc(100% - 32px); padding: 0; border: 0; border-radius: var(--radius); background: var(--card); color: var(--ink); }
+  dialog::backdrop { background: rgb(0 0 0 / .55); }
+  .modal-bar { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 18px; background: var(--card); border-bottom: 1px solid var(--line); }
+  .modal-bar p { margin: 0; font-weight: 800; font-size: 14px; }
+  .close { min-height: 40px; min-width: 40px; border-radius: var(--radius); border: 0; background: var(--bg); font-size: 20px; cursor: pointer; }
+  .mail { padding: 18px; font-size: 15px; }
+  .mail h2 { font-size: 22px; margin: 6px 0 8px; }
+  .mail h3 { font-size: 16px; margin: 22px 0 8px; }
+  .mail p, .mail ul { margin: 0 0 8px; }
+  .mail ul { padding-left: 18px; }
+  .mail li { margin-bottom: 4px; }
+  .mail-meta { font-size: 12.5px; color: var(--muted); }
+  .mail-warn { font-size: 13px; padding: 8px 10px; border-left: 3px solid var(--red); background: #fbf4f4; }
+  .mail-note, .mail-small { font-size: 12.5px; color: var(--muted); }
+  .mail-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 6px; }
+  .mail-table th, .mail-table td { padding: 7px 4px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  .mail-table thead th { font-weight: 800; }
+  .mail-table tbody th { font-weight: 500; color: var(--muted); width: 26%; }
+  .mail-table .is-chosen { background: #fbf4f4; }
+  .mail-table thead .is-chosen { color: var(--red); }
+  .mail-sources { font-size: 12px; color: var(--muted); padding-left: 18px; }
+  sup { font-size: 10px; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after, ::details-content { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">ETF Match<span>.</span></a>
+  </header>
+
+  <section class="hero" aria-labelledby="h1">
+    <h1 id="h1">ETF z NYSE si tu většinou nekoupíte, stejný index v evropském fondu ano.</h1>
+    <p class="why">Americké fondy nemají dokument KID, který EU vyžaduje. Většina brokerů je proto drobným investorům neprodá.</p>
+    <div class="pairs">
+      <div class="pairs-head" aria-hidden="true"><span>NYSE</span><span>Evropa</span></div>
+      <ul>
+        <li class="pair" style="--i:0">
+          <span class="pair-us">VOO, SPY, IVV</span>
+          <span class="pair-arrow" aria-label="místo nich">→</span>
+          <span class="pair-eu">iShares Core S&amp;P&nbsp;500</span>
+          <span class="pair-idx">S&P 500</span>
+        </li>
+        <li class="pair" style="--i:1">
+          <span class="pair-us">QQQ</span>
+          <span class="pair-arrow" aria-label="místo něj">→</span>
+          <span class="pair-eu">iShares NASDAQ&nbsp;100</span>
+          <span class="pair-idx">Nasdaq-100 (QQQ je na burze Nasdaq)</span>
+        </li>
+        <li class="pair" style="--i:2">
+          <span class="pair-us">URTH</span>
+          <span class="pair-arrow" aria-label="místo něj">→</span>
+          <span class="pair-eu">iShares Core MSCI&nbsp;World</span>
+          <span class="pair-idx">Svět (MSCI World)</span>
+        </li>
+      </ul>
+    </div>
+    <a class="cta" href="#taps" data-action="cta">Najít evropský fond ↓</a>
+  </section>
+
+  <section class="taps" id="taps" aria-label="Vyberte index a částku">
+    <h2 class="q">Který index vás zajímá?</h2>
+    <div class="chips">
+      <button class="chip" data-index="sp500">S&P 500</button>
+      <button class="chip" data-index="ndx">Nasdaq-100</button>
+      <button class="chip" data-index="world">Svět</button>
+    </div>
+    <h2 class="q">Kolik chcete investovat měsíčně?</h2>
+    <div class="chips amounts">
+      <button class="chip" data-amount="1000">1&nbsp;000&nbsp;Kč</button>
+      <button class="chip" data-amount="3000">3&nbsp;000&nbsp;Kč</button>
+      <button class="chip" data-amount="5000">5&nbsp;000&nbsp;Kč</button>
+      <button class="chip" data-amount="10000">10&nbsp;000&nbsp;Kč</button>
+    </div>
+  </section>
+
+  <article class="match" id="match" aria-label="Váš evropský fond">
+    <div class="ret-block">
+      <h3><span data-bind="indexLabel"></span> za 10 let průměrně</h3>
+      <div class="ret"><span data-bind="ret10"></span> ročně</div>
+      <p class="ret-sub">v USD, <span data-bind="retType"></span></p>
+      <p class="warn">Minulé výnosy nezaručují budoucí. Nejde o investiční doporučení, jen o historickou statistiku indexu.</p>
+    </div>
+
+    <div class="block">
+      <h3>Největší firmy uvnitř</h3>
+      <ul class="bars" data-bind="bars"></ul>
+      <p class="count">Celkem <span data-bind="companies"></span> v indexu.</p>
+    </div>
+
+    <div class="block">
+      <h3>Evropský fond místo <span data-bind="us"></span></h3>
+      <p class="fund" data-bind="fund"></p>
+      <div class="kv"><span>Poplatek fondu (TER) ročně</span><strong data-bind="ter"></strong></div>
+      <div class="kv"><span>Americký fond pro srovnání</span><span data-bind="usTer"></span></div>
+    </div>
+
+    <div class="block">
+      <h3>Kde koupit</h3>
+      <div class="brokers">
+        <div class="broker">Trading 212<small>směna měny <span data-bind="feeT212"></span></small></div>
+        <div class="broker">XTB<small>směna měny <span data-bind="feeXtb"></span></small></div>
+      </div>
+      <p class="count">Za nákup za <span data-bind="amount"></span>, pokud máte účet v Kč. Provize za nákup ETF je u obou 0&nbsp;Kč.</p>
+    </div>
+
+    <a class="cta more" href="#ask" data-action="more">Chci vědět víc ↓</a>
+
+    <details class="sources"><summary>Zdroje dat</summary><div data-bind="srcAll"></div></details>
+  </article>
+</div>
+
+<section class="ask" id="ask" aria-labelledby="ask-h">
+  <div class="wrap">
+    <h2 id="ask-h">Pošleme vám celý plán k <span data-bind="indexLabel"></span></h2>
+    <p class="ask-lead">Jeden e-mail, sestavený podle toho, co jste vybrali.</p>
+    <ul class="checklist">
+      <li>Evropský fond a jeho ISIN, podle kterého ho najdete u brokera</li>
+      <li>Kolik by z <span data-bind="amount"></span> měsíčně mohlo být za 10 let, u všech tří indexů</li>
+      <li>Co je uvnitř: S&P 500, Nasdaq-100 a Svět vedle sebe</li>
+      <li>Poplatky u Trading 212 a XTB pro vaši částku</li>
+      <li>Daně v Česku stručně: 3 roky, 100&nbsp;000&nbsp;Kč, 15&nbsp;%</li>
+      <li>Akumulační, nebo distribuční fond</li>
+    </ul>
+    <form data-form novalidate>
+      <label class="field" for="email">Váš e-mail</label>
+      <input id="email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="jmeno@email.cz" required>
+      <p class="error" data-form-error hidden role="alert"></p>
+      <p class="consent">Odesláním souhlasíte, že váš e-mail použijeme jen k zaslání plánu. Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním). Souhlas můžete kdykoli odvolat.</p>
+      <button class="cta" type="submit">Poslat plán</button>
+    </form>
+    <div class="done" data-form-done hidden>
+      <h3 style="font-size:20px;margin-bottom:6px">Hotovo, takhle plán vypadá.</h3>
+      <p>Demo: nic jsme neuložili ani neodeslali.</p>
+      <button class="ghost" data-action="open-email">Zobrazit e-mail znovu</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Časté otázky</h2>
+    <details data-q="banned"><summary>Je nákup ETF z NYSE v Česku zakázaný?</summary>
+      <p>Není. Pravidla EU chtějí, aby fond pro drobné investory měl dokument KID (klíčové informace). Americké fondy ho nevydávají, a proto je většina brokerů v EU nenabízí.</p></details>
+    <details data-q="stocks"><summary>Můžu koupit akcie amerických firem?</summary>
+      <p>Ano. Pravidlo o dokumentu KID se týká fondů, ne akcií jednotlivých firem.</p></details>
+    <details data-q="ter"><summary>Proč je evropský fond někdy dražší?</summary>
+      <p>Poplatek si určuje každý fond sám. U Nasdaq-100 stojí evropský fond 0,30&nbsp;% ročně, QQQ 0,18&nbsp;%. U MSCI World je to naopak: evropský fond 0,20&nbsp;%, URTH 0,24&nbsp;%.</p></details>
+    <details data-q="isin"><summary>Co je ISIN a jak fond najdu u brokera?</summary>
+      <p>ISIN je 12místný kód jednoho konkrétního fondu. Pošleme vám ho v plánu; vložte ho do vyhledávání v aplikaci brokera. Ticker se liší podle burzy, ISIN je všude stejný.</p></details>
+  </section>
+
+  <footer>
+    <p><strong>Nejde o investiční doporučení.</strong> Stránka ukazuje historická data indexů, ne předpověď. Minulé výnosy nezaručují budoucí a investice může ztratit hodnotu. Broker je uveden jen jako místo, kde fond najdete, ne jako doporučení.</p>
+    <details class="sources"><summary>Zdroje</summary><p>Proč americké ETF většinou nekoupíte: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R1286">nařízení EU 1286/2014</a>; <a href="https://www.xtb.com/int/help-center/stocks-and-etfs/adding-a-new-instrument-to-the-offer">XTB, nápověda, 3. 2. 2026</a>. Burzy amerických fondů: prospekty na SEC EDGAR (VOO, SPY, IVV a URTH na NYSE Arca, QQQ na Nasdaqu).</p></details>
+    <p>Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme před spuštěním).</p>
+  </footer>
+</div>
+
+<dialog data-modal aria-labelledby="modal-h">
+  <div class="modal-bar"><p id="modal-h">Takhle vypadá váš e-mail</p><button class="close" data-action="close-email" aria-label="Zavřít">×</button></div>
+  <div class="mail" data-bind="email"></div>
+</dialog>
+
+<script src="shared.js"></script>
+</body>
+</html>

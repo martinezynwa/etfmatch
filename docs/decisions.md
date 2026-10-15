@@ -218,3 +218,94 @@ Agreed in the C2 planning session. Builds on the C1 research scope in
     inside of `track()`; analytics needs a cookie-consent step before it
     goes live. *Reason:* the demo only logs; EU consent rules apply as
     soon as a real tool collects data.
+
+## C3 Design (2026-10-15)
+
+Agreed in the C3 review of the static mockups (`docs/mockups/`, `ads/`).
+Where a point changes a C2 decision, it says which one.
+
+21. **Page variant A.** Warm grey ground, white cards, black type, one red,
+    Archivo (variable width) for everything. Tokens for C4: background
+    `#e6e3de`, card `#ffffff`, ink `#000000`, muted `#5c5853`, line
+    `#d4d0ca`, red `#d7000f`, red on hover `#a8000c`. Variant B (no cards,
+    each pair row is the index tap) stays in `docs/mockups/` as the option
+    not taken. *Reason:* the user's choice; it is the brief's direction.
+
+22. **No strike-through anywhere** (page and ads). In the pairs list the
+    US and EU names have the same size; the US side is grey and the
+    columns are headed "Z NYSE, většinou nekoupíte" and "V Evropě, stejný
+    index". *Reason:* agreed in review; the pair is a match, not a
+    correction, and the column heads carry the "cannot / can buy" meaning.
+
+23. **Square corners on everything** (`--radius: 0`): cards, chips,
+    buttons, inputs, modal, check marks. *Reason:* agreed in review.
+
+24. **Motion pattern.** One load sequence: the pair rows rise in, one
+    after another. After that, motion only answers a tap: numbers count to
+    their new value (450 ms), changed text fades up (260 ms), bars slide
+    (500 ms), accordions expand, the modal fades up and back down. All of
+    it is off under `prefers-reduced-motion`. *Reason:* agreed in review;
+    motion shows what a tap changed, and nothing moves on its own after
+    the first screen.
+
+25. **Headline is one sentence:** "ETF z NYSE si tu většinou nekoupíte,
+    stejný index v evropském fondu ano." Replaces the two-sentence wording
+    in decision 11.
+
+26. **No personal name on the page.** The consent text and footer say
+    "Správce údajů: provozovatel ETF Match (demo, jméno a kontakt doplníme
+    před spuštěním)". Replaces the controller in decision 15. *Open:* the
+    brief asks for a named controller; it is filled in at launch readiness.
+
+27. **Ads: one pattern, NYSE in both headers.** Logo, big header, a sub
+    under a black rule, a full-width red button inside the side padding.
+    Replaces the wording in decision 18; the hook is still the only
+    variable.
+    - **A (problem):** "Chcete ETF z NYSE? V Česku ho většinou
+      nekoupíte." Sub: "VOO, SPY ani IVV vám většina brokerů v EU
+      neprodá. Ukážeme vám evropský fond se stejným indexem." Button "Co
+      místo toho". QQQ is left out: it is listed on Nasdaq, not NYSE
+      (decision 12).
+    - **B (answer):** "ETF z NYSE mají evropské protějšky." Sub: "S&P 500
+      i Nasdaq-100 koupíte i v Evropě, ve fondu se stejným indexem.
+      Ukážeme vám, který fond a kde." Button "Najít fond".
+
+28. **The match card shows the fund's full name** with "UCITS ETF", e.g.
+    "iShares Core S&P 500 UCITS ETF (Acc)". *Reason:* it is the name the
+    visitor finds in the broker's app; explanatory copy still avoids
+    "UCITS" (glossary).
+
+29. **Pairs list: one-word column heads, labels below.** The heads read
+    "NYSE" and "Evropa"; the index name sits under each row (e.g. "S&P
+    500", "Nasdaq-100 (QQQ je na burze Nasdaq)"). *Reason:* agreed in
+    review; the names are what the visitor reads first.
+
+30. **Match card order changed** (replaces the order in decision 14):
+    1. "[index] za 10 let průměrně": the 10-year % with its warning, first,
+       so a tap visibly changes the top of the card
+    2. top 5 companies as bars, plus the number of companies
+    3. "Evropský fond místo [US funds]": fund name, TER vs the US fund
+    4. where to buy and the fees row
+    5. a red "Chci vědět víc ↓" button that scrolls to the form
+    6. "Zdroje dat", an accordion with all the card's sources
+
+    **The ISIN is not on the page any more**; it is in the e-mail, and the
+    ask's checklist names it first ("Evropský fond a jeho ISIN…"). The
+    companies stay in the e-mail too. *Reason:* agreed in review; the ISIN
+    is the most concrete thing to give for the e-mail address, and every
+    interactive element should lead to the form.
+
+31. **Events** (changes decision 19): `isin_copied` is dropped with the
+    copy button. The new button sends `cta_clicked` with `location:
+    "match_card"` (the first-screen CTA sends `"first_screen"`). Source
+    accordions do not send `faq_opened`.
+
+32. **Sources behind accordions.** On the page every source sits in a
+    closed "Zdroje dat" / "Zdroje" accordion next to its block; the
+    warnings stay visible. The e-mail keeps its numbered "Zdroje" list.
+    *Reason:* agreed in review; the rule "every number has its source"
+    still holds, one tap away.
+
+33. **Ads exported** as `ads/ad-a.png` and `ads/ad-b.png`, 1080 × 1350,
+    from the HTML at device scale 2.5. The links get the live domain in
+    C10.
