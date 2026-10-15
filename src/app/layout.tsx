@@ -13,12 +13,11 @@ const archivo = localFont({
 
 const { title, description, ogTitle, ogAlt } = cs.meta;
 
-// Decision 40. localhost is the placeholder base until the deploy
-// (decisions 36, 47); C12 sets the live URL here.
+// Decision 40. The live Vercel URL resolves the OG image (decision 48).
 const ogImage = { url: "/og.png", width: 1200, height: 630, alt: ogAlt };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL("https://clientelo-task.vercel.app"),
   title: { default: title, template: `%s · ${title}` },
   description,
   openGraph: {

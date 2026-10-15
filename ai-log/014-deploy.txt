@@ -1,0 +1,439 @@
+ ▐▛███▛█   Claude Code v2.1.300
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Martin/GIT-MG/clientelo-task
+
+
+❯ /implementation-start C12                                                     
+please let me know what I need to set up on Vercel, I have already imported the 
+repo, now setting up the basic setting                                          
+
+  Searched for 1 pattern, listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(head -3 pnpm-lock.yaml; sed -n 78,110p README.md; sed -n 10,25p
+      src/app/layout.tsx; sed -n 325,335p docs/decisions.md; sed -n 462,475p
+      docs/decisions.md; tail -…)
+  ⎿  lockfileVersion: '9.0'
+
+     settings:
+     … +77 lines (ctrl+o to expand)
+
+⏺ Bash(sed -n 1,40p ads/ad-a.html; ls ads; grep -n "dl\|meta\b\|export"
+      ads/ad.css | head)
+  ⎿  <!doctype html>
+     <html lang="cs">
+     <head>
+     … +36 lines (ctrl+o to expand)
+
+⏺ Plan for C12
+
+  1. You deploy from the Vercel dashboard. Settings are below.
+  2. I replace http://localhost:3000 with the live URL in src/app/layout.tsx:21
+     (metadataBase), README.md (line 8, demo limit 1) and the "Odkaz" lines in
+     ads/ad-a.html and ads/ad-b.html. The link only appears in the spec block,
+     not in the .ad element, so the PNGs don't need re-exporting.
+  3. I add a decision to docs/decisions.md, tick both boxes and update the
+     comment in layout.tsx.
+  4. What's unclear: I need the final production URL, and I'll assume it's
+     https://<project-name>.vercel.app. Nothing else blocks the work.
+
+  Vercel settings
+
+  ┌────────────────────────┬────────────────────────────────────────────────┐
+  │        Setting         │                     Value                      │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Framework Preset       │ Next.js (auto-detected)                        │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Root Directory         │ ./                                             │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Build / Output /       │ Leave at defaults. Vercel runs pnpm install    │
+  │ Install commands       │ and next build because it finds                │
+  │                        │ pnpm-lock.yaml.                                │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │                        │ Choose this with care, because it sets the     │
+  │ Project name           │ URL. etf-match gives etf-match.vercel.app if   │
+  │                        │ that name is free.                             │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Environment variables  │ None. The app reads no process.env and has no  │
+  │                        │ secrets.                                       │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Node.js version        │                                                │
+  │ (Settings → Build and  │ 22.x or 24.x. Either matches "Node 20+".       │
+  │ Deployment)            │                                                │
+  ├────────────────────────┼────────────────────────────────────────────────┤
+  │ Production branch      │ main                                           │
+  └────────────────────────┴────────────────────────────────────────────────┘
+
+  Only if needed
+  - pnpm version: the repo pins pnpm@11.13.0 in packageManager. If the install
+    step fails or warns about the pnpm version or pnpm-workspace.yaml, add the
+    environment variable ENABLE_EXPERIMENTAL_COREPACK=1 and redeploy. That makes
+    Vercel use the exact pinned version.
+
+  Leave these off
+  - Web Analytics / Speed Insights: track() only writes to the console, and a
+    real analytics tool would need cookie consent (D20). Turning these on would
+    contradict what the README says.
+  - Deployment Protection: the default "Standard Protection" is fine because it
+    keeps the production domain public. Don't switch to "All deployments", or
+    reviewers won't be able to open the link.
+
+  After the first deploy, open the production URL on your phone and check /,
+  /ochrana-udaju and /og.png. Then send me the URL and I'll do step 2 onward.
+
+✻ Crunched for 32s · done 5:27 PM
+
+❯ [ERROR] pnpm v11.13.0 is a broken release and cannot be installed             
+
+⏺ Bash(pnpm --version; npm view pnpm dist-tags --json; npm view pnpm@11 version
+      --json | tail -8; npm view pnpm@11.13.0 deprecated)
+  ⎿  11.13.0
+     {
+       "latest-1": "1.43.1",
+     … +31 lines (ctrl+o to expand)
+
+⏺ v11.13.0 is deprecated on npm, so I'll switch to the latest stable, 11.28.2,
+  after confirming it meets the minimumReleaseAge requirement, then pin it.
+
+⏺ Bash(npm view pnpm time --json | grep -E '"11\.28\.2"|"11\.13\.1"'; grep -rn
+      "11.13\|pnpm 11" --exclude-dir=node_modules --exclude-dir=.next
+      --exclude-dir=.git --exc…)
+  ⎿    "11.13.1": "2026-07-16T00:20:58.940Z",
+       "11.28.2": "2026-09-28T17:38:08.713Z",
+     README.md:97:Needs Node 20+ and pnpm 11.
+     … +5 lines (ctrl+o to expand)
+
+⏺ Bash(sed -i '' 's/"packageManager": "pnpm@11.13.0"/"packageManager":
+      "pnpm@11.28.2"/' package.json && pnpm --version && pnpm install
+      --frozen-lockfile 2>&1 | tail -5…)
+  ⎿  ! Corepack is about to download https://registry.npmjs.org/pnpm/-/pnpm
+     -11.28.2.tgz
+     11.28.2
+     … +17 lines (ctrl+o to expand)
+  ⎿  Updated package.json (+1 -1)
+      27      "typescript": "^5",
+      28      "vitest": "5.0.4"
+      29    },
+      30 -  "packageManager": "pnpm@11.13.0"                             
+      30 +  "packageManager": "pnpm@11.28.2"                             
+      31  }
+  ⎿  (timeout 5m)
+
+⏺ I changed the pin in package.json from pnpm@11.13.0 to pnpm@11.28.2. npm marks
+  11.13.0 as "a broken version" and asks for 11.13.1 or newer, so Vercel
+  refuses to install it. 11.28.2 is the latest stable v11, released on 28 Sep
+  2026.
+
+  Locally, Corepack switched to 11.28.2. pnpm install --frozen-lockfile reported
+  "Already up to date" and the lockfile is unchanged. pnpm build finished with
+  every route still static (○). Nothing else changed: the README says "pnpm 11",
+  which still holds.
+
+  Vercel builds from GitHub, so it won't see the fix until it's pushed. Should I
+  commit and push it to main now as its own commit?
+
+  pin pnpm 11.28.2: Vercel rejects 11.13.0 as a broken release
+
+  After the push, Vercel should redeploy automatically. If it doesn't, use
+  Redeploy. You don't need the ENABLE_EXPERIMENTAL_COREPACK variable. Once it's
+  live, send me the URL and I'll finish C12.
+
+✻ Cooked for 26s · done 5:28 PM
+
+❯ It is deployed, https://clientelo-task.vercel.app/                            
+
+⏺ Bash(git status --short; git log --oneline -3; git fetch -q && git log
+      --oneline -2 origin/main; for p in / /ochrana-udaju /og.png /icon.svg; do
+      curl -s -o /dev/null…)
+  ⎿  ea1dd43 update pnpm
+     13bd81c add C11 README: section order, conversion, A/B tests, AI use,
+     limits
+     … +10 lines (ctrl+o to expand)
+
+⏺ All four live paths return 200. The live og:image still points to
+  http://localhost:3000/og.png, which is what this commit fixes. Now I'll make
+  the replacements.
+
+⏺ Bash(sed -i ''
+      's#http://localhost:3000/?utm#https://clientelo-task.vercel.app/?utm#'
+      ads/ad-a.html ads/ad-b.html && sed -i '' 's#new
+      URL("http://localhost:3000")#ne…)
+  ⎿  src/app/layout.tsx:21:  metadataBase: new URL("https://clientelo-task.
+     vercel.app"),
+     ads/ad-a.html:26:      <dt>Odkaz</dt><dd>https://clientelo-task.vercel
+     … +40 lines (ctrl+o to expand)
+  ⎿  Updated ads/ad-a.html (+1 -1)
+      23        <dt>Primární text</dt><dd>VOO, SPY nebo IVV znáte z videí
+           z USA. Většina brokerů v EU vám je ale neprodá. Ukážeme vám ev
+          ropský fond se stejným indexem a kde ho koupíte.</dd>
+      24        <dt>Titulek</dt><dd>Co místo toho</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26 -      <dt>Odkaz</dt><dd>http://localhost:3000/?utm_source=meta&
+         -amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp;utm_c
+         -ontent=ad-a</dd>                                               
+      26 +      <dt>Odkaz</dt><dd>https://clientelo-task.vercel.app/?utm_
+         +source=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-mat
+         +ch&amp;utm_content=ad-a</dd>                                   
+      27        <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+          ěřítku 2,5)</dd>
+      28      </dl>
+      29    </section>
+  ⎿  Updated ads/ad-b.html (+1 -1)
+      23        <dt>Primární text</dt><dd>Na VOO nebo SPY existuje evrops
+          ký fond se stejným indexem, který v Česku koupíte. Vyberte inde
+          x a ukážeme vám ISIN fondu a brokery, kde ho najdete.</dd>
+      24        <dt>Titulek</dt><dd>Najít fond</dd>
+      25        <dt>Tlačítko</dt><dd>Zjistit víc</dd>
+      26 -      <dt>Odkaz</dt><dd>http://localhost:3000/?utm_source=meta&
+         -amp;utm_medium=paid_social&amp;utm_campaign=etf-match&amp;utm_c
+         -ontent=ad-b</dd>                                               
+      26 +      <dt>Odkaz</dt><dd>https://clientelo-task.vercel.app/?utm_
+         +source=meta&amp;utm_medium=paid_social&amp;utm_campaign=etf-mat
+         +ch&amp;utm_content=ad-b</dd>                                   
+      27        <dt>Export</dt><dd>1080 × 1350 px (snímek prvku .ad při m
+          ěřítku 2,5)</dd>
+      28      </dl>
+      29    </section>
+  ⎿  Updated src/app/layout.tsx (+1 -1)
+      18  const ogImage = { url: "/og.png", width: 1200, height: 630, alt
+          : ogAlt };
+      19  
+      20  export const metadata: Metadata = {
+      21 -  metadataBase: new URL("http://localhost:3000"),              
+      21 +  metadataBase: new URL("https://clientelo-task.vercel.app"),  
+      22    title: { default: title, template: `%s · ${title}` },
+      23    description,
+      24    openGraph: {
+
+⏺ Now the layout comment, README, TODO and a decision entry.
+
+⏺ Bash(python3 - <<'EOF'
+      import re,pathlib…)
+  ⎿  [docs/brief.md](docs/brief.md). Decisions with reasons:
+     [docs/decisions.md](docs/decisions.md) ("D12" = decision 12).
+     … +32 lines (ctrl+o to expand)
+  ⎿  Updated README.md (+6 -8)
+       5  [docs/brief.md](docs/brief.md). Decisions with reasons:
+       6  [docs/decisions.md](docs/decisions.md) ("D12" = decision 12).
+       7  
+       8 -Live: not deployed yet (C12). Placeholder URL: http://localhost
+         -:3000.                                                         
+       8 +Live: https://clientelo-task.vercel.app/                       
+       9  
+      10  ## Why this order
+      11  
+     ...
+      14  
+      15  1. **First screen**: "cannot buy → can buy" continues both ads'
+           promise;
+      16     the CTA scrolls to the taps, not the form (D10, D11).
+      17 -2. **Taps** (index, amount): personal without a form field (D5)
+         -.                                                              
+      18 -3. **Match card**: the answer for free, before anything is aske
+         -d (D46).                                                       
+      19 -4. **The ask**, once, after the value: one field, consent; the 
+         -ISIN is                                                        
+      17 +1. **Taps** (index, amount): personal without a form field (D5)
+         +.                                                              
+      18 +2. **Match card**: the answer for free, before anything is aske
+         +d (D46).                                                       
+      19 +3. **The ask**, once, after the value: one field, consent; the 
+         +ISIN is                                                        
+      20     the first thing promised, the most concrete item kept for th
+          e e-mail (D30).
+      21 -5. **FAQ** answers the doubts that block a submit (D16).       
+      22 -6. **Disclaimer and sources**; warnings also sit next to every 
+         -return (D17).                                                  
+      21 +4. **FAQ** answers the doubts that block a submit (D16).       
+      22 +5. **Disclaimer and sources**; warnings also sit next to every 
+         +return (D17).                                                  
+      23  
+      24  ## Expected conversion
+      25  
+     ...
+      81  
+      82  ## Demo limits and unfinished
+      83  
+      84 -1. **Not deployed**: README, ad links and `metadataBase` point 
+         -to                                                             
+      85 -   localhost until C12.                                        
+      84  2. **No named data controller** yet, by choice; `/ochrana-udaju
+          `
+      85     explains the demo (D40). Needed before ads run.
+      86  3. **Nothing is sent or stored**; a mailing tool and double opt
+          -in are
+  ⎿  Updated docs/TODO.md (+2 -2)
+      72  
+      73  ## C12 Deploy
+      74  
+      75 -- [ ] Import the GitHub repo in Vercel and deploy.             
+      76 -- [ ] Replace the [http://localhost:3000](http://localhost:3000
+         -) placeholder with the live URL: README, ad links in `ads/`, `m
+         -etadataBase` for the Open Graph tags.                          
+      75 +- [x] Import the GitHub repo in Vercel and deploy. Live at http
+         +s://clientelo-task.vercel.app/; pnpm pinned to 11.28.2, since V
+         +ercel rejects 11.13.0 as a broken release (decision 48).       
+      76 +- [x] Replace the [http://localhost:3000](http://localhost:3000
+         +) placeholder with the live URL: README, ad links in `ads/`, `m
+         +etadataBase` for the Open Graph tags. The link is not in the ad
+         + image, so no PNG re-export.                                   
+      77  
+      78  
+      79  
+  ⎿  Updated docs/decisions.md (+10 -0)
+      474      labelled as assumptions, since there is no traffic yet. *R
+           eason:* the
+      475      user's choice; the README is written from what is built, a
+           nd the
+      476      deploy then only swaps URLs.
+      477 +                                                              
+      478 +## C12 Deploy (2026-10-15)                                    
+      479 +                                                              
+      480 +48. **Vercel with default settings, at https://clientelo-task.
+          +vercel.app/.**                                                
+      481 +    No environment variables, Web Analytics or Speed Insights;
+          + production                                                   
+      482 +    stays public under standard deployment protection. pnpm mo
+          +ves from                                                      
+      483 +    11.13.0 to 11.28.2, the latest v11. *Reason:* the page is 
+          +static and                                                    
+      484 +    reads no secrets; a Vercel analytics tool would contradict
+          + "`track()`                                                   
+      485 +    only logs to the console" (decision 20). npm marks 11.13.0
+          + as "a                                                        
+      486 +    broken version", and Vercel refuses to install it.        
+  ⎿  Updated src/app/layout.tsx (+1 -2)
+      13  
+      14  const { title, description, ogTitle, ogAlt } = cs.meta;
+      15  
+      16 -// Decision 40. localhost is the placeholder base until the dep
+         -loy                                                            
+      17 -// (decisions 36, 47); C12 sets the live URL here.             
+      16 +// Decision 40. The live Vercel URL resolves the OG image (deci
+         +sion 48).                                                      
+      17  const ogImage = { url: "/og.png", width: 1200, height: 630, alt
+          : ogAlt };
+      18  
+      19  export const metadata: Metadata = {
+
+⏺ Renumbering went wrong: the earlier lists in the README contain the same
+  patterns. Checking the diff.
+
+⏺ Bash(git diff README.md)
+  ⎿  diff --git a/README.md b/README.md
+     index 40c995c..c36aa31 100644
+     --- a/README.md
+     … +37 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      import pathlib…)
+  ⎿  diff --git a/README.md b/README.md
+     index 40c995c..07cf039 100644
+     --- a/README.md
+     … +31 lines (ctrl+o to expand)
+  ⎿  Updated README.md (+10 -10)
+      14  
+      15  1. **First screen**: "cannot buy → can buy" continues both ads'
+           promise;
+      16     the CTA scrolls to the taps, not the form (D10, D11).
+      17 -1. **Taps** (index, amount): personal without a form field (D5)
+         -.                                                              
+      18 -2. **Match card**: the answer for free, before anything is aske
+         -d (D46).                                                       
+      19 -3. **The ask**, once, after the value: one field, consent; the 
+         -ISIN is                                                        
+      17 +2. **Taps** (index, amount): personal without a form field (D5)
+         +.                                                              
+      18 +3. **Match card**: the answer for free, before anything is aske
+         +d (D46).                                                       
+      19 +4. **The ask**, once, after the value: one field, consent; the 
+         +ISIN is                                                        
+      20     the first thing promised, the most concrete item kept for th
+          e e-mail (D30).
+      21 -4. **FAQ** answers the doubts that block a submit (D16).       
+      22 -5. **Disclaimer and sources**; warnings also sit next to every 
+         -return (D17).                                                  
+      21 +5. **FAQ** answers the doubts that block a submit (D16).       
+      22 +6. **Disclaimer and sources**; warnings also sit next to every 
+         +return (D17).                                                  
+      23  
+      24  ## Expected conversion
+      25  
+     ...
+      81  
+      82  ## Demo limits and unfinished
+      83  
+      84 -2. **No named data controller** yet, by choice; `/ochrana-udaju
+         -`                                                              
+      84 +1. **No named data controller** yet, by choice; `/ochrana-udaju
+         +`                                                              
+      85     explains the demo (D40). Needed before ads run.
+      86 -3. **Nothing is sent or stored**; a mailing tool and double opt
+         --in are                                                        
+      86 +2. **Nothing is sent or stored**; a mailing tool and double opt
+         +-in are                                                        
+      87     missing.
+      88 -4. **`track()` only logs to the console**; a real tool needs co
+         -okie                                                           
+      88 +3. **`track()` only logs to the console**; a real tool needs co
+         +okie                                                           
+      89     consent (D20).
+      90 -5. **Data snapshot** from 15 Oct 2026, with no refresh.        
+      91 -6. **Ads** are static images, not uploaded to Meta.            
+      90 +4. **Data snapshot** from 15 Oct 2026, with no refresh.        
+      91 +5. **Ads** are static images, not uploaded to Meta.            
+      92  
+      93  ## Run
+      94  
+
+⏺ The README diff looks correct, and since no new files were added, CLAUDE.md's
+  Map doesn't need updating. Changed files: layout.tsx, README.md, both ad HTML
+  files, TODO.md, and decisions.md (adding decision 48).
+
+⏺ Skill(implementation-end)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(pnpm check 2>&1 | tail -6 && pnpm test 2>&1 | tail -6 && pnpm build 2>&1
+      | tail -9 && grep -o '<meta property="og:image"[^>]*>'
+      .next/server/app/index.html; ls…)  ⎿  $ pnpm typecheck && pnpm lint
+     $ next typegen && tsc --noEmit
+     Generating route types...
+     … +72 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ pnpm check, pnpm test (213 tests) and pnpm build all pass, and every route is
+  still static. The built page's og:image is now
+  https://clientelo-task.vercel.app/og.png. Both C12 boxes are ticked.
+
+  Export: run /export ai-log/014-deploy.txt so the session log goes into this
+  commit.
+
+  Mistakes from this session for ai-log/mistakes.md:
+  - I recommended a Vercel setup without checking that the pinned pnpm@11.13.0
+    was installable. npm had marked it as broken, and the first deploy failed.
+    npm view pnpm@11.13.0 deprecated would have caught it before the deploy.
+  - My script for renumbering the README's "Demo limits" list also renumbered
+    the "Why this order" list. I spotted it in the diff and fixed it before
+    showing you the result.
+
+  Commit message:
+
+  add C12 deploy: live Vercel URL in README, ads and OG tags
+
+  - live at https://clientelo-task.vercel.app/ with default Vercel
+    settings: no env vars, no Vercel analytics (decision 48)
+  - metadataBase uses the live URL, so og:image resolves for sharing
+  - README: live URL; "not deployed" dropped from the demo limits
+  - ad links in ads/ point to the live URL; the link is not in the
+    image, so no PNG re-export
+  - TODO: C12 ticked; decisions: 48 (Vercel setup, pnpm 11.28.2)
+  - ai-log: session export
+
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+  Files to stage: README.md, ads/ad-a.html, ads/ad-b.html, docs/TODO.md,
+  docs/decisions.md, src/app/layout.tsx, ai-log/014-deploy.txt
+
+  Is this message OK to commit and push to origin/main? The push will redeploy
+  Vercel with the new OG tags.
+
+✻ Sautéed for 51s · done 5:31 PM

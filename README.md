@@ -5,7 +5,7 @@ tracks the same index as the US ETF they know. Brief:
 [docs/brief.md](docs/brief.md). Decisions with reasons:
 [docs/decisions.md](docs/decisions.md) ("D12" = decision 12).
 
-Live: not deployed yet (C12). Placeholder URL: http://localhost:3000.
+Live: https://clientelo-task.vercel.app/
 
 ## Why this order
 
@@ -81,16 +81,14 @@ Claude Code, one session per step, exported to [ai-log/](ai-log/).
 
 ## Demo limits and unfinished
 
-1. **Not deployed**: README, ad links and `metadataBase` point to
-   localhost until C12.
-2. **No named data controller** yet, by choice; `/ochrana-udaju`
+1. **No named data controller** yet, by choice; `/ochrana-udaju`
    explains the demo (D40). Needed before ads run.
-3. **Nothing is sent or stored**; a mailing tool and double opt-in are
+2. **Nothing is sent or stored**; a mailing tool and double opt-in are
    missing.
-4. **`track()` only logs to the console**; a real tool needs cookie
+3. **`track()` only logs to the console**; a real tool needs cookie
    consent (D20).
-5. **Data snapshot** from 15 Oct 2026, with no refresh.
-6. **Ads** are static images, not uploaded to Meta.
+4. **Data snapshot** from 15 Oct 2026, with no refresh.
+5. **Ads** are static images, not uploaded to Meta.
 
 ## Run
 

@@ -474,3 +474,13 @@ Agreed in the C6 review of the match card at 375 px.
     labelled as assumptions, since there is no traffic yet. *Reason:* the
     user's choice; the README is written from what is built, and the
     deploy then only swaps URLs.
+
+## C12 Deploy (2026-10-15)
+
+48. **Vercel with default settings, at https://clientelo-task.vercel.app/.**
+    No environment variables, Web Analytics or Speed Insights; production
+    stays public under standard deployment protection. pnpm moves from
+    11.13.0 to 11.28.2, the latest v11. *Reason:* the page is static and
+    reads no secrets; a Vercel analytics tool would contradict "`track()`
+    only logs to the console" (decision 20). npm marks 11.13.0 as "a
+    broken version", and Vercel refuses to install it.
