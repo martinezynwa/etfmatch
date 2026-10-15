@@ -30,10 +30,10 @@ in C3 from the agreed mockup (`docs/mockups/page-a.html`).
 
 ## C5 First screen
 
-- [ ] Header with the ETF Match wordmark.
-- [ ] Headline, the KID line and the US → EU pairs list, rendered from `src/data/`, with the load sequence (decision 24).
-- [ ] Red CTA scrolls to the taps.
-- [ ] Fits 375 × 667: check with a screenshot.
+- [x] Header with the ETF Match wordmark.
+- [x] Headline, the KID line and the US → EU pairs list, rendered from `src/data/`, with the load sequence (decision 24).
+- [x] Red CTA scrolls to the taps.
+- [x] Fits 375 × 667: check with a screenshot.
 
 ## C6 Taps and match card
 

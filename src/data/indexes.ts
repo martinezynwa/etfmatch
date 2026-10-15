@@ -30,6 +30,8 @@ export type MarketIndex = {
   euFund: {
     /** Full name as brokers list it (decision 28). */
     name: string;
+    /** The name without "UCITS ETF" and share class, for the pairs list. */
+    shortName: string;
     isin: Fact<string>;
     /** Total expense ratio, % a year. */
     ter: Fact<number>;
@@ -86,6 +88,7 @@ const sp500: MarketIndex = {
   compareWith: "VOO",
   euFund: {
     name: "iShares Core S&P 500 UCITS ETF (Acc)",
+    shortName: "iShares Core S&P 500",
     isin: fact("IE00B5BMR087", s.ishSp500, "ISIN IE00B5BMR087"),
     ter: fact(0.07, s.ishSp500, "Total Expense Ratio 0.07%"),
   },
@@ -159,6 +162,7 @@ const ndx: MarketIndex = {
   compareWith: "QQQ",
   euFund: {
     name: "iShares NASDAQ 100 UCITS ETF",
+    shortName: "iShares NASDAQ 100",
     isin: fact("IE00B53SZB19", s.ishNdx, "ISIN IE00B53SZB19"),
     ter: fact(0.3, s.ishNdx, "Total Expense Ratio 0.30%"),
   },
@@ -223,6 +227,7 @@ const world: MarketIndex = {
   compareWith: "URTH",
   euFund: {
     name: "iShares Core MSCI World UCITS ETF (Acc)",
+    shortName: "iShares Core MSCI World",
     isin: fact("IE00B4L5Y983", s.ishWorld, "ISIN IE00B4L5Y983"),
     ter: fact(0.2, s.ishWorld, "Total Expense Ratio 0.20%"),
   },

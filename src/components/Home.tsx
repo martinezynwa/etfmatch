@@ -1,12 +1,22 @@
 import { cs } from "@/copy/cs";
+import { FirstScreen } from "./FirstScreen";
+import { Header } from "./Header";
+
+const tapsId = "taps";
 
 export function Home() {
   return (
-    <main className="mx-auto max-w-page px-gutter py-8">
-      <h1 className="text-[28px] leading-tight font-extrabold">
-        {cs.home.title}
-      </h1>
-      <p className="mt-3 text-muted">{cs.home.lead}</p>
-    </main>
+    <div className="mx-auto max-w-page px-gutter">
+      <Header />
+      <main>
+        <FirstScreen tapsId={tapsId} />
+        {/* The index and amount taps arrive in C6. */}
+        <section
+          id={tapsId}
+          className="scroll-mt-3"
+          aria-label={cs.taps.label}
+        />
+      </main>
+    </div>
   );
 }
